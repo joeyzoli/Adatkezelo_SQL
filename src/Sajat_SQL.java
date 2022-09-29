@@ -78,12 +78,12 @@ public class Sajat_SQL extends JPanel
 
 	}
 	
-	class SQL_futtat implements ActionListener																						//mentés gomb megnyomáskor hívodik meg
+	class SQL_futtat implements ActionListener																						//futtat gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
 			egyeni_sql = new SQL();
-			egyeni_sql.sajat_sql(sql_mezo.getText());
+			egyeni_sql.sajat_sql(sql_mezo.getText());																				//Jtextfieldben levő string futtatása
 		 }
 	}
 }

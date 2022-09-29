@@ -72,23 +72,23 @@ public class Adat_torles extends JPanel
 
 	}
 	
-	class PCB_torlo implements ActionListener																						//mentés gomb megnyomáskor hívodik meg
+	class PCB_torlo implements ActionListener																						//törlés gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
 
 
-			int res = JOptionPane.showConfirmDialog(null, 
+			int res = JOptionPane.showConfirmDialog(null, 																			//megerősítést kérő üzenet jelenik meg
 			"Figyelem! Biztosan ezt akarod?", 
 			"Figyelmeztetés", 
 			JOptionPane.YES_NO_OPTION);
 			 
-			if (res == JOptionPane.YES_OPTION)
+			if (res == JOptionPane.YES_OPTION)																						//igen gomb megnyomásakot törli a megadott sort
 			{
 				pcb_torlo = new Db_torlo();
 				pcb_torlo.pcb_torlo(pcb_sorszam.getText());
 			}
-			else
+			else																													//nem válasz estén hibaüzenet és a pcb sorszám törlése
 			{
 				JOptionPane.showMessageDialog(null, "Törlés megszakítva!!", "Hiba üzenet", 2);
 				pcb_sorszam.setText("");

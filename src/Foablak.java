@@ -1,18 +1,22 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class Foablak extends JFrame 
 {
@@ -26,8 +30,11 @@ public class Foablak extends JFrame
 	private Gyartasi_adatok adatok;
 	private EASQAS_adatok easqas;
 	private Adat_torles adattorlo;
+	private Torlo torles;
 	private Sajat_SQL sajat_sql;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
+	private String jelszo;
+	private static final String jelszavam = "polip13";
 
 	/**
 	 * Launch the application.
@@ -124,8 +131,7 @@ public class Foablak extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
-			
-			
+			Parbeszed();
 		 }
 	}
 	
@@ -159,4 +165,32 @@ public class Foablak extends JFrame
 		 }
 	}
 	
+	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
+	{
+		JTextField mezo = new JTextField(5);
+		JButton gomb = new JButton("Ok");
+		gomb.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				jelszo = mezo.getText();
+				if(jelszavam.equals(jelszo))																								//ha a jelszó stimmel, betölti a kért menüpontot
+				{
+					torles = new Torlo();
+					setContentPane(torles);
+					pack();
+				}
+				else																														//ha nem stimmel a jelszó, hibaüzenetet ír ki
+				{
+					JOptionPane.showMessageDialog(null, "Helytelen jelszó", "Hiba üzenet", 2);
+				}
+			}
+		});
+		add(new JLabel("Jelszó: "));
+		add(mezo);
+		add(gomb);
+		setLayout(new FlowLayout());
+		pack();
+		setVisible(true);
+	}
 }

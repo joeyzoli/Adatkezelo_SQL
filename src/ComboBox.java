@@ -14,7 +14,7 @@ public class ComboBox
 	private final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
 	private final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
 	
-	private void listakeszito_vt()
+	private void listakeszito_vt()																						//VT-azonosítókat dolgozza fel
 	{
 		try
 		{
@@ -119,31 +119,31 @@ public class ComboBox
 		}
 	}
 	
-	public String[] getCombobox()
+	public String[] getCombobox()														//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_vt();
 		return combobox_tomb;
 	}
 	
-	public String[] getCombobox_projekt()
+	public String[] getCombobox_projekt()												//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_projekt();
 		return combobox_tomb;
 	}
 	
-	public String[] getCombobox_hiba()
+	public String[] getCombobox_hiba()													//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_hiba_helye();
 		return combobox_tomb;
 	}
 	
-	public String[] getCombobox_ellenorok()
+	public String[] getCombobox_ellenorok()												//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_ellenorok();
 		return combobox_tomb;
 	}
 	
-	public String[] getCombobox_hibakodok()
+	public String[] getCombobox_hibakodok()												//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_hibakodok();
 		return combobox_tomb;
