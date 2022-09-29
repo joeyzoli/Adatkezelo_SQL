@@ -18,13 +18,13 @@ public class ComboBox
 	{
 		try
 		{
-			beolvas = new Adat_beolvaso();
-			beolvas.beolvas_darabol(vt_azon);
-			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
+			beolvas = new Adat_beolvaso();																				//példányosítás
+			beolvas.futtat_darabol(vt_azon);																			//osztály függvényének meghívása
+			combobox_tomb = new String[beolvas.getdinamikustomb().size()];												//tömb méretének meghatározása
 			
-			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
+			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)								//for cuklus az ArrayList elemeinek átadása egy String tömbnek
 			{
-				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
+				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);										//tömb elemeinek feltöltése
 			}
 		}
 		catch(Exception ex)
@@ -40,7 +40,7 @@ public class ComboBox
 		try
 		{
 			beolvas = new Adat_beolvaso();
-			beolvas.beolvas_sima(projekt);
+			beolvas.futtat_sima(projekt);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
 			
 			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
@@ -61,7 +61,7 @@ public class ComboBox
 		try
 		{
 			beolvas = new Adat_beolvaso();
-			beolvas.beolvas_sima(hiba_helye);
+			beolvas.futtat_sima(hiba_helye);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
 			
 			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
@@ -82,7 +82,7 @@ public class ComboBox
 		try
 		{
 			beolvas = new Adat_beolvaso();
-			beolvas.beolvas_sima(ellenorok);
+			beolvas.futtat_sima(ellenorok);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
 			
 			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
@@ -103,7 +103,7 @@ public class ComboBox
 		try
 		{
 			beolvas = new Adat_beolvaso();
-			beolvas.beolvas_darabol(hibakodok);
+			beolvas.futtat_darabol(hibakodok);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
 			
 			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)

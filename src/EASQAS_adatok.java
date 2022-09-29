@@ -63,6 +63,7 @@ public class EASQAS_adatok extends JPanel
 		JLabel lblNewLabel_6 = new JLabel("Termék");
 		
 		JButton termek_excel = new JButton("Excel");
+		termek_excel.addActionListener(new Termek_lekerdezo());
 		
 		JLabel lblNewLabel_7 = new JLabel("Hibák");
 		
@@ -147,6 +148,25 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 				String querry = "call qualitydb.projekt_lekerdezo(?,?,?)";																	//tárolt eljárás Stringje
+				SQL lekerdezo = new SQL();																									//példányosítás
+				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));	//függvénymeghívása a paraméterekkel
+			}
+			catch (Exception e1) 
+	        {
+	            e1.printStackTrace();
+	            String hibauzenet2 = e1.toString();
+				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+	        }
+		 }
+	}
+	
+	class Termek_lekerdezo implements ActionListener																						//termék gomb megnyomáskor hívodik meg
+	{
+		public void actionPerformed(ActionEvent e)
+		 {
+			try
+			{
+				String querry = "call qualitydb.termek_lekerdezo(?,?,?)";																	//tárolt eljárás Stringje
 				SQL lekerdezo = new SQL();																									//példányosítás
 				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));	//függvénymeghívása a paraméterekkel
 			}
