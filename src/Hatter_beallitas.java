@@ -1,21 +1,26 @@
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 
-public class Hatter_beallitas extends JPanel 
+public class Hatter_beallitas extends JPanel implements ChangeListener
 {
 	
 
@@ -23,6 +28,7 @@ public class Hatter_beallitas extends JPanel
 	 * Ez az osztály a háttér szinének beállítására szolgál
 	 */
 	private static final long serialVersionUID = 1L;
+	protected JColorChooser tcc;
 	private JCheckBox alap;
 	private JCheckBox kek;
 	private JCheckBox zold;
@@ -91,6 +97,12 @@ public class Hatter_beallitas extends JPanel
 		gombcsoport.add(kek);
 		gombcsoport.add(lila);
 		gombcsoport.add(sajat);
+		
+		tcc = new JColorChooser();
+        tcc.getSelectionModel().addChangeListener(this);
+        tcc.setBorder(BorderFactory.createTitledBorder(
+                                             "Choose Text Color"));
+        add(tcc, BorderLayout.PAGE_END);
 		
 		JButton mentes = new JButton("Mentés");
 		mentes.addActionListener(new Hatter_beallit());
@@ -175,7 +187,13 @@ public class Hatter_beallitas extends JPanel
 
 	}
 	
-	class Hatter_beallit implements ActionListener																						//törlés gomb megnyomáskor hívódik meg
+	public void stateChanged(ChangeEvent e) 
+	{
+        Color newColor = tcc.getColor();
+        Foablak.hatter_szine = newColor;
+    }
+	
+	class Hatter_beallit implements ActionListener																						//beallít gomb megnyomáskor hívódik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
