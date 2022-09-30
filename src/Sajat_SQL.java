@@ -74,6 +74,7 @@ public class Sajat_SQL extends JPanel
 					.addComponent(futtat)
 					.addContainerGap(57, Short.MAX_VALUE))
 		);
+		setBackground(Foablak.hatter_szine);
 		setLayout(groupLayout);
 
 	}

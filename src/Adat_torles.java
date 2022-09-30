@@ -68,6 +68,7 @@ public class Adat_torles extends JPanel
 					.addComponent(torlo_gomb)
 					.addContainerGap(297, Short.MAX_VALUE))
 		);
+		setBackground(Foablak.hatter_szine);
 		setLayout(groupLayout);
 
 	}

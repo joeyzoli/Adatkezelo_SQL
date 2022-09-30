@@ -137,6 +137,7 @@ public class EASQAS_adatok extends JPanel
 						.addComponent(hibak_excel))
 					.addContainerGap(503, Short.MAX_VALUE))
 		);
+		setBackground(Foablak.hatter_szine);
 		setLayout(groupLayout);
 
 	}

@@ -75,6 +75,7 @@ public class Torlo extends JPanel
 					.addComponent(csv_gomb)
 					.addContainerGap(244, Short.MAX_VALUE))
 		);
+		setBackground(Foablak.hatter_szine);
 		setLayout(groupLayout);
 
 	}

@@ -97,7 +97,7 @@ public class Gyartasi_adatok extends JPanel
 		JLabel lblNewLabel_8 = new JLabel("Minta nagyság");
 		
 		mintanagysag = new JTextField();
-		mintanagysag.setText("");
+		mintanagysag.setText("0");
 		mintanagysag.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("PCB sorszám");
@@ -112,7 +112,7 @@ public class Gyartasi_adatok extends JPanel
 		JLabel lblNewLabel_11 = new JLabel("Hibák száma");
 		
 		hibak_szama = new JTextField();
-		hibak_szama.setText("");
+		hibak_szama.setText("0");
 		hibak_szama.setColumns(10);
 		
 		ellenor_neve = new JComboBox<String>(combobox_tomb.getCombobox_ellenorok());
@@ -254,8 +254,8 @@ public class Gyartasi_adatok extends JPanel
 					.addComponent(mentes_gomb)
 					.addContainerGap())
 		);
-		
-		
+		setBackground(Foablak.hatter_szine);
+				
 		setLayout(groupLayout);
 
 	}
@@ -325,7 +325,8 @@ public class Gyartasi_adatok extends JPanel
 					String hibauzenet2 = ex2.toString();
 					JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
 				 }
-		    }    
+		    }
+		 
 	    }
 
 		@Override

@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -12,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -32,9 +34,12 @@ public class Foablak extends JFrame
 	private Adat_torles adattorlo;
 	private Torlo torles;
 	private Sajat_SQL sajat_sql;
+	private Hatter_beallitas hatterbeall;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private static final String jelszavam = "polip13";
+	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
+	
 
 	/**
 	 * Launch the application.
@@ -98,6 +103,14 @@ public class Foablak extends JFrame
 		JMenuItem sajat_sql = new JMenuItem("Saját SQL");
 		sajat_sql.addActionListener(new PanelCsere_sajat_sql());
 		lekerdezes.add(sajat_sql);
+		
+		JMenu beallitasok = new JMenu("Beállítások");
+		menuBar.add(beallitasok);
+		
+		JMenuItem hatterszin = new JMenuItem("Háttér");
+		hatterszin.addActionListener(new PanelCsere_hatter());
+		
+		beallitasok.add(hatterszin);
 		easqas.addActionListener(new PanelCsere_easqas());
 		
 		contentPane = new JPanel();
@@ -108,6 +121,7 @@ public class Foablak extends JFrame
 		ImageIcon img = new ImageIcon(kep);
 		hatter = new JLabel("", img ,JLabel.CENTER);
 		contentPane.add(hatter);
+		contentPane.setBackground(hatter_szine);
 		setContentPane(contentPane);
 		
 		pack();
@@ -165,6 +179,16 @@ public class Foablak extends JFrame
 		 }
 	}
 	
+	class PanelCsere_hatter implements ActionListener																					//mentés gomb megnyomáskor hívodik meg
+	{
+		public void actionPerformed(ActionEvent e)
+		 {
+			hatterbeall = new Hatter_beallitas();
+			setContentPane(hatterbeall);
+			pack();
+		 }
+	}
+	
 	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
 	{
 		JTextField mezo = new JTextField(5);
@@ -186,10 +210,10 @@ public class Foablak extends JFrame
 				}
 			}
 		});
-		add(new JLabel("Jelszó: "));
-		add(mezo);
-		add(gomb);
-		setLayout(new FlowLayout());
+		getContentPane().add(new JLabel("Jelszó: "));
+		getContentPane().add(mezo);
+		getContentPane().add(gomb);
+		getContentPane().setLayout(new FlowLayout());
 		pack();
 		setVisible(true);
 	}
