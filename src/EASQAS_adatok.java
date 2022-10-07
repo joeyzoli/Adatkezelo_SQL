@@ -13,6 +13,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class EASQAS_adatok extends JPanel 
 {
@@ -28,7 +29,9 @@ public class EASQAS_adatok extends JPanel
 	/**
 	 * Create the panel.
 	 */
-	public EASQAS_adatok() {
+	public EASQAS_adatok() 
+	{
+		this.setPreferredSize(new Dimension(1100, 650));
 		
 		JLabel lblNewLabel = new JLabel("EASQAS adatok");
 		lblNewLabel.setForeground(Color.BLUE);

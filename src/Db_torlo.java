@@ -22,7 +22,7 @@ public class Db_torlo
 	    {
 	       try 
 	       {
-	          Class.forName("com.mysql.jdbc.Driver");
+	          Class.forName("com.mysql.cj.jdbc.Driver");
 	       } catch (Exception e) {
 	          System.out.println(e);
 	    }
@@ -68,7 +68,7 @@ public class Db_torlo
 	
 /************************************* Csak a megadott PCB sorát törli a függvény  **************************************/
 	
-	public void pcb_torlo(String pcb)												//a függvény vár egy paramétert ami a törlendő PCB sorszámát tartalmazza
+	public void adat_torlo(String vt, String datum, String muszak, String hibahelye, int felajanlott, int hibakod)												//a függvény vár egy paramétert ami a törlendő PCB sorszámát tartalmazza
 	{
 		Connection conn = null;
 	    Statement stmt = null;
@@ -86,7 +86,12 @@ public class Db_torlo
 	    }
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");					//kapcsolódás az SQL adatbázisban
 	    stmt = (Statement) conn.createStatement();
-	    String torles = "DELETE FROM qualitydb.Gyartasi_adatok where PCB_sorszam = '" + pcb + "'";											//SQL string a paraméterrel
+	    String torles = "DELETE FROM qualitydb.Gyartasi_adatok where VT_azon = '" + vt +"'"
+	    															+ "and datum = '" + datum +"'"
+	    															+ "and muszak = '" + muszak +"'"
+	    															+ "and Hibagyujtes_helye = '" + hibahelye +"'"
+	    															+ "and Felajanlott = " + felajanlott; 
+	    															//+ "and Hibakod = " + hibakod +"";
 	    stmt.executeUpdate(torles);																											//SQL utasítás végrehajtása
 	    } 
 	    catch (SQLException e1) 
@@ -114,8 +119,8 @@ public class Db_torlo
 	          se.printStackTrace();
 	       }  
 	    }
-	    JOptionPane.showMessageDialog(null, "Törlés sikeres", "Info", 1);
-	}
+	    //JOptionPane.showMessageDialog(null, "Törlés sikeres", "Info", 1);
+	}  
 }
 	
 	

@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,7 @@ public class Hatter_beallitas extends JPanel implements ChangeListener
 	 */
 	public Hatter_beallitas() 
 	{
+		this.setPreferredSize(new Dimension(1100, 650));
 		
 		JLabel lblNewLabel = new JLabel("Háttér szinének a beállítása");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));

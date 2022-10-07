@@ -15,7 +15,7 @@ public class SQL
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye)
 	{
     
-        String driverName = "com.mysql.jdbc.Driver";						//driver stringje
+        String driverName = "com.mysql.cj.jdbc.Driver";						//driver stringje
         String url = "jdbc:mysql://172.20.22.29";							//adatbázis IP címe
         String userName = "veasquality";									//fehasználónév
         String password = "kg6T$kd14TWbs9&gd";								//jelszó

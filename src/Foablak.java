@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 public class Foablak extends JFrame 
 {
@@ -27,9 +26,9 @@ public class Foablak extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final LayoutManager H = new GridLayout(1, 0);
-    private JPanel contentPane;
+	private JPanel contentPane;
 	private Gyartasi_adatok adatok;
+	private Uj_alapadat ujadat;
 	private EASQAS_adatok easqas;
 	private Adat_torles adattorlo;
 	private Torlo torles;
@@ -71,8 +70,7 @@ public class Foablak extends JFrame
 	public Foablak() 
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(H);
-        this.setPreferredSize(new Dimension(1300, 800));
+        this.setPreferredSize(new Dimension(1200, 800));
         setTitle("Adat kezelő");
         
 		
@@ -91,6 +89,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem adat_torles = new JMenuItem("Adat törlés");
 		adat_torles.addActionListener(new PanelCsere_adat_torles());
+		
+		JMenuItem ujadat = new JMenuItem("Új alapadat");
+		ujadat.addActionListener(new PanelCsere_uj_adatok());
+		menu.add(ujadat);
 		menu.add(adat_torles);
 		menu.add(torles);
 		
@@ -116,27 +118,54 @@ public class Foablak extends JFrame
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
+		JScrollPane gorgeto = new JScrollPane(contentPane);
+		getContentPane().add(gorgeto);
 		
 		JLabel hatter;
 		ImageIcon img = new ImageIcon(kep);
 		hatter = new JLabel("", img ,JLabel.CENTER);
 		contentPane.add(hatter);
+		
 		contentPane.setBackground(hatter_szine);
-		setContentPane(contentPane);
+		
+		//setContentPane(gorgeto);
 		
 		pack();
         setLocationRelativeTo(null);
 
 	}
 	
-/**************************************************  Menü elemek közötti lépegetés *********************************************************************************************************/
+/*****************************************************************  Menü elemek közötti lépegetés *********************************************************************************************************/
 	
 	class PanelCsere_adatok implements ActionListener																						//menüelem kiválasztásakor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
 			adatok = new Gyartasi_adatok();																									//példányosítás
-			setContentPane(adatok);																											//új contentpane megadása
+			JScrollPane ablak = new JScrollPane(adatok);
+			setContentPane(ablak);																											//új contentpane megadása
+			pack();
+		 }
+	}
+	
+	class PanelCsere_uj_adatok implements ActionListener																					//menüelem kiválasztásakor hívodik meg
+	{
+		public void actionPerformed(ActionEvent e)
+		 {
+			ujadat = new Uj_alapadat();																										//példányosítás
+			JScrollPane ablak = new JScrollPane(ujadat);
+			setContentPane(ablak);																											//új contentpane megadása
+			pack();
+		 }
+	}
+	
+	class PanelCsere_adat_torles implements ActionListener																					//menüelem kiválasztásakor hívodik meg
+	{
+		public void actionPerformed(ActionEvent e)
+		 {
+			adattorlo = new Adat_torles();
+			JScrollPane ablak = new JScrollPane(adattorlo);
+			setContentPane(ablak);
 			pack();
 		 }
 	}
@@ -154,17 +183,8 @@ public class Foablak extends JFrame
 		public void actionPerformed(ActionEvent e)
 		 {
 			easqas = new EASQAS_adatok();																									//példányosítás
-			setContentPane(easqas);																											//új contentpane megadása
-			pack();
-		 }
-	}
-	
-	class PanelCsere_adat_torles implements ActionListener																					//menüelem kiválasztásakor hívodik meg
-	{
-		public void actionPerformed(ActionEvent e)
-		 {
-			adattorlo = new Adat_torles();
-			setContentPane(adattorlo);
+			JScrollPane ablak = new JScrollPane(easqas);
+			setContentPane(ablak);																											//új contentpane megadása
 			pack();
 		 }
 	}
@@ -174,7 +194,8 @@ public class Foablak extends JFrame
 		public void actionPerformed(ActionEvent e)
 		 {
 			sajat_sql = new Sajat_SQL();
-			setContentPane(sajat_sql);
+			JScrollPane ablak = new JScrollPane(sajat_sql);
+			setContentPane(ablak);
 			pack();
 		 }
 	}
@@ -184,7 +205,8 @@ public class Foablak extends JFrame
 		public void actionPerformed(ActionEvent e)
 		 {
 			hatterbeall = new Hatter_beallitas();
-			setContentPane(hatterbeall);
+			JScrollPane ablak = new JScrollPane(hatterbeall);
+			setContentPane(ablak);
 			pack();
 		 }
 	}

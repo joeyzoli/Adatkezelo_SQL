@@ -22,7 +22,7 @@ public class Db_iro
 	    {
 	       try 
 	       {
-	          Class.forName("com.mysql.jdbc.Driver");								//Driver meghívása
+	          Class.forName("com.mysql.cj.jdbc.Driver");								//Driver meghívása
 	       } 
 	       catch (Exception e) 
 	       {

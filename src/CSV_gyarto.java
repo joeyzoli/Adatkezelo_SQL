@@ -23,7 +23,7 @@ public class CSV_gyarto
 	     csv.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);															//filechooser beállítása
 	     csv.showOpenDialog(csv);																								//fc ablak megniytása
 	     File csv_fajl = csv.getSelectedFile();																					//kiválasztott fájl odaadása egy File osztálynak
-		 workbook.loadFromFile(csv_fajl.getName());																				//fájl odaadása az excel osztálynak
+		 workbook.loadFromFile(csv_fajl.getAbsolutePath());																				//fájl odaadása az excel osztálynak
 		
 		//Get the first sheet
 		Worksheet sheet = workbook.getWorksheets().get(0);																		//excel tábla létrehozása

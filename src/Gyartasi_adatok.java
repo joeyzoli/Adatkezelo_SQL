@@ -15,6 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class Gyartasi_adatok extends JPanel 
 {
@@ -38,12 +39,12 @@ public class Gyartasi_adatok extends JPanel
 	private JTextField pcb_sorszam;
 	private JTextField hibak_szama;
 	private JTextField pozicio;
-
 	/**
 	 * Gyártási adatok osztály. Ezen a felületen lehet felvinni az adatokat az SQL táblába
 	 */
 	public Gyartasi_adatok() 										//konstruktor létrehozza a panelt
 	{
+		this.setPreferredSize(new Dimension(1100, 650));
 		
 		JLabel lblNewLabel = new JLabel("Adatbevitel");
 		lblNewLabel.setForeground(Color.BLUE);
@@ -257,7 +258,6 @@ public class Gyartasi_adatok extends JPanel
 		setBackground(Foablak.hatter_szine);
 				
 		setLayout(groupLayout);
-
 	}
 	
 	class Iro implements ActionListener																						//mentés gomb megnyomáskor hívodik meg
@@ -342,6 +342,5 @@ public class Gyartasi_adatok extends JPanel
 			// TODO Auto-generated method stub
 			
 		}    
-	}
-	
+	}	
 }
