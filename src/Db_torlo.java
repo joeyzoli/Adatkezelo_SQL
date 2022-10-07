@@ -91,7 +91,7 @@ public class Db_torlo
 	    															+ "and muszak = '" + muszak +"'"
 	    															+ "and Hibagyujtes_helye = '" + hibahelye +"'"
 	    															+ "and Felajanlott = " + felajanlott; 
-	    															//+ "and Hibakod = " + hibakod +"";
+	    															//+ "and Hibakod = " + hibakod;
 	    stmt.executeUpdate(torles);																											//SQL utasítás végrehajtása
 	    } 
 	    catch (SQLException e1) 
