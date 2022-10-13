@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,9 +35,12 @@ public class Foablak extends JFrame
 	private Adat_torles adattorlo;
 	private Torlo torles;
 	private Sajat_SQL sajat_sql;
+	private Uj_adatok muszaki_adatok;
+	private Muszaki_leker muszaki_leker;
 	private Hatter_beallitas hatterbeall;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
+	private JTextField mezo;
 	private static final String jelszavam = "polip13";
 	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
 	
@@ -105,6 +110,17 @@ public class Foablak extends JFrame
 		JMenuItem sajat_sql = new JMenuItem("Saját SQL");
 		sajat_sql.addActionListener(new PanelCsere_sajat_sql());
 		lekerdezes.add(sajat_sql);
+		
+		JMenu mnNewMenu = new JMenu("Műszaki");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem ujadat_menu = new JMenuItem("Új adat felvitele");
+		ujadat_menu.addActionListener(new PanelCsere_muszaki_ujadat());
+		mnNewMenu.add(ujadat_menu);
+		
+		JMenuItem adatleker_menu = new JMenuItem("Adatok lekérdezése");
+		adatleker_menu.addActionListener(new PanelCsere_muszaki_leker());
+		mnNewMenu.add(adatleker_menu);
 		
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
@@ -200,11 +216,33 @@ public class Foablak extends JFrame
 		 }
 	}
 	
+	class PanelCsere_muszaki_ujadat implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            muszaki_adatok = new Uj_adatok();
+            JScrollPane ablak = new JScrollPane(muszaki_adatok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_muszaki_leker implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            muszaki_leker = new Muszaki_leker();
+            JScrollPane ablak = new JScrollPane(muszaki_leker);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//mentés gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
-			hatterbeall = new Hatter_beallitas();
+		    hatterbeall = new Hatter_beallitas();
 			JScrollPane ablak = new JScrollPane(hatterbeall);
 			setContentPane(ablak);
 			pack();
@@ -213,7 +251,8 @@ public class Foablak extends JFrame
 	
 	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
 	{
-		JTextField mezo = new JTextField(5);
+		mezo = new JTextField(5);
+		mezo.addKeyListener(new Enter());
 		JButton gomb = new JButton("Ok");
 		gomb.addActionListener(new ActionListener()
 		{
@@ -239,4 +278,42 @@ public class Foablak extends JFrame
 		pack();
 		setVisible(true);
 	}
+	
+	class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                jelszo = mezo.getText();
+                if(jelszavam.equals(jelszo))                                                                                                //ha a jelszó stimmel, betölti a kért menüpontot
+                {
+                    torles = new Torlo();
+                    setContentPane(torles);
+                    pack();
+                }
+                else                                                                                                                        //ha nem stimmel a jelszó, hibaüzenetet ír ki
+                {
+                    JOptionPane.showMessageDialog(null, "Helytelen jelszó", "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub
+            
+        }    
+    }   
 }
