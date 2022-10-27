@@ -160,7 +160,7 @@ public class SQL
         {
            try 
            {
-              Class.forName("com.mysql.jdbc.Driver");
+              Class.forName("com.mysql.cj.jdbc.Driver");
            } 
            catch (Exception e) 
            {
@@ -170,14 +170,15 @@ public class SQL
         }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         System.out.println("Csatlakozás sikeres...");
-        stmt = conn.createStatement();
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "SELECT * FROM  qualitydb.Muszaki_adatok where Tipus = '"+ tipus +"'";
         stmt.execute(sajat);
         System.out.println("Lekérdezés sikeres..................");
         ResultSet resultSet = stmt.getResultSet();
         
         int numColumns = resultSet.getMetaData().getColumnCount();
-        resultSet.absolute(1);
+      
+       
         while(resultSet.next())
         {      
             for ( int i = 1 ; i <= numColumns ; i++ ) 

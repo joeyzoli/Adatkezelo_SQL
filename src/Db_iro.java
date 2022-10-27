@@ -3,7 +3,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javax.swing.JOptionPane;
 
 import com.spire.data.table.DataTable;
@@ -156,15 +155,18 @@ public class Db_iro
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = conn.createStatement();                                                                                                  //csatlakozás
         
-        PreparedStatement statement = conn.prepareStatement("INSERT INTO qualitydb.Gyartasi_adatok (ID, VT_azon, Cikkszam, Vevo, Vevoi_megnev, Datum, Muszak, Ellenor_neve, Hibagyujtes_helye,"
+        PreparedStatement statement = conn.prepareStatement("INSERT INTO qualitydb.Gyartasi_adatok (ID, VT_azon, Cikksz, Vevo, Vevoi_megnev, Datum, Muszak, Ellenor_neve, Hibagyujtes_helye,"
                 + "Felajanlott, Minta_nagysag, PCB_sorszam, Hibakod, Hiba_megnevezes, Pozicio, Hibak_szam, Sor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
         Workbook workbook = new Workbook();
         workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\Java projekt\\minden.xlsx");
         Worksheet sheet = workbook.getWorksheets().get(0);
 
-        DataTable dataTable = sheet.exportDataTable();
-
+        DataTable dataTable = sheet.exportDataTable();                                  //sheet.getAllocatedRange(), false, false
+        
+        System.out.println("A sorok száma: " + dataTable.getRows().size());
+        System.out.println("Az oszlopok száma: " + dataTable.getColumns().size());
+        
         for (int i = 0; i < dataTable.getRows().size(); i++) 
         {
             for (int j = 0; j < dataTable.getColumns().size(); j++) 
@@ -173,6 +175,7 @@ public class Db_iro
             }
             statement.executeUpdate();
         }
+        
         statement.close();
         conn.close();
                                                                                                                   
@@ -209,4 +212,6 @@ public class Db_iro
         }
         System.out.println("Minden kész!");
 	}
+	
+	
 }

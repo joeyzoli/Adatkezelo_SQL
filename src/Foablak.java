@@ -251,6 +251,7 @@ public class Foablak extends JFrame
 	
 	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
 	{
+	    JPanel ablakos = new JPanel();
 		mezo = new JTextField(5);
 		mezo.addKeyListener(new Enter());
 		JButton gomb = new JButton("Ok");
@@ -262,7 +263,8 @@ public class Foablak extends JFrame
 				if(jelszavam.equals(jelszo))																								//ha a jelszó stimmel, betölti a kért menüpontot
 				{
 					torles = new Torlo();
-					setContentPane(torles);
+					JScrollPane ablak = new JScrollPane(torles);
+					setContentPane(ablak);
 					pack();
 				}
 				else																														//ha nem stimmel a jelszó, hibaüzenetet ír ki
@@ -271,10 +273,11 @@ public class Foablak extends JFrame
 				}
 			}
 		});
-		getContentPane().add(new JLabel("Jelszó: "));
-		getContentPane().add(mezo);
-		getContentPane().add(gomb);
-		getContentPane().setLayout(new FlowLayout());
+		ablakos.add(new JLabel("Jelszó: "));
+		ablakos.add(mezo);
+		ablakos.add(gomb);
+		ablakos.setLayout(new FlowLayout());
+		setContentPane(ablakos);
 		pack();
 		setVisible(true);
 	}
