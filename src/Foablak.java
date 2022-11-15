@@ -28,6 +28,7 @@ public class Foablak extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	static Foablak frame;
 	private JPanel contentPane;
 	private Gyartasi_adatok adatok;
 	private Uj_alapadat ujadat;
@@ -56,7 +57,7 @@ public class Foablak extends JFrame
 			{
 				try 
 				{
-					Foablak frame = new Foablak();
+					frame = new Foablak();
 					frame.setVisible(true);
 				} 
 				catch (Exception e) 

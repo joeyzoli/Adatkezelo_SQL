@@ -2,6 +2,8 @@ import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -91,9 +93,10 @@ public class Muszaki_leker extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             SQL lekerdez = new SQL();
             lekerdez.muszaki_lekerdezo(tipus.getText());
-           
+            Foablak.frame.setCursor(null);
          }
     }
 }

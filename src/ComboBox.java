@@ -1,3 +1,5 @@
+import java.awt.Cursor;
+
 import javax.swing.JOptionPane;
 
 public class ComboBox 
@@ -18,6 +20,7 @@ public class ComboBox
 	{
 		try
 		{
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();																				//példányosítás
 			beolvas.futtat_darabol(vt_azon);																			//osztály függvényének meghívása
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];												//tömb méretének meghatározása
@@ -26,6 +29,8 @@ public class ComboBox
 			{
 				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);										//tömb elemeinek feltöltése
 			}
+			Foablak.frame.setCursor(null);
+			
 		}
 		catch(Exception ex)
 		{
@@ -39,6 +44,7 @@ public class ComboBox
 	{
 		try
 		{
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();
 			beolvas.futtat_sima(projekt);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
@@ -47,6 +53,7 @@ public class ComboBox
 			{
 				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
 			}
+			Foablak.frame.setCursor(null);
 		}
 		catch(Exception ex)
 		{
@@ -60,6 +67,7 @@ public class ComboBox
 	{
 		try
 		{
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();
 			beolvas.futtat_sima(hiba_helye);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
@@ -68,6 +76,7 @@ public class ComboBox
 			{
 				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
 			}
+			Foablak.frame.setCursor(null);
 		}
 		catch(Exception ex)
 		{
@@ -81,6 +90,7 @@ public class ComboBox
 	{
 		try
 		{
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();
 			beolvas.futtat_sima(ellenorok);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
@@ -89,6 +99,7 @@ public class ComboBox
 			{
 				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
 			}
+			Foablak.frame.setCursor(null);
 		}
 		catch(Exception ex)
 		{
@@ -102,6 +113,7 @@ public class ComboBox
 	{
 		try
 		{
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();
 			beolvas.futtat_darabol(hibakodok);
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
@@ -110,6 +122,7 @@ public class ComboBox
 			{
 				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
 			}
+			Foablak.frame.setCursor(null);
 		}
 		catch(Exception ex)
 		{

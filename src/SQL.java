@@ -73,6 +73,68 @@ public class SQL
  
 	}
 	
+	public void lekerdez_projekt_projekt(String querry, String projekt, String datum_tol, String datum_ig, String hiba_helye)
+    {
+    
+        String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
+        String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
+        String userName = "veasquality";                                    //fehasználónév
+        String password = "kg6T$kd14TWbs9&gd";                              //jelszó
+        DataTable datatable = new DataTable();
+  
+        try 
+        {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
+            Statement statement = connection.createStatement();
+            CallableStatement cstmt = connection.prepareCall("{" + querry + "}");                                   //tárolt eljárást hívja meg
+            cstmt.setString(1, projekt);
+            cstmt.setString(2, datum_tol);
+            cstmt.setString(3, datum_ig);
+            cstmt.setString(4, hiba_helye);
+            cstmt.execute();
+            //String sql = "select * from " + DB;
+            ResultSet resultSet = cstmt.getResultSet();
+ 
+            Workbook workbook = new Workbook();
+            JdbcAdapter jdbcAdapter = new JdbcAdapter();
+            jdbcAdapter.fillDataTable(datatable, resultSet);
+ 
+            //Get the first worksheet
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            sheet.insertDataTable(datatable, true, 1, 1);
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+            sheet.getAllocatedRange().autoFitColumns();
+            sheet.getAllocatedRange().autoFitRows();
+            
+            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
+            JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            mentes_helye.showOpenDialog(mentes_helye);
+            File fajl = mentes_helye.getSelectedFile();
+            //System.out.println(fajl.getAbsolutePath());
+            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+            resultSet.close();
+            statement.close();
+            connection.close();
+            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
+	
 	public void sajat_sql(String SQL)
 	{
 		Connection conn = null;
