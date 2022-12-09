@@ -2,6 +2,8 @@ import javax.swing.JPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,6 +29,7 @@ public class EASQAS_adatok extends JPanel
 	private JComboBox<String> hiba_box;
 	private JComboBox<String> projekt_box;
 	private ComboBox combobox_tomb;
+	private JButton projekt_excel;
 
 	/**
 	 * Create the panel.
@@ -62,18 +65,21 @@ public class EASQAS_adatok extends JPanel
 		
 		JLabel lblNewLabel_5 = new JLabel("Projekt");
 		
-		JButton projekt_excel = new JButton("Excel");
+		projekt_excel = new JButton("Excel");
 		projekt_excel.addActionListener(new Projekt_lekerdezo());
+		projekt_excel.addKeyListener(new Enter());
 		
 		JLabel lblNewLabel_6 = new JLabel("Termék");
 		
 		JButton termek_excel = new JButton("Excel");
 		termek_excel.addActionListener(new Termek_lekerdezo());
+		termek_excel.addKeyListener(new Enter2());
 		
 		JLabel lblNewLabel_7 = new JLabel("Hibák");
 		
 		JButton hibak_excel = new JButton("Excel");
 		hibak_excel.addActionListener(new Hiba_lekerdezo());
+		hibak_excel.addKeyListener(new Enter3());
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -175,6 +181,7 @@ public class EASQAS_adatok extends JPanel
 				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
 	        }
 		 }
+      
 	}
 	
 	class Termek_lekerdezo implements ActionListener																						//termék gomb megnyomáskor hívodik meg
@@ -218,4 +225,124 @@ public class EASQAS_adatok extends JPanel
 	        }
 		 }
 	}
+	
+	class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                try
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    if(projekt_box.getSelectedItem().equals("-"))
+                    {
+                        String querry = "call qualitydb.projekt_lekerdezo(?,?,?)";                                                                  //tárolt eljárás Stringje
+                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        String querry = "call qualitydb.projekt_lekerdezo_projekt(?,?,?,?)";                                                                   //tárolt eljárás Stringje
+                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                        lekerdezo.lekerdez_projekt_projekt(querry, String.valueOf(projekt_box.getSelectedItem()), datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    }
+                    Foablak.frame.setCursor(null);
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
+	
+	class Enter2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                try
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.termek_lekerdezo(?,?,?)";                                                                   //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    Foablak.frame.setCursor(null);
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
+	
+	class Enter3 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                try
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?)";                                                                    //tárolt eljárás stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    Foablak.frame.setCursor(null);
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }   
 }
