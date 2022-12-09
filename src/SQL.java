@@ -5,10 +5,14 @@ import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.*;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
 public class SQL 
 {
@@ -56,6 +60,19 @@ public class SQL
             resultSet.close();
             statement.close();
             connection.close();
+            
+            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                workbook2.write(output);
+                output.close();
+            }
+            
             JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
         } 
         catch (SQLException e) 
@@ -118,6 +135,18 @@ public class SQL
             resultSet.close();
             statement.close();
             connection.close();
+            
+            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                workbook2.write(output);
+                output.close();
+            }
             JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
         } 
         catch (SQLException e) 
@@ -182,6 +211,18 @@ public class SQL
         resultSet.close();
         stmt.close();
         conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            workbook2.write(output);
+            output.close();
+        }
         JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
 	    } 
 	    catch (SQLException e1) 
