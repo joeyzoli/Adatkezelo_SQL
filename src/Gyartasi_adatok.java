@@ -94,6 +94,7 @@ public class Gyartasi_adatok extends JPanel
 		
 		felajanlott = new JTextField();
 		felajanlott.setColumns(10);
+		felajanlott.setText("0");
 		
 		JLabel lblNewLabel_8 = new JLabel("Minta nagyság");
 		
@@ -274,7 +275,7 @@ public class Gyartasi_adatok extends JPanel
 				id.setText(String.valueOf(szamlalo)); 																												//számláló újraírása
 		
 				Urlap_torlo torles = new Urlap_torlo();																												//űrlap törlő példányosítása
-				torles.urlaptorles(datum, muszak, felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);												//űrlap kitöltött mezőinek alaphelyzetbe állítása
+				torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);												//űrlap kitöltött mezőinek alaphelyzetbe állítása
 			 }
 			catch(Exception ex2)
 			 {
@@ -317,7 +318,7 @@ public class Gyartasi_adatok extends JPanel
 					id.setText(String.valueOf(szamlalo)); 
 			
 					Urlap_torlo torles = new Urlap_torlo();
-					torles.urlaptorles(datum, muszak, felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
+					torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
 				 }
 				catch(Exception ex2)
 				 {

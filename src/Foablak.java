@@ -39,6 +39,7 @@ public class Foablak extends JFrame
 	private Sajat_SQL sajat_sql;
 	private Uj_adatok muszaki_adatok;
 	private Muszaki_leker muszaki_leker;
+	private ProGlove proglove;
 	private Hatter_beallitas hatterbeall;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
@@ -99,6 +100,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem ujadat = new JMenuItem("Új alapadat");
 		ujadat.addActionListener(new PanelCsere_uj_adatok());
+		
+		JMenuItem proglove = new JMenuItem("ProGlove");
+		proglove.addActionListener(new PanelCsere_proglove());
+		menu.add(proglove);
 		menu.add(ujadat);
 		menu.add(adat_torles);
 		menu.add(torles);
@@ -236,6 +241,17 @@ public class Foablak extends JFrame
          {
             muszaki_leker = new Muszaki_leker();
             JScrollPane ablak = new JScrollPane(muszaki_leker);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_proglove implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            proglove = new ProGlove();
+            JScrollPane ablak = new JScrollPane(proglove);
             setContentPane(ablak);
             pack();
          }

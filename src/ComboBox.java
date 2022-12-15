@@ -15,6 +15,8 @@ public class ComboBox
 	private final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
 	private final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
 	private final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
+	private final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
+	private final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
 	
 	private void listakeszito_vt()																						//VT-azonosítókat dolgozza fel
 	{
@@ -132,6 +134,52 @@ public class ComboBox
 		}
 	}
 	
+	private void listakeszito_proglove()
+    {
+        try
+        {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            beolvas = new Adat_beolvaso();
+            beolvas.futtat_sima(proglove);
+            combobox_tomb = new String[beolvas.getdinamikustomb().size()];
+            
+            for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
+            {
+                combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
+            }
+            Foablak.frame.setCursor(null);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            String hibauzenet2 = ex.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+    }
+	
+	private void listakeszito_folyamat()
+    {
+        try
+        {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            beolvas = new Adat_beolvaso();
+            beolvas.futtat_sima(folyamat);
+            combobox_tomb = new String[beolvas.getdinamikustomb().size()];
+            
+            for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
+            {
+                combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
+            }
+            Foablak.frame.setCursor(null);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            String hibauzenet2 = ex.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+    }
+	
 	public String[] getCombobox()														//lefuttaja a függvényt és visszaadja a tomböt
 	{
 		listakeszito_vt();
@@ -161,5 +209,17 @@ public class ComboBox
 		listakeszito_hibakodok();
 		return combobox_tomb;
 	}
+	
+	public String[] getCombobox_proglove()                                                //lefuttaja a függvényt és visszaadja a tomböt
+    {
+        listakeszito_proglove();
+        return combobox_tomb;
+    }
+	
+	public String[] getCombobox_folyamat()                                                //lefuttaja a függvényt és visszaadja a tomböt
+    {
+        listakeszito_folyamat();
+        return combobox_tomb;
+    }
 
 }

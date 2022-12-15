@@ -8,14 +8,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.*;
+import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
 public class SQL 
 {
+    ResultSet resultSet;
+    
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye)
 	{
     
@@ -270,50 +274,27 @@ public class SQL
               System.out.println(e);
               String hibauzenet2 = e.toString();
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
+           }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         System.out.println("Csatlakozás sikeres...");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "SELECT * FROM  qualitydb.Muszaki_adatok where Tipus = '"+ tipus +"'";
         stmt.execute(sajat);
         System.out.println("Lekérdezés sikeres..................");
-        ResultSet resultSet = stmt.getResultSet();
+        resultSet = stmt.getResultSet();
         
-        int numColumns = resultSet.getMetaData().getColumnCount();
-      
-       
-        while(resultSet.next())
-        {      
-            for ( int i = 1 ; i <= numColumns ; i++ ) 
-            {
-               Muszaki_leker.eredmeny.append(resultSet.getString(i) + " - ");          //resultSet.getString(i) + " "
-            }
-            Muszaki_leker.eredmeny.append("\n");
-            
-        }
-        
-       
-        /*
-        Workbook workbook = new Workbook();
-        JdbcAdapter jdbcAdapter = new JdbcAdapter();
-        jdbcAdapter.fillDataTable(datatable, resultSet);
+        // int numColumns = resultSet.getMetaData().getColumnCount();
+        //JTable table2 = new JTable(buildTableModel(resultSet));
 
-        //Get the first worksheet
-        Worksheet sheet = workbook.getWorksheets().get(0);
-        sheet.insertDataTable(datatable, true, 1, 1);
-        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));                                   //filter rakása az első sorra
-        sheet.getAllocatedRange().autoFitColumns();                                                     //auto méretezés
-        sheet.getAllocatedRange().autoFitRows();                                                        //auto méretezés celláknak
+        // Closes the Connection
+        //table.setFillsViewportHeight(true);
+        //JOptionPane.showMessageDialog(null, new JScrollPane(table2));
+
         
-        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        Muszaki_leker.eredmeny.setModel(buildTableModel(resultSet));
+        System.out.print("elment");
+        
        
-        JFileChooser mentes_helye = new JFileChooser();
-        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        mentes_helye.showOpenDialog(mentes_helye);
-        File fajl = mentes_helye.getSelectedFile();
-        //System.out.println(fajl.getAbsolutePath());
-        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-        */
         resultSet.close();
         stmt.close();
         conn.close();
@@ -326,7 +307,8 @@ public class SQL
         catch (Exception e) 
         {
            e.printStackTrace();
-        } finally 
+        } 
+        finally 
         {
            try 
            {
@@ -344,7 +326,106 @@ public class SQL
               se.printStackTrace();
            }  
         }
-        JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);
+        JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);  
+    }
+	
+	public void top_hiba(String tipus)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        //DataTable datatable = new DataTable();
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        System.out.println("Csatlakozás sikeres...");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sajat = "SELECT Pozicio, Hiba_megnevezes, sum(Hibak_szam) FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ tipus +"' group by Pozicio order by Hibak_szam desc";
+        stmt.execute(sajat);
+        System.out.println("Lekérdezés sikeres..................");
+        resultSet = stmt.getResultSet();
+        
+        // int numColumns = resultSet.getMetaData().getColumnCount();
+        //JTable table2 = new JTable(buildTableModel(resultSet));
+
+        // Closes the Connection
+        //table.setFillsViewportHeight(true);
+        //JOptionPane.showMessageDialog(null, new JScrollPane(table2));
+
+        
+        ProGlove.table_1.setModel(buildTableModel(resultSet));
+        System.out.print("elment");
+        
+       
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
+    {
+
+        ResultSetMetaData metaData = rs.getMetaData();
+
+        // names of columns
+        Vector<Object> columnNames = new Vector<Object>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) 
+        {
+            columnNames.add(metaData.getColumnName(column));
+        }
+
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        while (rs.next()) 
+        {
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) 
+            {
+                vector.add(rs.getObject(columnIndex));
+            }
+            data.add(vector);
+        }
+
+        return new DefaultTableModel(data, columnNames);
+
     }
 	
 }
