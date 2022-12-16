@@ -73,7 +73,6 @@ public class Db_iro
 	          se.printStackTrace();
 	       }  
 	    }
-	    System.out.println("Minden kész!");
 	}
 	
 	void iro_muszaki(String tipus, String datum, String veas_nr, String avm_nr, String pcb_nr, String pcb_verzio, 
@@ -132,7 +131,6 @@ public class Db_iro
               se.printStackTrace();
            }  
         }
-        System.out.println("Minden kész!");
 	}
 	
 	void feltolt()
@@ -210,8 +208,5 @@ public class Db_iro
               se.printStackTrace();
            }  
         }
-        System.out.println("Minden kész!");
-	}
-	
-	
+	}	
 }

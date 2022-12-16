@@ -45,7 +45,7 @@ public class Uj_alapadat extends JPanel
 		JLabel lblNewLabel_1 = new JLabel("Vevő");
 		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 11));
 		
-		vevo_box = new JComboBox<String>(combobox_tomb.getCombobox_projekt());				//combobox_tomb.getCombobox_projekt()
+		vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));				//combobox_tomb.getCombobox_projekt()
 		
 		JLabel lblNewLabel_2 = new JLabel("Vevői azonosító");
 		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 11));

@@ -61,7 +61,7 @@ public class Gyartasi_adatok extends JPanel
 		
 		combobox_tomb = new ComboBox();
 		
-		vt_azon = new JComboBox<String>(combobox_tomb.getCombobox());
+		vt_azon = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));
 		
 		datum = new JTextField();
 		datum.setColumns(10);
@@ -88,7 +88,7 @@ public class Gyartasi_adatok extends JPanel
 		
 		JLabel lblNewLabel_2 = new JLabel("Hibagyűjtés helye");
 		
-		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox_hiba());
+		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));
 		
 		JLabel lblNewLabel_3 = new JLabel("Felajánlott mennyiség");
 		
@@ -109,7 +109,7 @@ public class Gyartasi_adatok extends JPanel
 		
 		JLabel lblNewLabel_10 = new JLabel("Hibakód");
 		
-		hibakod_combobox = new JComboBox<String>(combobox_tomb.getCombobox_hibakodok());
+		hibakod_combobox = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));
 		
 		JLabel lblNewLabel_11 = new JLabel("Hibák száma");
 		
@@ -117,7 +117,7 @@ public class Gyartasi_adatok extends JPanel
 		hibak_szama.setText("0");
 		hibak_szama.setColumns(10);
 		
-		ellenor_neve = new JComboBox<String>(combobox_tomb.getCombobox_ellenorok());
+		ellenor_neve = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));
 		
 		JLabel lblNewLabel_12 = new JLabel("Ellenőr neve");
 		
@@ -267,6 +267,7 @@ public class Gyartasi_adatok extends JPanel
 		 {
 			try
 			 {
+			    szamlalo_szama();
 				Db_iro beleir = new Db_iro();																				//példányosítás
 				beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
 						String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
@@ -288,14 +289,15 @@ public class Gyartasi_adatok extends JPanel
 	
 	public void szamlalo_szama()																										//a számláló pontosságáért felelő függvény
 	{
-		if(utolso.utolso("qualitydb.Gyartasi_adatok") == null)																			//lellenörzi, hogy üres-e az utolsó sor lekérdezése	
+	    szamlalo = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok")) + 1;                                               //a kapott számhoz hozzáad 1-et, hogy a következő adatot jó helyre írja 
+		/*if(utolso.utolso("qualitydb.Gyartasi_adatok") == null)																			//lellenörzi, hogy üres-e az utolsó sor lekérdezése	
         {
         	szamlalo = 1;																												//ha üres azt jelenti nincs benne adat így a számlálót 1-ről kell indítani
         }
         else																															//de ha nem üres akkor
         {
-        	szamlalo = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok")) + 1;												//a kapott számhoz hozzáad 1-et, hogy a következő adatot jó helyre írja	
-        }   
+        	
+        } */ 
 	}
 	
 /****************************************** Figyelő, hogy az enter megnyomásával is működjön a gomb, ne kelljen mindig klikkelni  *******************************************************/
@@ -310,6 +312,7 @@ public class Gyartasi_adatok extends JPanel
 		    {
 		    	try																														//lényegében lefuttaja ugynazt mintha klikeltél volna
 				 {
+		    	    szamlalo_szama();
 					Db_iro beleir = new Db_iro();
 					beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
 							String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 

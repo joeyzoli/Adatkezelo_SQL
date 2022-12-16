@@ -3,6 +3,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
@@ -10,12 +12,15 @@ import com.spire.xls.Worksheet;
 
 import javax.swing.JComboBox;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JTable;
 import javax.swing.ImageIcon;
@@ -43,6 +48,7 @@ public class ProGlove extends JPanel
     private final String infohelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_info.xlsx";
     private JLabel kepkeret;
     private JTextArea textArea;
+    private DataTable dataTable;
     static JTable table_1;
     static JScrollPane scrollPane;
 
@@ -59,14 +65,15 @@ public class ProGlove extends JPanel
         
         idopont = new JTextField();
         idopont.setBounds(148, 75, 113, 20);
+        ido();
         add(idopont);
         idopont.setColumns(10);
-        
+      
         JLabel lblNewLabel_1 = new JLabel("Név");
         lblNewLabel_1.setBounds(309, 50, 46, 14);
         add(lblNewLabel_1);
         
-        nev = new JComboBox<String>(combobox_tomb.getCombobox_ellenorok());              //combobox_tomb.getCombobox_ellenorok()
+        nev = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));              //combobox_tomb.getCombobox_ellenorok()
         nev.setBounds(309, 74, 153, 22);
         add(nev);
         
@@ -74,7 +81,8 @@ public class ProGlove extends JPanel
         lblNewLabel_2.setBounds(148, 106, 86, 14);
         add(lblNewLabel_2);
         
-        ell_helye = new JComboBox<String>(combobox_tomb.getCombobox_hiba());            //combobox_tomb.getCombobox_hiba()
+        String[] folyamatok = {"100% ellenőrzés", "KKS Végátvétel"};
+        ell_helye = new JComboBox<String>(folyamatok);            //combobox_tomb.getCombobox2(ComboBox.hiba_helye
         ell_helye.setBounds(148, 131, 113, 22);
         add(ell_helye);
         
@@ -82,7 +90,7 @@ public class ProGlove extends JPanel
         lblNewLabel_3.setBounds(309, 107, 46, 14);
         add(lblNewLabel_3);
         
-        termek = new JComboBox<String>(combobox_tomb.getCombobox_proglove());               //combobox_tomb.getCombobox_proglove()
+        termek = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.proglove));               //combobox_tomb.getCombobox_proglove()
         termek.setBounds(309, 131, 153, 22);
         termek.addActionListener(new Elem_valaszto());
         add(termek);
@@ -93,7 +101,8 @@ public class ProGlove extends JPanel
         
         textField = new JTextField();
         textField.setBounds(148, 189, 46, 20);
-        textField.addKeyListener(new Enter());
+        textField.setText("0");
+        textField.getDocument().addDocumentListener(new Enter());
         add(textField);
         textField.setColumns(10);
         
@@ -166,11 +175,11 @@ public class ProGlove extends JPanel
         add(textField_5);
         textField_5.setColumns(10);
         
-        folyamat = new JComboBox<String>(combobox_tomb.getCombobox_folyamat());
+        folyamat = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.folyamat));
         folyamat.setBounds(244, 387, 167, 22);
         add(folyamat);
         
-        hibakod = new JComboBox<String>(combobox_tomb.getCombobox_hibakodok());              //combobox_tomb.getCombobox_hibakodok()
+        hibakod = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));              //combobox_tomb.getCombobox_hibakodok()
         hibakod.setBounds(244, 412, 167, 22);
         add(hibakod);
         
@@ -207,25 +216,26 @@ public class ProGlove extends JPanel
         table_1 = new JTable();
         table_1.setBounds(528, 75, 516, 110);
         scrollPane = new JScrollPane(table_1);
-        //scrollPane.setBounds(528, 75, 516, 110);
-        add(table_1);
+        scrollPane.setBounds(528, 75, 516, 110);
+        //add(table_1);
         add(scrollPane);
         
         textArea = new JTextArea();
         textArea.setLineWrap(true);
-        textArea.setBounds(528, 610, 369, 63);
+        textArea.setBounds(528, 670, 369, 63);
         add(textArea);
         
         JButton info = new JButton("Egyéb infó");
-        info.setBounds(918, 640, 89, 23);
+        info.setBounds(918, 690, 89, 23);
+        info.addActionListener(new Egyeb_info());
         add(info);
         
         kepkeret = new JLabel("");
-        kepkeret.setBounds(527, 190, 520, 410);
+        kepkeret.setBounds(527, 190, 550, 470);
         
         add(kepkeret);
         setBackground(Foablak.hatter_szine);
-
+        
     }
     
     class Elem_valaszto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -233,12 +243,12 @@ public class ProGlove extends JPanel
         public void actionPerformed(ActionEvent e)
          {
             try
-            {
+            {            
                 String valasztott = String.valueOf(termek.getSelectedItem());
                 Workbook excel = new Workbook();
                 excel.loadFromFile(infohelye);
                 Worksheet sheet = excel.getWorksheets().get(0);
-                DataTable dataTable = sheet.exportDataTable();
+                dataTable = sheet.exportDataTable();
                 
                 for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
                 {
@@ -246,16 +256,17 @@ public class ProGlove extends JPanel
                     {
                         ImageIcon icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));
                         Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(520, 410,  java.awt.Image.SCALE_SMOOTH);
+                        Image resizedImage = icon.getScaledInstance(550, 470,  java.awt.Image.SCALE_SMOOTH);
                         ImageIcon meretezett = new ImageIcon(resizedImage);
                         kepkeret.setIcon(meretezett);
                         textArea.setText(dataTable.getRows().get(szamlalo).getString(5));
+                        
                     }
-                }
+                }              
                 SQL sql = new SQL();
                 String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
                 sql.top_hiba(koztes[0]);
-                        
+                    
             }
             catch (Exception e1) 
             {
@@ -266,23 +277,118 @@ public class ProGlove extends JPanel
          }
     }
     
-    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    class Enter implements DocumentListener                                                                                                 //billentyűzet figyelő eseménykezelő
     {
-        public void keyPressed (KeyEvent e) 
-        {    
-            int ellenorizendo = Integer.parseInt(textField.getText());
-            textField_1.setText(String.valueOf(ellenorizendo/3));
-         
+       
+        
+        @Override
+        public void insertUpdate(DocumentEvent e) 
+        {
+            // TODO Auto-generated method stub
+            try
+            {
+                szamolo();
+            }
+            catch(Exception e1)
+            {
+                szamolo();
+            }
         }
         @Override
-        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        public void removeUpdate(DocumentEvent e) 
         {
-            // TODO Auto-generated method stub         
+            // TODO Auto-generated method stub
+            try
+            {
+                szamolo();
+            }
+            catch(Exception e1)
+            {
+                szamolo();
+            }
         }
         @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        public void changedUpdate(DocumentEvent e) 
         {
-            // TODO Auto-generated method stub           
+            // TODO Auto-generated method stub
+            try
+            {
+                szamolo();
+            }
+            catch(Exception e1)
+            {
+                szamolo();
+            }
         }    
     }
+    
+    public void szamolo()
+    {
+        String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
+        int ellenorizendo = 0;
+
+            ellenorizendo = Integer.parseInt(textField.getText());                       
+            Workbook excel = new Workbook();
+            excel.loadFromFile(infohelye);
+            Worksheet sheet = excel.getWorksheets().get(0);
+            dataTable = sheet.exportDataTable();
+            if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))
+            {
+               for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+               {
+                   if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
+                   {
+                       textField_1.setText(String.valueOf((ellenorizendo/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3))));
+                   }
+                     
+               }
+            }
+            if(String.valueOf(ell_helye.getSelectedItem()).contains("KKS Végátvétel"))
+            {
+                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+                {
+                    if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
+                    {
+                        textField_1.setText(String.valueOf((ellenorizendo/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4))));
+                    }
+                      
+                }    
+            }
+    }
+    
+    public void ido()
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date();
+        idopont.setText(formatter.format(date));
+    }
+    
+    class Egyeb_info implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                String valasztott = String.valueOf(termek.getSelectedItem());
+                Workbook excel = new Workbook();
+                excel.loadFromFile(infohelye);
+                Worksheet sheet = excel.getWorksheets().get(0);
+                dataTable = sheet.exportDataTable();
+                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+                {
+                    if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
+                    {
+                        Desktop.getDesktop().open(new File(dataTable.getRows().get(szamlalo).getString(7)));                        
+                    }
+                }      
+                
+            } 
+            catch (IOException e1) 
+            {
+                e1.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Nincs plusz infó!", "Hiba üzenet", 2);
+            }
+         }
+    }
+        
 }

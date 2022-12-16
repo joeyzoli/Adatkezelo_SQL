@@ -349,23 +349,13 @@ public class SQL
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         System.out.println("Csatlakozás sikeres...");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String sajat = "SELECT Pozicio, Hiba_megnevezes, sum(Hibak_szam) FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ tipus +"' group by Pozicio order by Hibak_szam desc";
+        String sajat = "SELECT Pozicio as \"Pozíció\", Hiba_megnevezes as \"Hiba megnevezés\", sum(Hibak_szam) as \"Hibák száma\" FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ tipus +"' group by Pozicio order by Hibak_szam desc";
         stmt.execute(sajat);
         System.out.println("Lekérdezés sikeres..................");
         resultSet = stmt.getResultSet();
         
-        // int numColumns = resultSet.getMetaData().getColumnCount();
-        //JTable table2 = new JTable(buildTableModel(resultSet));
-
-        // Closes the Connection
-        //table.setFillsViewportHeight(true);
-        //JOptionPane.showMessageDialog(null, new JScrollPane(table2));
-
-        
         ProGlove.table_1.setModel(buildTableModel(resultSet));
-        System.out.print("elment");
-        
-       
+
         resultSet.close();
         stmt.close();
         conn.close();

@@ -47,7 +47,7 @@ public class EASQAS_adatok extends JPanel
 		combobox_tomb = new ComboBox();
 		
 		
-		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox_projekt());
+		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.projekt));
 		
 		JLabel lblNewLabel_2 = new JLabel("Időpont -tól");
 		
@@ -61,7 +61,7 @@ public class EASQAS_adatok extends JPanel
 		
 		JLabel lblNewLabel_4 = new JLabel("Hibagyűtés helye");
 		
-		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox_hiba());
+		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));
 		
 		JLabel lblNewLabel_5 = new JLabel("Projekt");
 		

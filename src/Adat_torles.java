@@ -62,14 +62,14 @@ public class Adat_torles extends JPanel
 		muszak = new JTextField();
 		muszak.setColumns(10);
 		
-		hibahelye_box = new JComboBox<String>(combobox_tomb.getCombobox_hiba());				//combobox_tomb.getCombobox_hiba()
+		hibahelye_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));				//combobox_tomb.getCombobox_hiba()
 		
-		vt_box = new JComboBox<String>(combobox_tomb.getCombobox());						//combobox_tomb.getCombobox()
+		vt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));						//combobox_tomb.getCombobox()
 		
 		felajanlott = new JTextField();
 		felajanlott.setColumns(10);
 		
-		hibakod_box = new JComboBox<String>(combobox_tomb.getCombobox_hibakodok());					//combobox_tomb.getCombobox_hibakodok()
+		hibakod_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));					//combobox_tomb.getCombobox_hibakodok()
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(

@@ -10,21 +10,21 @@ public class ComboBox
 	 */
 	private String[] combobox_tomb;
 	private Adat_beolvaso beolvas;
-	private final String vt_azon = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vt_lista.csv";
-	private final String projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.csv";
-	private final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
-	private final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
-	private final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
-	private final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
-	private final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
+	static final String vt_azon = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vt_lista.csv";
+	static final String projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.csv";
+	static final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
+	static final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
+	static final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
+	static final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
+	static final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
 	
-	private void listakeszito_vt()																						//VT-azonosítókat dolgozza fel
+	private void listakeszito(String hely)																						//VT-azonosítókat dolgozza fel
 	{
 		try
 		{
 		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			beolvas = new Adat_beolvaso();																				//példányosítás
-			beolvas.futtat_darabol(vt_azon);																			//osztály függvényének meghívása
+			beolvas.futtat_darabol(hely);																			//osztály függvényének meghívása
 			combobox_tomb = new String[beolvas.getdinamikustomb().size()];												//tömb méretének meghatározása
 			
 			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)								//for cuklus az ArrayList elemeinek átadása egy String tömbnek
@@ -42,112 +42,21 @@ public class ComboBox
 		}
 	}
 	
-	private void listakeszito_projekt()
-	{
-		try
-		{
-		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			beolvas = new Adat_beolvaso();
-			beolvas.futtat_sima(projekt);
-			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
-			
-			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
-			{
-				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
-			}
-			Foablak.frame.setCursor(null);
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-			String hibauzenet2 = ex.toString();
-			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-		}
-	}
-	
-	private void listakeszito_hiba_helye()
-	{
-		try
-		{
-		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			beolvas = new Adat_beolvaso();
-			beolvas.futtat_sima(hiba_helye);
-			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
-			
-			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
-			{
-				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
-			}
-			Foablak.frame.setCursor(null);
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-			String hibauzenet2 = ex.toString();
-			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-		}
-	}
-	
-	private void listakeszito_ellenorok()
-	{
-		try
-		{
-		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			beolvas = new Adat_beolvaso();
-			beolvas.futtat_sima(ellenorok);
-			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
-			
-			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
-			{
-				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
-			}
-			Foablak.frame.setCursor(null);
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-			String hibauzenet2 = ex.toString();
-			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-		}
-	}
-	
-	private void listakeszito_hibakodok()
-	{
-		try
-		{
-		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			beolvas = new Adat_beolvaso();
-			beolvas.futtat_darabol(hibakodok);
-			combobox_tomb = new String[beolvas.getdinamikustomb().size()];
-			
-			for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
-			{
-				combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
-			}
-			Foablak.frame.setCursor(null);
-		}
-		catch(Exception ex)
-		{
-			ex.printStackTrace();
-			String hibauzenet2 = ex.toString();
-			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-		}
-	}
-	
-	private void listakeszito_proglove()
+	private void listakeszito2(String hely)                                                                                     //VT-azonosítókat dolgozza fel
     {
         try
         {
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            beolvas = new Adat_beolvaso();
-            beolvas.futtat_sima(proglove);
-            combobox_tomb = new String[beolvas.getdinamikustomb().size()];
+            beolvas = new Adat_beolvaso();                                                                              //példányosítás
+            beolvas.futtat_sima(hely);                                                                           //osztály függvényének meghívása
+            combobox_tomb = new String[beolvas.getdinamikustomb().size()];                                              //tömb méretének meghatározása
             
-            for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
+            for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)                             //for cuklus az ArrayList elemeinek átadása egy String tömbnek
             {
-                combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
+                combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);                                     //tömb elemeinek feltöltése
             }
             Foablak.frame.setCursor(null);
+            
         }
         catch(Exception ex)
         {
@@ -157,69 +66,20 @@ public class ComboBox
         }
     }
 	
-	private void listakeszito_folyamat()
+	
+	
+	public String[] getCombobox(String hol)														//lefuttaja a függvényt és visszaadja a tomböt
+	{
+		listakeszito(hol);
+		return combobox_tomb;
+	}
+	
+	public String[] getCombobox2(String hol)                                                        //lefuttaja a függvényt és visszaadja a tomböt
     {
-        try
-        {
-            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            beolvas = new Adat_beolvaso();
-            beolvas.futtat_sima(folyamat);
-            combobox_tomb = new String[beolvas.getdinamikustomb().size()];
-            
-            for(int szamlalo = 0; szamlalo < beolvas.getdinamikustomb().size(); szamlalo++)
-            {
-                combobox_tomb[szamlalo] = beolvas.getdinamikustomb().get(szamlalo);
-            }
-            Foablak.frame.setCursor(null);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-            String hibauzenet2 = ex.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-    }
-	
-	public String[] getCombobox()														//lefuttaja a függvényt és visszaadja a tomböt
-	{
-		listakeszito_vt();
-		return combobox_tomb;
-	}
-	
-	public String[] getCombobox_projekt()												//lefuttaja a függvényt és visszaadja a tomböt
-	{
-		listakeszito_projekt();
-		return combobox_tomb;
-	}
-	
-	public String[] getCombobox_hiba()													//lefuttaja a függvényt és visszaadja a tomböt
-	{
-		listakeszito_hiba_helye();
-		return combobox_tomb;
-	}
-	
-	public String[] getCombobox_ellenorok()												//lefuttaja a függvényt és visszaadja a tomböt
-	{
-		listakeszito_ellenorok();
-		return combobox_tomb;
-	}
-	
-	public String[] getCombobox_hibakodok()												//lefuttaja a függvényt és visszaadja a tomböt
-	{
-		listakeszito_hibakodok();
-		return combobox_tomb;
-	}
-	
-	public String[] getCombobox_proglove()                                                //lefuttaja a függvényt és visszaadja a tomböt
-    {
-        listakeszito_proglove();
+        listakeszito2(hol);
         return combobox_tomb;
     }
 	
-	public String[] getCombobox_folyamat()                                                //lefuttaja a függvényt és visszaadja a tomböt
-    {
-        listakeszito_folyamat();
-        return combobox_tomb;
-    }
+	
 
 }
