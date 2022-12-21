@@ -288,16 +288,8 @@ public class Gyartasi_adatok extends JPanel
 	}
 	
 	public void szamlalo_szama()																										//a számláló pontosságáért felelő függvény
-	{
-	    szamlalo = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok")) + 1;                                               //a kapott számhoz hozzáad 1-et, hogy a következő adatot jó helyre írja 
-		/*if(utolso.utolso("qualitydb.Gyartasi_adatok") == null)																			//lellenörzi, hogy üres-e az utolsó sor lekérdezése	
-        {
-        	szamlalo = 1;																												//ha üres azt jelenti nincs benne adat így a számlálót 1-ről kell indítani
-        }
-        else																															//de ha nem üres akkor
-        {
-        	
-        } */ 
+	{	   
+	    szamlalo = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok")) + 1;     		
 	}
 	
 /****************************************** Figyelő, hogy az enter megnyomásával is működjön a gomb, ne kelljen mindig klikkelni  *******************************************************/
@@ -325,6 +317,16 @@ public class Gyartasi_adatok extends JPanel
 				 }
 				catch(Exception ex2)
 				 {
+				    szamlalo_szama();
+                    Db_iro beleir = new Db_iro();
+                    beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
+                            String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
+                            String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText());
+                    szamlalo++;
+                    id.setText(String.valueOf(szamlalo)); 
+            
+                    Urlap_torlo torles = new Urlap_torlo();
+                    torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
 					ex2.printStackTrace(); 
 					String hibauzenet2 = ex2.toString();
 					JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);

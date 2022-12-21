@@ -186,11 +186,9 @@ public class SQL
 		      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
 	    }
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-	    System.out.println("Csatlakozás sikeres...");
 	    stmt = (Statement) conn.createStatement();
 	    String sajat = SQL;
 	    stmt.execute(sajat);
-	    System.out.println("Lekérdezés sikeres..................");
 	    ResultSet resultSet = stmt.getResultSet();
 	    
         Workbook workbook = new Workbook();
@@ -276,20 +274,10 @@ public class SQL
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
            }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        System.out.println("Csatlakozás sikeres...");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "SELECT * FROM  qualitydb.Muszaki_adatok where Tipus = '"+ tipus +"'";
         stmt.execute(sajat);
-        System.out.println("Lekérdezés sikeres..................");
         resultSet = stmt.getResultSet();
-        
-        // int numColumns = resultSet.getMetaData().getColumnCount();
-        //JTable table2 = new JTable(buildTableModel(resultSet));
-
-        // Closes the Connection
-        //table.setFillsViewportHeight(true);
-        //JOptionPane.showMessageDialog(null, new JScrollPane(table2));
-
         
         Muszaki_leker.eredmeny.setModel(buildTableModel(resultSet));
         System.out.print("elment");
@@ -333,7 +321,7 @@ public class SQL
     {
         Connection conn = null;
         Statement stmt = null;
-        //DataTable datatable = new DataTable();
+      
         try 
         {
            try 
@@ -347,11 +335,9 @@ public class SQL
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
            }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        System.out.println("Csatlakozás sikeres...");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "SELECT Pozicio as \"Pozíció\", Hiba_megnevezes as \"Hiba megnevezés\", sum(Hibak_szam) as \"Hibák száma\" FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ tipus +"' group by Pozicio order by Hibak_szam desc";
         stmt.execute(sajat);
-        System.out.println("Lekérdezés sikeres..................");
         resultSet = stmt.getResultSet();
         
         ProGlove.table_1.setModel(buildTableModel(resultSet));

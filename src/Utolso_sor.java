@@ -68,7 +68,6 @@ public class Utolso_sor
 	          se.printStackTrace();
 	       }  
 	    }
-	    System.out.println("Utolsó sor indexe lekérve!");
 	    return eredmeny;
 	}
 }
