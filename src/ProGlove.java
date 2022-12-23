@@ -480,7 +480,8 @@ public class ProGlove extends JPanel
          {
             try 
             {
-                
+                modell.removeRow(0);
+                table.setModel(modell);
                 table.removeRowSelectionInterval(0, table.getRowCount()-1);;
             } 
             catch (Exception e1) 
