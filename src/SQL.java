@@ -177,7 +177,7 @@ public class SQL
 	    {
 	       try 
 	       {
-	          Class.forName("com.mysql.jdbc.Driver");
+	          Class.forName("com.mysql.cj.jdbc.Driver");
 	       } 
 	       catch (Exception e) 
 	       {
@@ -341,6 +341,65 @@ public class SQL
         resultSet = stmt.getResultSet();
         
         ProGlove.table_1.setModel(buildTableModel(resultSet));
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void adat_modositashoz(String vt, String datum, String muszak, String hiba_helye, int felajanlott, int hibakod)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+      
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sajat = "SELECT * FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ vt +"' and Datum = '"+ datum +"' and Muszak = '"+ muszak +"' and Hibagyujtes_helye = '"+ hiba_helye +"' "
+                + "and Felajanlott = '"+ felajanlott +"' and hibakod = '"+ hibakod +"' ";
+        stmt.execute(sajat);
+        resultSet = stmt.getResultSet();
+        
+        Adat_torles.table.setModel(buildTableModel(resultSet));
 
         resultSet.close();
         stmt.close();

@@ -42,7 +42,7 @@ public class Muszaki_leker extends JPanel
         
         //eredmeny = new JTextArea();
         
-        eredmeny.setFillsViewportHeight(true);
+        //eredmeny.setFillsViewportHeight(true);
         scrollPane = new JScrollPane(eredmeny);
         
         GroupLayout groupLayout = new GroupLayout(this);
@@ -62,7 +62,7 @@ public class Muszaki_leker extends JPanel
                                         .addComponent(tipus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(groupLayout.createSequentialGroup()
                             .addGap(47)
-                            .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 937, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1100, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(ComponentPlacement.RELATED)
                             .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap(99, Short.MAX_VALUE))
