@@ -37,8 +37,10 @@ public class Foablak extends JFrame
 	private Adat_torles adattorlo;
 	private Torlo torles;
 	private Sajat_SQL sajat_sql;
-	private Uj_adatok muszaki_adatok;
-	private Muszaki_leker muszaki_leker;
+	private PO_szam po;
+	private Hitlista hitlista;
+	//private Uj_adatok muszaki_adatok;
+	//private Muszaki_leker muszaki_leker;
 	private ProGlove proglove;
 	private Hatter_beallitas hatterbeall;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
@@ -79,7 +81,7 @@ public class Foablak extends JFrame
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(1200, 800));
-        setTitle("Adat kezelő");
+        setTitle("Minőségügyi Adatbázis kezelő");
         
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -118,6 +120,14 @@ public class Foablak extends JFrame
 		sajat_sql.addActionListener(new PanelCsere_sajat_sql());
 		lekerdezes.add(sajat_sql);
 		
+		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
+		po_szam.addActionListener(new PanelCsere_po_szam());
+		lekerdezes.add(po_szam);
+		
+		JMenuItem hitlista = new JMenuItem("Hitlista lekérdezés");
+		hitlista.addActionListener(new PanelCsere_hitlista());
+		lekerdezes.add(hitlista);
+		/*
 		JMenu mnNewMenu = new JMenu("Műszaki");
 		menuBar.add(mnNewMenu);
 		
@@ -128,7 +138,7 @@ public class Foablak extends JFrame
 		JMenuItem adatleker_menu = new JMenuItem("Adatok lekérdezése");
 		adatleker_menu.addActionListener(new PanelCsere_muszaki_leker());
 		mnNewMenu.add(adatleker_menu);
-		
+		*/
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -224,6 +234,28 @@ public class Foablak extends JFrame
 		 }
 	}
 	
+	class PanelCsere_po_szam implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            po = new PO_szam();
+            JScrollPane ablak = new JScrollPane(po);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_hitlista implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            hitlista = new Hitlista();
+            JScrollPane ablak = new JScrollPane(hitlista);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	/*
 	class PanelCsere_muszaki_ujadat implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -245,7 +277,7 @@ public class Foablak extends JFrame
             pack();
          }
     }
-	
+	*/
 	class PanelCsere_proglove implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)

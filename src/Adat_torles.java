@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
@@ -111,12 +112,12 @@ public class Adat_torles extends JPanel
 		table = new JTable();
 		scrollPane = new JScrollPane(table);
 		//table.setBounds(63, 410, 948, -51);
-		scrollPane.setBounds(63, 369, 948, 100);
+		scrollPane.setBounds(63, 369, 948, 193);
 		add(scrollPane);
 		
 		JButton ujra = new JButton("Újraír");
 		ujra.addActionListener(new Visszair());
-		ujra.setBounds(495, 490, 89, 23);
+		ujra.setBounds(495, 585, 89, 23);
 		add(ujra);
 
 	}
@@ -156,12 +157,9 @@ public class Adat_torles extends JPanel
         public void actionPerformed(ActionEvent e)
          {
             try
-            {
-                String[] vt_koztes = String.valueOf(vt_box.getSelectedItem()).split(" - ");
-                String[] hibakod_koztes = String.valueOf(hibakod_box.getSelectedItem()).split(" - ");
+            {             
                 SQL lekerdez = new SQL();
-                lekerdez.adat_modositashoz(vt_koztes[0], datum.getText(), muszak.getText(), String.valueOf(hibahelye_box.getSelectedItem()),Integer.parseInt(felajanlott.getText()), Integer.parseInt(hibakod_koztes[0]));
-                System.out.println(table.getModel().getValueAt(0, 5).toString() + " " + table.getModel().getValueAt(0, 13).toString());
+                lekerdez.adat_modositashoz(datum.getText());
             }
             catch(Exception e1)
             {
@@ -176,13 +174,18 @@ public class Adat_torles extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Db_iro visszair = new Db_iro();
-            visszair.ujrair(Integer.parseInt(table.getValueAt(0, 0).toString()), table.getValueAt(0, 1).toString(), table.getValueAt(0, 2).toString(), 
-                    table.getValueAt(0, 3).toString(), table.getValueAt(0, 4).toString(), table.getValueAt(0, 5).toString(), table.getValueAt(0, 6).toString(),
-                    table.getValueAt(0, 7).toString(), table.getValueAt(0, 8).toString(), Integer.parseInt(table.getValueAt(0, 9).toString()), Integer.parseInt(table.getValueAt(0, 10).toString()),
-                    table.getValueAt(0, 11).toString(), Integer.parseInt(table.getValueAt(0, 12).toString()), table.getValueAt(0, 13).toString(), table.getValueAt(0, 14).toString(), 
-                    Integer.parseInt(table.getValueAt(0, 15).toString()), table.getValueAt(0, 16).toString());
-            System.out.println("lefutot " + table.getValueAt(0, 11).toString());
+            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+            {
+                visszair.ujrair(Integer.parseInt(table.getValueAt(szamlalo, 0).toString()), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString(), 
+                    table.getValueAt(szamlalo, 3).toString(), table.getValueAt(szamlalo, 4).toString(), table.getValueAt(szamlalo, 5).toString(), table.getValueAt(szamlalo, 6).toString(),
+                    table.getValueAt(szamlalo, 7).toString(), table.getValueAt(szamlalo, 8).toString(), Integer.parseInt(table.getValueAt(szamlalo, 9).toString()), Integer.parseInt(table.getValueAt(szamlalo, 10).toString()),
+                    table.getValueAt(szamlalo, 11).toString(), Integer.parseInt(table.getValueAt(szamlalo, 12).toString()), table.getValueAt(szamlalo, 13).toString(), table.getValueAt(szamlalo, 14).toString(), 
+                    Integer.parseInt(table.getValueAt(szamlalo, 15).toString()), table.getValueAt(szamlalo, 16).toString());
+            }
+            Foablak.frame.setCursor(null);
+            JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Hiba üzenet", 2); 
          }
     }
 }

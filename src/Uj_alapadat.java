@@ -1,6 +1,4 @@
 import javax.swing.JPanel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -8,14 +6,17 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Uj_alapadat extends JPanel 
 {
@@ -31,6 +32,8 @@ public class Uj_alapadat extends JPanel
 	private JComboBox<String> vevo_box;
 	private JTextField hibakod;
 	private JTextField hiba_megnevezes;
+	private JTextField ellenor_neve;
+	private String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
 
 	/**
 	 * Create the panel.
@@ -39,135 +42,105 @@ public class Uj_alapadat extends JPanel
 	{
 		
 		JLabel lblNewLabel = new JLabel("Új alapadat felvitele");
+		lblNewLabel.setBounds(503, 38, 127, 18);
 		lblNewLabel.setForeground(new Color(204, 102, 0));
 		lblNewLabel.setFont(new Font("Rockwell", Font.PLAIN, 14));
 		
 		JLabel lblNewLabel_1 = new JLabel("Vevő");
+		lblNewLabel_1.setBounds(137, 150, 26, 13);
 		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 11));
 		
-		vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));				//combobox_tomb.getCombobox_projekt()
+		vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));				//combobox_tomb.getCombobox(ComboBox.projekt)
+		vevo_box.setBounds(259, 145, 255, 22);
 		
 		JLabel lblNewLabel_2 = new JLabel("Vevői azonosító");
+		lblNewLabel_2.setBounds(137, 189, 78, 13);
 		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 11));
 		
 		JLabel lblNewLabel_3 = new JLabel("Vevői megnevezés");
+		lblNewLabel_3.setBounds(137, 227, 93, 13);
 		lblNewLabel_3.setFont(new Font("Arial", Font.PLAIN, 11));
 		
 		JLabel lblNewLabel_4 = new JLabel("VT megnevezés");
+		lblNewLabel_4.setBounds(137, 265, 79, 13);
 		lblNewLabel_4.setFont(new Font("Arial", Font.PLAIN, 11));
 		
 		vevo_azon = new JTextField();
+		vevo_azon.setBounds(259, 185, 255, 20);
 		vevo_azon.setColumns(10);
 		
 		vevo_megnev = new JTextField();
+		vevo_megnev.setBounds(259, 223, 255, 20);
 		vevo_megnev.setColumns(10);
 		
 		vt_megnev = new JTextField();
+		vt_megnev.setBounds(259, 261, 255, 20);
 		vt_megnev.setColumns(10);
 		
-		JButton felvisz = new JButton("Cikkszám Felvisz");
+		JButton felvisz = new JButton("Cikkszám felvesz");
+		felvisz.setBounds(259, 299, 111, 23);
 		felvisz.addActionListener(new Fajlba_iro());
 		
 		JLabel lblNewLabel_5 = new JLabel("Cikkszám");
+		lblNewLabel_5.setBounds(204, 91, 43, 14);
 		
 		JLabel lblNewLabel_6 = new JLabel("Hibakód");
+		lblNewLabel_6.setBounds(698, 91, 38, 14);
 		
 		JLabel lblNewLabel_7 = new JLabel("Hibakód");
+		lblNewLabel_7.setBounds(621, 149, 57, 14);
 		
 		hibakod = new JTextField();
+		hibakod.addActionListener(new Hibakod());
+		hibakod.setBounds(723, 146, 86, 20);
 		hibakod.setColumns(10);
 		
 		JLabel lblNewLabel_8 = new JLabel("Hiba megnevezés");
+		lblNewLabel_8.setBounds(621, 188, 92, 14);
 		
 		hiba_megnevezes = new JTextField();
+		hiba_megnevezes.setBounds(723, 185, 196, 20);
 		hiba_megnevezes.setColumns(10);
 		
-		JButton uj_hibagomb = new JButton("Hiba felvisz");
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(204)
-					.addComponent(lblNewLabel_5)
-					.addPreferredGap(ComponentPlacement.RELATED, 451, Short.MAX_VALUE)
-					.addComponent(lblNewLabel_6)
-					.addGap(370))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(137)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_1)
-						.addComponent(lblNewLabel_2)
-						.addComponent(lblNewLabel_3)
-						.addComponent(lblNewLabel_4))
-					.addGap(29)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(vevo_box, Alignment.LEADING, 0, 152, Short.MAX_VALUE)
-								.addComponent(vevo_azon, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-								.addComponent(vevo_megnev, Alignment.LEADING, 98, 152, Short.MAX_VALUE)
-								.addComponent(vt_megnev, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_8)
-								.addComponent(lblNewLabel_7))
-							.addGap(18))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(felvisz)
-							.addGap(353)))
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(hibakod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(hiba_megnevezes, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
-						.addComponent(uj_hibagomb))
-					.addGap(187))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(518, Short.MAX_VALUE)
-					.addComponent(lblNewLabel)
-					.addGap(476))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(38)
-					.addComponent(lblNewLabel)
-					.addGap(35)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_5)
-						.addComponent(lblNewLabel_6))
-					.addGap(40)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(40)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_2)
-								.addComponent(vevo_azon, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_1)
-								.addComponent(vevo_box, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_7)
-								.addComponent(hibakod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_8)
-								.addComponent(hiba_megnevezes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_3)
-						.addComponent(vevo_megnev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_4)
-						.addComponent(vt_megnev, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(felvisz)
-						.addComponent(uj_hibagomb))
-					.addContainerGap(241, Short.MAX_VALUE))
-		);
+		JButton uj_hibagomb = new JButton("Hiba felvesz");
+		uj_hibagomb.setBounds(723, 299, 105, 23);
 		setBackground(Foablak.hatter_szine);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblNewLabel_5);
+		add(lblNewLabel_6);
+		add(lblNewLabel_1);
+		add(lblNewLabel_2);
+		add(lblNewLabel_3);
+		add(lblNewLabel_4);
+		add(vevo_box);
+		add(vevo_azon);
+		add(vevo_megnev);
+		add(vt_megnev);
+		add(lblNewLabel_8);
+		add(lblNewLabel_7);
+		add(felvisz);
+		add(hibakod);
+		add(hiba_megnevezes);
+		add(uj_hibagomb);
+		add(lblNewLabel);
+		
+		JLabel lblNewLabel_9 = new JLabel("Ellenőr");
+		lblNewLabel_9.setBounds(204, 365, 46, 14);
+		add(lblNewLabel_9);
+		
+		JLabel lblNewLabel_10 = new JLabel("Ellenőr neve");
+		lblNewLabel_10.setBounds(137, 406, 78, 14);
+		add(lblNewLabel_10);
+		
+		ellenor_neve = new JTextField();
+		ellenor_neve.setBounds(259, 403, 255, 20);
+		add(ellenor_neve);
+		ellenor_neve.setColumns(10);
+		
+		JButton ellenor_gomb = new JButton("Ellenőr felvesz");
+		ellenor_gomb.addActionListener(new Ellenor());
+		ellenor_gomb.setBounds(259, 457, 127, 23);
+		add(ellenor_gomb);
 
 	}
 	
@@ -192,4 +165,48 @@ public class Uj_alapadat extends JPanel
 				}
 		 }
 	}
+	
+	class Ellenor implements ActionListener                                                                                         //felvisz gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try(FileWriter fw = new FileWriter("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    OutputStream os = new FileOutputStream(ellenorok);
+                    PrintWriter out = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), true))
+                {
+                    out.println(ellenor_neve.getText());  
+                    //more code
+                    JOptionPane.showMessageDialog(null, "Új adat felvitel kész", "Info", 1);
+                } 
+                catch (IOException e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+         }
+    }
+	
+	class Hibakod implements ActionListener                                                                                         //felvisz gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try(FileWriter fw = new FileWriter("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter out = new PrintWriter(bw))
+                {
+                    out.println(hibakod.getText() + "," + hiba_megnevezes.getText());  
+                    //more code
+                    JOptionPane.showMessageDialog(null, "Új adat felvitel kész", "Info", 1);
+                    System.out.println("Fájlba írás kész");
+                } 
+                catch (IOException e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+         }
+    }
 }

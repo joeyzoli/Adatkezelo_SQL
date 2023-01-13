@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Cursor;
 
 public class Sajat_SQL extends JPanel 
 {
@@ -83,8 +84,10 @@ public class Sajat_SQL extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
+		    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			egyeni_sql = new SQL();
 			egyeni_sql.sajat_sql(sql_mezo.getText());																				//Jtextfieldben levő string futtatása
+			Foablak.frame.setCursor(null);
 		 }
 	}
 }

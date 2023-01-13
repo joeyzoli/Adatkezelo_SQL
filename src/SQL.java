@@ -375,7 +375,7 @@ public class SQL
         }
     }
 	
-	public void adat_modositashoz(String vt, String datum, String muszak, String hiba_helye, int felajanlott, int hibakod)
+	public void adat_modositashoz(String datum)
     {
         Connection conn = null;
         Statement stmt = null;
@@ -394,8 +394,7 @@ public class SQL
            }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String sajat = "SELECT * FROM  qualitydb.Gyartasi_adatok where VT_azon = '"+ vt +"' and Datum = '"+ datum +"' and Muszak = '"+ muszak +"' and Hibagyujtes_helye = '"+ hiba_helye +"' "
-                + "and Felajanlott = '"+ felajanlott +"' and hibakod = '"+ hibakod +"' ";
+        String sajat = "SELECT * FROM  qualitydb.Gyartasi_adatok where Datum = '"+ datum +"' ";
         stmt.execute(sajat);
         resultSet = stmt.getResultSet();
         
@@ -432,6 +431,198 @@ public class SQL
               se.printStackTrace();
            }  
         }
+    }
+	
+	public void hitlista(String projekt, String cikk, String datumtol, String datumig, String poz)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        DataTable datatable = new DataTable();
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sajat = "SELECT * FROM  qualitydb.Gyartasi_adatok where Vevo = '"+ projekt +"' and VT_azon like '"+ cikk +"' and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' and Pozicio = '"+ poz +"' ";         
+        stmt.execute(sajat);
+        resultSet = stmt.getResultSet();
+        
+        Workbook workbook = new Workbook();
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+
+        //Get the first worksheet
+        Worksheet sheet = workbook.getWorksheets().get(0);
+        sheet.insertDataTable(datatable, true, 1, 1);
+        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+        sheet.getAllocatedRange().autoFitColumns();
+        sheet.getAllocatedRange().autoFitRows();
+        
+        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        
+        JFileChooser mentes_helye = new JFileChooser();
+        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        mentes_helye.showOpenDialog(mentes_helye);
+        File fajl = mentes_helye.getSelectedFile();
+        //System.out.println(fajl.getAbsolutePath());
+        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            workbook2.write(output);
+            output.close();
+        }
+        JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+        
+        
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	void po_kereses(String po)
+    {
+	    Connection con = null;
+        Statement stmt = null;
+        try
+        {
+            ResultSet result;
+            JdbcAdapter jdbcAdapter;
+            DataTable datatable;
+            Workbook workbook;
+            //Registering the Driver
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
+                
+            //Getting the connection
+            String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+            con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
+            System.out.println("Connection established......");
+                      
+            String sql = "select     videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                    + "videoton.fkov.kod2, videoton.fkov.szeriaszam, videoton.fkov.hibakod, videoton.fkov.torolt, "
+                    + "videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                    + "videoton.fkov.dolgozo \n"
+                    + "from videoton.fkov \n"
+                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                    + " where nev = 'Loxone FCT' and ido > '2022.06.01' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
+                    
+            Statement cstmt = con.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+                       
+            cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+            result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+            datatable = new DataTable();
+            
+            workbook = new Workbook();
+            workbook.setVersion(ExcelVersion.Version2016); 
+            jdbcAdapter = new JdbcAdapter();         
+            jdbcAdapter.fillDataTable(datatable, result);
+         
+            //Get the first worksheet
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            sheet.insertDataTable(datatable, true, 1, 1);
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+            sheet.getAllocatedRange().autoFitColumns();
+            sheet.getAllocatedRange().autoFitRows();
+                
+            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
+             
+            result.close();
+            cstmt.close();
+            con.close();
+            workbook.setActiveSheetIndex(0);
+            JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            mentes_helye.showOpenDialog(mentes_helye);
+            File menteshelye = mentes_helye.getSelectedFile();
+            workbook.saveToFile(menteshelye.getAbsolutePath(), ExcelVersion.Version2016);
+            
+            FileInputStream fileStream = new FileInputStream(menteshelye.getAbsolutePath());
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(menteshelye.getAbsolutePath());
+                workbook2.write(output);
+                output.close();
+            }
+            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+        {
+            try 
+            {
+              if (stmt != null)
+                 con.close();
+            } 
+            catch (SQLException se) {}
+            try 
+            {
+              if (con != null)
+                 con.close();
+            } 
+            catch (SQLException se) 
+            {
+              se.printStackTrace();
+            }  
+        }   
     }
 	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 

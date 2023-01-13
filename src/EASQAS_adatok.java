@@ -5,13 +5,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -38,118 +35,80 @@ public class EASQAS_adatok extends JPanel
 	{
 		this.setPreferredSize(new Dimension(1100, 650));
 		
-		JLabel lblNewLabel = new JLabel("EASQAS adatok");
+		JLabel lblNewLabel = new JLabel("EASQAS adatok lekérezése");
+		lblNewLabel.setBounds(497, 11, 184, 48);
 		lblNewLabel.setForeground(Color.BLUE);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblNewLabel_1 = new JLabel("Projekt");
+		lblNewLabel_1.setBounds(263, 78, 53, 14);
 		
 		combobox_tomb = new ComboBox();
 		
 		
-		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.projekt));
+		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.projekt));                //combobox_tomb.getCombobox2(ComboBox.projekt)
+		projekt_box.setBounds(497, 74, 191, 22);
 		
 		JLabel lblNewLabel_2 = new JLabel("Időpont -tól");
+		lblNewLabel_2.setBounds(263, 121, 84, 14);
 		
 		datum_tol = new JTextField();
+		datum_tol.setBounds(497, 118, 146, 20);
 		datum_tol.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Dátum -ig");
+		lblNewLabel_3.setBounds(263, 166, 72, 14);
 		
 		datum_ig = new JTextField();
+		datum_ig.setBounds(497, 163, 146, 20);
 		datum_ig.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Hibagyűtés helye");
+		lblNewLabel_4.setBounds(263, 211, 104, 14);
 		
-		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));
+		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));                //combobox_tomb.getCombobox2(ComboBox.hiba_helye)
+		hiba_box.setBounds(497, 207, 191, 22);
 		
 		JLabel lblNewLabel_5 = new JLabel("Projekt");
+		lblNewLabel_5.setBounds(275, 286, 53, 14);
 		
 		projekt_excel = new JButton("Excel");
+		projekt_excel.setBounds(338, 282, 72, 23);
 		projekt_excel.addActionListener(new Projekt_lekerdezo());
 		projekt_excel.addKeyListener(new Enter());
 		
 		JLabel lblNewLabel_6 = new JLabel("Termék");
+		lblNewLabel_6.setBounds(469, 286, 60, 14);
 		
 		JButton termek_excel = new JButton("Excel");
+		termek_excel.setBounds(539, 282, 72, 23);
 		termek_excel.addActionListener(new Termek_lekerdezo());
 		termek_excel.addKeyListener(new Enter2());
 		
 		JLabel lblNewLabel_7 = new JLabel("Hibák");
+		lblNewLabel_7.setBounds(674, 286, 34, 14);
 		
 		JButton hibak_excel = new JButton("Excel");
+		hibak_excel.setBounds(718, 282, 72, 23);
 		hibak_excel.addActionListener(new Hiba_lekerdezo());
 		hibak_excel.addKeyListener(new Enter3());
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(319)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_4)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblNewLabel_5)
-									.addGap(18)
-									.addComponent(projekt_excel)))
-							.addGap(105)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblNewLabel_6)
-									.addGap(18)
-									.addComponent(termek_excel)
-									.addGap(103)
-									.addComponent(lblNewLabel_7)
-									.addGap(18)
-									.addComponent(hibak_excel))
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(projekt_box, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(datum_tol)
-									.addComponent(datum_ig)
-									.addComponent(hiba_box, 0, 381, Short.MAX_VALUE))))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(574)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(385, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(projekt_box, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(datum_tol, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_2))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_3)
-						.addComponent(datum_ig, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_4)
-						.addComponent(hiba_box, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(84)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_5)
-						.addComponent(lblNewLabel_6)
-						.addComponent(termek_excel)
-						.addComponent(projekt_excel)
-						.addComponent(lblNewLabel_7)
-						.addComponent(hibak_excel))
-					.addContainerGap(503, Short.MAX_VALUE))
-		);
 		setBackground(Foablak.hatter_szine);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblNewLabel_1);
+		add(lblNewLabel_2);
+		add(lblNewLabel_3);
+		add(lblNewLabel_4);
+		add(lblNewLabel_5);
+		add(projekt_excel);
+		add(lblNewLabel_6);
+		add(termek_excel);
+		add(lblNewLabel_7);
+		add(hibak_excel);
+		add(projekt_box);
+		add(datum_tol);
+		add(datum_ig);
+		add(hiba_box);
+		add(lblNewLabel);
 
 	}
 	
