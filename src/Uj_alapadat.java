@@ -6,13 +6,9 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -170,21 +166,27 @@ public class Uj_alapadat extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
-            try(FileWriter fw = new FileWriter("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv", true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    OutputStream os = new FileOutputStream(ellenorok);
-                    PrintWriter out = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), true))
-                {
-                    out.println(ellenor_neve.getText());  
-                    //more code
-                    JOptionPane.showMessageDialog(null, "Új adat felvitel kész", "Info", 1);
-                } 
+            try (FileWriter f = new FileWriter(ellenorok, true);
+                    BufferedWriter b = new BufferedWriter(f);
+                    PrintWriter p = new PrintWriter(b);) {
+
+                p.println(ellenor_neve.getText());
+                JOptionPane.showMessageDialog(null, "Új ellenőr felvétele kész!", "Infó", 1);
+            } 
+            catch (IOException e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+
+                /*
                 catch (IOException e1) 
                 {
                     e1.printStackTrace();
                     String hibauzenet2 = e1.toString();
                     JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }
+                }*/
          }
     }
 	

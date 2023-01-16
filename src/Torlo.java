@@ -32,7 +32,7 @@ public class Torlo extends JPanel
 		hiba_torles.addActionListener(new Torles_hiba());
 		
 		JButton gyartas_torles = new JButton("Törlés");
-		gyartas_torles.addActionListener(new Torles_gyartas());
+		//gyartas_torles.addActionListener(new Torles_gyartas());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
 		
