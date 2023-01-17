@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,6 +38,9 @@ public class Gyartasi_adatok extends JPanel
 	private JTextField pcb_sorszam;
 	private JTextField hibak_szama;
 	private JTextField pozicio;
+	private SimpleDateFormat idopont;
+	private Timestamp timestamp;
+	
 	/**
 	 * Gyártási adatok osztály. Ezen a felületen lehet felvinni az adatokat az SQL táblába
 	 */
@@ -82,7 +87,7 @@ public class Gyartasi_adatok extends JPanel
 		sor.setText("-");
 		
 		JButton mentes_gomb = new JButton("Mentés");
-		mentes_gomb.setBounds(499, 541, 67, 23);
+		mentes_gomb.setBounds(499, 541, 80, 23);
 		mentes_gomb.addActionListener(new Iro());
 		mentes_gomb.addKeyListener(new Enter());
 		
@@ -199,10 +204,12 @@ public class Gyartasi_adatok extends JPanel
 			try
 			 {
 			    szamlalo_szama();
+			    idopont = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			    timestamp = new Timestamp(System.currentTimeMillis());
 				Db_iro beleir = new Db_iro();																				//példányosítás
-				beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
+				beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
 						String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
-						String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText());				//Író osztály függvényének meghívása paraméterrel
+						String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));				//Író osztály függvényének meghívása paraméterrel
 				szamlalo++;																																			//szamlalo növelése a DB-ben levő sorszámhoz
 				id.setText(String.valueOf(szamlalo)); 																												//számláló újraírása
 		
@@ -237,9 +244,9 @@ public class Gyartasi_adatok extends JPanel
 				 {
 		    	    szamlalo_szama();
 					Db_iro beleir = new Db_iro();
-					beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
+					beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
 							String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
-							String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText());
+							String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));
 					szamlalo++;
 					id.setText(String.valueOf(szamlalo)); 
 			
@@ -247,17 +254,7 @@ public class Gyartasi_adatok extends JPanel
 					torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
 				 }
 				catch(Exception ex2)
-				 {
-				    szamlalo_szama();
-                    Db_iro beleir = new Db_iro();
-                    beleir.iro_gyartas(szamlalo, String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
-                            String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
-                            String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText());
-                    szamlalo++;
-                    id.setText(String.valueOf(szamlalo)); 
-            
-                    Urlap_torlo torles = new Urlap_torlo();
-                    torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
+				 { 
 					ex2.printStackTrace(); 
 					String hibauzenet2 = ex2.toString();
 					JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);

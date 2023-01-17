@@ -31,6 +31,9 @@ public class EASQAS_adatok extends JPanel
 	private JButton projekt_excel;
 	static JTable table;
 	static JScrollPane gorgeto;
+	private String projekt = System.getProperty("user.home") + "\\Desktop\\ProjektPPM.xlsx";
+	private String termek = System.getProperty("user.home") + "\\Desktop\\TermékPPM.xlsx";
+	private String hiba = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai.xlsx";
 
 	/**
 	 * Create the panel.
@@ -147,13 +150,14 @@ public class EASQAS_adatok extends JPanel
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
 			    if(projekt_box.getSelectedItem().equals("-"))
 			    {				
-    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
+    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);	//függvénymeghívása a paraméterekkel
 			    }
 			    else
 			    {
-                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
 			    }
 			    Foablak.frame.setCursor(null);
+			    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
 			}
 			catch (Exception e1) 
 	        {
@@ -205,13 +209,14 @@ public class EASQAS_adatok extends JPanel
 				SQL lekerdezo = new SQL();																									//példányosítás
 				 if(projekt_box.getSelectedItem().equals("-"))
 	             {
-				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
+				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);	//függvénymeghívása a paraméterekkel
 	             }
 				 else
 				 {
-				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
 				 }
 				Foablak.frame.setCursor(null);
+				JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
 			}
 			catch (Exception e1) 
 	        {
@@ -261,13 +266,14 @@ public class EASQAS_adatok extends JPanel
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
 			    if(projekt_box.getSelectedItem().equals("-"))
                 {				
-    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
+    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba);	//függvénymeghívása a paraméterekkel
                 }
 			    else
 			    {
-                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
 			    }
 				Foablak.frame.setCursor(null);
+				JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
 			}
 			catch (Exception e1) 
 	        {
@@ -321,13 +327,14 @@ public class EASQAS_adatok extends JPanel
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                     if(projekt_box.getSelectedItem().equals("-"))
                     {                    
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);   //függvénymeghívása a paraméterekkel    //függvénymeghívása a paraméterekkel
                     }
                     Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {
@@ -365,13 +372,14 @@ public class EASQAS_adatok extends JPanel
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                      if(projekt_box.getSelectedItem().equals("-"))
                      {
-                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
                      }
                      else
                      {
-                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                      }
                     Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {
@@ -409,13 +417,14 @@ public class EASQAS_adatok extends JPanel
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                     if(projekt_box.getSelectedItem().equals("-"))
                     {                    
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba);   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                     }
                     Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {

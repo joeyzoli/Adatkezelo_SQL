@@ -20,7 +20,10 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,10 +58,11 @@ public class ProGlove extends JPanel
     static JTable table_1;
     static JScrollPane scrollPane;
     private JTextField jo_mezo;
-    private Utolso_sor utolso;
     private DefaultTableModel modell;
     private JScrollPane scrollPane2;
-    private ArrayList<String[]> kiirando; 
+    private ArrayList<String[]> kiirando;
+    private SimpleDateFormat rogzites;
+    private Timestamp timestamp;
 
     /**
      * Create the panel.
@@ -111,7 +115,8 @@ public class ProGlove extends JPanel
         ell_varo = new JTextField();
         ell_varo.setBounds(148, 189, 46, 20);
         ell_varo.setText("0");
-        ell_varo.getDocument().addDocumentListener(new Enter());
+        //ell_varo.getDocument().addDocumentListener(new Enter());
+        ell_varo.addKeyListener(new Enter2());
         add(ell_varo);
         ell_varo.setColumns(10);
         
@@ -408,6 +413,66 @@ public class ProGlove extends JPanel
         }
     }
     
+    class Enter2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
+            int ellenorizendo_menny = 0;
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                try
+                {
+                    ellenorizendo_menny = Integer.parseInt(ell_varo.getText());                       
+                    Workbook excel = new Workbook();
+                    excel.loadFromFile(infohelye);
+                    Worksheet sheet = excel.getWorksheets().get(0);
+                    dataTable = sheet.exportDataTable();
+                    if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))
+                    {
+                       for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+                       {
+                           if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
+                           {
+                               ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3))));
+                           }
+                             
+                       }
+                    }
+                    if(String.valueOf(ell_helye.getSelectedItem()).contains("KKS Végátvétel"))
+                    {
+                        for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+                        {
+                            if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
+                            {
+                                ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4))));
+                            }
+                              
+                        }    
+                    }
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
+    
     public void ido()
     {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
@@ -452,13 +517,16 @@ public class ProGlove extends JPanel
             try 
             {
                 Db_iro ir = new Db_iro();
-                utolso = new Utolso_sor();
-                int szam = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok"));
+                //utolso = new Utolso_sor();
+                rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                timestamp = new Timestamp(System.currentTimeMillis());
+                //int szam = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok"));
                 for(int szamlalo = 0; szamlalo < kiirando.size(); szamlalo++)
                 {
-                    ir.iro_gyartas(szam+1, kiirando.get(szamlalo)[0], kiirando.get(szamlalo)[1], kiirando.get(szamlalo)[2], kiirando.get(szamlalo)[3], kiirando.get(szamlalo)[4], 
-                        Integer.parseInt(kiirando.get(szamlalo)[5]), Integer.parseInt(kiirando.get(szamlalo)[6]), kiirando.get(szamlalo)[7], kiirando.get(szamlalo)[8], kiirando.get(szamlalo)[9], Integer.parseInt(kiirando.get(szamlalo)[10]), "-" );
-                    szam++;
+                    ir.iro_gyartas(kiirando.get(szamlalo)[0], kiirando.get(szamlalo)[1], kiirando.get(szamlalo)[2], kiirando.get(szamlalo)[3], kiirando.get(szamlalo)[4], 
+                        Integer.parseInt(kiirando.get(szamlalo)[5]), Integer.parseInt(kiirando.get(szamlalo)[6]), kiirando.get(szamlalo)[7], 
+                        kiirando.get(szamlalo)[8], kiirando.get(szamlalo)[9], Integer.parseInt(kiirando.get(szamlalo)[10]), "-" , rogzites.format(timestamp));
+                    //szam++;
                 }
                 JOptionPane.showMessageDialog(null, "Mentés kész", "Info", 1);
             } 

@@ -17,7 +17,7 @@ public class Db_iro
 	 * 
 	 */
 	
-	void iro_gyartas(int szam, String vt, String datum, String muszak, String ellenor_neve, String hiba_helye, int felajanlott, int minta_nagysag, String pcb, String hibakod, String pozicio, int hibak_szama, String sor )
+	void iro_gyartas(String vt, String datum, String muszak, String ellenor_neve, String hiba_helye, int felajanlott, int minta_nagysag, String pcb, String hibakod, String pozicio, int hibak_szama, String sor, String idopont )
 	{	
 		String[] koztes = vt.split(" - ");											//bejövő Stringet darabolni kell
 		String[] hibakod_koztes = hibakod.split("-");
@@ -38,11 +38,11 @@ public class Db_iro
 	       
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");							//kapcsolat létrehozása
 	    stmt = (Statement) conn.createStatement();																									//csatlakozás
-	    String query1 = "INSERT INTO qualitydb.Gyartasi_adatok " + 
-	                    "VALUES ("+ szam +",'"+koztes[0] +"', '"+koztes[1]+"', '"+koztes[2]+"', '"+ koztes[3]+ "', '" + datum + "', '" + muszak +"','"+ellenor_neve
-	                    + "', '" + hiba_helye + "', " + felajanlott + ", " + minta_nagysag + ", '" + pcb + "', " + hibakod_koztes[0] + ", '" + hibakod_koztes[1] + "','"+ pozicio+"',"+hibak_szama +",'"+sor+"')";		//String ami magát az SQL utasítást tartalmazza
+	    String query1 = "INSERT INTO qualitydb.Gyartasi_adatok (VT_azon, Cikksz, Vevo, Vevoi_megnev, Datum, Muszak, Ellenor_neve, Hibagyujtes_helye, FElajanlott, Minta_nagysag, PCB_sorszam, Hibakod, Hiba_megnevezes, Pozicio, Hibak_szam, Sor, Rogzites_idopontja)" + 
+	                    "VALUES ('" + koztes[0] +"', '"+koztes[1]+"', '"+koztes[2]+"', '"+ koztes[3]+ "', '" + datum + "', '" + muszak +"','"+ellenor_neve
+	                    + "', '" + hiba_helye + "', " + felajanlott + ", " + minta_nagysag + ", '" + pcb + "', " + hibakod_koztes[0] + ", '" + hibakod_koztes[1] + "','"+ pozicio+"',"+hibak_szama +",'"+sor+"', '"+ idopont +"' )";		//String ami magát az SQL utasítást tartalmazza
 	    stmt.executeUpdate(query1);																													//sql utasítás végrehajtása
-	    
+	    //+ szam +",
 	    } 
 	    catch (SQLException e1) 													//kivétel esetén történik
 	    {
