@@ -15,5 +15,15 @@ public class Urlap_torlo
 		hibaszam.setText("0");
 		sor.setText("-");
 	}
+	
+	public void urlaptorles_proglove(JTextField felajanlott, JTextField mintanagysag, JTextField pcb, JTextField pozicio, JTextField hiba, JTextField jo)
+    {
+        felajanlott.setText("0");
+        mintanagysag.setText("0");
+        pcb.setText("");
+        pozicio.setText("");
+        hiba.setText("");
+        jo.setText("");
+    }
 
 }

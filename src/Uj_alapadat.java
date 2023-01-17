@@ -74,14 +74,14 @@ public class Uj_alapadat extends JPanel
 		vt_megnev.setColumns(10);
 		
 		JButton felvisz = new JButton("Cikkszám felvesz");
-		felvisz.setBounds(259, 299, 111, 23);
+		felvisz.setBounds(259, 299, 159, 23);
 		felvisz.addActionListener(new Fajlba_iro());
 		
 		JLabel lblNewLabel_5 = new JLabel("Cikkszám");
-		lblNewLabel_5.setBounds(204, 91, 43, 14);
+		lblNewLabel_5.setBounds(204, 91, 62, 14);
 		
 		JLabel lblNewLabel_6 = new JLabel("Hibakód");
-		lblNewLabel_6.setBounds(698, 91, 38, 14);
+		lblNewLabel_6.setBounds(698, 91, 57, 14);
 		
 		JLabel lblNewLabel_7 = new JLabel("Hibakód");
 		lblNewLabel_7.setBounds(621, 149, 57, 14);

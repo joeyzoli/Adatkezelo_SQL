@@ -20,7 +20,7 @@ public class SQL
 {
     ResultSet resultSet;
     
-	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye)
+	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt)
 	{
     
         String driverName = "com.mysql.cj.jdbc.Driver";						//driver stringje
@@ -38,6 +38,7 @@ public class SQL
             cstmt.setString(1, datum_tol);
             cstmt.setString(2, datum_ig);
             cstmt.setString(3, hiba_helye);
+            cstmt.setString(4, projekt);
             cstmt.execute();
             //String sql = "select * from " + DB;
             ResultSet resultSet = cstmt.getResultSet();
@@ -54,6 +55,10 @@ public class SQL
             sheet.getAllocatedRange().autoFitRows();
             
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
+            String homeDirectory="";
+            homeDirectory = System.getProperty("user.home") + "\\Desktop\\ProjektPPM.xlsx";
+            System.out.println("Home directory is : "+homeDirectory);
             
             JFileChooser mentes_helye = new JFileChooser();
             mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -94,64 +99,32 @@ public class SQL
  
 	}
 	
-	public void lekerdez_projekt_projekt(String querry, String projekt, String datum_tol, String datum_ig, String hiba_helye)
+	public void lekerdez_mutat(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt)
     {
     
         String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
         String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
         String userName = "veasquality";                                    //fehasználónév
         String password = "kg6T$kd14TWbs9&gd";                              //jelszó
-        DataTable datatable = new DataTable();
-  
         try 
         {
             Class.forName(driverName);
             Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
-            Statement statement = connection.createStatement();
             CallableStatement cstmt = connection.prepareCall("{" + querry + "}");                                   //tárolt eljárást hívja meg
-            cstmt.setString(1, projekt);
-            cstmt.setString(2, datum_tol);
-            cstmt.setString(3, datum_ig);
-            cstmt.setString(4, hiba_helye);
+            cstmt.setString(1, datum_tol);
+            cstmt.setString(2, datum_ig);
+            cstmt.setString(3, hiba_helye);
+            cstmt.setString(4, projekt);
             cstmt.execute();
             //String sql = "select * from " + DB;
             ResultSet resultSet = cstmt.getResultSet();
- 
-            Workbook workbook = new Workbook();
-            JdbcAdapter jdbcAdapter = new JdbcAdapter();
-            jdbcAdapter.fillDataTable(datatable, resultSet);
- 
-            //Get the first worksheet
-            Worksheet sheet = workbook.getWorksheets().get(0);
-            sheet.insertDataTable(datatable, true, 1, 1);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
-            sheet.getAllocatedRange().autoFitColumns();
-            sheet.getAllocatedRange().autoFitRows();
             
-            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            
-            JFileChooser mentes_helye = new JFileChooser();
-            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            mentes_helye.showOpenDialog(mentes_helye);
-            File fajl = mentes_helye.getSelectedFile();
-            //System.out.println(fajl.getAbsolutePath());
-            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+            EASQAS_adatok.table.setModel(buildTableModel(resultSet));
+
             resultSet.close();
-            statement.close();
+            cstmt.close();
             connection.close();
             
-            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-            {
-                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                workbook2.write(output);
-                output.close();
-            }
-            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
         } 
         catch (SQLException e) 
         {
@@ -547,7 +520,7 @@ public class SQL
                       
             String sql = "select     videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                     + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
-                    + "videoton.fkov.kod2, videoton.fkov.szeriaszam, videoton.fkov.hibakod, videoton.fkov.torolt, "
+                    + "videoton.fkov.kod2 as 'PO szám', videoton.fkov.szeriaszam, videoton.fkov.hibakod, videoton.fkov.torolt, "
                     + "videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                     + "videoton.fkov.dolgozo \n"
                     + "from videoton.fkov \n"

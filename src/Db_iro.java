@@ -38,8 +38,9 @@ public class Db_iro
 	       
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");							//kapcsolat létrehozása
 	    stmt = (Statement) conn.createStatement();																									//csatlakozás
-	    String query1 = "INSERT INTO qualitydb.Gyartasi_adatok " + "VALUES ("+ szam +",'"+koztes[0] +"', '"+koztes[1]+"', '"+koztes[2]+"', '"+ koztes[3]+ "', '" + datum + "', '" + muszak +"','"+ellenor_neve
-	    		+ "', '" + hiba_helye + "', " + felajanlott + ", " + minta_nagysag + ", '" + pcb + "', " + hibakod_koztes[0] + ", '" + hibakod_koztes[1] + "','"+ pozicio+"',"+hibak_szama +",'"+sor+"')";		//String ami magát az SQL utasítást tartalmazza
+	    String query1 = "INSERT INTO qualitydb.Gyartasi_adatok " + 
+	                    "VALUES ("+ szam +",'"+koztes[0] +"', '"+koztes[1]+"', '"+koztes[2]+"', '"+ koztes[3]+ "', '" + datum + "', '" + muszak +"','"+ellenor_neve
+	                    + "', '" + hiba_helye + "', " + felajanlott + ", " + minta_nagysag + ", '" + pcb + "', " + hibakod_koztes[0] + ", '" + hibakod_koztes[1] + "','"+ pozicio+"',"+hibak_szama +",'"+sor+"')";		//String ami magát az SQL utasítást tartalmazza
 	    stmt.executeUpdate(query1);																													//sql utasítás végrehajtása
 	    
 	    } 

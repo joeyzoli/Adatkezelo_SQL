@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import javax.swing.JTable;
 
 public class EASQAS_adatok extends JPanel 
 {
@@ -27,6 +29,8 @@ public class EASQAS_adatok extends JPanel
 	private JComboBox<String> projekt_box;
 	private ComboBox combobox_tomb;
 	private JButton projekt_excel;
+	static JTable table;
+	static JScrollPane gorgeto;
 
 	/**
 	 * Create the panel.
@@ -109,6 +113,26 @@ public class EASQAS_adatok extends JPanel
 		add(datum_ig);
 		add(hiba_box);
 		add(lblNewLabel);
+		
+		JButton mutat_projekt = new JButton("Mutat");
+		mutat_projekt.setBounds(338, 315, 72, 23);
+		mutat_projekt.addActionListener(new Projekt_mutat());
+		add(mutat_projekt);
+		
+		JButton mutat_termek = new JButton("Mutat");
+		mutat_termek.setBounds(539, 316, 72, 23);
+		mutat_termek.addActionListener(new Termek_mutat());
+		add(mutat_termek);
+		
+		JButton mutat_hiba = new JButton("Mutat");
+		mutat_hiba.setBounds(718, 316, 72, 23);
+		mutat_hiba.addActionListener(new Hiba_mutat());
+		add(mutat_hiba);
+		
+		table = new JTable();
+		gorgeto = new JScrollPane(table);
+		gorgeto.setBounds(193, 379, 682, 224);
+		add(gorgeto);
 
 	}
 	
@@ -119,17 +143,15 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
 			    if(projekt_box.getSelectedItem().equals("-"))
-			    {
-    				String querry = "call qualitydb.projekt_lekerdezo(?,?,?)";																	//tárolt eljárás Stringje
-    				SQL lekerdezo = new SQL();																									//példányosítás
-    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));	//függvénymeghívása a paraméterekkel
+			    {				
+    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
 			    }
 			    else
 			    {
-			        String querry = "call qualitydb.projekt_lekerdezo_projekt(?,?,?,?)";                                                                   //tárolt eljárás Stringje
-                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                    lekerdezo.lekerdez_projekt_projekt(querry, String.valueOf(projekt_box.getSelectedItem()), datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
 			    }
 			    Foablak.frame.setCursor(null);
 			}
@@ -143,6 +165,35 @@ public class EASQAS_adatok extends JPanel
       
 	}
 	
+	class Projekt_mutat implements ActionListener                                                                                      //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                if(projekt_box.getSelectedItem().equals("-"))
+                {               
+                    lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                }
+                else
+                {
+                    lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                }
+                Foablak.frame.setCursor(null);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+         }
+      
+    }
+	
 	class Termek_lekerdezo implements ActionListener																						//termék gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -150,9 +201,16 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				String querry = "call qualitydb.termek_lekerdezo(?,?,?)";																	//tárolt eljárás Stringje
+				String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";																	//tárolt eljárás Stringje
 				SQL lekerdezo = new SQL();																									//példányosítás
-				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));	//függvénymeghívása a paraméterekkel
+				 if(projekt_box.getSelectedItem().equals("-"))
+	             {
+				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
+	             }
+				 else
+				 {
+				     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+				 }
 				Foablak.frame.setCursor(null);
 			}
 			catch (Exception e1) 
@@ -164,6 +222,34 @@ public class EASQAS_adatok extends JPanel
 		 }
 	}
 	
+	class Termek_mutat implements ActionListener                                                                                       //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                 if(projekt_box.getSelectedItem().equals("-"))
+                 {
+                     lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
+                 }
+                 else
+                 {
+                     lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                 }
+                Foablak.frame.setCursor(null);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
 	class Hiba_lekerdezo implements ActionListener																							//hiba gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -171,9 +257,16 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				String querry = "call qualitydb.hibak_lekerdezo(?,?,?)";																	//tárolt eljárás stringje
-				SQL lekerdezo = new SQL();																									//példányosítás
-				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));	//függvénymeghívása a paraméterekkel
+			    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+			    if(projekt_box.getSelectedItem().equals("-"))
+                {				
+    				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");	//függvénymeghívása a paraméterekkel
+                }
+			    else
+			    {
+                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+			    }
 				Foablak.frame.setCursor(null);
 			}
 			catch (Exception e1) 
@@ -184,6 +277,34 @@ public class EASQAS_adatok extends JPanel
 	        }
 		 }
 	}
+	
+	class Hiba_mutat implements ActionListener                                                                                         //hiba gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                if(projekt_box.getSelectedItem().equals("-"))
+                {               
+                    lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                }
+                else
+                {
+                    lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                }
+                Foablak.frame.setCursor(null);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+         }
+    }
 	
 	class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
     {
@@ -196,17 +317,15 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                  //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                     if(projekt_box.getSelectedItem().equals("-"))
-                    {
-                        String querry = "call qualitydb.projekt_lekerdezo(?,?,?)";                                                                  //tárolt eljárás Stringje
-                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    {                    
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        String querry = "call qualitydb.projekt_lekerdezo_projekt(?,?,?,?)";                                                                   //tárolt eljárás Stringje
-                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                        lekerdezo.lekerdez_projekt_projekt(querry, String.valueOf(projekt_box.getSelectedItem()), datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel    //függvénymeghívása a paraméterekkel
                     }
                     Foablak.frame.setCursor(null);
                 }
@@ -242,9 +361,16 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String querry = "call qualitydb.termek_lekerdezo(?,?,?)";                                                                   //tárolt eljárás Stringje
+                    String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                     if(projekt_box.getSelectedItem().equals("-"))
+                     {
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
+                     }
+                     else
+                     {
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                     }
                     Foablak.frame.setCursor(null);
                 }
                 catch (Exception e1) 
@@ -279,9 +405,16 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?)";                                                                    //tárolt eljárás stringje
+                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                  //tárolt eljárás stringje
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    if(projekt_box.getSelectedItem().equals("-"))
+                    {                    
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                    }
                     Foablak.frame.setCursor(null);
                 }
                 catch (Exception e1) 
