@@ -6,9 +6,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -140,7 +143,7 @@ public class Uj_alapadat extends JPanel
 
 	}
 	
-	class Fajlba_iro implements ActionListener																							//felvisz gomb megnyomáskor hívodik meg
+	class Fajlba_iro implements ActionListener																							//fájlba író gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
@@ -166,11 +169,14 @@ public class Uj_alapadat extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
-            try (FileWriter f = new FileWriter(ellenorok, true);
-                    BufferedWriter b = new BufferedWriter(f);
-                    PrintWriter p = new PrintWriter(b);) {
-
-                p.println(ellenor_neve.getText());
+            try 
+            {
+                Writer writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(ellenorok, true), "UTF-8"));
+                writer.append(ellenor_neve.getText()+ "\n");
+                writer.flush();
+                writer.close();
+                //p.println(ellenor_neve.getText());
                 JOptionPane.showMessageDialog(null, "Új ellenőr felvétele kész!", "Infó", 1);
             } 
             catch (IOException e1) 
@@ -179,14 +185,6 @@ public class Uj_alapadat extends JPanel
                 String hibauzenet2 = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
             }
-
-                /*
-                catch (IOException e1) 
-                {
-                    e1.printStackTrace();
-                    String hibauzenet2 = e1.toString();
-                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }*/
          }
     }
 	

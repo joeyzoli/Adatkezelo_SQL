@@ -244,6 +244,8 @@ public class Gyartasi_adatok extends JPanel
 				 {
 		    	    szamlalo_szama();
 					Db_iro beleir = new Db_iro();
+					idopont = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	                timestamp = new Timestamp(System.currentTimeMillis());
 					beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
 							String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
 							String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));

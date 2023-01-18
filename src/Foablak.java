@@ -94,7 +94,7 @@ public class Foablak extends JFrame
 		gyartasi.addActionListener(new PanelCsere_adatok());
 		menu.add(gyartasi);
         
-		JMenuItem torles = new JMenuItem("Törlés");
+		JMenuItem torles = new JMenuItem("Dev");
 		torles.addActionListener(new PanelCsere_torles());
 		
 		JMenuItem adat_torles = new JMenuItem("Adat törlés");

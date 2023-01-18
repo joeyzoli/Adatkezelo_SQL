@@ -3,8 +3,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.spire.data.table.DataTable;
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JTable;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -63,6 +62,7 @@ public class ProGlove extends JPanel
     private ArrayList<String[]> kiirando;
     private SimpleDateFormat rogzites;
     private Timestamp timestamp;
+    private ArrayList<String> kivalasztott;
 
     /**
      * Create the panel.
@@ -72,6 +72,7 @@ public class ProGlove extends JPanel
         this.setPreferredSize(new Dimension(1100, 700));
         setLayout(null);
         combobox_tomb = new ComboBox();
+        kivalasztott = new ArrayList<String>();
         JLabel lblNewLabel = new JLabel("Időpont");
         lblNewLabel.setBounds(148, 50, 46, 14);
         add(lblNewLabel);
@@ -114,9 +115,7 @@ public class ProGlove extends JPanel
         
         ell_varo = new JTextField();
         ell_varo.setBounds(148, 189, 46, 20);
-        ell_varo.setText("0");
-        //ell_varo.getDocument().addDocumentListener(new Enter());
-        ell_varo.addKeyListener(new Enter2());
+        ell_varo.addKeyListener(new Enter());
         add(ell_varo);
         ell_varo.setColumns(10);
         
@@ -167,7 +166,7 @@ public class ProGlove extends JPanel
         add(lblNewLabel_9);
         
         hiba_arany = new JTextField();
-        hiba_arany.setBounds(222, 338, 29, 20);
+        hiba_arany.setBounds(222, 338, 50, 20);
         hiba_arany.setEditable(false);
         add(hiba_arany);
         hiba_arany.setColumns(10);
@@ -183,7 +182,7 @@ public class ProGlove extends JPanel
         hibas_db.setColumns(10);
         
         JLabel lblNewLabel_11 = new JLabel("Hibás alaktrész");
-        lblNewLabel_11.setBounds(148, 366, 86, 14);
+        lblNewLabel_11.setBounds(148, 366, 94, 14);
         add(lblNewLabel_11);
         
         JLabel lblNewLabel_12 = new JLabel("Folyamat");
@@ -201,9 +200,10 @@ public class ProGlove extends JPanel
         
         folyamat = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.folyamat));                         //combobox_tomb.getCombobox(ComboBox.folyamat)
         folyamat.setBounds(244, 387, 167, 22);
+        folyamat.addActionListener(new Kivalaszt());
         add(folyamat);
         
-        hibakod = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));              //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hibakod = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                          //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hibakod.setBounds(244, 412, 167, 22);
         add(hibakod);
         
@@ -326,94 +326,7 @@ public class ProGlove extends JPanel
          }
     }
     
-    class Enter implements DocumentListener                                                                                                 //billentyűzet figyelő eseménykezelő
-    {         
-        @Override
-        public void insertUpdate(DocumentEvent e) 
-        {
-            // TODO Auto-generated method stub
-            try
-            {
-                szamolo();
-            }
-            catch(Exception e1)
-            {
-                szamolo();
-            }
-        }
-        @Override
-        public void removeUpdate(DocumentEvent e) 
-        {
-            // TODO Auto-generated method stub
-            try
-            {
-                szamolo();
-            }
-            catch(Exception e1)
-            {
-                szamolo();
-            }
-        }
-        @Override
-        public void changedUpdate(DocumentEvent e) 
-        {
-            // TODO Auto-generated method stub
-            try
-            {
-                szamolo();
-            }
-            catch(Exception e1)
-            {
-                szamolo();
-            }
-        }    
-    }
-    
-    public void szamolo()
-    {
-        String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
-        int ellenorizendo_menny = 0;
-            
-        try
-        {
-            ellenorizendo_menny = Integer.parseInt(ell_varo.getText());                       
-            Workbook excel = new Workbook();
-            excel.loadFromFile(infohelye);
-            Worksheet sheet = excel.getWorksheets().get(0);
-            dataTable = sheet.exportDataTable();
-            if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))
-            {
-               for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
-               {
-                   if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
-                   {
-                       ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3))));
-                   }
-                     
-               }
-            }
-            if(String.valueOf(ell_helye.getSelectedItem()).contains("KKS Végátvétel"))
-            {
-                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
-                {
-                    if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
-                    {
-                        ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4))));
-                    }
-                      
-                }    
-            }
-            System.out.print(50/20);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            String hibauzenet = e.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-        }
-    }
-    
-    class Enter2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
     {
         public void keyPressed (KeyEvent e) 
         {    
@@ -429,13 +342,16 @@ public class ProGlove extends JPanel
                     excel.loadFromFile(infohelye);
                     Worksheet sheet = excel.getWorksheets().get(0);
                     dataTable = sheet.exportDataTable();
+                    String szorzo = "0.";
+                    
                     if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))
                     {
                        for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
                        {
                            if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
                            {
-                               ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3))));
+                               String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");
+                               ellenorizendo.setText(koztes2[0]);
                            }
                              
                        }
@@ -446,7 +362,8 @@ public class ProGlove extends JPanel
                         {
                             if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
                             {
-                                ellenorizendo.setText(String.valueOf((ellenorizendo_menny/100)*Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4))));
+                                String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
+                                ellenorizendo.setText(koztes2[0]);
                             }
                               
                         }    
@@ -529,6 +446,7 @@ public class ProGlove extends JPanel
                     //szam++;
                 }
                 JOptionPane.showMessageDialog(null, "Mentés kész", "Info", 1);
+                torlo();
             } 
             catch (Exception e1) 
             {
@@ -553,6 +471,9 @@ public class ProGlove extends JPanel
                 String[] hiba = {String.valueOf(termek.getSelectedItem()), idopont.getText(), "De", String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
                                     megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText()};
                 kiirando.add(hiba);
+                osszead_db();
+                osszead_hibas();
+                hibaszazalek();
             } 
             catch (Exception e1) 
             {              
@@ -575,6 +496,9 @@ public class ProGlove extends JPanel
                 String[] jo = {String.valueOf(termek.getSelectedItem()), idopont.getText(), "De", String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
                         megjegyzes.getText(), "0 - nincs hiba", "", "0"};
                 kiirando.add(jo);
+                osszead_db();
+                osszead_hibas();
+                hibaszazalek();
             } 
             catch (Exception e1) 
             {              
@@ -591,15 +515,7 @@ public class ProGlove extends JPanel
          {
             try 
             {
-                Urlap_torlo torlo = new Urlap_torlo();
-                torlo.urlaptorles_proglove(ell_varo, ellenorizendo, hibas_alkatresz, megjegyzes, hiba_mezo, jo_mezo);
-                int rowCount = modell.getRowCount();
-             
-                for (int i = rowCount - 1; i > -1; i--) 
-                {
-                  modell.removeRow(i);
-                }
-                table.setModel(modell);
+                torlo();
             } 
             catch (Exception e1) 
             {              
@@ -608,5 +524,89 @@ public class ProGlove extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Kivalaszt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                String keresett = String.valueOf(folyamat.getSelectedItem());
+                kivalasztott.add(combobox_tomb.getCombobox(ComboBox.hibakodok)[0]);
+                
+                for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox(ComboBox.hibakodok).length; szamlalo++)
+                {
+                    if(combobox_tomb.getCombobox(ComboBox.hibakodok)[szamlalo].contains(keresett))
+                    {
+                        kivalasztott.add(combobox_tomb.getCombobox(ComboBox.hibakodok)[szamlalo]); 
+                    }
+                }
+                
+                String[] ujmodell = new String[kivalasztott.size()];
+                for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
+                {
+                    ujmodell[szamlalo] = kivalasztott.get(szamlalo);
+                }
+                DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(ujmodell);
+                hibakod.setModel(model);
+                kivalasztott.clear();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    public void osszead_db()
+    {
+        int osszeg = 0;
+        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+        {
+            osszeg += Integer.parseInt(table.getValueAt(szamlalo, 3).toString()); 
+        }
+        ellenorzott_db.setText(String.valueOf(osszeg));    
+        //table.getValueAt(0, 0).toString();
+    }
+    
+    public void osszead_hibas()
+    {
+        int osszeg = 0;
+        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+        {
+            if(table.getValueAt(szamlalo, 2).toString().equals("0"))
+            {
+                
+            }
+            else
+            {
+                osszeg += Integer.parseInt(table.getValueAt(szamlalo, 3).toString());
+            }
+        }
+        hibas_db.setText(String.valueOf(osszeg));    
+        //table.getValueAt(0, 0).toString();
+    }
+    
+    public void hibaszazalek()
+    {
+        float szazalek = (100/Float.parseFloat(ellenorzott_db.getText()))* Float.parseFloat(hibas_db.getText());
+        hiba_arany.setText(String.valueOf(szazalek+ "%"));
+    }
+    
+    public void torlo()
+    {
+        Urlap_torlo torlo = new Urlap_torlo();
+        torlo.urlaptorles_proglove(ell_varo, ellenorizendo, hibas_alkatresz, megjegyzes, hiba_mezo, jo_mezo);
+        int rowCount = modell.getRowCount();
+     
+        for (int i = rowCount - 1; i > -1; i--) 
+        {
+          modell.removeRow(i);
+        }
+        table.setModel(modell);
+        kiirando.clear(); 
     }
 }
