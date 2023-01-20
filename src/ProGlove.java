@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,11 +64,14 @@ public class ProGlove extends JPanel
     private SimpleDateFormat rogzites;
     private Timestamp timestamp;
     private ArrayList<String> kivalasztott;
+    private SimpleDateFormat formatter;
+    private Date date;
 
     /**
      * Create the panel.
+     * @throws ParseException 
      */
-    public ProGlove() 
+    public ProGlove()
     {
         this.setPreferredSize(new Dimension(1100, 700));
         setLayout(null);
@@ -98,6 +102,7 @@ public class ProGlove extends JPanel
         String[] folyamatok = {"100% ellenőrzés", "KKS Végátvétel"};
         ell_helye = new JComboBox<String>(folyamatok);            //folyamatok
         ell_helye.setBounds(148, 131, 113, 22);
+        ell_helye.addActionListener(new Hely_valaszto());
         add(ell_helye);
         
         JLabel lblNewLabel_3 = new JLabel("Termék");
@@ -227,7 +232,7 @@ public class ProGlove extends JPanel
         add(lblNewLabel_15);
         
         hiba_mezo = new JTextField();
-        hiba_mezo.setBounds(222, 510, 29, 20);
+        hiba_mezo.setBounds(222, 510, 50, 20);
         add(hiba_mezo);
         hiba_mezo.setColumns(10);
         
@@ -273,7 +278,7 @@ public class ProGlove extends JPanel
         add(lblNewLabel_17);
         
         jo_mezo = new JTextField();
-        jo_mezo.setBounds(222, 544, 29, 20);
+        jo_mezo.setBounds(222, 544, 50, 20);
         add(jo_mezo);
         jo_mezo.setColumns(10);
         
@@ -283,7 +288,12 @@ public class ProGlove extends JPanel
         add(hozzaad2);
         
         kiirando = new ArrayList<String[]>();
-        
+        try {
+            muszak();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     class Elem_valaszto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -292,89 +302,69 @@ public class ProGlove extends JPanel
          {
             try
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                String valasztott = String.valueOf(termek.getSelectedItem());
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                String valasztott = String.valueOf(termek.getSelectedItem());                                                           //kiválasztott elem Stringé alakítása
                 Workbook excel = new Workbook();
-                excel.loadFromFile(infohelye);
-                Worksheet sheet = excel.getWorksheets().get(0);
-                dataTable = sheet.exportDataTable();
+                excel.loadFromFile(infohelye);                                                                                          //infot tartalamzó excel betöltése
+                Worksheet sheet = excel.getWorksheets().get(0);                                                                         //excel tábla létrehozása
+                dataTable = sheet.exportDataTable();                                                                                    //datatablénak adja az excel tábla tratalmát
                 
-                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                               //for ciklus megkeresi a kiválasztott elemhez tartozó adatokat
                 {
                     if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
                     {
                         ImageIcon icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));
                         Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(550, 475,  java.awt.Image.SCALE_SMOOTH);
-                        ImageIcon meretezett = new ImageIcon(resizedImage);
-                        kepkeret.setIcon(meretezett);
-                        textArea.setText(dataTable.getRows().get(szamlalo).getString(5));
+                        Image resizedImage = icon.getScaledInstance(550, 475,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                        kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                        textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése
                         
                     }
                 }              
                 SQL sql = new SQL();
-                String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");
-                sql.top_hiba(koztes[0]);
-                Foablak.frame.setCursor(null);    
+                String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");                                                //cikkszám kivágása a teljes felsorolásból 
+                sql.top_hiba(koztes[0]);                                                                                                //sql meghívása a cikkszám paraméterrel
+                torlo();
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
             catch (Exception e1) 
             {
                 e1.printStackTrace();
                 String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }
     
-    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
+    class Hely_valaszto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                
+                szamolo();
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
         public void keyPressed (KeyEvent e) 
         {    
             int key = e.getKeyCode();
-            String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
-            int ellenorizendo_menny = 0;
             if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
             {
-                try
-                {
-                    ellenorizendo_menny = Integer.parseInt(ell_varo.getText());                       
-                    Workbook excel = new Workbook();
-                    excel.loadFromFile(infohelye);
-                    Worksheet sheet = excel.getWorksheets().get(0);
-                    dataTable = sheet.exportDataTable();
-                    String szorzo = "0.";
-                    
-                    if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))
-                    {
-                       for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
-                       {
-                           if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
-                           {
-                               String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");
-                               ellenorizendo.setText(koztes2[0]);
-                           }
-                             
-                       }
-                    }
-                    if(String.valueOf(ell_helye.getSelectedItem()).contains("KKS Végátvétel"))
-                    {
-                        for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
-                        {
-                            if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
-                            {
-                                String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
-                                ellenorizendo.setText(koztes2[0]);
-                            }
-                              
-                        }    
-                    }
-                }
-                catch (Exception e1) 
-                {
-                    e1.printStackTrace();
-                    String hibauzenet2 = e1.toString();
-                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }
+                szamolo();
             }
          
         }
@@ -390,20 +380,20 @@ public class ProGlove extends JPanel
         }    
     }
     
-    public void ido()
+    public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
     {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-        Date date = new Date();
-        idopont.setText(formatter.format(date));
+        formatter = new SimpleDateFormat("yyyy.MM.dd");
+        date = new Date();
+        idopont.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
     }
     
-    class Egyeb_info implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    class Egyeb_info implements ActionListener                                                                                          //egyén infó gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
             try 
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                 String valasztott = String.valueOf(termek.getSelectedItem());
                 Workbook excel = new Workbook();
                 excel.loadFromFile(infohelye);
@@ -413,7 +403,7 @@ public class ProGlove extends JPanel
                 {
                     if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
                     {
-                        Desktop.getDesktop().open(new File(dataTable.getRows().get(szamlalo).getString(7)));                        
+                        Desktop.getDesktop().open(new File(dataTable.getRows().get(szamlalo).getString(7)));                            //megnyitja az excelben szereplő helyen levő infó fájlt                       
                     }
                 }      
                 Foablak.frame.setCursor(null);
@@ -427,7 +417,7 @@ public class ProGlove extends JPanel
          }
     }
     
-    class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    class Mentes implements ActionListener                                                                                        //mentés gomb megnyomáskor hívodik meg, beírja az adatokat az adatbázisba
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -435,7 +425,7 @@ public class ProGlove extends JPanel
             {
                 Db_iro ir = new Db_iro();
                 //utolso = new Utolso_sor();
-                rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                 timestamp = new Timestamp(System.currentTimeMillis());
                 //int szam = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok"));
                 for(int szamlalo = 0; szamlalo < kiirando.size(); szamlalo++)
@@ -466,14 +456,23 @@ public class ProGlove extends JPanel
             {
                 String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");
                 String[] koztes2 = String.valueOf(hibakod.getSelectedItem()).split(" - ");
-                modell.addRow(new Object[]{koztes[0], hibas_alkatresz.getText(), koztes2[0], hiba_mezo.getText()});
-                table.setModel(modell);
-                String[] hiba = {String.valueOf(termek.getSelectedItem()), idopont.getText(), "De", String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
-                                    megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText()};
-                kiirando.add(hiba);
-                osszead_db();
-                osszead_hibas();
-                hibaszazalek();
+                if(koztes2[0].equals("0") || hibas_alkatresz.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg poziciót vagy hibakódot!", "Hiba üzenet", 2);
+                }
+                else
+                {
+                    modell.addRow(new Object[]{koztes[0], hibas_alkatresz.getText(), koztes2[0], hiba_mezo.getText()});
+                    table.setModel(modell);
+                    String[] hiba = {String.valueOf(termek.getSelectedItem()), idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
+                                        megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText()};
+                    kiirando.add(hiba);
+                    osszead_db();
+                    osszead_hibas();
+                    hibaszazalek();
+                    hiba_mezo.setText("");
+                    megjegyzes.setText("");
+                }
             } 
             catch (Exception e1) 
             {              
@@ -493,12 +492,13 @@ public class ProGlove extends JPanel
                 String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");
                 modell.addRow(new Object[]{koztes[0], "", "0", jo_mezo.getText()});
                 table.setModel(modell);
-                String[] jo = {String.valueOf(termek.getSelectedItem()), idopont.getText(), "De", String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
+                String[] jo = {String.valueOf(termek.getSelectedItem()), idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
                         megjegyzes.getText(), "0 - nincs hiba", "", "0"};
                 kiirando.add(jo);
                 osszead_db();
                 osszead_hibas();
                 hibaszazalek();
+                jo_mezo.setText("");
             } 
             catch (Exception e1) 
             {              
@@ -561,6 +561,33 @@ public class ProGlove extends JPanel
          }
     }
     
+    public String muszak() throws ParseException
+    {
+        String melyikmuszak = "";
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat sdformat2 = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+        Date mai = new Date();
+        String maiido = sdformat2.format(mai);
+        
+        Date d2 = sdformat.parse(maiido);
+        String valaszto = formatter.format(d2);
+        Date d1 = sdformat2.parse(valaszto + " 13:55:00");
+        Date d3 = sdformat2.parse(maiido);
+        
+        if(d1.compareTo(d3) > 0) 
+        {
+           System.out.println("De");
+           melyikmuszak = "De";
+        } 
+        else if(d1.compareTo(d3) < 0) 
+        {
+           System.out.println("Du");
+           melyikmuszak = "Du";
+        }
+        return melyikmuszak;
+        
+    }
+    
     public void osszead_db()
     {
         int osszeg = 0;
@@ -608,5 +635,52 @@ public class ProGlove extends JPanel
         }
         table.setModel(modell);
         kiirando.clear(); 
+    }
+    
+    public void szamolo()
+    {
+        String[] koztes = String.valueOf(termek.getSelectedItem()).split(",");
+        int ellenorizendo_menny = 0;
+        
+        try
+        {
+            ellenorizendo_menny = Integer.parseInt(ell_varo.getText());                       
+            Workbook excel = new Workbook();
+            excel.loadFromFile(infohelye);
+            Worksheet sheet = excel.getWorksheets().get(0);
+            dataTable = sheet.exportDataTable();
+            String szorzo = "0.";
+            
+            if(String.valueOf(ell_helye.getSelectedItem()).contains("100% ellenőrzés"))                                         //ellenörzés helyétől függően számolja ki az ellenőrizendő mennyiséget
+            {
+               for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                        //for ciklus végigmegy az excelen
+               {
+                   if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))                                       //találat esetén lefut
+                   {
+                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                   }
+                     
+               }
+            }
+            if(String.valueOf(ell_helye.getSelectedItem()).contains("KKS Végátvétel"))                                          //ellenörzés helyétől függően számolja ki az ellenőrizendő mennyiséget
+            {
+                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                       //for ciklus végigmegy az excelen
+                {
+                    if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
+                    {
+                        String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
+                        ellenorizendo.setText(koztes2[0]);
+                    }
+                      
+                }    
+            }
+        }
+        catch (Exception e1)                                                                                                    //kivétel kezelése
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+        }
     }
 }

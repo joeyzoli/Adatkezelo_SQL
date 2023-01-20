@@ -5,6 +5,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+
+import com.spire.data.table.DataTable;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -24,12 +29,12 @@ public class Torlo extends JPanel
 	public Torlo() 
 	{
 		
-		JLabel lblNewLabel = new JLabel("Hiba adatok törlése");
+		JLabel lblNewLabel = new JLabel("Adatbázis átírása");
 		
 		JLabel lblNewLabel_1 = new JLabel("Gyártási adatok törlse");
 		
-		JButton hiba_torles = new JButton("Törléss");
-		hiba_torles.addActionListener(new Torles_hiba());
+		JButton db_atiro = new JButton("Átír");
+		db_atiro.addActionListener(new DB_atiras());
 		
 		JButton gyartas_torles = new JButton("Törlés");
 		//gyartas_torles.addActionListener(new Torles_gyartas());
@@ -52,7 +57,7 @@ public class Torlo extends JPanel
 		            .addGap(132)
 		            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 		                .addComponent(lblNewLabel)
-		                .addComponent(hiba_torles)
+		                .addComponent(db_atiro)
 		                .addComponent(lblNewLabel_2)
 		                .addComponent(csv_gomb))
 		            .addGap(197)
@@ -72,7 +77,7 @@ public class Torlo extends JPanel
 		                .addComponent(lblNewLabel_1))
 		            .addGap(44)
 		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-		                .addComponent(hiba_torles)
+		                .addComponent(db_atiro)
 		                .addComponent(gyartas_torles))
 		            .addGap(50)
 		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
@@ -89,15 +94,24 @@ public class Torlo extends JPanel
 
 	}
 	
-	class Torles_hiba implements ActionListener																						//törlés gomb megnyomáskor hívódik meg
+	class DB_atiras implements ActionListener																						//törlés gomb megnyomáskor hívódik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
 			try
 			 {
-				Db_torlo torol = new Db_torlo();
-				torol.torlo("qualitydb.Hiba_adatok");
-				System.out.println("Törlés sikeres");
+			    Db_iro atiras = new Db_iro();
+			    Workbook workbook = new Workbook();
+			    workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\Java projekt\\emerson felosztás.xlsx");
+	            Worksheet sheet = workbook.getWorksheets().get(0);
+	            DataTable dataTable = sheet.exportDataTable();
+	            for (int i = 0; i < dataTable.getRows().size(); i++) 
+	            {
+	                System.out.println(dataTable.getRows().get(i).getString(0));
+	                atiras.atir(dataTable.getRows().get(i).getString(0), dataTable.getRows().get(i).getString(1));
+	            }
+	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);
+   
 			 }
 			catch(Exception ex2)
 			 {

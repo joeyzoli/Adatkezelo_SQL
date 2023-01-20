@@ -10,6 +10,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -30,7 +31,6 @@ public class Adat_torles extends JPanel
 	private JComboBox<String> hibakod_box;
 	static JTable table;
 	private JScrollPane scrollPane;
-
 	/**
 	 * Create the panel.
 	 */

@@ -2,12 +2,16 @@ import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.JColorChooser;
 import javax.swing.JButton;
@@ -20,6 +24,7 @@ public class Hatter_beallitas extends JPanel
 	private static final long serialVersionUID = 1L;
 	protected JColorChooser tcc;
 	private Color color = Foablak.hatter_szine;
+	private String hattermentes = System.getProperty("user.home") + "\\hatterszin.txt";
 
 	/**
 	 * Create the panel.
@@ -28,7 +33,7 @@ public class Hatter_beallitas extends JPanel
 	{
 		this.setPreferredSize(new Dimension(1100, 650));
 		
-		JLabel lblNewLabel = new JLabel("Háttér szinének a beállítása");
+		JLabel lblNewLabel = new JLabel("Háttér színének a beállítása");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		JButton mentes = new JButton("Szín választás");
@@ -65,9 +70,22 @@ public class Hatter_beallitas extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
-		    Color initialcolor = Color.RED;    
+		    Color initialcolor = Color.BLUE;    
 		    color = JColorChooser.showDialog(new Hatter_beallitas(),"Select a color",initialcolor);    
 		    Foablak.hatter_szine = color;
+		    String hatterszin = String.valueOf(color.getRGB());
+		    try
+		    {
+		    PrintWriter writer = new PrintWriter(hattermentes, "UTF-8");
+		    writer.print(hatterszin);
+		    writer.close();
+		    }
+		    catch (IOException e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
 		    revalidate();
 		    repaint();
 		 }

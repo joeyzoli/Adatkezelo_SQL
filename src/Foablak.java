@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,7 +33,7 @@ public class Foablak extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 	static Foablak frame;
-	private JPanel contentPane;
+	private static JPanel contentPane;
 	private Gyartasi_adatok adatok;
 	private Uj_alapadat ujadat;
 	private EASQAS_adatok easqas;
@@ -62,7 +65,22 @@ public class Foablak extends JFrame
 				try 
 				{
 					frame = new Foablak();
-					frame.setVisible(true);
+					File mentes = new File(System.getProperty("user.home") + "\\hatterszin.txt");
+					if(mentes.exists())
+					{
+    					FileReader fr = new FileReader(System.getProperty("user.home") + "\\hatterszin.txt");
+    			        try (BufferedReader br = new BufferedReader(fr)) 
+    			        {
+                            Color szin = new Color(Integer.parseInt(br.readLine()));
+                            contentPane.setBackground(szin);
+                            hatter_szine = szin;
+                        }
+    			        frame.setVisible(true);
+					}
+					else
+					{
+					    frame.setVisible(true);
+					}
 				} 
 				catch (Exception e) 
 				{
@@ -79,8 +97,8 @@ public class Foablak extends JFrame
 	 */
 	public Foablak() 
 	{
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(1200, 800));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                       //JFrame.EXIT_ON_CLOSE
+        this.setPreferredSize(new Dimension(1200, 850));
         setTitle("Minőségügyi Adatbázis kezelő");
         
 		
@@ -234,7 +252,7 @@ public class Foablak extends JFrame
 		 }
 	}
 	
-	class PanelCsere_po_szam implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_po_szam implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -245,7 +263,7 @@ public class Foablak extends JFrame
          }
     }
 	
-	class PanelCsere_hitlista implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_hitlista implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -256,7 +274,7 @@ public class Foablak extends JFrame
          }
     }
 	/*
-	class PanelCsere_muszaki_ujadat implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_muszaki_ujadat implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -267,7 +285,7 @@ public class Foablak extends JFrame
          }
     }
 	
-	class PanelCsere_muszaki_leker implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_muszaki_leker implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -278,7 +296,7 @@ public class Foablak extends JFrame
          }
     }
 	*/
-	class PanelCsere_proglove implements ActionListener                                                                                   //mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_proglove implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -289,7 +307,7 @@ public class Foablak extends JFrame
          }
     }
 	
-	class PanelCsere_hatter implements ActionListener																					//mentés gomb megnyomáskor hívodik meg
+	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
