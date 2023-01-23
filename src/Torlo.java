@@ -107,7 +107,6 @@ public class Torlo extends JPanel
 	            DataTable dataTable = sheet.exportDataTable();
 	            for (int i = 0; i < dataTable.getRows().size(); i++) 
 	            {
-	                System.out.println(dataTable.getRows().get(i).getString(0));
 	                atiras.atir(dataTable.getRows().get(i).getString(0), dataTable.getRows().get(i).getString(1));
 	            }
 	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);

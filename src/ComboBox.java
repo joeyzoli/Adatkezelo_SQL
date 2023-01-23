@@ -10,7 +10,7 @@ public class ComboBox
 	 */
 	private String[] combobox_tomb;
 	private Adat_beolvaso beolvas;
-	static final String vt_azon = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vt_lista.csv";
+	static final String vt_azon = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vt_lista2.csv";
 	static final String projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.csv";
 	static final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
 	static final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";

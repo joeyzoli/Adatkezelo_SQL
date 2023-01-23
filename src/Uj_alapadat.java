@@ -28,11 +28,17 @@ public class Uj_alapadat extends JPanel
 	private JTextField vevo_megnev;
 	private JTextField vt_megnev;
 	private ComboBox combobox_tomb = new ComboBox();
+	private ComboBox combobox_tomb2 = new ComboBox();
 	private JComboBox<String> vevo_box;
 	private JTextField hibakod;
 	private JTextField hiba_megnevezes;
 	private JTextField ellenor_neve;
 	private String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
+	private JTextField vevo2;
+	private JTextField vevo_azon2;
+	private JTextField vevo_megnev2;
+	private JTextField vt_megnev2;
+	private JComboBox<String> cikk_box;
 
 	/**
 	 * Create the panel.
@@ -140,6 +146,41 @@ public class Uj_alapadat extends JPanel
 		ellenor_gomb.addActionListener(new Ellenor());
 		ellenor_gomb.setBounds(259, 457, 127, 23);
 		add(ellenor_gomb);
+		
+		JLabel lblNewLabel_11 = new JLabel("Cikkszám módosítása");
+		lblNewLabel_11.setBounds(698, 365, 130, 14);
+		add(lblNewLabel_11);
+		
+		System.out.println(combobox_tomb.getCombobox(ComboBox.vt_azon).length);
+		cikk_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));                           //combobox_tomb.getCombobox(ComboBox.vt_azon)
+		cikk_box.setBounds(698, 402, 356, 22);
+		cikk_box.addActionListener(new Modosit_darabol());
+		add(cikk_box);
+		
+		vevo2 = new JTextField();
+		vevo2.setBounds(698, 458, 184, 20);
+		add(vevo2);
+		vevo2.setColumns(10);
+		
+		vevo_azon2 = new JTextField();
+		vevo_azon2.setBounds(698, 489, 184, 20);
+		add(vevo_azon2);
+		vevo_azon2.setColumns(10);
+		
+		vevo_megnev2 = new JTextField();
+		vevo_megnev2.setBounds(698, 520, 184, 20);
+		add(vevo_megnev2);
+		vevo_megnev2.setColumns(10);
+		
+		vt_megnev2 = new JTextField();
+		vt_megnev2.setBounds(698, 551, 184, 20);
+		add(vt_megnev2);
+		vt_megnev2.setColumns(10);
+		
+		JButton modosit = new JButton("Módosít");
+		modosit.setBounds(723, 593, 89, 23);
+		modosit.addActionListener(new Modosit_visszair());
+		add(modosit);
 
 	}
 	
@@ -207,6 +248,50 @@ public class Uj_alapadat extends JPanel
                     String hibauzenet2 = e1.toString();
                     JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
                 }
+         }
+    }
+	
+	class Modosit_darabol implements ActionListener                                                                                         //felvisz gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            String[] darabolas = String.valueOf(cikk_box.getSelectedItem()).split(" - ");
+            vevo2.setText(darabolas[2]);
+            vevo_azon2.setText(darabolas[1]);
+            vevo_megnev2.setText(darabolas[3]);
+            vt_megnev2.setText(darabolas[0]);
+            System.out.println(cikk_box.getSelectedIndex());         
+         }
+    }
+	
+	class Modosit_visszair implements ActionListener                                                                                         //felvisz gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            
+            //combobox_tomb2.getCombobox(ComboBox.vt_azon)[cikk_box.getSelectedIndex()] = vt_megnev2.getText() + " - " + vevo_azon2.getText() + " - " + vevo2.getText()  + " - " + vevo_megnev2.getText();
+            try
+            {
+                
+                System.out.println(combobox_tomb2.getCombobox(ComboBox.vt_azon).length);
+                String[] adatok = combobox_tomb2.getCombobox(ComboBox.vt_azon);
+                System.out.println(adatok[1] + "" +adatok[285]);              
+                
+                for (int j = 0; j < adatok.length; j++) 
+                {
+                    String[] darabolas = adatok[j].split(" - ");
+                    
+                    System.out.println(darabolas[0] + "," + darabolas[1] + "," + darabolas[2] + "," + darabolas[3] + "," + "\n");
+                }
+                
+                JOptionPane.showMessageDialog(null, "Módosítás kész", "Infó", 1);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
          }
     }
 }

@@ -46,6 +46,7 @@ public class Foablak extends JFrame
 	//private Muszaki_leker muszaki_leker;
 	private ProGlove proglove;
 	private Hatter_beallitas hatterbeall;
+	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -98,7 +99,7 @@ public class Foablak extends JFrame
 	public Foablak() 
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                       //JFrame.EXIT_ON_CLOSE
-        this.setPreferredSize(new Dimension(1200, 850));
+        this.setPreferredSize(new Dimension(1200, 830));
         setTitle("Minőségügyi Adatbázis kezelő");
         
 		
@@ -124,6 +125,10 @@ public class Foablak extends JFrame
 		JMenuItem proglove = new JMenuItem("ProGlove");
 		proglove.addActionListener(new PanelCsere_proglove());
 		menu.add(proglove);
+		
+		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
+		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
+		menu.add(vevoi_reklamaciok);
 		menu.add(ujadat);
 		menu.add(adat_torles);
 		menu.add(torles);
@@ -302,6 +307,17 @@ public class Foablak extends JFrame
          {
             proglove = new ProGlove();
             JScrollPane ablak = new JScrollPane(proglove);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_vevoi_bevitel implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            vevoi_rek = new Vevoi_reklmacio_bevitel();
+            JScrollPane ablak = new JScrollPane(vevoi_rek);
             setContentPane(ablak);
             pack();
          }
