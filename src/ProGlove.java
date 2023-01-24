@@ -11,6 +11,7 @@ import com.spire.xls.Worksheet;
 
 import javax.swing.JComboBox;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -43,7 +44,7 @@ public class ProGlove extends JPanel
     private JTextField hiba_arany;
     private JTextField hibas_db;
     private JTextField hibas_alkatresz;
-    private JTextField megjegyzes;
+    private JTextArea megjegyzes;
     private JTextField hiba_mezo;
     private ComboBox combobox_tomb;
     private JComboBox<String> nev;
@@ -66,6 +67,8 @@ public class ProGlove extends JPanel
     private ArrayList<String> kivalasztott;
     private SimpleDateFormat formatter;
     private Date date;
+    private JButton info;
+    
 
     /**
      * Create the panel.
@@ -73,7 +76,7 @@ public class ProGlove extends JPanel
      */
     public ProGlove()
     {
-        this.setPreferredSize(new Dimension(1100, 700));
+        this.setPreferredSize(new Dimension(1100, 800));
         setLayout(null);
         combobox_tomb = new ComboBox();
         kivalasztott = new ArrayList<String>();
@@ -91,6 +94,7 @@ public class ProGlove extends JPanel
         lblNewLabel_1.setBounds(309, 50, 46, 14);
         add(lblNewLabel_1);
         
+        
         nev = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));              //combobox_tomb.getCombobox2(ComboBox.ellenorok)
         nev.setBounds(309, 74, 153, 22);
         add(nev);
@@ -100,7 +104,7 @@ public class ProGlove extends JPanel
         add(lblNewLabel_2);
         
         String[] folyamatok = {"100% ellenőrzés", "KKS Végátvétel"};
-        ell_helye = new JComboBox<String>(folyamatok);            //folyamatok
+        ell_helye = new JComboBox<String>(folyamatok);                                  //folyamatok
         ell_helye.setBounds(148, 131, 113, 22);
         ell_helye.addActionListener(new Hely_valaszto());
         add(ell_helye);
@@ -216,28 +220,29 @@ public class ProGlove extends JPanel
         lblNewLabel_14.setBounds(148, 441, 86, 14);
         add(lblNewLabel_14);
         
-        megjegyzes = new JTextField();
+        megjegyzes = new JTextArea();
         megjegyzes.setText("");
-        megjegyzes.setBounds(148, 466, 263, 20);
-        add(megjegyzes);
+        JScrollPane scrolled = new JScrollPane(megjegyzes);
+        scrolled.setBounds(148, 455, 263, 71);
+        add(scrolled);
         megjegyzes.setColumns(10);
         
         JButton torles = new JButton("Törlés");
-        torles.setBounds(148, 604, 75, 23);
+        torles.setBounds(148, 649, 75, 23);
         torles.addActionListener(new Torles());
         add(torles);
         
         JLabel lblNewLabel_15 = new JLabel("Hiba:");
-        lblNewLabel_15.setBounds(148, 513, 29, 14);
+        lblNewLabel_15.setBounds(148, 540, 29, 14);
         add(lblNewLabel_15);
         
         hiba_mezo = new JTextField();
-        hiba_mezo.setBounds(222, 510, 50, 20);
+        hiba_mezo.setBounds(222, 537, 50, 20);
         add(hiba_mezo);
         hiba_mezo.setColumns(10);
         
         JButton mentes = new JButton("Mentés");
-        mentes.setBounds(322, 604, 89, 23);
+        mentes.setBounds(322, 649, 89, 23);
         mentes.addActionListener(new Mentes());
         add(mentes);
         
@@ -257,43 +262,42 @@ public class ProGlove extends JPanel
         textArea.setBounds(528, 670, 369, 63);
         add(textArea);
         
-        JButton info = new JButton("Egyéb infó");
-        info.setBounds(918, 690, 126, 23);
+        info = new JButton("Egyéb infó");
+        info.setBounds(917, 710, 126, 23);
         info.addActionListener(new Egyeb_info());
         add(info);
         
         kepkeret = new JLabel("");
-        kepkeret.setBounds(527, 190, 550, 475);
+        kepkeret.setBounds(527, 190, 570, 475);
         
         add(kepkeret);
         setBackground(Foablak.hatter_szine);
         
         JButton hozzaad = new JButton("Hozzáad");
-        hozzaad.setBounds(309, 509, 89, 23);
+        hozzaad.setBounds(309, 536, 89, 23);
         hozzaad.addActionListener(new Hozzaad_hiba());
         add(hozzaad);
         
         JLabel lblNewLabel_17 = new JLabel("Jó ");
-        lblNewLabel_17.setBounds(148, 547, 46, 14);
+        lblNewLabel_17.setBounds(148, 576, 46, 14);
         add(lblNewLabel_17);
         
         jo_mezo = new JTextField();
-        jo_mezo.setBounds(222, 544, 50, 20);
+        jo_mezo.setBounds(222, 573, 50, 20);
         add(jo_mezo);
         jo_mezo.setColumns(10);
         
         JButton hozzaad2 = new JButton("Hozzáad");
         hozzaad2.addActionListener(new Hozzaad_jo());
-        hozzaad2.setBounds(309, 543, 89, 23);
+        hozzaad2.setBounds(309, 570, 89, 23);
         add(hozzaad2);
         
+        JButton btnNewButton = new JButton("Eredeti kép");
+        btnNewButton.setBounds(917, 671, 89, 23);
+        add(btnNewButton);
+        
         kiirando = new ArrayList<String[]>();
-        try {
-            muszak();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
     }
     
     class Elem_valaszto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -315,16 +319,17 @@ public class ProGlove extends JPanel
                     {
                         ImageIcon icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));
                         Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(550, 475,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        Image resizedImage = icon.getScaledInstance(570, 475,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
                         ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                         kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése
-                        
+                        JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
                     }
                 }              
                 SQL sql = new SQL();
                 String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");                                                //cikkszám kivágása a teljes felsorolásból 
                 sql.top_hiba(koztes[0]);                                                                                                //sql meghívása a cikkszám paraméterrel
+                egyebinfo();
                 torlo();
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
@@ -454,7 +459,13 @@ public class ProGlove extends JPanel
          {
             try 
             {
-                String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");
+                if(hiba_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
+                    return;
+                }
+                String[] proglove = combobox_tomb.getCombobox(ComboBox.proglove);
+                String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 String[] koztes2 = String.valueOf(hibakod.getSelectedItem()).split(" - ");
                 if(koztes2[0].equals("0") || hibas_alkatresz.getText().equals(""))
                 {
@@ -464,7 +475,7 @@ public class ProGlove extends JPanel
                 {
                     modell.addRow(new Object[]{koztes[0], hibas_alkatresz.getText(), koztes2[0], hiba_mezo.getText()});
                     table.setModel(modell);
-                    String[] hiba = {String.valueOf(termek.getSelectedItem()), idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
+                    String[] hiba = {proglove[termek.getSelectedIndex()], idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
                                         megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText()};
                     kiirando.add(hiba);
                     osszead_db();
@@ -472,6 +483,8 @@ public class ProGlove extends JPanel
                     hibaszazalek();
                     hiba_mezo.setText("");
                     megjegyzes.setText("");
+                    hibas_alkatresz.setText("");
+                    hibakod.setSelectedIndex(0);
                 }
             } 
             catch (Exception e1) 
@@ -489,16 +502,23 @@ public class ProGlove extends JPanel
          {
             try 
             {
-                String[] koztes = String.valueOf(termek.getSelectedItem()).split(" - ");
+                if(jo_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
+                    return;
+                }
+                String[] proglove = combobox_tomb.getCombobox(ComboBox.proglove);
+                String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 modell.addRow(new Object[]{koztes[0], "", "0", jo_mezo.getText()});
                 table.setModel(modell);
-                String[] jo = {String.valueOf(termek.getSelectedItem()), idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
+                String[] jo = {proglove[termek.getSelectedIndex()], idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
                         megjegyzes.getText(), "0 - nincs hiba", "", "0"};
                 kiirando.add(jo);
                 osszead_db();
                 osszead_hibas();
                 hibaszazalek();
                 jo_mezo.setText("");
+                hibakod.setSelectedIndex(0);
             } 
             catch (Exception e1) 
             {              
@@ -561,6 +581,40 @@ public class ProGlove extends JPanel
          }
     }
     
+    public void egyebinfo()
+    {
+        try 
+        {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+            String valasztott = String.valueOf(termek.getSelectedItem());
+            Workbook excel = new Workbook();
+            excel.loadFromFile(infohelye);
+            Worksheet sheet = excel.getWorksheets().get(0);
+            dataTable = sheet.exportDataTable();
+            for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++) 
+            {
+                if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
+                {
+                    File fajl = new File(dataTable.getRows().get(szamlalo).getString(7));                            //megnyitja az excelben szereplő helyen levő infó fájlt
+                    if(fajl.exists())
+                    {
+                        info.setBackground(Color.GREEN);
+                    }
+                    else
+                    {
+                        info.setBackground(Color.RED);
+                    }
+                }
+            }      
+            Foablak.frame.setCursor(null);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Nincs plusz infó!", "Hiba üzenet", 2);
+            Foablak.frame.setCursor(null);
+        }
+    }
     public String muszak() throws ParseException
     {
         String melyikmuszak = "";
@@ -619,14 +673,14 @@ public class ProGlove extends JPanel
     
     public void hibaszazalek()
     {
-        float szazalek = (100/Float.parseFloat(ellenorzott_db.getText()))* Float.parseFloat(hibas_db.getText());
-        hiba_arany.setText(String.valueOf(szazalek+ "%"));
+        //float szazalek = (100/Float.parseFloat(ellenorzott_db.getText()))* Float.parseFloat(hibas_db.getText());
+        // hiba_arany.setText(String.valueOf(szazalek+ "%"));
     }
     
     public void torlo()
     {
         Urlap_torlo torlo = new Urlap_torlo();
-        torlo.urlaptorles_proglove(ell_varo, ellenorizendo, hibas_alkatresz, megjegyzes, hiba_mezo, jo_mezo);
+        torlo.urlaptorles_proglove(ell_varo, ellenorizendo, hibas_alkatresz, megjegyzes, hiba_mezo, jo_mezo, ellenorzott_db, hibas_db, hiba_arany);
         int rowCount = modell.getRowCount();
      
         for (int i = rowCount - 1; i > -1; i--) 

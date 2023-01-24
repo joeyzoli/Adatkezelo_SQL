@@ -1,3 +1,4 @@
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Urlap_torlo 
@@ -16,7 +17,7 @@ public class Urlap_torlo
 		sor.setText("-");
 	}
 	
-	public void urlaptorles_proglove(JTextField felajanlott, JTextField mintanagysag, JTextField pcb, JTextField pozicio, JTextField hiba, JTextField jo)
+	public void urlaptorles_proglove(JTextField felajanlott, JTextField mintanagysag, JTextField pcb, JTextArea pozicio, JTextField hiba, JTextField jo, JTextField sum, JTextField hibas, JTextField arany)
     {
         felajanlott.setText("0");
         mintanagysag.setText("0");
@@ -24,6 +25,9 @@ public class Urlap_torlo
         pozicio.setText("");
         hiba.setText("");
         jo.setText("");
+        sum.setText("");
+        hibas.setText("");
+        arany.setText("");
     }
 
 }

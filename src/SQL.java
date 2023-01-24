@@ -403,6 +403,71 @@ public class SQL
         }
     }
 	
+	public void vevoi_lezarashoz(String datum, String cikkszam)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        Statement stmt2 = null;
+        ResultSet resultSet2;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
+        stmt.execute(sajat);
+        resultSet = stmt.getResultSet();
+        
+        String sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
+        stmt2.execute(sajat2);
+        resultSet2 = stmt2.getResultSet();
+        
+        Vevoi_reklamacio_lezaras.table.setModel(buildTableModel(resultSet));
+        Vevoi_reklamacio_lezaras.table_1.setModel(buildTableModel(resultSet2));
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
 	public void hitlista(String projekt, String cikk, String datumtol, String datumig, String poz)
     {
         Connection conn = null;

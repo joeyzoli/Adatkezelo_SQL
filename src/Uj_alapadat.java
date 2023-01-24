@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -28,7 +29,6 @@ public class Uj_alapadat extends JPanel
 	private JTextField vevo_megnev;
 	private JTextField vt_megnev;
 	private ComboBox combobox_tomb = new ComboBox();
-	private ComboBox combobox_tomb2 = new ComboBox();
 	private JComboBox<String> vevo_box;
 	private JTextField hibakod;
 	private JTextField hiba_megnevezes;
@@ -151,7 +151,6 @@ public class Uj_alapadat extends JPanel
 		lblNewLabel_11.setBounds(698, 365, 130, 14);
 		add(lblNewLabel_11);
 		
-		System.out.println(combobox_tomb.getCombobox(ComboBox.vt_azon).length);
 		cikk_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));                           //combobox_tomb.getCombobox(ComboBox.vt_azon)
 		cikk_box.setBounds(698, 402, 356, 22);
 		cikk_box.addActionListener(new Modosit_darabol());
@@ -181,6 +180,7 @@ public class Uj_alapadat extends JPanel
 		modosit.setBounds(723, 593, 89, 23);
 		modosit.addActionListener(new Modosit_visszair());
 		add(modosit);
+		setBackground(Foablak.hatter_szine);
 
 	}
 	
@@ -268,26 +268,44 @@ public class Uj_alapadat extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
-            
-            //combobox_tomb2.getCombobox(ComboBox.vt_azon)[cikk_box.getSelectedIndex()] = vt_megnev2.getText() + " - " + vevo_azon2.getText() + " - " + vevo2.getText()  + " - " + vevo_megnev2.getText();
+            BufferedWriter out = null;
             try
             {
-                
-                System.out.println(combobox_tomb2.getCombobox(ComboBox.vt_azon).length);
+                ComboBox combobox_tomb2 = new ComboBox();
                 String[] adatok = combobox_tomb2.getCombobox(ComboBox.vt_azon);
-                System.out.println(adatok[1] + "" +adatok[285]);              
+                adatok[cikk_box.getSelectedIndex()] = vt_megnev2.getText() +" - "+ vevo_azon2.getText() +" - "+ vevo2.getText() +" - "+ vevo_megnev2.getText();
+                out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(ComboBox.vt_azon), StandardCharsets.UTF_8));                           
+                out.write("VT megnevez‚s,Expr1002,Vevő,Vevői megnevez‚s \n");
+                out.write("-,,, \n");
                 
-                for (int j = 0; j < adatok.length; j++) 
+                for(int szamlalo = 1; szamlalo < adatok.length; szamlalo++)
                 {
-                    String[] darabolas = adatok[j].split(" - ");
+                    String[] darabolas = adatok[szamlalo].split(" - ");
+                    if(darabolas.length < 2)
+                    {
+                        out.write(darabolas[0] + ",,,");
+                    }
+                    else
+                    {
+                        out.write(darabolas[0] + "," + darabolas[1] +"," + darabolas[2] +","+ darabolas[3] +  "\n");
+                    }
                     
-                    System.out.println(darabolas[0] + "," + darabolas[1] + "," + darabolas[2] + "," + darabolas[3] + "," + "\n");
                 }
                 
                 JOptionPane.showMessageDialog(null, "Módosítás kész", "Infó", 1);
+                out.close();
             }
             catch (Exception e1) 
             {
+                try 
+                {
+                    out.close();
+                } 
+                catch (IOException e2) 
+                {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                }
                 e1.printStackTrace();
                 String hibauzenet2 = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
