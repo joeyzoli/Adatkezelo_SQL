@@ -1,7 +1,9 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
     private JTextField tipus_mezo;
     static JTable table;
     static JTable table_1;
+    private JTextField veglegido_mezo;
 
     /**
      * Create the panel.
@@ -26,11 +29,11 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         
         JLabel lblNewLabel = new JLabel("Vevői reklamációk nyitott pont lezárása");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblNewLabel.setBounds(355, 23, 353, 20);
+        lblNewLabel.setBounds(385, 23, 353, 20);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Dátum");
-        lblNewLabel_1.setBounds(405, 88, 46, 14);
+        lblNewLabel_1.setBounds(453, 88, 46, 14);
         add(lblNewLabel_1);
         
         datum_mezo = new JTextField();
@@ -39,7 +42,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_2 = new JLabel("Cikkszám");
-        lblNewLabel_2.setBounds(405, 128, 46, 14);
+        lblNewLabel_2.setBounds(443, 128, 56, 14);
         add(lblNewLabel_2);
         
         tipus_mezo = new JTextField();
@@ -48,21 +51,37 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         tipus_mezo.setColumns(10);
         
         JButton keres_gomb = new JButton("Keres");
-        keres_gomb.setBounds(449, 156, 89, 23);
+        keres_gomb.setBounds(506, 156, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
         table = new JTable();
-        table.setBounds(161, 201, 738, 127);
-        add(table);
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setBounds(73, 201, 952, 127);
+        add(scroll);
         
         table_1 = new JTable();
-        table_1.setBounds(161, 339, 738, 123);
-        add(table_1);
+        JScrollPane scroll2 = new JScrollPane(table_1);
+        scroll2.setBounds(207, 339, 738, 123);
+        add(scroll2);
         
-        JButton btnNewButton_1 = new JButton("Lezárás");
-        btnNewButton_1.setBounds(449, 508, 89, 23);
-        add(btnNewButton_1);
+        JButton lezar_gomb = new JButton("Lezárás");
+        lezar_gomb.setBounds(506, 492, 89, 23);
+        lezar_gomb.addActionListener(new Visszair());
+        add(lezar_gomb);
+        
+        JLabel lblNewLabel_3 = new JLabel("Vevői raklamáció lezárás időpontja");
+        lblNewLabel_3.setBounds(310, 597, 180, 14);
+        add(lblNewLabel_3);
+        
+        veglegido_mezo = new JTextField();
+        veglegido_mezo.setBounds(509, 594, 86, 20);
+        add(veglegido_mezo);
+        veglegido_mezo.setColumns(10);
+        
+        JButton veglegzar_gomb = new JButton("Reklamáció zárása");
+        veglegzar_gomb.setBounds(605, 593, 157, 23);
+        add(veglegzar_gomb);
 
     }
     
@@ -80,6 +99,96 @@ public class Vevoi_reklamacio_lezaras extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Visszair implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Db_iro visszair = new Db_iro();
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(table.getValueAt(szamlalo, 9) == null)
+                    {
+                        //table.setValueAt("", szamlalo, 9);
+                    }
+                    else
+                    {
+                        String sql = "update qualitydb.Vevoireklamacio_felelosok set  Lezarva = '"+ table.getValueAt(szamlalo, 9).toString() +"' where "
+                                + "Datum = '"+ table.getValueAt(szamlalo, 0).toString() +"' and Cikkszam = '"+ table.getValueAt(szamlalo, 1).toString() 
+                                +"' and Zarolt = '"+ table.getValueAt(szamlalo, 2).toString() +"' "
+                                +" and Zarolt_db = "+ Integer.parseInt(table.getValueAt(szamlalo, 3).toString()) 
+                                +" and Talalt_db = "+ Integer.parseInt(table.getValueAt(szamlalo, 4).toString()) 
+                                +" and Muszaki_doku = '"+ table.getValueAt(szamlalo, 5).toString() +"' and Termeles = '"+ table.getValueAt(szamlalo, 6).toString() 
+                                +"' and Felelos = '"+ table.getValueAt(szamlalo, 7).toString() +"' and Hatarido = '"+ table.getValueAt(szamlalo, 8).toString() +"'";
+                        visszair.ujrair_vevoi(sql);
+                    }
+                }
+                
+                for(int szamlalo = 0; szamlalo < table_1.getRowCount(); szamlalo++)
+                {
+                    if(table_1.getValueAt(szamlalo, 5) == null)
+                    {
+                        //table_1.setValueAt("", szamlalo, 5);
+                    }
+                    else
+                    {
+                        String sql = "update qualitydb.Vevoireklamacio_detekt set  Lezarva = '"+ table_1.getValueAt(szamlalo, 5).toString() +"' where "
+                                + "Datum = '"+ table_1.getValueAt(szamlalo, 0).toString() +"' and Cikkszam = '"+ table_1.getValueAt(szamlalo, 1).toString() 
+                                +"' and Intezkedes = '"+ table_1.getValueAt(szamlalo, 2).toString() +""                                             
+                                +"' and Felelos = '"+ table_1.getValueAt(szamlalo, 3).toString() +"' and Hatarido = '"+ table_1.getValueAt(szamlalo, 4).toString() +"'";
+                        visszair.ujrair_vevoi(sql);
+                    }
+                }
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Infó", 1);
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Veglegzar implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Db_iro visszair = new Db_iro();
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(table.getValueAt(szamlalo, 9) == null)
+                    {
+                        //table.setValueAt("", szamlalo, 9);
+                    }
+                    else
+                    {
+                        String sql = "update qualitydb.Vevoireklamacio_alapadat set  Lezaras_ido = '"+ veglegido_mezo.getText() +"' where "
+                                + "Datum = '"+ table.getValueAt(szamlalo, 0).toString() +"' and Cikkszam = '"+ table.getValueAt(szamlalo, 1).toString() +"'";
+                        visszair.ujrair_vevoi(sql);
+                    }
+                }
+                               
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Infó", 1);
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }

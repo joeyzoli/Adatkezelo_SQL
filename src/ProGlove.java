@@ -68,6 +68,7 @@ public class ProGlove extends JPanel
     private SimpleDateFormat formatter;
     private Date date;
     private JButton info;
+    private JButton eredetikep;
     
 
     /**
@@ -113,7 +114,7 @@ public class ProGlove extends JPanel
         lblNewLabel_3.setBounds(309, 107, 46, 14);
         add(lblNewLabel_3);
         
-        termek = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.proglove));               //combobox_tomb.getCombobox(ComboBox.proglove)
+        termek = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.proglove_rovid));               //combobox_tomb.getCombobox(ComboBox.proglove)
         termek.setBounds(309, 131, 153, 22);
         termek.addActionListener(new Elem_valaszto());
         add(termek);
@@ -292,9 +293,10 @@ public class ProGlove extends JPanel
         hozzaad2.setBounds(309, 570, 89, 23);
         add(hozzaad2);
         
-        JButton btnNewButton = new JButton("Eredeti kép");
-        btnNewButton.setBounds(917, 671, 89, 23);
-        add(btnNewButton);
+        eredetikep= new JButton("Eredeti kép");
+        eredetikep.setBounds(917, 671, 100, 23);
+        eredetikep.addActionListener(new Eredeti_kep());
+        add(eredetikep);
         
         kiirando = new ArrayList<String[]>();
         
@@ -323,7 +325,16 @@ public class ProGlove extends JPanel
                         ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                         kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése
-                        JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
+                        File letezik = new  File(dataTable.getRows().get(szamlalo).getString(6));
+                        if(letezik.exists())
+                        {    
+                            JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
+                            eredetikep.setBackground(Color.GREEN);
+                        }
+                        else
+                        {
+                            eredetikep.setBackground(Color.RED);
+                        }
                     }
                 }              
                 SQL sql = new SQL();
@@ -331,6 +342,43 @@ public class ProGlove extends JPanel
                 sql.top_hiba(koztes[0]);                                                                                                //sql meghívása a cikkszám paraméterrel
                 egyebinfo();
                 torlo();
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Eredeti_kep implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                String valasztott = String.valueOf(termek.getSelectedItem());                                                           //kiválasztott elem Stringé alakítása
+                Workbook excel = new Workbook();
+                excel.loadFromFile(infohelye);                                                                                          //infot tartalamzó excel betöltése
+                Worksheet sheet = excel.getWorksheets().get(0);                                                                         //excel tábla létrehozása
+                dataTable = sheet.exportDataTable();                                                                                    //datatablénak adja az excel tábla tratalmát
+                
+                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                               //for ciklus megkeresi a kiválasztott elemhez tartozó adatokat
+                {
+                    if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
+                    {
+                        ImageIcon icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));                                                               
+                        File letezik = new  File(dataTable.getRows().get(szamlalo).getString(6));
+                        if(letezik.exists())
+                        {    
+                            JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
+                        }
+                    }
+                }              
+                
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
             catch (Exception e1) 
