@@ -137,6 +137,86 @@ public class SQL
  
     }
 	
+	public void vevoi_napok(String querry, String datum, String cikkszam, String mikor, String mit)
+    {
+    
+        String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
+        String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
+        String userName = "veasquality";                                    //fehasználónév
+        String password = "kg6T$kd14TWbs9&gd";                              //jelszó
+        DataTable datatable = new DataTable();
+  
+        try 
+        {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
+            Statement statement = connection.createStatement();
+            CallableStatement cstmt = connection.prepareCall("{" + querry + "}");                                   //tárolt eljárást hívja meg
+            cstmt.setString(1, datum);
+            cstmt.setString(2, cikkszam);
+            cstmt.execute();
+            //String sql = "select * from " + DB;
+            ResultSet resultSet = cstmt.getResultSet();
+ 
+            Workbook workbook = new Workbook();
+            JdbcAdapter jdbcAdapter = new JdbcAdapter();
+            jdbcAdapter.fillDataTable(datatable, resultSet);
+ 
+            //Get the first worksheet
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            sheet.insertDataTable(datatable, true, 1, 1);
+            
+            Db_iro visszair = new Db_iro();
+            String sql = "update qualitydb.Vevoireklamacio_alapadat set  Nyitva = '"+ Integer.parseInt(datatable.getRows().get(0).getString(0)) +"' where "
+                    + "Datum = '"+ mikor +"' and Tipus = '"+ mit +"'";
+                    
+            visszair.ujrair_vevoi(sql);
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+            sheet.getAllocatedRange().autoFitColumns();
+            sheet.getAllocatedRange().autoFitRows();
+            
+            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            /*
+            JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            mentes_helye.showOpenDialog(mentes_helye);
+            File fajl = mentes_helye.getSelectedFile();
+            //System.out.println(fajl.getAbsolutePath());*/
+            String menteshelye = "c:\\Users\\kovacs.zoltan\\Desktop\\teszt.xlsx";
+            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+            resultSet.close();
+            statement.close();
+            connection.close();
+            
+            FileInputStream fileStream = new FileInputStream(menteshelye);
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(menteshelye);
+                workbook2.write(output);
+                output.close();
+            }
+            
+            //JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
+	
 	public void sajat_sql(String SQL)
 	{
 		Connection conn = null;
@@ -310,7 +390,14 @@ public class SQL
         stmt.execute(sajat);
         resultSet = stmt.getResultSet();
         
-        ProGlove.table_1.setModel(buildTableModel(resultSet));
+        if(ProGlove.table_1 != null)
+        {
+            ProGlove.table_1.setModel(buildTableModel(resultSet));
+        }
+        else
+        {
+            Loxone.table_1.setModel(buildTableModel(resultSet));
+        }
 
         resultSet.close();
         stmt.close();
@@ -434,6 +521,84 @@ public class SQL
         
         Vevoi_reklamacio_lezaras.table.setModel(buildTableModel(resultSet));
         Vevoi_reklamacio_lezaras.table_1.setModel(buildTableModel(resultSet2));
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_lekerdezes(String projekt, String datumtol, String datumig, String lezart, String nyitott)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sql = "";
+
+        if(projekt.equals("-"))
+        {
+            projekt = "%";
+        }
+        
+        if(lezart.equals("igen") && nyitott.equals("igen"))
+        {
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"'and Datum >= '"+ datumtol 
+                            +"' and Datum <= '"+ datumig +"'";
+        }
+        else if(lezart.equals("igen") && nyitott.equals("nem"))
+        {
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                            +"' and Datum <= '"+ datumig +"' and Lezaras_ido is not null  ";
+        }
+        else
+        {
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                    +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
+        }
+        stmt.execute(sql);
+        resultSet = stmt.getResultSet();
+
+        Vevoi_reklamacio_lekerdezes.table.setModel(buildTableModel(resultSet));
 
         resultSet.close();
         stmt.close();

@@ -45,9 +45,11 @@ public class Foablak extends JFrame
 	//private Uj_adatok muszaki_adatok;
 	//private Muszaki_leker muszaki_leker;
 	private ProGlove proglove;
+	private Loxone loxon;
 	private Hatter_beallitas hatterbeall;
 	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private Vevoi_reklamacio_lezaras vevoi_lezar;
+	private Vevoi_reklamacio_lekerdezes vevoi_leker;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -129,6 +131,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
 		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
+		
+		JMenuItem loxone = new JMenuItem("Loxone");
+		loxone.addActionListener(new PanelCsere_loxone());
+		menu.add(loxone);
 		menu.add(vevoi_reklamaciok);
 		
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
@@ -146,6 +152,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem sajat_sql = new JMenuItem("Saját SQL");
 		sajat_sql.addActionListener(new PanelCsere_sajat_sql());
+		
+		JMenuItem vevoi_lekerdezes = new JMenuItem("Vevői reklamációk");
+		vevoi_lekerdezes.addActionListener(new PanelCsere_vevoi_lekerdezes());
+		lekerdezes.add(vevoi_lekerdezes);
 		lekerdezes.add(sajat_sql);
 		
 		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
@@ -317,6 +327,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_loxone implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            loxon = new Loxone();
+            JScrollPane ablak = new JScrollPane(loxon);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_vevoi_bevitel implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -334,6 +355,17 @@ public class Foablak extends JFrame
          {
             vevoi_lezar = new Vevoi_reklamacio_lezaras();
             JScrollPane ablak = new JScrollPane(vevoi_lezar);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_vevoi_lekerdezes implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            vevoi_leker = new Vevoi_reklamacio_lekerdezes();
+            JScrollPane ablak = new JScrollPane(vevoi_leker);
             setContentPane(ablak);
             pack();
          }

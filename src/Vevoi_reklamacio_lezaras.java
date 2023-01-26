@@ -57,7 +57,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         
         table = new JTable();
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setBounds(73, 201, 952, 127);
+        scroll.setBounds(73, 201, 986, 127);
         add(scroll);
         
         table_1 = new JTable();
@@ -81,6 +81,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         
         JButton veglegzar_gomb = new JButton("Reklamáció zárása");
         veglegzar_gomb.setBounds(605, 593, 157, 23);
+        veglegzar_gomb.addActionListener(new Veglegzar());
         add(veglegzar_gomb);
 
     }
@@ -166,21 +167,14 @@ public class Vevoi_reklamacio_lezaras extends JPanel
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                SQL hanynapja = new SQL();
                 Db_iro visszair = new Db_iro();
-                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                {
-                    if(table.getValueAt(szamlalo, 9) == null)
-                    {
-                        //table.setValueAt("", szamlalo, 9);
-                    }
-                    else
-                    {
-                        String sql = "update qualitydb.Vevoireklamacio_alapadat set  Lezaras_ido = '"+ veglegido_mezo.getText() +"' where "
-                                + "Datum = '"+ table.getValueAt(szamlalo, 0).toString() +"' and Cikkszam = '"+ table.getValueAt(szamlalo, 1).toString() +"'";
-                        visszair.ujrair_vevoi(sql);
-                    }
-                }
-                               
+                String sql = "update qualitydb.Vevoireklamacio_alapadat set  Lezaras_ido = '"+ veglegido_mezo.getText() +"' where "
+                        + "Datum = '"+ table.getValueAt(0, 0).toString() +"' and Tipus = '"+ table.getValueAt(0, 1).toString() +"'";
+                        
+                visszair.ujrair_vevoi(sql);
+                String query = "call qualitydb.vevoi_hanynapig(?,?)";        
+                hanynapja.vevoi_napok(query, table.getValueAt(0, 0).toString(), table.getValueAt(0, 1).toString(), table.getValueAt(0, 0).toString(), table.getValueAt(0, 1).toString());        
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Infó", 1);
             }
