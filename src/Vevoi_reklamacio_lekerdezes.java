@@ -67,11 +67,11 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         add(datumig);
         datumig.setColumns(10);
         
-        lezart_gomb = new JRadioButton("Lezárt");
+        lezart_gomb = new JRadioButton("Nyitott");
         lezart_gomb.setBounds(482, 163, 66, 14);
         add(lezart_gomb);
         
-        nyitott_gomb = new JRadioButton("Nyitott");
+        nyitott_gomb = new JRadioButton("Lezárt");
         nyitott_gomb.setBounds(592, 159, 80, 23);
         add(nyitott_gomb);
         
@@ -100,11 +100,11 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 String lezart = "";
                 if(lezart_gomb.isSelected())
                 {
-                    nyitott = "igen";
+                    lezart = "igen";
                 }
                 else
                 {
-                    nyitott = "nem";
+                    lezart = "nem";
                 }
                 
                 if(nyitott_gomb.isSelected())

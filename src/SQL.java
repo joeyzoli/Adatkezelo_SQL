@@ -582,7 +582,7 @@ public class SQL
         
         if(lezart.equals("igen") && nyitott.equals("igen"))
         {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"'and Datum >= '"+ datumtol 
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
                             +"' and Datum <= '"+ datumig +"'";
         }
         else if(lezart.equals("igen") && nyitott.equals("nem"))

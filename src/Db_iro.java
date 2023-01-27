@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -214,6 +216,69 @@ public class Db_iro
         String query1 = "INSERT INTO qualitydb.Vevoireklamacio_detekt (Datum, Cikkszam, Intezkedes, Felelos, Hatarido)" + 
                         "VALUES ('" + datum +"', '"+ koztes[0]+"', '"+intezkedes+"', '" + felelos + "', '" + hatarido +"')"; 
         stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása
+        //+ szam +",
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	void iro_vevoi_kep(String datum, String cikkszam, String kephelye)
+    {   
+        String[] koztes = cikkszam.split(" - ");                                          //bejövő Stringet darabolni kell
+        Connection conn = null;
+        Statement stmt = null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+                                                                                                          //csatlakozás
+        
+        File image = new File(kephelye);
+        FileInputStream fis = new FileInputStream (image);
+        String sql = "INSERT INTO qualitydb.Vevoireklamacio_kepek (Datum, Cikkszam, Kep) VALUES(?,?,?)";
+        stmt = conn.prepareStatement(sql);
+        ((PreparedStatement) stmt).setString(1, datum);
+        ((PreparedStatement) stmt).setString(2, koztes[0]);
+        ((PreparedStatement) stmt).setBinaryStream (3, fis, (int) image.length() );
+        stmt.executeUpdate(sql);                                                                                                                 //sql utasítás végrehajtása
         //+ szam +",
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

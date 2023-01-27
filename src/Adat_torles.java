@@ -112,7 +112,7 @@ public class Adat_torles extends JPanel
 		table = new JTable();
 		scrollPane = new JScrollPane(table);
 		//table.setBounds(63, 410, 948, -51);
-		scrollPane.setBounds(63, 369, 948, 193);
+		scrollPane.setBounds(63, 369, 1050, 193);
 		add(scrollPane);
 		
 		JButton ujra = new JButton("Újraír");

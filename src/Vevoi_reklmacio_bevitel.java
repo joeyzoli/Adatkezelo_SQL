@@ -4,11 +4,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -58,13 +61,14 @@ public class Vevoi_reklmacio_bevitel extends JPanel
     private JCheckBox termeles_igen;
     private JCheckBox termeles_nem;
     private JTextArea intezkedes_det;
+    private ArrayList<String> kephelye = new ArrayList<String>();
     
     /**
      * Create the panel.
      */
     public Vevoi_reklmacio_bevitel() 
     {
-        this.setPreferredSize(new Dimension(1100, 900));
+        this.setPreferredSize(new Dimension(1100, 999));
         setLayout(null);
         
         JLabel lblNewLabel = new JLabel("Vevői reklamációk felvitele");
@@ -367,6 +371,11 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         talalthiba_mezo.setBounds(199, 274, 46, 20);
         add(talalthiba_mezo);
         talalthiba_mezo.setColumns(10);
+        
+        JButton kephozzaadasa_gomb = new JButton("Kép hozzáadása");
+        kephozzaadasa_gomb.setBounds(478, 715, 119, 23);
+        kephozzaadasa_gomb.addActionListener(new Kephozzadasa());
+        add(kephozzaadasa_gomb);
 
     }
     
@@ -418,6 +427,13 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                                 Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());
                     }                 
                 }
+                
+                for(int szamlalo = 0; szamlalo < kephelye.size(); szamlalo++)
+                {
+                   iras.iro_vevoi_kep(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), kephelye.get(szamlalo));          
+                }
+                kephelye.clear();
+                
                 JOptionPane.showMessageDialog(null, "Mentés sikeres!", "Info", 1);
             } 
             catch (Exception e1) 
@@ -511,6 +527,25 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Kephozzadasa implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                kephelye.add(fajl.getAbsolutePath());
+            } 
+            catch (Exception e1) 
+            {              
+                
             }
          }
     }

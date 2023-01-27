@@ -481,11 +481,16 @@ public class Loxone extends JPanel
                 rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                 timestamp = new Timestamp(System.currentTimeMillis());
                 //int szam = Integer.parseInt(utolso.utolso("qualitydb.Gyartasi_adatok"));
+                if(kiirando.get(0)[0].equals("-"))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg cikkszámot!", "Hiba!", 2);
+                    return;
+                }
                 for(int szamlalo = 0; szamlalo < kiirando.size(); szamlalo++)
                 {
                     ir.iro_gyartas(kiirando.get(szamlalo)[0], kiirando.get(szamlalo)[1], kiirando.get(szamlalo)[2], kiirando.get(szamlalo)[3], kiirando.get(szamlalo)[4], 
                         Integer.parseInt(kiirando.get(szamlalo)[5]), Integer.parseInt(kiirando.get(szamlalo)[6]), kiirando.get(szamlalo)[7], 
-                        kiirando.get(szamlalo)[8], kiirando.get(szamlalo)[9], Integer.parseInt(kiirando.get(szamlalo)[10]), "-" , rogzites.format(timestamp));
+                        kiirando.get(szamlalo)[8], kiirando.get(szamlalo)[9], Integer.parseInt(kiirando.get(szamlalo)[10]), kiirando.get(szamlalo)[11]  , rogzites.format(timestamp));
                     //szam++;
                 }
                 JOptionPane.showMessageDialog(null, "Mentés kész", "Info", 1);
@@ -524,7 +529,7 @@ public class Loxone extends JPanel
                     modell.addRow(new Object[]{koztes[0], hibas_alkatresz.getText(), koztes2[0], hiba_mezo.getText()});
                     table.setModel(modell);
                     String[] hiba = {proglove[termek.getSelectedIndex()], idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), "0", "0",
-                                        megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText()};
+                                        megjegyzes.getText(), String.valueOf(hibakod.getSelectedItem()), hibas_alkatresz.getText(), hiba_mezo.getText(), "-"};
                     kiirando.add(hiba);
                     osszead_db();
                     osszead_hibas();
@@ -560,7 +565,7 @@ public class Loxone extends JPanel
                 modell.addRow(new Object[]{koztes[0], "", "0", jo_mezo.getText()});
                 table.setModel(modell);
                 String[] jo = {proglove[termek.getSelectedIndex()], idopont.getText(), muszak(), String.valueOf(nev.getSelectedItem()), String.valueOf(ell_helye.getSelectedItem()), ell_varo.getText(), ellenorizendo.getText(),
-                        megjegyzes.getText(), "0 - nincs hiba", "", "0"};
+                        megjegyzes.getText(), "0 - nincs hiba", "", "0", jo_mezo.getText()};
                 kiirando.add(jo);
                 osszead_db();
                 osszead_hibas();
@@ -666,31 +671,44 @@ public class Loxone extends JPanel
     public String muszak() throws ParseException
     {
         String melyikmuszak = "";
-        SimpleDateFormat rovid = new SimpleDateFormat("yyyy.MM.dd");
-        SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+        SimpleDateFormat rovid = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat hosszu = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         Date mai = new Date();
-        String maiido = hosszu.format(mai);
+        Date mai2 = new Date();
+        String maiido = rovid.format(mai);
+        String maihosszu = hosszu.format(mai2);
         
-        Date d2 = rovid.parse(maiido);
-        String valaszto = formatter.format(d2);
-        Date reggelvege = hosszu.parse(valaszto + " 13:55:00");
-        Date reggelkezd = hosszu.parse(valaszto + " 05:55:00");
-        Date delutanvege = hosszu.parse(valaszto + " 21:55:00");
-        Date d3 = hosszu.parse(maiido);
+        System.out.println(maiido);
+        System.out.println(maihosszu);
         
-        if(reggelvege.compareTo(d3) > 0 && reggelkezd.compareTo(d3) < 0) 
+        Date reggelvege = hosszu.parse(maiido+" 13:55:00");
+        Date reggelkezd = hosszu.parse(maiido + " 05:55:00");
+        Date delutanvege = hosszu.parse(maiido+" 21:55:00");
+        Date d3 = new Date();          //hosszu.parse(maihosszu);
+        
+        if(reggelvege.compareTo(d3) > 0) 
         {
-           System.out.println("De");
+           System.out.println("De "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
            melyikmuszak = "De";
-        } 
-        else if(reggelvege.compareTo(d3) < 0 && delutanvege.compareTo(d3) > 0) 
+        }
+        if(reggelkezd.compareTo(d3) < 0) 
         {
-           System.out.println("Du");
+           System.out.println("De "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
+           melyikmuszak = "De";
+        }
+        else 
+        {
+            System.out.println("Éj " + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
+            melyikmuszak = "Éj";
+        }
+        if(reggelvege.compareTo(d3) < 0) 
+        {
+           System.out.println("Du "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
            melyikmuszak = "Du";
         }
-        else
+        if(delutanvege.compareTo(d3) < 0) 
         {
-            System.out.println("Éj");
+            System.out.println("Éj " + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
             melyikmuszak = "Éj";
         }
         return melyikmuszak;
