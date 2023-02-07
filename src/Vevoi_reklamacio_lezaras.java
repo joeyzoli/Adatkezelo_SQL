@@ -170,7 +170,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 SQL hanynapja = new SQL();
                 Db_iro visszair = new Db_iro();
                 String sql = "update qualitydb.Vevoireklamacio_alapadat set  Lezaras_ido = '"+ veglegido_mezo.getText() +"' where "
-                        + "Datum = '"+ table.getValueAt(0, 0).toString() +"' and Tipus = '"+ table.getValueAt(0, 1).toString() +"'";
+                        + "Datum = '"+ datum_mezo.getText() +"' and Tipus = '"+ tipus_mezo.getText() +"'";
                         
                 visszair.ujrair_vevoi(sql);
                 String query = "call qualitydb.vevoi_hanynapig(?,?)";        

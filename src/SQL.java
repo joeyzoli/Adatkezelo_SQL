@@ -19,6 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class SQL 
 {
     ResultSet resultSet;
+    static DefaultTableModel alapmodell;
     
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
 	{
@@ -50,7 +51,7 @@ public class SQL
             //Get the first worksheet
             Worksheet sheet = workbook.getWorksheets().get(0);
             sheet.insertDataTable(datatable, true, 1, 1);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:G1"));
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
@@ -94,6 +95,100 @@ public class SQL
         }
  
 	}
+	
+	public void lekerdez_projekt_osszegez(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
+    {
+    
+        String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
+        String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
+        String userName = "veasquality";                                    //fehasználónév
+        String password = "kg6T$kd14TWbs9&gd";                              //jelszó
+        DataTable datatable = new DataTable();
+  
+        try 
+        {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
+            Statement statement = connection.createStatement();
+            CallableStatement cstmt = connection.prepareCall("{" + querry + "}");                                   //tárolt eljárást hívja meg
+            cstmt.setString(1, datum_tol);
+            cstmt.setString(2, datum_ig);
+            cstmt.setString(3, hiba_helye);
+            cstmt.setString(4, projekt);
+            cstmt.execute();
+            //String sql = "select * from " + DB;
+            ResultSet resultSet = cstmt.getResultSet();
+ 
+            Workbook workbook = new Workbook();
+            JdbcAdapter jdbcAdapter = new JdbcAdapter();
+            jdbcAdapter.fillDataTable(datatable, resultSet);
+            
+            int sumfelajanlott = 0;
+            int summinta = 0;
+            int sumhiba = 0;
+            float ppm = 0;
+            for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+            {
+                sumfelajanlott += Integer.parseInt(datatable.getRows().get(szamlalo).getString(3));
+            }
+            for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+            {
+                summinta += Integer.parseInt(datatable.getRows().get(szamlalo).getString(4));
+            }
+            for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+            {
+                sumhiba += Integer.parseInt(datatable.getRows().get(szamlalo).getString(5));
+            }
+            ppm = ((float)sumhiba/(float)sumfelajanlott)* (float)1000000;
+            
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            sheet.insertDataTable(datatable, true, 1, 1);
+            int utolsosor = sheet.getLastRow() +1;
+            sheet.getRange().get("C" + (utolsosor)).setText("Sum:");
+            sheet.getRange().get("D" + (utolsosor)).setText(String.valueOf(sumfelajanlott));
+            sheet.getRange().get("E" + (utolsosor)).setText(String.valueOf(summinta));
+            sheet.getRange().get("F" + (utolsosor)).setText(String.valueOf(sumhiba));
+            sheet.getRange().get("G" + (utolsosor)).setText(String.valueOf(ppm));
+            
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:G1"));
+            sheet.getAllocatedRange().autoFitColumns();
+            sheet.getAllocatedRange().autoFitRows();
+            
+            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
+            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+            resultSet.close();
+            statement.close();
+            connection.close();
+            
+            FileInputStream fileStream = new FileInputStream(menteshelye);
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(menteshelye);
+                workbook2.write(output);
+                output.close();
+            }
+            
+            //JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
 	
 	public void lekerdez_mutat(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt)
     {
@@ -144,8 +239,6 @@ public class SQL
         String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
         String userName = "veasquality";                                    //fehasználónév
         String password = "kg6T$kd14TWbs9&gd";                              //jelszó
-        DataTable datatable = new DataTable();
-  
         try 
         {
             Class.forName(driverName);
@@ -157,50 +250,25 @@ public class SQL
             cstmt.execute();
             //String sql = "select * from " + DB;
             ResultSet resultSet = cstmt.getResultSet();
- 
-            Workbook workbook = new Workbook();
-            JdbcAdapter jdbcAdapter = new JdbcAdapter();
-            jdbcAdapter.fillDataTable(datatable, resultSet);
- 
-            //Get the first worksheet
-            Worksheet sheet = workbook.getWorksheets().get(0);
-            sheet.insertDataTable(datatable, true, 1, 1);
-            
+            int napok = 0;
+            //resultSet.next();            
+            while (resultSet.next()) 
+            {
+                if(resultSet.getString(1) != null)
+                {
+                    napok = Integer.parseInt(resultSet.getString(1));
+                }              
+            }
+      
             Db_iro visszair = new Db_iro();
-            String sql = "update qualitydb.Vevoireklamacio_alapadat set  Nyitva = '"+ Integer.parseInt(datatable.getRows().get(0).getString(0)) +"' where "
+            String sql = "update qualitydb.Vevoireklamacio_alapadat set  Nyitva = '"+ napok +"' where "
                     + "Datum = '"+ mikor +"' and Tipus = '"+ mit +"'";
                     
             visszair.ujrair_vevoi(sql);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
-            sheet.getAllocatedRange().autoFitColumns();
-            sheet.getAllocatedRange().autoFitRows();
-            
-            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            /*
-            JFileChooser mentes_helye = new JFileChooser();
-            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            mentes_helye.showOpenDialog(mentes_helye);
-            File fajl = mentes_helye.getSelectedFile();
-            //System.out.println(fajl.getAbsolutePath());*/
-            String menteshelye = "c:\\Users\\kovacs.zoltan\\Desktop\\teszt.xlsx";
-            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+           
             resultSet.close();
             statement.close();
-            connection.close();
-            
-            FileInputStream fileStream = new FileInputStream(menteshelye);
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-            {
-                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(menteshelye);
-                workbook2.write(output);
-                output.close();
-            }
-            
-            //JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+            connection.close();          
         } 
         catch (SQLException e) 
         {
@@ -752,7 +820,7 @@ public class SQL
                     + "videoton.fkov.dolgozo \n"
                     + "from videoton.fkov \n"
                     + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                    + " where nev = 'Loxone FCT' and ido > '2022.06.01' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
+                    + " where hely = '26' and ido > '2022.06.01' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
                     
             Statement cstmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -827,7 +895,6 @@ public class SQL
 	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
     {
-
         ResultSetMetaData metaData = rs.getMetaData();
 
         // names of columns
@@ -850,7 +917,7 @@ public class SQL
             data.add(vector);
         }
 
-        return new DefaultTableModel(data, columnNames);
+        return alapmodell =  new DefaultTableModel(data, columnNames);
 
     }
 	

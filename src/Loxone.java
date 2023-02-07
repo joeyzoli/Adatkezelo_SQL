@@ -298,6 +298,12 @@ public class Loxone extends JPanel
         eredetikep.addActionListener(new Eredeti_kep());
         add(eredetikep);
         
+        try {
+            muszak();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         kiirando = new ArrayList<String[]>();
         
     }
@@ -476,6 +482,11 @@ public class Loxone extends JPanel
          {
             try 
             {
+                if(kiirando.size() < 1)
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg ellenőrzési adatot!", "Hiba!", 2);
+                    return;
+                }
                 Db_iro ir = new Db_iro();
                 //utolso = new Utolso_sor();
                 rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //

@@ -9,7 +9,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
+//import java.io.FileNotFoundException;
 import java.io.FileReader;
+//import java.io.IOException;
+//import java.io.Reader;
+//import java.nio.charset.StandardCharsets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -204,6 +208,7 @@ public class Foablak extends JFrame
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		pack();
         setLocationRelativeTo(null);
+        //sorszamol();
 
 	}
 	
@@ -451,5 +456,56 @@ public class Foablak extends JFrame
             // TODO Auto-generated method stub
             
         }    
-    }   
+    }
+	/*
+	public void sorszamol()
+	{
+	    String hely = "c:\\Users\\kovacs.zoltan\\eclipse-workspace\\Adat kezelo\\src\\";
+	    FileReader fr = null;
+	    int sorokszama = 0;
+	    int karakterek = 0;
+	    File mappa = new File(hely);
+	    File[] fajlok = mappa.listFiles();
+	    
+	    //BufferedReader br = new BufferedReader(fr);  
+	    for(int szamlalo = 0; szamlalo < fajlok.length; szamlalo++)
+	    {
+	        try 
+            {
+                fr = new FileReader(fajlok[szamlalo]);
+                BufferedReader br = new BufferedReader(fr);  
+                BufferedReader beolvaso = new BufferedReader(new FileReader(fajlok[szamlalo], StandardCharsets.UTF_8));
+    
+                String buffer;
+                
+                while((buffer = beolvaso.readLine()) != null)   
+                {  
+                    sorokszama++;
+                }
+                beolvaso.close();
+                
+                int i;    
+                while((i=br.read())!=-1)
+                {  
+                    karakterek++;
+                }  
+            } 
+	        catch (Exception e) 
+	        {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+	    }
+	    System.out.println("Sorosk száma: " + sorokszama);
+	    System.out.println("Karakterek száma: " + karakterek);
+              
+        try 
+        {
+            fr.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+	    
+	}*/
 }

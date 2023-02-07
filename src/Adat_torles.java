@@ -126,8 +126,6 @@ public class Adat_torles extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
-
-
 			int res = JOptionPane.showConfirmDialog(null, 																			//megerősítést kérő üzenet jelenik meg
 			"Figyelem! Biztosan ezt akarod?", 
 			"Figyelmeztetés", 
@@ -146,8 +144,7 @@ public class Adat_torles extends JPanel
 			}
 			else																													//nem válasz estén hibaüzenet és a pcb sorszám törlése
 			{
-				JOptionPane.showMessageDialog(null, "Törlés megszakítva!!", "Hiba üzenet", 2);
-				
+				JOptionPane.showMessageDialog(null, "Törlés megszakítva!!", "Hiba üzenet", 2);				
 			}
 		 }
 	}

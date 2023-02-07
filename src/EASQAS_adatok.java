@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -148,13 +149,15 @@ public class EASQAS_adatok extends JPanel
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+               
 			    if(projekt_box.getSelectedItem().equals("-"))
 			    {				
     				lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);	//függvénymeghívása a paraméterekkel
 			    }
 			    else
 			    {
-                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                    lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel                   
+                    
 			    }
 			    Foablak.frame.setCursor(null);
 			    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
@@ -178,6 +181,10 @@ public class EASQAS_adatok extends JPanel
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                int sumfelajanlott = 0;
+                int summinta = 0;
+                int sumhiba = 0;
+                float ppm = 0;
                 if(projekt_box.getSelectedItem().equals("-"))
                 {               
                     lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
@@ -185,6 +192,31 @@ public class EASQAS_adatok extends JPanel
                 else
                 {
                     lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                       sumfelajanlott += Integer.parseInt(table.getValueAt(szamlalo, 3).toString());
+                    }
+                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                       summinta += Integer.parseInt(table.getValueAt(szamlalo, 4).toString());
+                    }
+                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                       sumhiba += Integer.parseInt(table.getValueAt(szamlalo, 5).toString());
+                    }
+                    ppm = ((float)sumhiba/(float)sumfelajanlott)* (float)1000000;
+                    String[] egesz = String.valueOf(ppm).split("\\.");
+                    Vector<Object> vector = new Vector<Object>();
+                    vector.add("");
+                    vector.add("");
+                    vector.add("Sum:");
+                    vector.add(sumfelajanlott);
+                    vector.add(summinta);
+                    vector.add(sumhiba);
+                    vector.add(ppm);
+                    System.out.println(sumfelajanlott + " "+ summinta +" "+ sumhiba + " " + egesz[0]);
+                    SQL.alapmodell.addRow(vector);
+                    table.setModel(SQL.alapmodell);
                 }
                 Foablak.frame.setCursor(null);
             }

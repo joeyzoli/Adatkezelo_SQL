@@ -482,6 +482,11 @@ public class ProGlove extends JPanel
          {
             try 
             {
+                if(kiirando.size() < 1)
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg ellenőrzési adatot!", "Hiba!", 2);
+                    return;
+                }
                 Db_iro ir = new Db_iro();
                 //utolso = new Utolso_sor();
                 rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
