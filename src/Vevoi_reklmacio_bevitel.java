@@ -166,16 +166,16 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         gorgeto2.setBounds(422, 228, 319, 74);
         add(gorgeto2);
         
-        JLabel lblNewLabel_11 = new JLabel("Műszaki dokumntáció");
-        lblNewLabel_11.setBounds(751, 231, 131, 14);
+        JLabel lblNewLabel_11 = new JLabel("Műszaki dokumntáció megnézve?");
+        lblNewLabel_11.setBounds(776, 228, 164, 20);
         add(lblNewLabel_11);
         
         muszaki_igen = new JCheckBox("Igen");
-        muszaki_igen.setBounds(888, 227, 66, 23);
+        muszaki_igen.setBounds(946, 227, 66, 23);
         add(muszaki_igen);
         
         muszaki_nem = new JCheckBox("Nem");
-        muszaki_nem.setBounds(970, 227, 97, 23);
+        muszaki_nem.setBounds(1014, 227, 97, 23);
         add(muszaki_nem);
         
         ButtonGroup csoport = new ButtonGroup();
@@ -183,15 +183,15 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         csoport.add(muszaki_nem);
         
         JLabel lblNewLabel_12 = new JLabel("Termelés értesítése");
-        lblNewLabel_12.setBounds(751, 277, 116, 14);
+        lblNewLabel_12.setBounds(839, 277, 101, 14);
         add(lblNewLabel_12);
         
         termeles_igen = new JCheckBox("Igen");
-        termeles_igen.setBounds(888, 273, 53, 23);
+        termeles_igen.setBounds(946, 273, 53, 23);
         add(termeles_igen);
         
         termeles_nem = new JCheckBox("Nem");
-        termeles_nem.setBounds(970, 273, 60, 23);
+        termeles_nem.setBounds(1013, 273, 60, 23);
         add(termeles_nem);
         
         ButtonGroup csoport2 = new ButtonGroup();

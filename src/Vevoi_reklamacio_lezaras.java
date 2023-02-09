@@ -174,7 +174,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                         
                 visszair.ujrair_vevoi(sql);
                 String query = "call qualitydb.vevoi_hanynapig(?,?)";        
-                hanynapja.vevoi_napok(query, table.getValueAt(0, 0).toString(), table.getValueAt(0, 1).toString(), table.getValueAt(0, 0).toString(), table.getValueAt(0, 1).toString());        
+                hanynapja.vevoi_napok(query, datum_mezo.getText(), tipus_mezo.getText(), datum_mezo.getText(), tipus_mezo.getText());        
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Infó", 1);
             }

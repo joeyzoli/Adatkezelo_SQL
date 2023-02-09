@@ -297,13 +297,7 @@ public class Loxone extends JPanel
         eredetikep.setBounds(917, 671, 100, 23);
         eredetikep.addActionListener(new Eredeti_kep());
         add(eredetikep);
-        
-        try {
-            muszak();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+     
         kiirando = new ArrayList<String[]>();
         
     }

@@ -254,7 +254,7 @@ public class Db_iro
     {   
         String[] koztes = cikkszam.split(" - ");                                          //bejövő Stringet darabolni kell
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         try 
         {
            try 
@@ -273,13 +273,12 @@ public class Db_iro
         
         File image = new File(kephelye);
         FileInputStream fis = new FileInputStream (image);
-        String sql = "INSERT INTO qualitydb.Vevoireklamacio_kepek (Datum, Cikkszam, Kep) VALUES(?,?,?)";
+        String sql = "INSERT INTO qualitydb.Vevoireklamacio_kepek(Datum, Cikkszam, Kep) VALUES(?,?,?)";
         stmt = conn.prepareStatement(sql);
-        ((PreparedStatement) stmt).setString(1, datum);
-        ((PreparedStatement) stmt).setString(2, koztes[0]);
-        ((PreparedStatement) stmt).setBinaryStream (3, fis, (int) image.length() );
-        stmt.executeUpdate(sql);                                                                                                                 //sql utasítás végrehajtása
-        //+ szam +",
+        stmt.setString(1, datum);
+        stmt.setString(2, koztes[0]);
+        stmt.setBinaryStream (3, fis, (int) image.length());
+        stmt.executeUpdate();                                                                                                                 //sql utasítás végrehajtása
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik
         {

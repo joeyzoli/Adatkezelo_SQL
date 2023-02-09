@@ -9,10 +9,10 @@
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/mysql-connector-java-8.0.28.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/activation.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/commons-collections4-4.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/Spire.Xls.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/SQL/poi-3.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/SQL/poi-ooxml-3.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/SQL/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/SQL/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/Spire.Xls.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

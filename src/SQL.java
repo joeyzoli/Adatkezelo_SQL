@@ -1,8 +1,13 @@
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.Chart;
+import com.spire.xls.ExcelChartType;
 import com.spire.xls.ExcelVersion;
+import com.spire.xls.LegendPositionType;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
+import com.spire.xls.charts.ChartSerie;
+import com.spire.xls.charts.ChartSeries;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -667,6 +672,360 @@ public class SQL
         resultSet = stmt.getResultSet();
 
         Vevoi_reklamacio_lekerdezes.table.setModel(buildTableModel(resultSet));
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_lekerdezes_excel(String projekt, String datumtol, String datumig, String lezart, String nyitott)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        DataTable datatable = new DataTable();
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sql = "";
+
+        if(projekt.equals("-"))
+        {
+            projekt = "%";
+        }
+        
+        if(lezart.equals("igen") && nyitott.equals("igen"))
+        {
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                            +"' and Datum <= '"+ datumig +"'";
+        }
+        else if(lezart.equals("igen") && nyitott.equals("nem"))
+        {
+            sql = "SELECT DATE_FORMAT(Datum,'%Y%m'), projekt, rek_vagy, nyitva, Rek_db FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                            +"' and Datum <= '"+ datumig +"' and Lezaras_ido is not null";
+        }
+        else
+        {
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                    +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
+        }
+        stmt.execute(sql);
+        resultSet = stmt.getResultSet();
+
+        Workbook workbook = new Workbook();
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+
+        //Get the first worksheet
+        Worksheet sheet = workbook.getWorksheets().get(0);
+        Worksheet sheet2 = workbook.getWorksheets().get(1);
+        sheet2.insertDataTable(datatable, true, 1, 1);
+        int reklamacio_jan = 0;
+        int visszajelzes_jan = 0;
+        int reklamacio_feb = 0;
+        int visszajelzes_feb = 0;
+        int reklamacio_mar = 0;
+        int visszajelzes_mar = 0;
+        int reklamacio_apr = 0;
+        int visszajelzes_apr = 0;
+        int reklamacio_maj = 0;
+        int visszajelzes_maj = 0;
+        int reklamacio_jun = 0;
+        int visszajelzes_jun = 0;
+        int reklamacio_jul = 0;
+        int visszajelzes_jul = 0;
+        int reklamacio_aug = 0;
+        int visszajelzes_aug = 0;
+        int reklamacio_sze = 0;
+        int visszajelzes_sze = 0;
+        int reklamacio_okt = 0;
+        int visszajelzes_okt = 0;
+        int reklamacio_nov = 0;
+        int visszajelzes_nov = 0;
+        int reklamacio_dec = 0;
+        int visszajelzes_dec = 0;
+        
+        sheet.getRange().get("A" + 1).setText("Hónap");
+        sheet.getRange().get("B" + 1).setText("Reklamáció");
+        sheet.getRange().get("C" + 1).setText("Visszajelzés");
+        
+        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+        {
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202301"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_jan++;                     
+                }
+                else
+                {
+                    visszajelzes_jan++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202302"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_feb++;                     
+                }
+                else
+                {
+                    visszajelzes_feb++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202303"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_mar++;                     
+                }
+                else
+                {
+                    visszajelzes_mar++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202304"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_apr++;                     
+                }
+                else
+                {
+                    visszajelzes_apr++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202305"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_maj++;                     
+                }
+                else
+                {
+                    visszajelzes_maj++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202306"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_jun++;                     
+                }
+                else
+                {
+                    visszajelzes_jun++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202307"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_jul++;                     
+                }
+                else
+                {
+                    visszajelzes_jul++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202308"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_aug++;                     
+                }
+                else
+                {
+                    visszajelzes_aug++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202309"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_sze++;                     
+                }
+                else
+                {
+                    visszajelzes_sze++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202310"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_okt++;                     
+                }
+                else
+                {
+                    visszajelzes_okt++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202311"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_nov++;                     
+                }
+                else
+                {
+                    visszajelzes_nov++;
+                }
+            }
+            if(datatable.getRows().get(szamlalo).getString(0).equals("202312"))
+            {            
+                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                {
+                   reklamacio_dec++;                     
+                }
+                else
+                {
+                    visszajelzes_dec++;
+                }
+            }
+                
+        }   
+        sheet.getRange().get("A" + 2).setText("Január");
+        sheet.getRange().get("A" + 3).setText("Február");
+        sheet.getRange().get("A" + 4).setText("Március");
+        sheet.getRange().get("A" + 5).setText("Április");
+        sheet.getRange().get("A" + 6).setText("Május");
+        sheet.getRange().get("A" + 7).setText("Június");
+        sheet.getRange().get("A" + 8).setText("Július");
+        sheet.getRange().get("A" + 9).setText("Augusztus");
+        sheet.getRange().get("A" + 10).setText("Szeptember");
+        sheet.getRange().get("A" + 11).setText("Október");
+        sheet.getRange().get("A" + 12).setText("November");
+        sheet.getRange().get("A" + 13).setText("December");
+        
+        sheet.getRange().get("B" + 2).setNumberValue(reklamacio_jan);
+        sheet.getRange().get("C" + 2).setNumberValue(visszajelzes_jan);        
+        sheet.getCellRange("B" + 3).setNumberValue(reklamacio_feb);
+        sheet.getCellRange("C" + 3).setNumberValue(visszajelzes_feb);
+        sheet.getCellRange("B" + 4).setNumberValue(reklamacio_mar);
+        sheet.getCellRange("C" + 4).setNumberValue(visszajelzes_mar);
+        sheet.getCellRange("B" + 5).setNumberValue(reklamacio_apr);
+        sheet.getCellRange("C" + 5).setNumberValue(visszajelzes_apr);
+        sheet.getCellRange("B" + 6).setNumberValue(reklamacio_maj);
+        sheet.getCellRange("C" + 6).setNumberValue(visszajelzes_maj);
+        sheet.getCellRange("B" + 7).setNumberValue(reklamacio_jun);
+        sheet.getCellRange("C" + 7).setNumberValue(visszajelzes_jun);
+        sheet.getCellRange("B" + 8).setNumberValue(reklamacio_jul);
+        sheet.getCellRange("C" + 8).setNumberValue(visszajelzes_jul);
+        sheet.getCellRange("B" + 9).setNumberValue(reklamacio_aug);
+        sheet.getCellRange("C" + 9).setNumberValue(visszajelzes_aug);
+        sheet.getCellRange("B" + 10).setNumberValue(reklamacio_sze);
+        sheet.getCellRange("C" + 10).setNumberValue(visszajelzes_sze);
+        sheet.getCellRange("B" + 11).setNumberValue(reklamacio_okt);
+        sheet.getCellRange("C" + 11).setNumberValue(visszajelzes_okt);
+        sheet.getCellRange("B" + 12).setNumberValue(reklamacio_nov);
+        sheet.getCellRange("C" + 12).setNumberValue(visszajelzes_nov);
+        sheet.getCellRange("B" + 13).setNumberValue(reklamacio_dec);
+        sheet.getCellRange("C" + 13).setNumberValue(visszajelzes_dec);
+        
+        //createChartData(sheet);
+        Chart chart = sheet.getCharts().add();
+        chart.setDataRange(sheet.getCellRange("A1:C13"));
+        chart.setSeriesDataFromRange(false);
+        
+        chart.setLeftColumn(1);
+        chart.setTopRow(15);
+        chart.setRightColumn(11);
+        chart.setBottomRow(35);
+        /*
+        if (false)
+        {
+            chart.setChartType(ExcelChartType.Column3DStacked);
+        }
+        else
+        {
+            chart.setChartType(ExcelChartType.ColumnStacked);
+        }
+        */
+        chart.setChartType(ExcelChartType.ColumnStacked);
+        
+        chart.setChartTitle("Reklamáció és visszajelzés száma");
+        chart.getChartTitleArea().isBold(true);
+        chart.getChartTitleArea().setSize(14);
+        chart.getPrimaryCategoryAxis().setTitle("Projektek");
+        chart.getPrimaryCategoryAxis().getFont().isBold(true);
+        chart.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+        chart.getPrimaryValueAxis().setTitle("Összesen");
+        chart.getPrimaryValueAxis().hasMajorGridLines(false);
+        chart.getPrimaryValueAxis().setMinValue(0);
+        chart.getPrimaryValueAxis().getTitleArea().isBold(true);
+        chart.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+        
+        ChartSeries series = chart.getSeries();
+        for (int i = 0;i < series.size();i++)
+        {
+            ChartSerie cs = series.get(i);
+            cs.getFormat().getOptions().isVaryColor(true);
+            cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+        }
+        
+        chart.getLegend().setPosition(LegendPositionType.Top);
+        
+        JFileChooser mentes_helye = new JFileChooser();
+        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        mentes_helye.showOpenDialog(mentes_helye);
+        File fajl = mentes_helye.getSelectedFile();
+        //System.out.println(fajl.getAbsolutePath());
+        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            workbook2.write(output);
+            output.close();
+        }
+        JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
 
         resultSet.close();
         stmt.close();

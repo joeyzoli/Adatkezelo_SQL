@@ -298,12 +298,7 @@ public class ProGlove extends JPanel
         eredetikep.addActionListener(new Eredeti_kep());
         add(eredetikep);
         
-        try {
-            muszak();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
         kiirando = new ArrayList<String[]>();
         
     }

@@ -23,6 +23,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
     private JComboBox<String> projekt_box;
     private JRadioButton lezart_gomb;
     private JRadioButton nyitott_gomb;
+    private SQL lekerdezes = new SQL();
 
     /**
      * Create the panel.
@@ -86,6 +87,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         add(pane);
         
         JButton excel_gomb = new JButton("Excel");
+        excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(520, 478, 89, 23);
         add(excel_gomb);
     }
@@ -115,8 +117,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 {
                     nyitott = "nem";
                 }
-                
-                SQL lekerdezes = new SQL();
+                                
                 lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
             } 
             catch (Exception e1) 
@@ -134,7 +135,26 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          {
             try 
             {
-               
+                String nyitott = "";
+                String lezart = "";
+                if(lezart_gomb.isSelected())
+                {
+                    lezart = "igen";
+                }
+                else
+                {
+                    lezart = "nem";
+                }
+                
+                if(nyitott_gomb.isSelected())
+                {
+                    nyitott = "igen";
+                }
+                else
+                {
+                    nyitott = "nem";
+                }
+                lekerdezes.vevoi_lekerdezes_excel(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
             } 
             catch (Exception e1) 
             {              
