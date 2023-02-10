@@ -628,7 +628,7 @@ public class SQL
         }
     }
 	
-	public void vevoi_lekerdezes(String projekt, String datumtol, String datumig, String lezart, String nyitott)
+	public void vevoi_lekerdezes(String projekt, String datumtol, String datumig, String lezart, String nyitott, String id)
     {
         Connection conn = null;
         Statement stmt = null;
@@ -653,20 +653,27 @@ public class SQL
             projekt = "%";
         }
         
-        if(lezart.equals("igen") && nyitott.equals("igen"))
-        {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                            +"' and Datum <= '"+ datumig +"'";
-        }
-        else if(lezart.equals("igen") && nyitott.equals("nem"))
-        {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                            +"' and Datum <= '"+ datumig +"' and Lezaras_ido is not null  ";
+        if(id.equals(""))
+        {      
+            if(lezart.equals("igen") && nyitott.equals("igen"))
+            {
+                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                                +"' and Datum <= '"+ datumig +"'";
+            }
+            else if(lezart.equals("igen") && nyitott.equals("nem"))
+            {
+                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                                +"' and Datum <= '"+ datumig +"' and Lezaras_ido is not null  ";
+            }
+            else
+            {
+                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+                        +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
+            }
         }
         else
-        {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                    +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
+        { 
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where ID = '"+ id +"'"; 
         }
         stmt.execute(sql);
         resultSet = stmt.getResultSet();
@@ -706,11 +713,17 @@ public class SQL
         }
     }
 	
-	public void vevoi_lekerdezes_excel(String projekt, String datumtol, String datumig, String lezart, String nyitott)
+	public void vevoi_6d(String datum, String cikkszam, String excelhelye)
     {
         Connection conn = null;
         Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
         DataTable datatable = new DataTable();
+        DataTable datatable2 = new DataTable();
+        DataTable datatable3 = new DataTable();
+        ResultSet resultSet2;
+        ResultSet resultSet3;
         try 
         {
            try 
@@ -725,7 +738,176 @@ public class SQL
            }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sql = "select Felelos,\n"
+                + "        zarolt,\n"
+                + "        zarolt_db,\n"
+                + "        talalt_db\n"
+                + "from qualitydb.Vevoireklamacio_felelosok\n"
+                + "where 3=3\n"
+                + "     and Datum = '" + datum +"'\n"
+                + "    and Cikkszam = '"+ cikkszam +"'";
+        
+        String sql2 = "select Felelos,\n"
+                + "        intezkedes,\n"
+                + "        lezarva\n"
+                + "from qualitydb.Vevoireklamacio_detekt\n"
+                + "where 3=3\n"
+                + "     and Datum = '" + datum +"'\n"
+                + "    and Cikkszam = '"+ cikkszam +"'";
+        
+        String sql3 = "select Hibaleiras,\n"
+                + "        Hiba_oka,\n"
+                + "        Hiba_oka\n"
+                + "from qualitydb.Vevoireklamacio_alapadat\n"
+                + "where 3=3\n"
+                + "     and Datum = '" + datum +"'\n"
+                + "    and Tipus = '"+ cikkszam +"'";
+        
+        stmt.execute(sql);
+        stmt2.execute(sql2);
+        stmt3.execute(sql3);
+        resultSet = stmt.getResultSet();
+        resultSet2 = stmt2.getResultSet();
+        resultSet3 = stmt3.getResultSet();
+
+        Workbook workbook = new Workbook();
+        workbook.loadFromFile(excelhelye);
+        Worksheet sheet = workbook.getWorksheets().get(0);
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+        jdbcAdapter2.fillDataTable(datatable2, resultSet2);
+        //jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        
+        String d1 = "";
+        String d2 = "";
+        String d3 = "";
+        String d4 = "";
+        String d5 = "";
+        String d6 = "";
+        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+        {
+            d1 += datatable.getRows().get(szamlalo).getString(0) + " ";
+            d3 += datatable.getRows().get(szamlalo).getString(1) + " ";
+            d3 += datatable.getRows().get(szamlalo).getString(2) + " ";
+            d3 += datatable.getRows().get(szamlalo).getString(3) + " ";
+        }
+        
+        for (int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++) 
+        {
+            d1 += datatable2.getRows().get(szamlalo).getString(0) + " ";
+            d6 += datatable2.getRows().get(szamlalo).getString(1) + " " + datatable2.getRows().get(szamlalo).getString(0) + " " + datatable2.getRows().get(szamlalo).getString(2) + " ";
+            d5 += datatable2.getRows().get(szamlalo).getString(1) + " ";
+        }
+        
+        for (int szamlalo = 0; szamlalo < datatable3.getRows().size(); szamlalo++) 
+        {
+            d2 += datatable3.getRows().get(szamlalo).getString(0) + " ";
+            d4 += datatable3.getRows().get(szamlalo).getString(0) + " ";
+            d4 += datatable3.getRows().get(szamlalo).getString(0) + " ";
+        }
+        
+        sheet.getRange().get("E" + 2).setText(d1);
+        sheet.getRange().get("E" + 5).setText(d2);
+        sheet.getRange().get("E" + 8).setText(d3);
+        sheet.getRange().get("E" + 11).setText(d4);
+        sheet.getRange().get("E" + 14).setText(d5);
+        sheet.getRange().get("E" + 17).setText(d6);
+        
+        JFileChooser mentes_helye = new JFileChooser();
+        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        mentes_helye.showOpenDialog(mentes_helye);
+        File fajl = mentes_helye.getSelectedFile();
+        //System.out.println(fajl.getAbsolutePath());
+        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i > 0 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            workbook2.write(output);
+            output.close();
+        }
+        JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_lekerdezes_excel(String projekt, String datumtol, String datumig, String lezart, String nyitott)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        Statement stmt4 = null;
+        DataTable datatable = new DataTable();
+        DataTable datatable2 = new DataTable();
+        DataTable datatable3 = new DataTable();
+        DataTable datatable4 = new DataTable();
+        ResultSet resultSet2;
+        ResultSet resultSet3;
+        ResultSet resultSet4;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt4 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sql = "";
+        String sql2 = "";
+        String sql3 = "";
+        String sql4 = "";
 
         if(projekt.equals("-"))
         {
@@ -747,17 +929,45 @@ public class SQL
             sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
                     +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
         }
+        
+        sql2 = "select projekt, sum(Rek_db)\n"
+                + "from qualitydb.Vevoireklamacio_alapadat\n"
+                + "where 3=3\n"
+                + "group by projekt";
+        
+        sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
+                + "        projekt, count(projekt)\n"
+                + "from qualitydb.Vevoireklamacio_alapadat\n"
+                + "where 3=3\n"
+                + "group by projekt, Hónap";
+        
+        sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
+                                    "' and Datum <= '"+ datumig +"' and Lezaras_ido is not null";
+        
         stmt.execute(sql);
+        stmt2.execute(sql2);
+        stmt3.execute(sql3);
+        stmt4.execute(sql4);
         resultSet = stmt.getResultSet();
+        resultSet2 = stmt2.getResultSet();
+        resultSet3 = stmt3.getResultSet();
+        resultSet4 = stmt4.getResultSet();
 
         Workbook workbook = new Workbook();
         JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter4 = new JdbcAdapter();
         jdbcAdapter.fillDataTable(datatable, resultSet);
+        jdbcAdapter2.fillDataTable(datatable2, resultSet2);
+        jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        jdbcAdapter4.fillDataTable(datatable4, resultSet4);
 
-        //Get the first worksheet
+        /********************************Első diagramm*************************/
+        
         Worksheet sheet = workbook.getWorksheets().get(0);
         Worksheet sheet2 = workbook.getWorksheets().get(1);
-        sheet2.insertDataTable(datatable, true, 1, 1);
+        sheet2.insertDataTable(datatable4, true, 1, 1);
         int reklamacio_jan = 0;
         int visszajelzes_jan = 0;
         int reklamacio_feb = 0;
@@ -920,8 +1130,7 @@ public class SQL
                 {
                     visszajelzes_dec++;
                 }
-            }
-                
+            }           
         }   
         sheet.getRange().get("A" + 2).setText("Január");
         sheet.getRange().get("A" + 3).setText("Február");
@@ -1003,6 +1212,98 @@ public class SQL
         }
         
         chart.getLegend().setPosition(LegendPositionType.Top);
+        
+        /********************************Második diagramm*************************/
+        
+        sheet.getRange().get("L" + 1).setText("Projekt");
+        sheet.getRange().get("M" + 1).setText("Reklamált db");
+        int cella = 2;
+        for (int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++) 
+        {
+            sheet.getRange().get("L" + cella).setText(datatable2.getRows().get(szamlalo).getString(0));
+            sheet.getRange().get("M" + cella).setNumberValue(Integer.parseInt(datatable2.getRows().get(szamlalo).getString(1)));
+            cella++;
+        }
+        
+        Chart chart2 = sheet.getCharts().add();
+        chart2.setDataRange(sheet.getCellRange("L1:M" +cella));
+        chart2.setSeriesDataFromRange(false);
+        
+        chart2.setLeftColumn(12);
+        chart2.setTopRow(15);
+        chart2.setRightColumn(22);
+        chart2.setBottomRow(35);
+        
+        chart2.setChartType(ExcelChartType.ColumnStacked);
+        
+        chart2.setChartTitle("Reklamált db projektenként");
+        chart2.getChartTitleArea().isBold(true);
+        chart2.getChartTitleArea().setSize(14);
+        chart2.getPrimaryCategoryAxis().setTitle("Projektek");
+        chart2.getPrimaryCategoryAxis().getFont().isBold(true);
+        chart2.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+        chart2.getPrimaryValueAxis().setTitle("Összesen");
+        chart2.getPrimaryValueAxis().hasMajorGridLines(false);
+        chart2.getPrimaryValueAxis().setMinValue(0);
+        chart2.getPrimaryValueAxis().getTitleArea().isBold(true);
+        chart2.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+        
+        ChartSeries series2 = chart2.getSeries();
+        for (int i = 0;i < series2.size();i++)
+        {
+            ChartSerie cs2 = series2.get(i);
+            cs2.getFormat().getOptions().isVaryColor(true);
+            cs2.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+        }        
+        chart2.getLegend().setPosition(LegendPositionType.Top);
+        
+        /********************************Harmadik diagramm*************************/
+        
+        sheet.getRange().get("F" + 1).setText("Hónap");
+        sheet.getRange().get("G" + 1).setText("Projekt");
+        sheet.getRange().get("H" + 1).setText("Reklamáció");
+        sheet.getRange().get("I" + 1).setText("Visszajelzés");
+        int cella2 = 2;
+        for (int szamlalo = 0; szamlalo < datatable3.getRows().size(); szamlalo++) 
+        {
+            sheet.getRange().get("F" + cella2).setText(datatable3.getRows().get(szamlalo).getString(0)+" " + datatable3.getRows().get(szamlalo).getString(1));
+            //sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(1));
+            sheet.getRange().get("G" + cella2).setNumberValue(Integer.parseInt(datatable3.getRows().get(szamlalo).getString(2)));
+            cella2++;
+        }
+        
+        Chart chart3 = sheet.getCharts().add();
+        chart3.setDataRange(sheet.getCellRange("F1:G" +cella2));
+        chart3.setSeriesDataFromRange(false);
+        
+        chart3.setLeftColumn(1);
+        chart3.setTopRow(36);
+        chart3.setRightColumn(16);
+        chart3.setBottomRow(72);
+        
+        chart3.setChartType(ExcelChartType.ColumnStacked);
+        
+        chart3.setChartTitle("Reklamált db projektenként");
+        chart3.getChartTitleArea().isBold(true);
+        chart3.getChartTitleArea().setSize(14);
+        chart3.getPrimaryCategoryAxis().setTitle("Projektek");
+        chart3.getPrimaryCategoryAxis().getFont().isBold(true);
+        chart3.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+        chart3.getPrimaryValueAxis().setTitle("Összesen");
+        chart3.getPrimaryValueAxis().hasMajorGridLines(false);
+        chart3.getPrimaryValueAxis().setMinValue(0);
+        chart3.getPrimaryValueAxis().getTitleArea().isBold(true);
+        chart3.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+        
+        ChartSeries series3 = chart3.getSeries();
+        for (int i = 0;i < series3.size();i++)
+        {
+            ChartSerie cs3 = series3.get(i);
+            cs3.getFormat().getOptions().isVaryColor(true);
+            cs3.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+        }
+        
+        chart3.getLegend().setPosition(LegendPositionType.Top);
         
         JFileChooser mentes_helye = new JFileChooser();
         mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

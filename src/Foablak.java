@@ -54,6 +54,7 @@ public class Foablak extends JFrame
 	private JTextField mezo;
 	private static final String jelszavam = "polip13";
 	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
+	static Dimension meretek = new Dimension(1200, 850);
 	
 
 	/**
@@ -101,7 +102,7 @@ public class Foablak extends JFrame
 	public Foablak() 
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                       //JFrame.EXIT_ON_CLOSE
-        this.setPreferredSize(new Dimension(1200, 850));
+        this.setPreferredSize(meretek);
         setTitle("Minőségügyi Adatbázis kezelő");
         
 		

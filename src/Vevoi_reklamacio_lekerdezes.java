@@ -24,13 +24,15 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
     private JRadioButton lezart_gomb;
     private JRadioButton nyitott_gomb;
     private SQL lekerdezes = new SQL();
+    private JTextField id_mezo;
+    private final String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\reklamáció adatbázis.xlsx";
 
     /**
      * Create the panel.
      */
     public Vevoi_reklamacio_lekerdezes() 
     {
-        this.setPreferredSize(new Dimension(1100, 700));
+        this.setPreferredSize(new Dimension(1160, 700));
         setLayout(null);
         
         combobox = new ComboBox();
@@ -69,27 +71,50 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         datumig.setColumns(10);
         
         lezart_gomb = new JRadioButton("Nyitott");
-        lezart_gomb.setBounds(482, 163, 66, 14);
+        lezart_gomb.setBounds(481, 220, 66, 14);
         add(lezart_gomb);
         
         nyitott_gomb = new JRadioButton("Lezárt");
-        nyitott_gomb.setBounds(592, 159, 80, 23);
+        nyitott_gomb.setBounds(587, 216, 80, 23);
         add(nyitott_gomb);
         
         JButton keres_gomb = new JButton("Keresés");
-        keres_gomb.setBounds(520, 208, 89, 23);
+        keres_gomb.setBounds(520, 262, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
         table = new JTable();
         JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(50, 267, 1070, 200);
+        pane.setBounds(49, 314, 1070, 200);
         add(pane);
         
         JButton excel_gomb = new JButton("Excel");
         excel_gomb.addActionListener(new Excel());
-        excel_gomb.setBounds(520, 478, 89, 23);
+        excel_gomb.setBounds(520, 525, 89, 23);
         add(excel_gomb);
+        
+        id_mezo = new JTextField();
+        id_mezo.setBounds(520, 152, 86, 20);
+        add(id_mezo);
+        id_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_4 = new JLabel("ID");
+        lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_4.setBounds(464, 155, 46, 14);
+        add(lblNewLabel_4);
+        
+        JLabel lblNewLabel_5 = new JLabel("Gafikonok");
+        lblNewLabel_5.setBounds(430, 529, 80, 14);
+        add(lblNewLabel_5);
+        
+        JLabel lblNewLabel_6 = new JLabel("6D");
+        lblNewLabel_6.setBounds(430, 573, 46, 14);
+        add(lblNewLabel_6);
+        
+        JButton d_gomb = new JButton("6D excel");
+        d_gomb.setBounds(520, 569, 89, 23);
+        d_gomb.addActionListener(new D_gyarto());
+        add(d_gomb);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -118,7 +143,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     nyitott = "nem";
                 }
                                 
-                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
+                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart, id_mezo.getText());
             } 
             catch (Exception e1) 
             {              
@@ -155,6 +180,23 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     nyitott = "nem";
                 }
                 lekerdezes.vevoi_lekerdezes_excel(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class D_gyarto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                lekerdezes.vevoi_6d(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString(), excelhelye);
             } 
             catch (Exception e1) 
             {              

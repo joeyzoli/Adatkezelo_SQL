@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
@@ -19,6 +20,8 @@ public class Vevoi_reklamacio_lezaras extends JPanel
     static JTable table;
     static JTable table_1;
     private JTextField veglegido_mezo;
+    private int tablavege1 = 0;
+    private int tablavege2 = 0;
 
     /**
      * Create the panel.
@@ -83,6 +86,16 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         veglegzar_gomb.setBounds(605, 593, 157, 23);
         veglegzar_gomb.addActionListener(new Veglegzar());
         add(veglegzar_gomb);
+        
+        JButton sorgomb1 = new JButton("Sor hozzáadása");
+        sorgomb1.setBounds(1069, 253, 117, 23);
+        sorgomb1.addActionListener(new Sorhozzaad1());
+        add(sorgomb1);
+        
+        JButton sorgomb2 = new JButton("Sor hozzáadása");
+        sorgomb2.setBounds(955, 397, 117, 23);
+        sorgomb2.addActionListener(new Sorhozzaad2());
+        add(sorgomb2);
 
     }
     
@@ -94,6 +107,8 @@ public class Vevoi_reklamacio_lezaras extends JPanel
             {
                 SQL kereses = new SQL();
                 kereses.vevoi_lezarashoz(datum_mezo.getText(), tipus_mezo.getText());
+                tablavege1 = table.getRowCount();
+                tablavege2 = table_1.getRowCount();
                 
             } 
             catch (Exception e1) 
@@ -113,7 +128,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 Db_iro visszair = new Db_iro();
-                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                for(int szamlalo = 0; szamlalo < tablavege1; szamlalo++)
                 {
                     if(table.getValueAt(szamlalo, 9) == null)
                     {
@@ -132,7 +147,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                     }
                 }
                 
-                for(int szamlalo = 0; szamlalo < table_1.getRowCount(); szamlalo++)
+                for(int szamlalo = 0; szamlalo < tablavege2; szamlalo++)
                 {
                     if(table_1.getValueAt(szamlalo, 5) == null)
                     {
@@ -145,6 +160,23 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                                 +"' and Intezkedes = '"+ table_1.getValueAt(szamlalo, 2).toString() +""                                             
                                 +"' and Felelos = '"+ table_1.getValueAt(szamlalo, 3).toString() +"' and Hatarido = '"+ table_1.getValueAt(szamlalo, 4).toString() +"'";
                         visszair.ujrair_vevoi(sql);
+                    }
+                }
+                if(tablavege1 < table.getRowCount())
+                {
+                    for(int szamlalo = tablavege1-1; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                        visszair.iro_vevoi_felelos(table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString(), Integer.parseInt(table.getValueAt(szamlalo, 3).toString()),
+                                Integer.parseInt(table.getValueAt(szamlalo, 4).toString()), table.getValueAt(szamlalo, 5).toString(), table.getValueAt(szamlalo, 6).toString(), 
+                                table.getValueAt(szamlalo, 7).toString(), table.getValueAt(szamlalo, 8).toString());
+                    }   
+                }
+                if(tablavege2 < table_1.getRowCount())
+                {
+                    for(int szamlalo = tablavege2-1; szamlalo < table_1.getRowCount(); szamlalo++)
+                    {
+                        visszair.iro_vevoi_intezkedes(table_1.getValueAt(szamlalo, 0).toString(), table_1.getValueAt(szamlalo, 1).toString(), table_1.getValueAt(szamlalo, 2).toString(),
+                                table_1.getValueAt(szamlalo, 3).toString(), table_1.getValueAt(szamlalo, 4).toString());
                     }
                 }
                 Foablak.frame.setCursor(null);
@@ -183,6 +215,44 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Sorhozzaad1 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {     
+                DefaultTableModel model =(DefaultTableModel) table.getModel();
+                model.addRow(new Object[]{table.getValueAt(0, 0).toString(), table.getValueAt(0, 1).toString(), "", "","","","","","",""});
+                table.setModel(model);;
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Sorhozzaad2 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                DefaultTableModel model =(DefaultTableModel) table_1.getModel();
+                model.addRow(new Object[]{table_1.getValueAt(0, 0).toString(), table_1.getValueAt(0, 1).toString(), "", "","","","","","",""});
+                table_1.setModel(model);              
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }

@@ -78,7 +78,7 @@ public class Db_iro
 	    }
 	}
 	
-	void iro_vevoi_alap(String datum, String projekt, String tipus, String rek_vagy, int rek_db, String hibaleiras, String gyartas_idopontja, String rma, String hibaoka, String hibaokozoja )
+	void iro_vevoi_alap(String datum, String projekt, String tipus, String rek_vagy, int rek_db, String hibaleiras, String gyartas_idopontja, String rma, String hibaoka, String hibaokozoja, String hibaoka2, String hibaokozoja2 )
     {   
         String[] koztes = tipus.split(" - ");                                          //bejövő Stringet darabolni kell
         Connection conn = null;
@@ -98,9 +98,9 @@ public class Db_iro
            
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
-        String query1 = "INSERT INTO qualitydb.Vevoireklamacio_alapadat (Datum, Projekt, Tipus, Rek_vagy, Rek_db, Hibaleiras, Gyartas_idopontja, Kiadott_RMA, Hiba_oka, Hiba_okozoja)" + 
+        String query1 = "INSERT INTO qualitydb.Vevoireklamacio_alapadat (Datum, Projekt, Tipus, Rek_vagy, Rek_db, Hibaleiras, Gyartas_idopontja, Kiadott_RMA, Hiba_oka, Hiba_okozoja, Hiba_oka2, Hiba_okozoja2)" + 
                         "VALUES ('" + datum +"', '"+projekt+"', '"+koztes[0]+"', '" + rek_vagy + "', '"+ rek_db + "', '" + hibaleiras + "', '" + gyartas_idopontja +"', '" + rma +  "',"
-                         +  "  '" + hibaoka + "', '" + hibaokozoja + "')"; 
+                         +  "  '" + hibaoka + "', '" + hibaokozoja + "', '" + hibaoka2 + "', '" + hibaokozoja2 + "')"; 
         stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása
         //+ szam +",
         } 

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JCheckBox;
@@ -62,13 +63,17 @@ public class Vevoi_reklmacio_bevitel extends JPanel
     private JTextArea intezkedes_det;
     private ArrayList<String> kephelye = new ArrayList<String>();
     private ArrayList<String> kivalasztott;
+    private JTextField hibaoka2_mezo;
+    private JComboBox<String> hibaokozoja2_box;
+    private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vevoi.jpg";
     
     /**
      * Create the panel.
      */
     public Vevoi_reklmacio_bevitel() 
     {
-        this.setPreferredSize(new Dimension(1159, 999));
+        this.setPreferredSize(new Dimension(1200, 999));
+        Foablak.meretek.setSize(1250, 999);
         setLayout(null);
         
         kivalasztott = new ArrayList<String>();
@@ -198,21 +203,21 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         csoport2.add(termeles_igen);
         csoport2.add(termeles_nem);
         
-        JLabel lblNewLabel_13 = new JLabel("Hiba oka");
+        JLabel lblNewLabel_13 = new JLabel("Gyökérok");
         lblNewLabel_13.setBounds(34, 473, 66, 14);
         add(lblNewLabel_13);
         
         hibaoka_mezo = new JTextField();
-        hibaoka_mezo.setBounds(110, 470, 181, 20);
+        hibaoka_mezo.setBounds(110, 470, 124, 20);
         add(hibaoka_mezo);
         hibaoka_mezo.setColumns(10);
         
         JLabel lblNewLabel_14 = new JLabel("Hiba okozója");
-        lblNewLabel_14.setBounds(323, 473, 72, 14);
+        lblNewLabel_14.setBounds(253, 473, 72, 14);
         add(lblNewLabel_14);
         
         hibaokozoja_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok));                            //combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok)
-        hibaokozoja_box.setBounds(422, 469, 175, 22);
+        hibaokozoja_box.setBounds(328, 469, 175, 22);
         add(hibaokozoja_box);
         
         JSeparator separator = new JSeparator();
@@ -368,6 +373,37 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         kephozzaadasa_gomb.setBounds(478, 787, 119, 23);
         kephozzaadasa_gomb.addActionListener(new Kephozzadasa());
         add(kephozzaadasa_gomb);
+        
+        JLabel lblNewLabel_2 = new JLabel("Hiba előfordulásra");
+        lblNewLabel_2.setBounds(225, 445, 120, 14);
+        add(lblNewLabel_2);
+        
+        JLabel lblNewLabel_5 = new JLabel("Gyökérok");
+        lblNewLabel_5.setBounds(632, 473, 66, 14);
+        add(lblNewLabel_5);
+        
+        hibaoka2_mezo = new JTextField();
+        hibaoka2_mezo.setBounds(710, 470, 115, 20);
+        add(hibaoka2_mezo);
+        hibaoka2_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_25 = new JLabel("Hiba okozója");
+        lblNewLabel_25.setBounds(839, 473, 74, 14);
+        add(lblNewLabel_25);
+        
+        hibaokozoja2_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok2));                                         //combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok2)
+        hibaokozoja2_box.setBounds(916, 469, 214, 22);
+        add(hibaokozoja2_box);
+        
+        JLabel lblNewLabel_26 = new JLabel("Hiba nem észlelésre");
+        lblNewLabel_26.setBounds(813, 445, 127, 14);
+        add(lblNewLabel_26);
+        
+        JLabel hatter = new JLabel("");
+        ImageIcon img = new ImageIcon(kep);
+        hatter.setBounds(30, 630, 560, 465);
+        hatter.setIcon(img);
+        add(hatter);
 
     }
     
@@ -399,7 +435,8 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                 Db_iro iras = new Db_iro();
                 
                 iras.iro_vevoi_alap(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()), String.valueOf(vagy_vagy.getSelectedItem()),
-                         Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), String.valueOf(hibaokozoja_box.getSelectedItem()));
+                         Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), 
+                         String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()));
                 
                 for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                 {

@@ -18,6 +18,7 @@ public class ComboBox
 	static final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
 	static final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
 	static final String vevoi_hibaok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok.csv";
+	static final String vevoi_hibaok2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok2.csv";
 	static final String proglove_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek_rovid.csv";
 	static final String loxone = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek.csv";
 	static final String loxone_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek_rovid.csv";
