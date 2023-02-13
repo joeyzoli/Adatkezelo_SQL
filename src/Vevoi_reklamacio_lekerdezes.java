@@ -13,6 +13,8 @@ import javax.swing.JTable;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Vevoi_reklamacio_lekerdezes extends JPanel 
 {
@@ -95,6 +97,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         id_mezo = new JTextField();
         id_mezo.setBounds(520, 152, 86, 20);
+        id_mezo.addKeyListener(new Enter());
         add(id_mezo);
         id_mezo.setColumns(10);
         
@@ -152,6 +155,49 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                String nyitott = "";
+                String lezart = "";
+                if(lezart_gomb.isSelected())
+                {
+                    lezart = "igen";
+                }
+                else
+                {
+                    lezart = "nem";
+                }
+                
+                if(nyitott_gomb.isSelected())
+                {
+                    nyitott = "igen";
+                }
+                else
+                {
+                    nyitott = "nem";
+                }
+                                
+                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart, id_mezo.getText());
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
     
     class Excel implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

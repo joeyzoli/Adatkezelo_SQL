@@ -757,17 +757,17 @@ public class SQL
                 + "     and Datum = '" + datum +"'\n"
                 + "    and Cikkszam = '"+ cikkszam +"'";
         
-        String sql3 = "select Hibaleiras,\n"
+        String sql4 = "select Hibaleiras,\n"
                 + "        Hiba_oka,\n"
-                + "        Hiba_oka\n"
-                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                + "where 3=3\n"
-                + "     and Datum = '" + datum +"'\n"
+                + "        Hiba_oka2 \n"
+                + "from qualitydb.Vevoireklamacio_alapadat \n"
+                + "where 3=3 \n"
+                + "     and Datum = '" + datum +"' \n"
                 + "    and Tipus = '"+ cikkszam +"'";
         
         stmt.execute(sql);
         stmt2.execute(sql2);
-        stmt3.execute(sql3);
+        stmt3.execute(sql4);
         resultSet = stmt.getResultSet();
         resultSet2 = stmt2.getResultSet();
         resultSet3 = stmt3.getResultSet();
@@ -780,7 +780,7 @@ public class SQL
         JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
         jdbcAdapter.fillDataTable(datatable, resultSet);
         jdbcAdapter2.fillDataTable(datatable2, resultSet2);
-        //jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        jdbcAdapter3.fillDataTable(datatable3, resultSet3, 0, 1);
         
         String d1 = "";
         String d2 = "";
