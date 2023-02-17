@@ -21,6 +21,7 @@ public class CSV_gyarto
 	     Workbook workbook = new Workbook();																					//példányosítás excel osztályból
 		 //Load a sample excel file
 	     csv.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);															//filechooser beállítása
+	     csv.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
 	     csv.showOpenDialog(csv);																								//fc ablak megniytása
 	     File csv_fajl = csv.getSelectedFile();																					//kiválasztott fájl odaadása egy File osztálynak
 		 workbook.loadFromFile(csv_fajl.getAbsolutePath());																				//fájl odaadása az excel osztálynak

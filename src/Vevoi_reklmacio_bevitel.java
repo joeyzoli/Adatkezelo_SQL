@@ -10,6 +10,8 @@ import javax.swing.JTextArea;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -25,47 +27,52 @@ import java.awt.Font;
 
 public class Vevoi_reklmacio_bevitel extends JPanel 
 {
-    private JTextField datum_mezo;
-    private JTextField reklamalt_db;
-    private JTextField gyartasidopontja_mezo;
+    static JTextField datum_mezo;
+    static JTextField reklamalt_db;
+    static JTextField gyartasidopontja_mezo;
     private ComboBox combobox_tomb = new ComboBox();
-    private JTextField rma_mezo;
+    static JTextField rma_mezo;
     private JTextField zarolttetel_mezo;
-    private JTable zarolt_tabla;
+    static JTable zarolt_tabla;
+    static JScrollPane gorgeto2;
     //private JScrollPane gorgeto;
-    private JTextField hibaoka_mezo;
+    static JTextField hibaoka_mezo;
     private JTextField felelos1;
     private JTextField hatarido1;
-    private JTable felelos_tabla;
-    private DefaultTableModel modell;
-    private DefaultTableModel modell2;
-    private DefaultTableModel modell3;
-    private DefaultTableModel modell4;
+    static JTable felelos_tabla;
+    static DefaultTableModel modell;
+    static DefaultTableModel modell2;
+    static DefaultTableModel modell3;
+    static DefaultTableModel modell4;
     private JTextField felelos2;
     private JTextField hatarido2;
-    private JTable helyesbito_tabla;
+    static JTable helyesbito_tabla;
     private JTextField felelos3;
     private JTextField hatarido3;
-    private JTextArea hibaleiras_mezo;
-    private JTable table;
+    static JTextArea hibaleiras_mezo;
+    static JTable table;
     private int szamlalo = 1;
     private JTextArea intezkedes_elo;
     private JTextField zaroltdb_mezo;
     private JTextField talalthiba_mezo;
-    private JComboBox<String> projekt_box;
-    private JComboBox<String> tipus_box;
-    private JComboBox<String> vagy_vagy;
-    private JComboBox<String> hibaokozoja_box;
+    static JComboBox<String> projekt_box;
+    static JComboBox<String> tipus_box;
+    static JComboBox<String> vagy_vagy;
+    static JComboBox<String> hibaokozoja_box;
     private JCheckBox muszaki_igen;
     private JCheckBox muszaki_nem;
     private JCheckBox termeles_igen;
     private JCheckBox termeles_nem;
     private JTextArea intezkedes_det;
     private ArrayList<String> kephelye = new ArrayList<String>();
+    private ArrayList<String> kepneve = new ArrayList<String>();
+    private ArrayList<String> excelhelye = new ArrayList<String>();
+    private ArrayList<String> excelneve = new ArrayList<String>();
     private ArrayList<String> kivalasztott;
-    private JTextField hibaoka2_mezo;
-    private JComboBox<String> hibaokozoja2_box;
+    static JTextField hibaoka2_mezo;
+    static JComboBox<String> hibaokozoja2_box;
     private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vevoi.jpg";
+    private JTextField id_mezo;
     
     /**
      * Create the panel.
@@ -83,34 +90,34 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Reklamáció időpont");
-        lblNewLabel_1.setBounds(34, 72, 101, 14);
+        lblNewLabel_1.setBounds(34, 97, 101, 14);
         add(lblNewLabel_1);
         
         datum_mezo = new JTextField();
-        datum_mezo.setBounds(145, 69, 81, 20);
+        datum_mezo.setBounds(145, 94, 81, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Projekt");
-        lblNewLabel_3.setBounds(253, 72, 46, 14);
+        lblNewLabel_3.setBounds(253, 97, 46, 14);
         add(lblNewLabel_3);
         
-        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));                //combobox_tomb.getCombobox(ComboBox.projekt)
-        projekt_box.setBounds(309, 68, 124, 22);
+        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
+        projekt_box.setBounds(309, 93, 124, 22);
         projekt_box.addActionListener(new Kivalaszt());
         add(projekt_box);
         
         JLabel lblNewLabel_4 = new JLabel("Típus");
-        lblNewLabel_4.setBounds(462, 72, 46, 14);
+        lblNewLabel_4.setBounds(459, 97, 46, 14);
         add(lblNewLabel_4);
         
-        tipus_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));                  //combobox_tomb.getCombobox(ComboBox.vt_azon)
-        tipus_box.setBounds(506, 68, 319, 22);
+        tipus_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_cikk));                  //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        tipus_box.setBounds(500, 93, 319, 22);
         add(tipus_box);
         
         String[] folyamatok = {"Visszajelzés", "Reklamáció"};
         vagy_vagy = new JComboBox<String>(folyamatok);                  //folyamatok
-        vagy_vagy.setBounds(847, 68, 124, 22);
+        vagy_vagy.setBounds(875, 93, 124, 22);
         add(vagy_vagy);
         
         JLabel lblNewLabel_6 = new JLabel("Reklamált db");
@@ -167,7 +174,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         modell2.setColumnIdentifiers(new Object[]{"Sorszám", "Tétel", "Db szám", "Talált db szám"}); 
         zarolt_tabla.setBounds(422, 228, 302, 74);
         zarolt_tabla.setModel(modell2);
-        JScrollPane gorgeto2 = new JScrollPane(zarolt_tabla);
+        gorgeto2 = new JScrollPane(zarolt_tabla);
         gorgeto2.setBounds(422, 228, 319, 74);
         add(gorgeto2);
         
@@ -207,17 +214,17 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         lblNewLabel_13.setBounds(34, 473, 66, 14);
         add(lblNewLabel_13);
         
-        hibaoka_mezo = new JTextField();
-        hibaoka_mezo.setBounds(110, 470, 124, 20);
+        hibaoka_mezo = new JTextField();        
+        hibaoka_mezo.setBounds(92, 470, 188, 20);
         add(hibaoka_mezo);
         hibaoka_mezo.setColumns(10);
         
         JLabel lblNewLabel_14 = new JLabel("Hiba okozója");
-        lblNewLabel_14.setBounds(253, 473, 72, 14);
+        lblNewLabel_14.setBounds(290, 473, 72, 14);
         add(lblNewLabel_14);
         
         hibaokozoja_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok));                            //combobox_tomb.getCombobox2(ComboBox.vevoi_hibaok)
-        hibaokozoja_box.setBounds(328, 469, 175, 22);
+        hibaokozoja_box.setBounds(372, 469, 175, 22);
         add(hibaokozoja_box);
         
         JSeparator separator = new JSeparator();
@@ -345,7 +352,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(gorgeto4);
         
         JButton mentes_gomb = new JButton("Mentés");
-        mentes_gomb.setBounds(488, 856, 89, 23);
+        mentes_gomb.setBounds(489, 897, 89, 23);
         mentes_gomb.addActionListener(new Mentes());
         add(mentes_gomb);
         
@@ -357,6 +364,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         zaroltdb_mezo = new JTextField();
         zaroltdb_mezo.setBounds(110, 253, 40, 20);
+        zaroltdb_mezo.setText("0");
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
@@ -366,11 +374,12 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         talalthiba_mezo = new JTextField();
         talalthiba_mezo.setBounds(199, 274, 46, 20);
+        talalthiba_mezo.setText("0");
         add(talalthiba_mezo);
         talalthiba_mezo.setColumns(10);
         
         JButton kephozzaadasa_gomb = new JButton("Kép hozzáadása");
-        kephozzaadasa_gomb.setBounds(478, 787, 119, 23);
+        kephozzaadasa_gomb.setBounds(478, 843, 119, 23);
         kephozzaadasa_gomb.addActionListener(new Kephozzadasa());
         add(kephozzaadasa_gomb);
         
@@ -379,15 +388,15 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(lblNewLabel_2);
         
         JLabel lblNewLabel_5 = new JLabel("Gyökérok");
-        lblNewLabel_5.setBounds(632, 473, 66, 14);
+        lblNewLabel_5.setBounds(599, 473, 66, 14);
         add(lblNewLabel_5);
         
         hibaoka2_mezo = new JTextField();
-        hibaoka2_mezo.setBounds(710, 470, 115, 20);
+        hibaoka2_mezo.setBounds(662, 470, 175, 20);
         add(hibaoka2_mezo);
         hibaoka2_mezo.setColumns(10);
         
-        JLabel lblNewLabel_25 = new JLabel("Hiba okozója");
+        JLabel lblNewLabel_25 = new JLabel("Hiba oka");
         lblNewLabel_25.setBounds(839, 473, 74, 14);
         add(lblNewLabel_25);
         
@@ -401,9 +410,29 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         JLabel hatter = new JLabel("");
         ImageIcon img = new ImageIcon(kep);
-        hatter.setBounds(30, 630, 560, 465);
+        hatter.setBounds(18, 631, 560, 465);
         hatter.setIcon(img);
         add(hatter);
+        
+        JLabel lblNewLabel_27 = new JLabel("ID");
+        lblNewLabel_27.setBounds(34, 58, 29, 14);
+        add(lblNewLabel_27);
+        
+        id_mezo = new JTextField();
+        id_mezo.setBounds(73, 55, 40, 20);
+        id_mezo.addKeyListener(new Enter());
+        add(id_mezo);
+        id_mezo.setColumns(10);
+        
+        JButton id_keres_gomb = new JButton("Keres");
+        id_keres_gomb.setBounds(123, 54, 89, 23);
+        id_keres_gomb.addActionListener(new ID_vissza());
+        add(id_keres_gomb);
+        
+        JButton excelhozzaadasa_gomb = new JButton("Excel hozzáadása");
+        excelhozzaadasa_gomb.setBounds(478, 787, 119, 23);
+        excelhozzaadasa_gomb.addActionListener(new Excelhozzadasa());
+        add(excelhozzaadasa_gomb);
 
     }
     
@@ -433,35 +462,54 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     termeles = "nem";
                 }
                 Db_iro iras = new Db_iro();
-                
-                iras.iro_vevoi_alap(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()), String.valueOf(vagy_vagy.getSelectedItem()),
-                         Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), 
-                         String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()));
-                
-                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+       
+                if(id_mezo.getText().equals(""))
                 {
-                    iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString());
+                    iras.iro_vevoi_alap(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()), String.valueOf(vagy_vagy.getSelectedItem()),
+                                       Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), 
+                                       String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()));
+                        
+                    for(int szamlalo = 0; szamlalo < felelos_tabla.getRowCount(); szamlalo++)
+                    {
+                        for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                        {
+                            iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
+                                         Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());                            
+                        }                 
+                    }
+                    iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
                 }
-                
-                for(int szamlalo = 0; szamlalo < helyesbito_tabla.getRowCount(); szamlalo++)
-                {
-                    iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), helyesbito_tabla.getValueAt(szamlalo, 0).toString(), helyesbito_tabla.getValueAt(szamlalo, 1).toString(), helyesbito_tabla.getValueAt(szamlalo, 2).toString());
-                }
-                
-                for(int szamlalo = 0; szamlalo < felelos_tabla.getRowCount(); szamlalo++)
+                else
                 {
                     for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
                     {
-                        iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
-                                Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());
-                    }                 
+                        iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
+                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString());
+                    }    
+                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString());
+                    }
+                    
+                    for(int szamlalo = 0; szamlalo < helyesbito_tabla.getRowCount(); szamlalo++)
+                    {
+                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), helyesbito_tabla.getValueAt(szamlalo, 0).toString(), helyesbito_tabla.getValueAt(szamlalo, 1).toString(), helyesbito_tabla.getValueAt(szamlalo, 2).toString());
+                    }
+                    iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
                 }
-                
-                for(int szamlalo = 0; szamlalo < kephelye.size(); szamlalo++)
-                {
-                   iras.iro_vevoi_kep(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), kephelye.get(szamlalo));          
-                }
-                kephelye.clear();
+                    for(int szamlalo = 0; szamlalo < kephelye.size(); szamlalo++)
+                    {
+                       iras.iro_vevoi_kep(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), kephelye.get(szamlalo), kepneve.get(szamlalo));          
+                    }
+                    for(int szamlalo = 0; szamlalo < excelhelye.size(); szamlalo++)
+                    {
+                       iras.iro_vevoi_excel(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), excelhelye.get(szamlalo), excelneve.get(szamlalo));          
+                    }
+                    kephelye.clear();
+                    kepneve.clear();
+                    excelhelye.clear();
+                    excelneve.clear();
+                    
                 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres!", "Info", 1);
             } 
@@ -571,12 +619,88 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
                 kephelye.add(fajl.getAbsolutePath());
+                kepneve.add(fajl.getName());
             } 
             catch (Exception e1) 
             {              
-                
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Excelhozzadasa implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                excelhelye.add(fajl.getAbsolutePath());
+                excelneve.add(fajl.getName());
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class ID_vissza implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                SQL id = new SQL();
+                id.vevoi_id_bevitel(id_mezo.getText());
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            try 
+            {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    SQL id = new SQL();
+                    id.vevoi_id_bevitel(id_mezo.getText());
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
     
     class Kivalaszt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -585,23 +709,24 @@ public class Vevoi_reklmacio_bevitel extends JPanel
          {
             try 
             {
+                DefaultComboBoxModel<String> model;
                 String keresett = String.valueOf(projekt_box.getSelectedItem());
-                //kivalasztott.add(combobox_tomb.getCombobox(ComboBox.vt_azon));
                 
-                for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox(ComboBox.vt_azon).length; szamlalo++)
-                {
-                    if(combobox_tomb.getCombobox(ComboBox.vt_azon)[szamlalo].contains(keresett))
+                    for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
                     {
-                        kivalasztott.add(combobox_tomb.getCombobox(ComboBox.vt_azon)[szamlalo]); 
+                        if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].contains(keresett))
+                        {
+                            kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
+                        }
                     }
-                }
+                    
+                    String[] ujmodell = new String[kivalasztott.size()];
+                    for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
+                    {
+                        ujmodell[szamlalo] = kivalasztott.get(szamlalo);
+                    }
+                    model = new DefaultComboBoxModel<>(ujmodell);
                 
-                String[] ujmodell = new String[kivalasztott.size()];
-                for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
-                {
-                    ujmodell[szamlalo] = kivalasztott.get(szamlalo);
-                }
-                DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(ujmodell);
                 tipus_box.setModel(model);
                 kivalasztott.clear();
             } 

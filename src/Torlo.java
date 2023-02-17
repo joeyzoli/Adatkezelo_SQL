@@ -37,7 +37,7 @@ public class Torlo extends JPanel
 		db_atiro.addActionListener(new DB_atiras());
 		
 		JButton gyartas_torles = new JButton("Törlés");
-		//gyartas_torles.addActionListener(new Torles_gyartas());
+		gyartas_torles.addActionListener(new Torles_gyartas());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
 		
@@ -129,7 +129,11 @@ public class Torlo extends JPanel
 			try
 			 {
 				Db_torlo torol = new Db_torlo();
-				torol.torlo("qualitydb.Gyartasi_adatok");
+				String[] adatbazisok = {"qualitydb.Vevoireklamacio_alapadat", "qualitydb.Vevoireklamacio_felelosok", "qualitydb.Vevoireklamacio_detekt", "qualitydb.Vevoireklamacio_kepek"};
+				for(int szamlalo = 0; szamlalo < adatbazisok.length; szamlalo++)
+				{
+				    torol.torlo(adatbazisok[szamlalo]);
+				}
 				System.out.println("Törlés sikeres");
 			 }
 			catch(Exception ex2)

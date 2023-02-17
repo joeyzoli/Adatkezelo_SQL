@@ -22,6 +22,9 @@ public class ComboBox
 	static final String proglove_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek_rovid.csv";
 	static final String loxone = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek.csv";
 	static final String loxone_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek_rovid.csv";
+	static final String vevoi_projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői projektek.csv";
+	static final String vevoi_cikk = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői cikkszámok.csv";
+	static final String vevoi_proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői proglove.csv";
 	
 	private void listakeszito(String hely)																						//VT-azonosítókat dolgozza fel
 	{

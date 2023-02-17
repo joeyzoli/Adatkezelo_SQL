@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Vevoi_reklamacio_lekerdezes extends JPanel 
 {
@@ -28,7 +30,6 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
     private SQL lekerdezes = new SQL();
     private JTextField id_mezo;
     private final String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\reklamáció adatbázis.xlsx";
-
     /**
      * Create the panel.
      */
@@ -59,6 +60,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         datumtol = new JTextField();
         datumtol.setBounds(520, 90, 86, 20);
+        datumtol.setText("2023.01.01");
         add(datumtol);
         datumtol.setColumns(10);
         
@@ -118,6 +120,25 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         d_gomb.setBounds(520, 569, 89, 23);
         d_gomb.addActionListener(new D_gyarto());
         add(d_gomb);
+        
+        JLabel lblNewLabel_7 = new JLabel("Képek");
+        lblNewLabel_7.setBounds(430, 617, 46, 14);
+        add(lblNewLabel_7);
+        
+        JButton mentes_gomb = new JButton("Mentés");
+        mentes_gomb.addActionListener(new Kepmentes());
+        mentes_gomb.setBounds(520, 615, 89, 23);
+        add(mentes_gomb);
+        
+        JLabel lblNewLabel_8 = new JLabel("Excel");
+        lblNewLabel_8.setBounds(430, 655, 46, 14);
+        add(lblNewLabel_8);
+        
+        JButton excelmentes = new JButton("Mentés");
+        excelmentes.setBounds(520, 651, 89, 23);
+        excelmentes.addActionListener(new Excelmentes());
+        add(excelmentes);
+        ido();
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -251,5 +272,48 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Kepmentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                lekerdezes.vevoi_kepmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());
+                JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Excelmentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                lekerdezes.vevoi_excelmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());
+                JOptionPane.showMessageDialog(null, "Excel/ek mentve az asztalra", "Info", 1);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date();
+        datumig.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
     }
 }

@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -61,7 +62,7 @@ public class Foablak extends JFrame
 	 * Launch the application.
 	 */
 	public static void main(String[] args) 
-	{
+	{	    
 		EventQueue.invokeLater(new Runnable() 
 		{
 			public void run() 
@@ -79,7 +80,7 @@ public class Foablak extends JFrame
                             contentPane.setBackground(szin);
                             hatter_szine = szin;
                         }
-    			        frame.setVisible(true);
+    			        frame.setVisible(true);   			        
 					}
 					else
 					{
@@ -92,6 +93,9 @@ public class Foablak extends JFrame
 				}
 			}
 		});
+		Emailszal beolvasas = new Emailszal();
+        Thread szal1 = new Thread(beolvasas);
+        szal1.start();
 	}
 
 	/**
@@ -453,6 +457,15 @@ public class Foablak extends JFrame
             
         }    
     }
+	
+	static class Emailszal implements Runnable
+    {
+        public void run()
+        {
+            SQL lekerdez = new SQL();
+            lekerdez.vevoi_email();
+        }
+    }
 	/*
 	public void sorszamol()
 	{
@@ -504,4 +517,5 @@ public class Foablak extends JFrame
         }    
 	    
 	}*/
+	
 }

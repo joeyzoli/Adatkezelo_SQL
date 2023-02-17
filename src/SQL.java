@@ -13,18 +13,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
 public class SQL 
 {
     ResultSet resultSet;
     static DefaultTableModel alapmodell;
+    private final String emaillista = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\E-mail lista_ reklamáció.xlsx";
     
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
 	{
@@ -61,12 +65,7 @@ public class SQL
             sheet.getAllocatedRange().autoFitRows();
             
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            /*
-            JFileChooser mentes_helye = new JFileChooser();
-            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            mentes_helye.showOpenDialog(mentes_helye);
-            File fajl = mentes_helye.getSelectedFile();
-            //System.out.println(fajl.getAbsolutePath());*/
+            
             workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
             resultSet.close();
             statement.close();
@@ -82,9 +81,7 @@ public class SQL
                 FileOutputStream output = new FileOutputStream(menteshelye);
                 workbook2.write(output);
                 output.close();
-            }
-            
-            //JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+            }                       
         } 
         catch (SQLException e) 
         {
@@ -97,8 +94,7 @@ public class SQL
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
 			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
- 
+        } 
 	}
 	
 	public void lekerdez_projekt_osszegez(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
@@ -563,7 +559,140 @@ public class SQL
         }
     }
 	
-	public void vevoi_lezarashoz(String datum, String cikkszam)
+	public void vevoi_id_bevitel(String id)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        ResultSet resultSet2;
+        ResultSet resultSet3;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+       
+        String sql = "SELECT datum, projekt, tipus, rek_vagy, rek_db, hibaleiras, gyartas_idopontja, kiadott_rma FROM  qualitydb.Vevoireklamacio_alapadat where ID = '"+ id +"'";
+       
+        stmt.execute(sql);       
+        resultSet = stmt.getResultSet();      
+        
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
+        DataTable datatable = new DataTable();
+        DataTable datatable2 = new DataTable();
+        DataTable datatable3 = new DataTable();
+        jdbcAdapter.fillDataTable(datatable, resultSet);      
+        
+        String[] datum = datatable.getRows().get(0).getString(0).split(" ");
+        String[] projekt = {datatable.getRows().get(0).getString(1)};;
+        String[] cikkszam = {datatable.getRows().get(0).getString(2)};;
+        String[] rekvagy = {datatable.getRows().get(0).getString(3)};;
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(projekt);
+        DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>(cikkszam);
+        DefaultComboBoxModel<String> model3 = new DefaultComboBoxModel<>(rekvagy);
+        Vevoi_reklmacio_bevitel.projekt_box.setModel(model);
+        Vevoi_reklmacio_bevitel.tipus_box.setModel(model2);
+        Vevoi_reklmacio_bevitel.vagy_vagy.setModel(model3);
+        
+        Vevoi_reklmacio_bevitel.datum_mezo.setText(datum[0]);
+        Vevoi_reklmacio_bevitel.reklamalt_db.setText(datatable.getRows().get(0).getString(4));
+        Vevoi_reklmacio_bevitel.hibaleiras_mezo.setText(datatable.getRows().get(0).getString(5));
+        Vevoi_reklmacio_bevitel.gyartasidopontja_mezo.setText(datatable.getRows().get(0).getString(6));
+        Vevoi_reklmacio_bevitel.rma_mezo.setText(datatable.getRows().get(0).getString(7));
+        
+        String sql2 = "SELECT zarolt, zarolt_db, talalt_db, felelos, hatarido FROM  qualitydb.Vevoireklamacio_felelosok "
+                + "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Cikkszam = '"+ datatable.getRows().get(0).getString(2) +"' "; 
+        stmt2.execute(sql2);
+        resultSet2 = stmt2.getResultSet();
+        jdbcAdapter2.fillDataTable(datatable2, resultSet2);        
+        int szamlalo2 = 1;            
+        Vevoi_reklmacio_bevitel.modell.setRowCount(0);
+        Vevoi_reklmacio_bevitel.modell2.setRowCount(0);
+        for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+        {
+            Vevoi_reklmacio_bevitel.modell.addRow(new Object[]{datatable2.getRows().get(szamlalo).getString(3), datatable2.getRows().get(szamlalo).getString(4)});
+            Vevoi_reklmacio_bevitel.modell2.addRow(new Object[]{szamlalo2, datatable2.getRows().get(szamlalo).getString(0), datatable2.getRows().get(szamlalo).getString(1), datatable2.getRows().get(szamlalo).getString(2)});
+            szamlalo2++;
+        }                       
+        Vevoi_reklmacio_bevitel.felelos_tabla.setModel(Vevoi_reklmacio_bevitel.modell);
+        Vevoi_reklmacio_bevitel.zarolt_tabla.setModel(Vevoi_reklmacio_bevitel.modell2);
+        
+        String sql3 = "SELECT hiba_oka, hiba_okozoja, hiba_oka2, hiba_okozoja2 FROM  qualitydb.Vevoireklamacio_alapadat "
+                + "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Tipus = '"+ datatable.getRows().get(0).getString(2) +"' "; 
+        stmt3.execute(sql3);
+        resultSet3 = stmt3.getResultSet();            
+        jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        String[] hibaoka = {datatable3.getRows().get(0).getString(1)};
+        String[] hibaoka2 = {datatable3.getRows().get(0).getString(3)};
+        DefaultComboBoxModel<String> hiba = new DefaultComboBoxModel<>(hibaoka);
+        DefaultComboBoxModel<String> hiba2 = new DefaultComboBoxModel<>(hibaoka2);
+        if(datatable3.getRows().get(0).getString(0).equals(""))
+        {
+            
+        }
+        else
+        {
+            Vevoi_reklmacio_bevitel.hibaokozoja_box.setModel(hiba);
+            Vevoi_reklmacio_bevitel.hibaokozoja2_box.setModel(hiba2);
+            Vevoi_reklmacio_bevitel.hibaoka_mezo.setText(datatable3.getRows().get(0).getString(0));
+            Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText(datatable3.getRows().get(0).getString(2));
+            
+        }
+        
+        
+        
+        resultSet.close();
+        resultSet2.close();
+        resultSet3.close();
+        stmt.close();
+        stmt2.close();
+        stmt3.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_lezarashoz(String datum, String cikkszam, String id)
     {
         Connection conn = null;
         Statement stmt = null;
@@ -584,11 +713,21 @@ public class SQL
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
+        String sajat = "";
+        String sajat2 = "";
+        if(id.equals(""))
+        {
+            sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";                
+            sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
+        }
+        else
+        {
+            sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where ID = '"+ id +"'";                
+            sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where ID = '"+ id +"'";
+        }
+            
         stmt.execute(sajat);
         resultSet = stmt.getResultSet();
-        
-        String sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
         stmt2.execute(sajat2);
         resultSet2 = stmt2.getResultSet();
         
@@ -713,6 +852,136 @@ public class SQL
         }
     }
 	
+	public void vevoi_kepmentes(String datum, String cikk)
+    {   
+        Connection con = null;
+        PreparedStatement ps = null;
+        FileOutputStream fs=null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        con = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+        ps= con.prepareStatement("SELECT Kep, Kepneve FROM qualitydb.Vevoireklamacio_kepek WHERE Datum = '"+ datum +"' and Cikkszam = '"+ cikk +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+        ResultSet rset = ps.executeQuery();         
+        byte b[];
+        Blob blob;
+        while(rset.next())
+        {        
+            File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ rset.getString(2));
+            fs = new FileOutputStream(f);
+            blob = rset.getBlob("Kep");
+            b = blob.getBytes(1, (int)blob.length());
+            fs.write(b);
+            fs.close();
+        }                                                                                                                                                                                                                      
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (ps != null)
+                 con.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (con != null)
+                 con.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_excelmentes(String datum, String cikk)
+    {   
+        Connection con = null;
+        PreparedStatement ps = null;
+        FileOutputStream fs=null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        con = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+        ps= con.prepareStatement("SELECT Excel, Excelneve FROM qualitydb.Vevoireklamacio_excel WHERE Datum = '"+ datum +"' and Cikkszam = '"+ cikk +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+        ResultSet rset = ps.executeQuery();       
+        byte b[];
+        Blob blob;
+        while(rset.next())
+        {
+            File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ rset.getString(2));
+            fs = new FileOutputStream(f);
+            blob = rset.getBlob("Excel");
+            b = blob.getBytes(1, (int)blob.length());
+            fs.write(b);
+            fs.close();
+        }                                                                                                                                                                                                                      
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (ps != null)
+                 con.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (con != null)
+                 con.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
 	public void vevoi_6d(String datum, String cikkszam, String excelhelye)
     {
         Connection conn = null;
@@ -780,7 +1049,7 @@ public class SQL
         JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
         jdbcAdapter.fillDataTable(datatable, resultSet);
         jdbcAdapter2.fillDataTable(datatable2, resultSet2);
-        jdbcAdapter3.fillDataTable(datatable3, resultSet3, 0, 1);
+        jdbcAdapter3.fillDataTable(datatable3, resultSet3);
         
         String d1 = "";
         String d2 = "";
@@ -791,9 +1060,9 @@ public class SQL
         for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
         {
             d1 += datatable.getRows().get(szamlalo).getString(0) + " ";
-            d3 += datatable.getRows().get(szamlalo).getString(1) + " ";
-            d3 += datatable.getRows().get(szamlalo).getString(2) + " ";
-            d3 += datatable.getRows().get(szamlalo).getString(3) + " ";
+            d3 += datatable.getRows().get(szamlalo).getString(1) + "  ";
+            d3 += datatable.getRows().get(szamlalo).getString(2) + " db/";
+            d3 += datatable.getRows().get(szamlalo).getString(3) + " db ";
         }
         
         for (int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++) 
@@ -806,8 +1075,8 @@ public class SQL
         for (int szamlalo = 0; szamlalo < datatable3.getRows().size(); szamlalo++) 
         {
             d2 += datatable3.getRows().get(szamlalo).getString(0) + " ";
-            d4 += datatable3.getRows().get(szamlalo).getString(0) + " ";
-            d4 += datatable3.getRows().get(szamlalo).getString(0) + " ";
+            d4 += datatable3.getRows().get(szamlalo).getString(1) + ",  ";
+            d4 += datatable3.getRows().get(szamlalo).getString(2) + " ";
         }
         
         sheet.getRange().get("E" + 2).setText(d1);
@@ -1328,6 +1597,141 @@ public class SQL
         }
         JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
 
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_email()
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        Statement stmt4 = null;
+        DataTable datatable = new DataTable();
+        DataTable datatable2 = new DataTable();
+        DataTable datatable3 = new DataTable();
+        DataTable datatable4 = new DataTable();
+        ResultSet resultSet2;
+        ResultSet resultSet3;
+        ResultSet resultSet4;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+       
+        String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
+        String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";
+            
+        //SELECT DATEDIFF("2017-01-01", "2016-12-24"); 
+        //resultset.getString(2);    
+        stmt.execute(sql);
+        stmt2.execute(sql2);       
+        resultSet = stmt.getResultSet();
+        resultSet2 = stmt2.getResultSet();
+      
+        
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();       
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+        jdbcAdapter2.fillDataTable(datatable2, resultSet2);
+       
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        
+        String maiido = formatter.format(date);
+       
+        
+        String querry = "vevoi_ertesites(?,?)";
+        CallableStatement cstmt = conn.prepareCall("{call qualitydb.vevoi_ertesites(?,?) }");                                   //tárolt eljárást hívja meg
+        ArrayList<String> felelosok = new ArrayList<String>();
+        ArrayList<String> adatok = new ArrayList<String>();
+        
+        for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+        {
+            Date hatarido = formatter.parse(datatable.getRows().get(szamlalo).getString(1));
+            String hatarido2 = formatter.format(hatarido);
+            cstmt.setString(1, hatarido2);
+            cstmt.setString(2, maiido);
+            cstmt.execute();
+            resultSet3 = cstmt.getResultSet();
+            resultSet3.next();
+            System.out.println(resultSet3.getString(1));
+            if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+            {
+                felelosok.add(datatable.getRows().get(szamlalo).getString(0));
+                //adatok.add();
+            }
+        }
+        
+        for(int szamlalo = 0; szamlalo < felelosok.size(); szamlalo++)
+        {          
+            System.out.println(felelosok.get(szamlalo));
+        }
+        
+        if(felelosok.size() > 0)
+        {
+            Workbook workbook = new Workbook();
+            workbook.loadFromFile(emaillista);
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            DataTable felelosexcel = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+            for(int szamlalo = 0; szamlalo < felelosok.size(); szamlalo++)
+            {          
+                for(int szamlalo2 = 0; szamlalo2 < felelosexcel.getRows().size(); szamlalo2++)
+                {          
+                    if(felelosok.get(szamlalo).equals(felelosexcel.getRows().get(szamlalo2).getString(0)))
+                    {
+                        Email emailkuldes = new Email();
+                        //emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
+                        //        felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3));
+                        System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " + felelosexcel.getRows().get(szamlalo2).getString(3));
+                    }
+                }
+            }
+            
+        }
+        
         resultSet.close();
         stmt.close();
         conn.close();
