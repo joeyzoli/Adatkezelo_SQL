@@ -1203,10 +1203,12 @@ public class SQL
                 + "group by projekt";
         
         sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
-                + "        projekt, rek_vagy \n"
-                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                + "where 3=3\n"
-                + " order by Hónap asc";
+                + "              Projekt, \n"
+                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"1\", \"0\")) as 'reklamáció', \n"
+                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"0\", \"1\")) as 'Visszajelzés'\n"
+                + "            from qualitydb.Vevoireklamacio_alapadat\n"
+                + "                where 3=3\n"
+                + "                group by Projekt, Hónap order by Hónap asc";
         
         sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
                                     "' and Datum <= '"+ datumig +"'";
@@ -1300,11 +1302,9 @@ public class SQL
         }       
         sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Q1"));
         sheet2.getAllocatedRange().autoFitColumns();
-        sheet2.getAllocatedRange().autoFitRows();
+        sheet2.getAllocatedRange().autoFitRows();       
+        sheet2.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
-        sheet.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-        
-
         /********************************Első diagramm***************************************/
         
         
@@ -1485,6 +1485,8 @@ public class SQL
         sheet.getRange().get("A" + 11).setText("Október");
         sheet.getRange().get("A" + 12).setText("November");
         sheet.getRange().get("A" + 13).setText("December");
+        sheet.getRange().get("A" + 14).setText("Sum Rek.");
+        sheet.getRange().get("A" + 15).setText("Sum Vissz.");
         
         sheet.getRange().get("B" + 2).setNumberValue(reklamacio_jan);
         sheet.getRange().get("C" + 2).setNumberValue(visszajelzes_jan);        
@@ -1511,9 +1513,15 @@ public class SQL
         sheet.getCellRange("B" + 13).setNumberValue(reklamacio_dec);
         sheet.getCellRange("C" + 13).setNumberValue(visszajelzes_dec);
         
+        int sumrek = reklamacio_jan + reklamacio_feb + reklamacio_mar + reklamacio_apr + reklamacio_maj + reklamacio_jun + reklamacio_jul + reklamacio_aug + reklamacio_sze + reklamacio_okt +
+                reklamacio_nov + reklamacio_dec;
+        sheet.getCellRange("B" + 14).setNumberValue(sumrek);
+        int sumvissza = visszajelzes_jan + visszajelzes_feb + visszajelzes_mar + visszajelzes_apr + visszajelzes_maj + visszajelzes_jun + visszajelzes_jul + visszajelzes_aug + visszajelzes_sze + visszajelzes_okt + 
+                visszajelzes_nov + visszajelzes_dec;
+        sheet.getCellRange("C" + 15).setNumberValue(sumvissza);
         //createChartData(sheet);
         Chart chart = sheet.getCharts().add();
-        chart.setDataRange(sheet.getCellRange("A1:C13"));
+        chart.setDataRange(sheet.getCellRange("A1:C15"));
         chart.setSeriesDataFromRange(false);
         
         chart.setLeftColumn(1);
@@ -1609,12 +1617,15 @@ public class SQL
         {
             sheet.getRange().get("F" + cella2).setText(datatable3.getRows().get(szamlalo).getString(0)+" " + datatable3.getRows().get(szamlalo).getString(1));
             //sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(1));
-            sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(2));
+            String[] reklamacio = datatable3.getRows().get(szamlalo).getString(2).split("\\.");
+            String[] visszajelzes = datatable3.getRows().get(szamlalo).getString(3).split("\\.");
+            sheet.getCellRange("G" + cella2).setNumberValue(Integer.parseInt(reklamacio[0]));
+            sheet.getCellRange("H" + cella2).setNumberValue(Integer.parseInt(visszajelzes[0]));
             cella2++;
         }
         
         Chart chart3 = sheet.getCharts().add();
-        chart3.setDataRange(sheet.getCellRange("F1:G" +cella2));
+        chart3.setDataRange(sheet.getCellRange("F1:H" +cella2));
         chart3.setSeriesDataFromRange(false);
         
         chart3.setLeftColumn(1);
@@ -1645,6 +1656,10 @@ public class SQL
         }
         
         chart3.getLegend().setPosition(LegendPositionType.Top);
+        
+        sheet.getAllocatedRange().autoFitColumns();
+        sheet.getAllocatedRange().autoFitRows();       
+        sheet.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
         JFileChooser mentes_helye = new JFileChooser();
         mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
