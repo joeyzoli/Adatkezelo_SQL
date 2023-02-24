@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Email 
 {
-    public void emailkuldes(String felado, String feladoemail, String cimzett, String cc, String id, String datum, String cikk)
+    public void emailkuldes(String felado, String feladoemail, String cimzett, String cc, String id, String datum, String cikk, String intezkedes)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -36,7 +36,8 @@ public class Email
             textPart.setText("Tisztelt " + felado + "! \n  \n 5 napon bellül lejár a határideje a vevői reklamációnál aminél Ön a felelős!"
                     + "\n Reklamáció ID: " + id
                     + "\n Reklamáció dátuma: \n " + datum
-                    + "\n Reklamáct cikkszám: \n " + cikk
+                    + "\n Reklamált cikkszám: \n " + cikk
+                    + "\n Elvégzendő feladat: \n " + intezkedes
                     + "\n Kérem minnél elöbb zárja le!");                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                    

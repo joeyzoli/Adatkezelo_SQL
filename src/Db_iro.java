@@ -278,13 +278,17 @@ public class Db_iro
         String sql = "select id from qualitydb.Vevoireklamacio_alapadat where Datum = '" + datum + "' and Tipus = '" + koztes[0] + "'";
         stmt.execute(sql);
         ResultSet result = stmt.getResultSet();
-        result.next();
-        int id = Integer.parseInt(result.getString(1));
+        int id = 0;
+        if(result.next())
+        {
+            id = Integer.parseInt(result.getString(1));
+        }
         
-        String query = "update qualitydb.Vevoireklamacio_felelosok set  ID = '"+ id +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "'";
-        String query2 = "update qualitydb.Vevoireklamacio_detekt set  ID = '"+ id +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "'";
+        String query = "update qualitydb.Vevoireklamacio_felelosok set  ID = '"+ id +"' where Datum = '" + datum + "' and Cikkszam = '" + koztes[0] + "'";
+        String query2 = "update qualitydb.Vevoireklamacio_detekt set  ID = '"+ id +"' where Datum = '" + datum + "' and Cikkszam = '" + koztes[0] + "'";
         stmt2.executeUpdate(query);                                                                                                                 //sql utasítás végrehajtása
         stmt3.executeUpdate(query2);
+        Vevoi_reklmacio_bevitel.id_mezo.setText(String.valueOf(id));
         //+ szam +",
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

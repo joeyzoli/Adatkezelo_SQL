@@ -72,7 +72,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
     static JTextField hibaoka2_mezo;
     static JComboBox<String> hibaokozoja2_box;
     private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vevoi.jpg";
-    private JTextField id_mezo;
+    static JTextField id_mezo;
     
     /**
      * Create the panel.
@@ -421,6 +421,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         id_mezo = new JTextField();
         id_mezo.setBounds(73, 55, 40, 20);
         id_mezo.addKeyListener(new Enter());
+        id_mezo.setText("");
         add(id_mezo);
         id_mezo.setColumns(10);
         
@@ -475,9 +476,26 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                         {
                             iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
                                          Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());                            
-                        }                 
+                        }
+                        iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
                     }
                     iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                    for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                    {
+                        iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
+                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString());
+                    }    
+                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                    {
+                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString());
+                    }
+                    
+                    for(int szamlalo = 0; szamlalo < helyesbito_tabla.getRowCount(); szamlalo++)
+                    {
+                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), helyesbito_tabla.getValueAt(szamlalo, 0).toString(), helyesbito_tabla.getValueAt(szamlalo, 1).toString(), helyesbito_tabla.getValueAt(szamlalo, 2).toString());
+                    }
+                    iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                    
                 }
                 else
                 {
@@ -509,6 +527,35 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     kepneve.clear();
                     excelhelye.clear();
                     excelneve.clear();
+                    
+                    Urlap_torlo torles = new Urlap_torlo();
+                    torles.urlaptorles_veoi(datum_mezo, reklamalt_db, hibaleiras_mezo, gyartasidopontja_mezo, rma_mezo, hibaoka_mezo, hibaoka2_mezo);
+                    
+                    int rowCount = modell.getRowCount();
+                    int rowCount2 = modell2.getRowCount();
+                    int rowCount3 = modell3.getRowCount();
+                    int rowCount4 = modell4.getRowCount();
+                    
+                    for (int i = rowCount - 1; i > -1; i--) 
+                    {
+                      modell.removeRow(i);
+                    }
+                    for (int i = rowCount2 - 1; i > -1; i--) 
+                    {
+                      modell2.removeRow(i);
+                    }
+                    for (int i = rowCount3 - 1; i > -1; i--) 
+                    {
+                      modell3.removeRow(i);
+                    }
+                    for (int i = rowCount4 - 1; i > -1; i--) 
+                    {
+                      modell4.removeRow(i);
+                    }
+                    table.setModel(modell4);
+                    felelos_tabla.setModel(modell);
+                    zarolt_tabla.setModel(modell2);
+                    helyesbito_tabla.setModel(modell3);
                     
                 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres!", "Info", 1);

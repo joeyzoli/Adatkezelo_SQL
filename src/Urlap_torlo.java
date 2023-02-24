@@ -29,5 +29,16 @@ public class Urlap_torlo
         hibas.setText("");
         arany.setText("");
     }
+	
+	public void urlaptorles_veoi(JTextField datum, JTextField reklamaltdb, JTextArea hibaleiras, JTextField gyartas, JTextField rma, JTextField hibaoka, JTextField hibaoka2)
+    {
+        datum.setText("");
+        reklamaltdb.setText("");
+        hibaleiras.setText("");
+        gyartas.setText("");
+        rma.setText("");
+        hibaoka.setText("");
+        hibaoka2.setText("");
+    }
 
 }

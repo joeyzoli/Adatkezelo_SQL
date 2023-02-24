@@ -1149,10 +1149,8 @@ public class SQL
         Statement stmt2 = null;
         Statement stmt3 = null;
         Statement stmt4 = null;
-        DataTable datatable = new DataTable();
         DataTable datatable2 = new DataTable();
         DataTable datatable3 = new DataTable();
-        DataTable datatable4 = new DataTable();
         ResultSet resultSet2;
         ResultSet resultSet3;
         ResultSet resultSet4;
@@ -1185,7 +1183,7 @@ public class SQL
         
         if(lezart.equals("igen") && nyitott.equals("igen"))
         {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+            sql = "SELECT DATE_FORMAT(Datum,'%Y%m'), projekt, rek_vagy, nyitva, Rek_db FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
                             +"' and Datum <= '"+ datumig +"'";
         }
         else if(lezart.equals("igen") && nyitott.equals("nem"))
@@ -1195,23 +1193,23 @@ public class SQL
         }
         else
         {
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
+            sql = "SELECT DATE_FORMAT(Datum,'%Y%m'), projekt, rek_vagy, nyitva, Rek_db FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
                     +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
         }
-        
+        // DATE_FORMAT(Datum,'%Y%m'), projekt, rek_vagy, nyitva, Rek_db
         sql2 = "select projekt, sum(Rek_db)\n"
                 + "from qualitydb.Vevoireklamacio_alapadat\n"
                 + "where 3=3\n"
                 + "group by projekt";
         
         sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
-                + "        projekt, count(projekt)\n"
+                + "        projekt, rek_vagy \n"
                 + "from qualitydb.Vevoireklamacio_alapadat\n"
                 + "where 3=3\n"
-                + "group by projekt, Hónap";
+                + " order by Hónap asc";
         
         sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
-                                    "' and Datum <= '"+ datumig +"' and Lezaras_ido is not null";
+                                    "' and Datum <= '"+ datumig +"'";
         
         stmt.execute(sql);
         stmt2.execute(sql2);
@@ -1221,22 +1219,96 @@ public class SQL
         resultSet2 = stmt2.getResultSet();
         resultSet3 = stmt3.getResultSet();
         resultSet4 = stmt4.getResultSet();
-
-        Workbook workbook = new Workbook();
-        JdbcAdapter jdbcAdapter = new JdbcAdapter();
-        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
-        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();
-        JdbcAdapter jdbcAdapter4 = new JdbcAdapter();
-        jdbcAdapter.fillDataTable(datatable, resultSet);
-        jdbcAdapter2.fillDataTable(datatable2, resultSet2);
-        jdbcAdapter3.fillDataTable(datatable3, resultSet3);
-        jdbcAdapter4.fillDataTable(datatable4, resultSet4);
-
-        /********************************Első diagramm*************************/
         
+        ArrayList<String[]> adatok = new ArrayList<String[]>();
+        ArrayList<String[]> minden = new ArrayList<String[]>();  
+        while(resultSet.next())
+        {
+            String[] kontener = {resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)};
+            adatok.add(kontener);        
+        }
+        while(resultSet4.next())
+        {
+            String[] datum = resultSet4.getString(2).split(" ");
+            String[] lezaras;
+            
+            if(resultSet4.getString(16) != null)
+            {
+                lezaras = resultSet4.getString(16).split(" ");
+                String[] kontener = {resultSet4.getString(1), datum[0], resultSet4.getString(3), resultSet4.getString(4), resultSet4.getString(5), resultSet4.getString(6), resultSet4.getString(7),
+                        resultSet4.getString(8), resultSet4.getString(9), resultSet4.getString(10), resultSet4.getString(11), resultSet4.getString(12), resultSet4.getString(13), resultSet4.getString(14),
+                        resultSet4.getString(15), lezaras[0], resultSet4.getString(17)};
+                minden.add(kontener);
+            }
+            else
+            {
+                String[] kontener = {resultSet4.getString(1), datum[0], resultSet4.getString(3), resultSet4.getString(4), resultSet4.getString(5), resultSet4.getString(6), resultSet4.getString(7),
+                        resultSet4.getString(8), resultSet4.getString(9), resultSet4.getString(10), resultSet4.getString(11), resultSet4.getString(12), resultSet4.getString(13), resultSet4.getString(14),
+                        resultSet4.getString(15), resultSet4.getString(16), resultSet4.getString(17)};
+                minden.add(kontener);
+            }          
+        }
+                     
+        Workbook workbook = new Workbook();
         Worksheet sheet = workbook.getWorksheets().get(0);
         Worksheet sheet2 = workbook.getWorksheets().get(1);
-        sheet2.insertDataTable(datatable4, true, 1, 1);
+        sheet.setName("Diagrammok");
+        sheet2.setName("Alapadatok");
+        JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
+        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();     
+        jdbcAdapter2.fillDataTable(datatable2, resultSet2);
+        jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        
+        sheet2.getRange().get("A" + 1).setText("ID");
+        sheet2.getRange().get("B" + 1).setText("Dátum");
+        sheet2.getRange().get("C" + 1).setText("Projekt");
+        sheet2.getRange().get("D" + 1).setText("Cikkszám");
+        sheet2.getRange().get("E" + 1).setText("Változat");
+        sheet2.getRange().get("F" + 1).setText("Megnevezés");
+        sheet2.getRange().get("G" + 1).setText("Reklamáció vagy visszajelzés");
+        sheet2.getRange().get("H" + 1).setText("Relamált db");
+        sheet2.getRange().get("I" + 1).setText("Hibaleírás");
+        sheet2.getRange().get("J" + 1).setText("Gyártás időpontja");
+        sheet2.getRange().get("K" + 1).setText("Kiadott RMA");
+        sheet2.getRange().get("L" + 1).setText("Gyökérok 1");
+        sheet2.getRange().get("M" + 1).setText("Hiba okozója 1");
+        sheet2.getRange().get("N" + 1).setText("Gyökérok 2");
+        sheet2.getRange().get("O" + 1).setText("Hiba okozója 2");
+        sheet2.getRange().get("P" + 1).setText("Lezárás időpontja");
+        sheet2.getRange().get("Q" + 1).setText("nyitva");
+        int szamlalo2 = 2;
+        for(int szamlalo = 0; szamlalo < minden.size(); szamlalo++)
+        {
+            sheet2.getRange().get("A" + szamlalo2).setText(minden.get(szamlalo)[0]);
+            sheet2.getRange().get("B" + szamlalo2).setText(minden.get(szamlalo)[1]);
+            sheet2.getRange().get("C" + szamlalo2).setText(minden.get(szamlalo)[2]);
+            sheet2.getRange().get("D" + szamlalo2).setText(minden.get(szamlalo)[3]);
+            sheet2.getRange().get("E" + szamlalo2).setText(minden.get(szamlalo)[4]);
+            sheet2.getRange().get("F" + szamlalo2).setText(minden.get(szamlalo)[5]);
+            sheet2.getRange().get("G" + szamlalo2).setText(minden.get(szamlalo)[6]);
+            sheet2.getRange().get("H" + szamlalo2).setText(minden.get(szamlalo)[7]);
+            sheet2.getRange().get("I" + szamlalo2).setText(minden.get(szamlalo)[8]);
+            sheet2.getRange().get("J" + szamlalo2).setText(minden.get(szamlalo)[9]);
+            sheet2.getRange().get("K" + szamlalo2).setText(minden.get(szamlalo)[10]);
+            sheet2.getRange().get("L" + szamlalo2).setText(minden.get(szamlalo)[11]);
+            sheet2.getRange().get("M" + szamlalo2).setText(minden.get(szamlalo)[12]);
+            sheet2.getRange().get("N" + szamlalo2).setText(minden.get(szamlalo)[13]);
+            sheet2.getRange().get("O" + szamlalo2).setText(minden.get(szamlalo)[14]);
+            sheet2.getRange().get("P" + szamlalo2).setText(minden.get(szamlalo)[15]);
+            sheet2.getRange().get("Q" + szamlalo2).setText(minden.get(szamlalo)[16]);
+            szamlalo2++;
+        }       
+        sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Q1"));
+        sheet2.getAllocatedRange().autoFitColumns();
+        sheet2.getAllocatedRange().autoFitRows();
+        
+        sheet.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        
+
+        /********************************Első diagramm***************************************/
+        
+        
+        //sheet2.insertDataTable(datatable4, true, 1, 1);
         int reklamacio_jan = 0;
         int visszajelzes_jan = 0;
         int reklamacio_feb = 0;
@@ -1266,11 +1338,11 @@ public class SQL
         sheet.getRange().get("B" + 1).setText("Reklamáció");
         sheet.getRange().get("C" + 1).setText("Visszajelzés");
         
-        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+        for (int szamlalo = 0; szamlalo < adatok.size(); szamlalo++) 
         {
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202301"))
+            if(adatok.get(szamlalo)[0].equals("202301"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_jan++;                     
                 }
@@ -1279,9 +1351,9 @@ public class SQL
                     visszajelzes_jan++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202302"))
+            if(adatok.get(szamlalo)[0].equals("202302"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_feb++;                     
                 }
@@ -1290,9 +1362,9 @@ public class SQL
                     visszajelzes_feb++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202303"))
+            if(adatok.get(szamlalo)[0].equals("202303"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_mar++;                     
                 }
@@ -1301,9 +1373,9 @@ public class SQL
                     visszajelzes_mar++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202304"))
+            if(adatok.get(szamlalo)[0].equals("202304"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_apr++;                     
                 }
@@ -1312,9 +1384,9 @@ public class SQL
                     visszajelzes_apr++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202305"))
+            if(adatok.get(szamlalo)[0].equals("202305"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_maj++;                     
                 }
@@ -1323,9 +1395,9 @@ public class SQL
                     visszajelzes_maj++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202306"))
+            if(adatok.get(szamlalo)[0].equals("202306"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_jun++;                     
                 }
@@ -1334,9 +1406,9 @@ public class SQL
                     visszajelzes_jun++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202307"))
+            if(adatok.get(szamlalo)[0].equals("202307"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_jul++;                     
                 }
@@ -1345,9 +1417,9 @@ public class SQL
                     visszajelzes_jul++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202308"))
+            if(adatok.get(szamlalo)[0].equals("202308"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_aug++;                     
                 }
@@ -1356,9 +1428,9 @@ public class SQL
                     visszajelzes_aug++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202309"))
+            if(adatok.get(szamlalo)[0].equals("202309"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_sze++;                     
                 }
@@ -1367,9 +1439,9 @@ public class SQL
                     visszajelzes_sze++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202310"))
+            if(adatok.get(szamlalo)[0].equals("202310"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_okt++;                     
                 }
@@ -1378,9 +1450,9 @@ public class SQL
                     visszajelzes_okt++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202311"))
+            if(adatok.get(szamlalo)[0].equals("202311"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_nov++;                     
                 }
@@ -1389,9 +1461,9 @@ public class SQL
                     visszajelzes_nov++;
                 }
             }
-            if(datatable.getRows().get(szamlalo).getString(0).equals("202312"))
+            if(adatok.get(szamlalo)[0].equals("202312"))
             {            
-                if(datatable.getRows().get(szamlalo).getString(2).equals("Reklamáció"))
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
                    reklamacio_dec++;                     
                 }
@@ -1482,7 +1554,7 @@ public class SQL
         
         chart.getLegend().setPosition(LegendPositionType.Top);
         
-        /********************************Második diagramm*************************/
+        /********************************Második diagramm*******************************************/
         
         sheet.getRange().get("L" + 1).setText("Projekt");
         sheet.getRange().get("M" + 1).setText("Reklamált db");
@@ -1526,18 +1598,18 @@ public class SQL
         }        
         chart2.getLegend().setPosition(LegendPositionType.Top);
         
-        /********************************Harmadik diagramm*************************/
+        /********************************Harmadik diagramm**********************************************/
         
         sheet.getRange().get("F" + 1).setText("Hónap");
-        sheet.getRange().get("G" + 1).setText("Projekt");
-        sheet.getRange().get("H" + 1).setText("Reklamáció");
-        sheet.getRange().get("I" + 1).setText("Visszajelzés");
+        //sheet.getRange().get("G" + 1).setText("Projekt");
+        sheet.getRange().get("G" + 1).setText("Reklamáció");
+        sheet.getRange().get("H" + 1).setText("Visszajelzés");
         int cella2 = 2;
         for (int szamlalo = 0; szamlalo < datatable3.getRows().size(); szamlalo++) 
         {
             sheet.getRange().get("F" + cella2).setText(datatable3.getRows().get(szamlalo).getString(0)+" " + datatable3.getRows().get(szamlalo).getString(1));
             //sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(1));
-            sheet.getRange().get("G" + cella2).setNumberValue(Integer.parseInt(datatable3.getRows().get(szamlalo).getString(2)));
+            sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(2));
             cella2++;
         }
         
@@ -1552,7 +1624,7 @@ public class SQL
         
         chart3.setChartType(ExcelChartType.ColumnStacked);
         
-        chart3.setChartTitle("Reklamált db projektenként");
+        chart3.setChartTitle("Reklamáció és visszajelzés projektenként");
         chart3.getChartTitleArea().isBold(true);
         chart3.getChartTitleArea().setSize(14);
         chart3.getPrimaryCategoryAxis().setTitle("Projektek");
@@ -1590,7 +1662,8 @@ public class SQL
             for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
             {    
                 workbook2.removeSheetAt(i); 
-            }      
+            }
+            workbook2.setActiveSheet(0);
             FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
             workbook2.write(output);
             output.close();
@@ -1636,14 +1709,14 @@ public class SQL
         Statement stmt = null;
         Statement stmt2 = null;
         Statement stmt3 = null;
-        Statement stmt4 = null;
+        //Statement stmt4 = null;
         DataTable datatable = new DataTable();
         DataTable datatable2 = new DataTable();
-        DataTable datatable3 = new DataTable();
-        DataTable datatable4 = new DataTable();
+        //DataTable datatable3 = new DataTable();
+        //DataTable datatable4 = new DataTable();
         ResultSet resultSet2;
         ResultSet resultSet3;
-        ResultSet resultSet4;
+        //ResultSet resultSet4;
         try 
         {
            try 
@@ -1661,11 +1734,9 @@ public class SQL
         stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
        
-        String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
-        String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";
-            
-        //SELECT DATEDIFF("2017-01-01", "2016-12-24"); 
-        //resultset.getString(2);    
+        String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Zarolt FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
+        String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Intezkedes  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";     
+                    
         stmt.execute(sql);
         stmt2.execute(sql2);       
         resultSet = stmt.getResultSet();
@@ -1683,11 +1754,9 @@ public class SQL
         String maiido = formatter.format(date);
        
         
-        String querry = "vevoi_ertesites(?,?)";
         CallableStatement cstmt = conn.prepareCall("{call qualitydb.vevoi_ertesites(?,?) }");                                   //tárolt eljárást hívja meg
         ArrayList<String> felelosok = new ArrayList<String>();
         ArrayList<String> adatok = new ArrayList<String>();
-        
         for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
         {
             Date hatarido = formatter.parse(datatable.getRows().get(szamlalo).getString(1));
@@ -1695,13 +1764,38 @@ public class SQL
             cstmt.setString(1, hatarido2);
             cstmt.setString(2, maiido);
             cstmt.execute();
+            resultSet3 = cstmt.getResultSet();           
+            if(resultSet3.next())
+            {              
+                if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+                {
+                    if(datatable.getRows().get(szamlalo).getString(5).equals("Nem"))
+                    {
+                        felelosok.add(datatable.getRows().get(szamlalo).getString(0));
+                        adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                    }
+                }
+            }
+        }
+        
+        for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+        {
+            Date hatarido = formatter.parse(datatable2.getRows().get(szamlalo).getString(1));
+            String hatarido2 = formatter.format(hatarido);
+            cstmt.setString(1, hatarido2);
+            cstmt.setString(2, maiido);
+            cstmt.execute();
             resultSet3 = cstmt.getResultSet();
-            resultSet3.next();
-            System.out.println(resultSet3.getString(1));
-            if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+            if(resultSet3.next())
             {
-                felelosok.add(datatable.getRows().get(szamlalo).getString(0));
-                //adatok.add();
+                if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+                {
+                    if(datatable2.getRows().get(szamlalo).getString(5).equals("Nem"))
+                    {
+                        felelosok.add(datatable2.getRows().get(szamlalo).getString(0));
+                        adatok.add(datatable2.getRows().get(szamlalo).getString(2)+ ","+ datatable2.getRows().get(szamlalo).getString(3)+ ","+ datatable2.getRows().get(szamlalo).getString(4)+ ","+datatable2.getRows().get(szamlalo).getString(6));
+                    }
+                }
             }
         }
         
@@ -1721,17 +1815,23 @@ public class SQL
                 for(int szamlalo2 = 0; szamlalo2 < felelosexcel.getRows().size(); szamlalo2++)
                 {          
                     if(felelosok.get(szamlalo).equals(felelosexcel.getRows().get(szamlalo2).getString(0)))
-                    {
+                    {                       
+                        String[] adat = adatok.get(szamlalo).split(",");
                         Email emailkuldes = new Email();
-                        //emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
-                        //        felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3));
-                        System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " + felelosexcel.getRows().get(szamlalo2).getString(3));
+                        emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
+                               felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3), adat[0], adat[1], adat[2], adat[3]);
+                        System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " 
+                               + felelosexcel.getRows().get(szamlalo2).getString(3));
+                        String modosit = "update qualitydb.Vevoireklamacio_felelosok set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
+                        String modosit2 = "update qualitydb.Vevoireklamacio_detekt set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
+                        stmt3.executeUpdate(modosit);
+                        stmt3.executeUpdate(modosit2); 
                     }
                 }
             }
             
         }
-        
+        System.out.println("Lefutott az Email rész");
         resultSet.close();
         stmt.close();
         conn.close();
