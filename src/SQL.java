@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -1149,11 +1151,17 @@ public class SQL
         Statement stmt2 = null;
         Statement stmt3 = null;
         Statement stmt4 = null;
+        Statement stmt5 = null;
+        Statement stmt6 = null;
         DataTable datatable2 = new DataTable();
         DataTable datatable3 = new DataTable();
+        DataTable datatable4 = new DataTable();
+        DataTable datatable6 = new DataTable();
         ResultSet resultSet2;
         ResultSet resultSet3;
         ResultSet resultSet4;
+        ResultSet resultSet5;
+        ResultSet resultSet6;
         try 
         {
            try 
@@ -1171,10 +1179,14 @@ public class SQL
         stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt4 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt5 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt6 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sql = "";
         String sql2 = "";
         String sql3 = "";
         String sql4 = "";
+        String sql5 = "";
+        String sql6 = "";
 
         if(projekt.equals("-"))
         {
@@ -1204,7 +1216,7 @@ public class SQL
         
         sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
                 + "              Projekt, \n"
-                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"1\", \"0\")) as 'reklamáció', \n"
+                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"1\", \"0\")) as 'Reklamáció', \n"
                 + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"0\", \"1\")) as 'Visszajelzés'\n"
                 + "            from qualitydb.Vevoireklamacio_alapadat\n"
                 + "                where 3=3\n"
@@ -1212,15 +1224,33 @@ public class SQL
         
         sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
                                     "' and Datum <= '"+ datumig +"'";
+        sql5 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',            \n"
+                + "        sum(if(rek_vagy = 'Reklamáció' && Nyitva is null, 1,0)) as 'Nyitott reklamáció',\n"
+                + "        sum(if(rek_vagy = 'Reklamáció' && Nyitva is not null, 1,0)) as 'Lezárt reklamáció',\n"
+                + "        sum(if(rek_vagy = 'Visszajelzés' && Nyitva is null, 1,0)) as 'Nyitott visszajelzés',\n"
+                + "        sum(if(rek_vagy = 'Visszajelzés' && Nyitva is not null, 1,0)) as 'Lezárt visszajelzés'\n"
+                + "                from qualitydb.Vevoireklamacio_alapadat\n"
+                + "                    where 3=3\n"
+                + "                    group by Hónap order by Hónap asc";
+        
+        sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',            \n"
+                + "                cast(AVG(Nyitva) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                + "                from qualitydb.Vevoireklamacio_alapadat\n"
+                + "                    where 3=3\n"
+                + "                    group by Hónap order by Hónap asc";
         
         stmt.execute(sql);
         stmt2.execute(sql2);
         stmt3.execute(sql3);
         stmt4.execute(sql4);
+        stmt5.execute(sql5);
+        stmt6.execute(sql6);
         resultSet = stmt.getResultSet();
         resultSet2 = stmt2.getResultSet();
         resultSet3 = stmt3.getResultSet();
         resultSet4 = stmt4.getResultSet();
+        resultSet5 = stmt5.getResultSet();
+        resultSet6 = stmt6.getResultSet();
         
         ArrayList<String[]> adatok = new ArrayList<String[]>();
         ArrayList<String[]> minden = new ArrayList<String[]>();  
@@ -1257,9 +1287,13 @@ public class SQL
         sheet.setName("Diagrammok");
         sheet2.setName("Alapadatok");
         JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
-        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();     
+        JdbcAdapter jdbcAdapter3 = new JdbcAdapter();    
+        JdbcAdapter jdbcAdapter4 = new JdbcAdapter();   
+        JdbcAdapter jdbcAdapter6 = new JdbcAdapter();   
         jdbcAdapter2.fillDataTable(datatable2, resultSet2);
         jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        jdbcAdapter4.fillDataTable(datatable4, resultSet5);
+        jdbcAdapter6.fillDataTable(datatable6, resultSet6);
         
         sheet2.getRange().get("A" + 1).setText("ID");
         sheet2.getRange().get("B" + 1).setText("Dátum");
@@ -1485,8 +1519,8 @@ public class SQL
         sheet.getRange().get("A" + 11).setText("Október");
         sheet.getRange().get("A" + 12).setText("November");
         sheet.getRange().get("A" + 13).setText("December");
-        sheet.getRange().get("A" + 14).setText("Sum Rek.");
-        sheet.getRange().get("A" + 15).setText("Sum Vissz.");
+        sheet.getRange().get("A" + 14).setText("Átlag Rek.");
+        sheet.getRange().get("A" + 15).setText("Átlag Vissz.");
         
         sheet.getRange().get("B" + 2).setNumberValue(reklamacio_jan);
         sheet.getRange().get("C" + 2).setNumberValue(visszajelzes_jan);        
@@ -1514,12 +1548,17 @@ public class SQL
         sheet.getCellRange("C" + 13).setNumberValue(visszajelzes_dec);
         
         int sumrek = reklamacio_jan + reklamacio_feb + reklamacio_mar + reklamacio_apr + reklamacio_maj + reklamacio_jun + reklamacio_jul + reklamacio_aug + reklamacio_sze + reklamacio_okt +
-                reklamacio_nov + reklamacio_dec;
-        sheet.getCellRange("B" + 14).setNumberValue(sumrek);
+                reklamacio_nov + reklamacio_dec;        
         int sumvissza = visszajelzes_jan + visszajelzes_feb + visszajelzes_mar + visszajelzes_apr + visszajelzes_maj + visszajelzes_jun + visszajelzes_jul + visszajelzes_aug + visszajelzes_sze + visszajelzes_okt + 
                 visszajelzes_nov + visszajelzes_dec;
-        sheet.getCellRange("C" + 15).setNumberValue(sumvissza);
-        //createChartData(sheet);
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int month = localDate.getMonthValue();
+        Float atlagrek = (float) (sumrek / month);
+        Float atlagvissza = (float) (sumvissza/month);
+        sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
+        sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);
+               
         Chart chart = sheet.getCharts().add();
         chart.setDataRange(sheet.getCellRange("A1:C15"));
         chart.setSeriesDataFromRange(false);
@@ -1657,9 +1696,147 @@ public class SQL
         
         chart3.getLegend().setPosition(LegendPositionType.Top);
         
+        
+        /**********************************************Negyedik diagramm******************************************/
+        
+        sheet.getRange().get("R" + 1).setText("Hónap");
+        sheet.getRange().get("S" + 1).setText("Nyitott rek");
+        sheet.getRange().get("T" + 1).setText("Lezárt rek");
+        sheet.getRange().get("U" + 1).setText("Nyitott vissza");
+        sheet.getRange().get("V" + 1).setText("Lezárt vissza");
+        sheet.getRange().get("W" + 1).setText("Átlag nyitva");
+        
+        sheet.getRange().get("R" + 2).setText("Január");
+        sheet.getRange().get("R" + 3).setText("Február");
+        sheet.getRange().get("R" + 4).setText("Március");
+        sheet.getRange().get("R" + 5).setText("Április");
+        sheet.getRange().get("R" + 6).setText("Május");
+        sheet.getRange().get("R" + 7).setText("Június");
+        sheet.getRange().get("R" + 8).setText("Július");
+        sheet.getRange().get("R" + 9).setText("Augusztus");
+        sheet.getRange().get("R" + 10).setText("Szeptember");
+        sheet.getRange().get("R" + 11).setText("Október");
+        sheet.getRange().get("R" + 12).setText("November");
+        sheet.getRange().get("R" + 13).setText("December");
+        sheet.getRange().get("R" + 14).setText("Átlag");
+        
+        int cella3 = 2;
+        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
+        {          
+            sheet.getCellRange("S" + cella3).setNumberValue(Integer.parseInt(datatable4.getRows().get(szamlalo).getString(1)));
+            sheet.getCellRange("T" + cella3).setNumberValue(Integer.parseInt(datatable4.getRows().get(szamlalo).getString(2)));
+            sheet.getCellRange("U" + cella3).setNumberValue(Integer.parseInt(datatable4.getRows().get(szamlalo).getString(3)));
+            sheet.getCellRange("V" + cella3).setNumberValue(Integer.parseInt(datatable4.getRows().get(szamlalo).getString(4)));          
+            cella3++;
+        }
+        int cella4 = 2;
+        int sum = 0;
+        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
+        {         
+            sheet.getCellRange("W" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1)));           
+            cella4++;
+        }
+        
+        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
+        {         
+           sum += Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1));          
+        }
+        int atlag = sum / datatable4.getRows().size();
+        sheet.getCellRange("W14").setNumberValue(atlag);
+        
+        Chart chart4 = sheet.getCharts().add();
+        chart4.setDataRange(sheet.getCellRange("R1:V13"));
+        chart4.setSeriesDataFromRange(false);
+        
+        chart4.setLeftColumn(1);
+        chart4.setTopRow(73);
+        chart4.setRightColumn(16);
+        chart4.setBottomRow(93);
+        
+        chart4.setChartType(ExcelChartType.ColumnStacked);
+        
+        chart4.setChartTitle("Nyitott és lezárt visszajelzés és reklamáció");
+        chart4.getChartTitleArea().isBold(true);
+        chart4.getChartTitleArea().setSize(14);
+        chart4.getPrimaryCategoryAxis().setTitle("Hónapok");
+        chart4.getPrimaryCategoryAxis().getFont().isBold(true);
+        chart4.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+        chart4.getPrimaryValueAxis().setTitle("Összesen");
+        chart4.getPrimaryValueAxis().hasMajorGridLines(false);
+        chart4.getPrimaryValueAxis().setMinValue(0);
+        chart4.getPrimaryValueAxis().getTitleArea().isBold(true);
+        chart4.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+        
+        ChartSeries series4 = chart4.getSeries();
+        for (int i = 0;i < series4.size();i++)
+        {
+            ChartSerie cs4 = series4.get(i);
+            cs4.getFormat().getOptions().isVaryColor(true);
+            cs4.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+        }
+        
+        chart4.getLegend().setPosition(LegendPositionType.Top);
+        
+        /****************************************Ötödik diagramm*****************************************************/
+        
+        sheet.getRange().get("O" + 1).setText("Hónap");
+        sheet.getRange().get("P" + 1).setText("Átlag nyitva");
+        
+        sheet.getRange().get("O" + 2).setText("Január");
+        sheet.getRange().get("O" + 3).setText("Február");
+        sheet.getRange().get("O" + 4).setText("Március");
+        sheet.getRange().get("O" + 5).setText("Április");
+        sheet.getRange().get("O" + 6).setText("Május");
+        sheet.getRange().get("O" + 7).setText("Június");
+        sheet.getRange().get("O" + 8).setText("Július");
+        sheet.getRange().get("O" + 9).setText("Augusztus");
+        sheet.getRange().get("O" + 10).setText("Szeptember");
+        sheet.getRange().get("O" + 11).setText("Október");
+        sheet.getRange().get("O" + 12).setText("November");
+        sheet.getRange().get("O" + 13).setText("December");
+        sheet.getRange().get("O" + 14).setText("Átlag");
+        
+        cella4 = 2;
+        sum = 0;
+        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
+        {         
+            sheet.getCellRange("P" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1)));           
+            cella4++;
+        }
+        
+        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
+        {         
+           sum += Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1));          
+        }
+        atlag = sum / datatable4.getRows().size();
+        sheet.getCellRange("P14").setNumberValue(atlag);
+        
+        //Add a line chart to the worksheet
+        Chart chart5 = sheet.getCharts().add();
+        chart5.setChartTitle("Nyitott és lezárt visszajelzés és reklamáció");
+        chart5.setDataRange(sheet.getCellRange("R1:W14"));
+        chart5.setSeriesDataFromRange(false);
+ 
+        //Set position of the chart
+        chart5.setLeftColumn(1);
+        chart5.setTopRow(94);
+        chart5.setRightColumn(14);
+        chart5.setBottomRow(114);
+ 
+        //Apply different chart types to different data series
+        ChartSerie cs5 = (ChartSerie)chart5.getSeries().get(0);
+        cs5.setSerieType(ExcelChartType.ColumnClustered);
+        ChartSerie cs6 = (ChartSerie)chart5.getSeries().get(4);
+        cs6.setSerieType(ExcelChartType.LineMarkers);
+ 
+        //Add a secondary Y axis to the chart
+        cs6.setUsePrimaryAxis(false);
+        
+        
+        
         sheet.getAllocatedRange().autoFitColumns();
         sheet.getAllocatedRange().autoFitRows();       
-        sheet.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
         JFileChooser mentes_helye = new JFileChooser();
         mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
