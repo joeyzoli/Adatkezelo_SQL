@@ -10,6 +10,8 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -50,6 +52,8 @@ public class Foablak extends JFrame
 	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private Vevoi_reklamacio_lezaras vevoi_lezar;
 	private Vevoi_reklamacio_lekerdezes vevoi_leker;
+	private Vevoi_reklamacio_ujadat vevoi_ujadat;
+	private Retour retour;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -114,6 +118,7 @@ public class Foablak extends JFrame
 		setJMenuBar(menuBar);
 		
 		JMenu menu = new JMenu("Adatbevitel");
+		menu.setForeground(new Color(0, 0, 255));
 		menuBar.add(menu);
 		
 		JMenuItem gyartasi = new JMenuItem("Gyártási adtok");
@@ -144,11 +149,20 @@ public class Foablak extends JFrame
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
 		vevoi_lezaras.addActionListener(new PanelCsere_vevoi_lezaras());
 		menu.add(vevoi_lezaras);
+		
+		JMenuItem vevoi_ujadat = new JMenuItem("Vevői új adat");
+		vevoi_ujadat.addActionListener(new PanelCsere_vevoi_ujadat());
+		menu.add(vevoi_ujadat);
+		
+		JMenuItem retour = new JMenuItem("Retour");
+		retour.addActionListener(new PanelCsere_retour());
+		menu.add(retour);
 		menu.add(ujadat);
 		menu.add(adat_torles);
 		menu.add(torles);
 		
 		JMenu lekerdezes = new JMenu("Lekérdezés");
+		lekerdezes.setForeground(new Color(0, 153, 0));
 		menuBar.add(lekerdezes);
 		
 		JMenuItem easqas = new JMenuItem("EASQAS adatok");
@@ -208,7 +222,7 @@ public class Foablak extends JFrame
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		pack();
         setLocationRelativeTo(null);
-        //sorszamol();
+        sorszamol();
 
 	}
 	
@@ -365,12 +379,34 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_vevoi_ujadat implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            vevoi_ujadat = new Vevoi_reklamacio_ujadat();
+            JScrollPane ablak = new JScrollPane(vevoi_ujadat);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_vevoi_lekerdezes implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
             vevoi_leker = new Vevoi_reklamacio_lekerdezes();
             JScrollPane ablak = new JScrollPane(vevoi_leker);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_retour implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            retour = new Retour();
+            JScrollPane ablak = new JScrollPane(retour);
             setContentPane(ablak);
             pack();
          }
@@ -466,7 +502,7 @@ public class Foablak extends JFrame
             lekerdez.vevoi_email();
         }
     }
-	/*
+	
 	public void sorszamol()
 	{
 	    String hely = "c:\\Users\\kovacs.zoltan\\eclipse-workspace\\Adat kezelo\\src\\";
@@ -516,6 +552,6 @@ public class Foablak extends JFrame
             e.printStackTrace();
         }    
 	    
-	}*/
+	}
 	
 }

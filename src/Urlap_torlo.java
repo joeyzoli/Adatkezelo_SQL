@@ -40,5 +40,14 @@ public class Urlap_torlo
         hibaoka.setText("");
         hibaoka2.setText("");
     }
+	
+	public void urlaptorles_retour(JTextField datum, JTextField beerkezett, JTextField elteres, JTextField rma, JTextField megjegyzes)
+    {
+        datum.setText("");
+        beerkezett.setText("");
+        elteres.setText("");     
+        rma.setText("");
+        megjegyzes.setText("");
+    }
 
 }

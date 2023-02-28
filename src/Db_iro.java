@@ -511,6 +511,73 @@ public class Db_iro
         }
     }
 	
+	void iro_retour(String datum, String vevo, String tipus, String vagy, int beerkezett, int elteres, String rma, String megjegyzes)
+    {   
+        String[] koztes = tipus.split(",");                                          //bejövő Stringet darabolni kell
+        Connection conn = null;
+        Statement stmt = null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+        stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
+        String query1 = "INSERT INTO qualitydb.Retour (Datum, Vevo, Tipus, Vagy, Beerkezett, Elteres, RMA, Megjegyzes)" + 
+                        "VALUES ('" + datum +"', '"+ vevo +"', '"+koztes[0]+"', '" + vagy + "', '" + beerkezett +"', '" + elteres +"', '" + rma +"', '" + megjegyzes +"')"; 
+        stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása
+        
+        String sql = "select id from qualitydb.Retour where Datum = '" + datum + "' and Tipus = '" + koztes[0] + "'";
+        stmt.execute(sql);
+        ResultSet result = stmt.getResultSet();
+        int id = 0;
+        if(result.next())
+        {
+            id = Integer.parseInt(result.getString(1));
+        }       
+        Retour.id_mezo.setText(String.valueOf(id));
+        
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
 	void iro_muszaki(String tipus, String datum, String veas_nr, String avm_nr, String pcb_nr, String pcb_verzio, 
 	        String vegso, String prod, String stencil, String fa10, String fa21, String fa22, String fa23, String u4, String u42, String pcn, String remark)
 	{

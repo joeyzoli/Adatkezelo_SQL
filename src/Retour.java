@@ -1,0 +1,251 @@
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+
+public class Retour extends JPanel 
+{
+    static JTextField id_mezo;
+    private JTextField datum_mezo;
+    private JTextField beerkezett_mezo;
+    private JTextField elteres_mezo;
+    private JComboBox<String> projekt_box;
+    private JComboBox<String> cikk_box;
+    private JComboBox<String> javagy_box;
+    private JTextField rma_mezo;
+    private JTextField megjegyzes_mezo;
+    private JTextField hova_mezo;
+    private JTextField kiadas_mezo;
+    private JTextField felelos_mezo;
+    private JTextField teszt_mezo;
+    private JTextField felelos2_mezo;
+    private JTextField textField;
+    private JTextField felelos3_mezo;
+    private ComboBox combobox_tomb = new ComboBox();
+    private JTextField raktarra_mezo;
+    private JTextField textField_1;
+    private JTextField textField_2;
+
+    /**
+     * Create the panel.
+     */
+    public Retour() 
+    {
+        setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("Retour adatok");
+        lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 13));
+        lblNewLabel.setBounds(501, 11, 143, 24);
+        add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("ID");
+        lblNewLabel_1.setBounds(29, 49, 46, 14);
+        add(lblNewLabel_1);
+        
+        id_mezo = new JTextField();
+        id_mezo.setBounds(85, 46, 46, 20);
+        add(id_mezo);
+        id_mezo.setColumns(10);
+        
+        JButton id_keresgomb = new JButton("Keresés");
+        id_keresgomb.setBounds(141, 45, 89, 23);
+        add(id_keresgomb);
+        
+        JLabel lblNewLabel_2 = new JLabel("Beérkezés dátuma");
+        lblNewLabel_2.setBounds(29, 92, 112, 14);
+        add(lblNewLabel_2);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.setBounds(151, 89, 86, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_3 = new JLabel("Vevő");
+        lblNewLabel_3.setBounds(271, 92, 35, 14);
+        add(lblNewLabel_3);
+        
+        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                      //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
+        projekt_box.setBounds(316, 88, 143, 22);
+        add(projekt_box);
+        
+        JLabel lblNewLabel_4 = new JLabel("Típus");
+        lblNewLabel_4.setBounds(501, 92, 46, 14);
+        add(lblNewLabel_4);
+        
+        cikk_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_cikk));                         //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        cikk_box.setBounds(557, 88, 261, 22);
+        add(cikk_box);
+        
+        String[] vagy = {"Javítás", "Átmunkálás"};
+        javagy_box = new JComboBox<String>(vagy);                       //vagy
+        javagy_box.setBounds(877, 88, 132, 22);
+        add(javagy_box);
+        
+        JLabel lblNewLabel_5 = new JLabel("Beérkezett mennyiség");
+        lblNewLabel_5.setBounds(29, 144, 132, 14);
+        add(lblNewLabel_5);
+        
+        beerkezett_mezo = new JTextField();
+        beerkezett_mezo.setBounds(166, 141, 46, 20);
+        add(beerkezett_mezo);
+        beerkezett_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_6 = new JLabel("Eltérés");
+        lblNewLabel_6.setBounds(222, 144, 46, 14);
+        add(lblNewLabel_6);
+        
+        elteres_mezo = new JTextField();
+        elteres_mezo.setBounds(278, 141, 46, 20);
+        elteres_mezo.setText("0");
+        add(elteres_mezo);
+        elteres_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_7 = new JLabel("RMA, RDP vagy reklamációs szám");
+        lblNewLabel_7.setBounds(348, 144, 207, 14);
+        add(lblNewLabel_7);
+        
+        rma_mezo = new JTextField();
+        rma_mezo.setBounds(557, 141, 86, 20);
+        add(rma_mezo);
+        rma_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_8 = new JLabel("Megjegyzés");
+        lblNewLabel_8.setBounds(666, 144, 84, 14);
+        add(lblNewLabel_8);
+        
+        megjegyzes_mezo = new JTextField();
+        megjegyzes_mezo.setBounds(744, 141, 428, 20);
+        add(megjegyzes_mezo);
+        megjegyzes_mezo.setColumns(10);
+        
+        JButton mentesgomb = new JButton("Mentés");
+        mentesgomb.addActionListener(new Mentes());
+        mentesgomb.setBounds(505, 200, 89, 23);
+        add(mentesgomb);
+        
+        JLabel lblNewLabel_9 = new JLabel("Gépes/Kézi/Szilárd");
+        lblNewLabel_9.setBounds(29, 253, 112, 14);
+        add(lblNewLabel_9);
+        
+        hova_mezo = new JTextField();
+        hova_mezo.setBounds(151, 250, 86, 20);
+        add(hova_mezo);
+        hova_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_10 = new JLabel("Kiadás dátuma");
+        lblNewLabel_10.setBounds(278, 253, 89, 14);
+        add(lblNewLabel_10);
+        
+        kiadas_mezo = new JTextField();
+        kiadas_mezo.setBounds(377, 250, 86, 20);
+        add(kiadas_mezo);
+        kiadas_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_11 = new JLabel("Felelős");
+        lblNewLabel_11.setBounds(501, 253, 46, 14);
+        add(lblNewLabel_11);
+        
+        felelos_mezo = new JTextField();
+        felelos_mezo.setBounds(557, 250, 143, 20);
+        add(felelos_mezo);
+        felelos_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_12 = new JLabel("Tesztre átadva dátuma");
+        lblNewLabel_12.setBounds(29, 313, 132, 14);
+        add(lblNewLabel_12);
+        
+        teszt_mezo = new JTextField();
+        teszt_mezo.setBounds(166, 310, 86, 20);
+        add(teszt_mezo);
+        teszt_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_13 = new JLabel("Felelős");
+        lblNewLabel_13.setBounds(303, 313, 46, 14);
+        add(lblNewLabel_13);
+        
+        felelos2_mezo = new JTextField();
+        felelos2_mezo.setBounds(377, 310, 132, 20);
+        add(felelos2_mezo);
+        felelos2_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_14 = new JLabel("Végellenőrzésre átadva dátuma");
+        lblNewLabel_14.setBounds(29, 370, 183, 14);
+        add(lblNewLabel_14);
+        
+        textField = new JTextField();
+        textField.setBounds(222, 367, 86, 20);
+        add(textField);
+        textField.setColumns(10);
+        
+        JLabel lblNewLabel_15 = new JLabel("Felelős");
+        lblNewLabel_15.setBounds(377, 370, 46, 14);
+        add(lblNewLabel_15);
+        
+        felelos3_mezo = new JTextField();
+        felelos3_mezo.setBounds(433, 367, 132, 20);
+        add(felelos3_mezo);
+        felelos3_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_16 = new JLabel("Ratárra adás dátuma");
+        lblNewLabel_16.setBounds(29, 418, 118, 14);
+        add(lblNewLabel_16);
+        
+        raktarra_mezo = new JTextField();
+        raktarra_mezo.setBounds(166, 415, 86, 20);
+        add(raktarra_mezo);
+        raktarra_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_17 = new JLabel("Raktárra adott db szám");
+        lblNewLabel_17.setBounds(278, 418, 145, 14);
+        add(lblNewLabel_17);
+        
+        textField_1 = new JTextField();
+        textField_1.setBounds(433, 415, 46, 20);
+        add(textField_1);
+        textField_1.setColumns(10);
+        
+        JLabel lblNewLabel_18 = new JLabel("Selejt");
+        lblNewLabel_18.setBounds(522, 418, 46, 14);
+        add(lblNewLabel_18);
+        
+        textField_2 = new JTextField();
+        textField_2.setBounds(578, 415, 46, 20);
+        add(textField_2);
+        textField_2.setColumns(10);
+        
+        JButton folyamat_gomb = new JButton("Folyamat felvisz");
+        folyamat_gomb.setBounds(505, 497, 119, 23);
+        add(folyamat_gomb);
+
+    }
+    
+    class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Db_iro iras = new Db_iro();
+                iras.iro_retour(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(cikk_box.getSelectedItem()), String.valueOf(javagy_box.getSelectedItem()), Integer.parseInt(beerkezett_mezo.getText()),
+                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText());
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+                Urlap_torlo torles = new Urlap_torlo();
+                torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo);
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+
+}

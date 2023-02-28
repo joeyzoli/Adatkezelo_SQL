@@ -1744,95 +1744,28 @@ public class SQL
         int atlag = sum / datatable4.getRows().size();
         sheet.getCellRange("W14").setNumberValue(atlag);
         
-        Chart chart4 = sheet.getCharts().add();
-        chart4.setDataRange(sheet.getCellRange("R1:V13"));
-        chart4.setSeriesDataFromRange(false);
-        
-        chart4.setLeftColumn(1);
-        chart4.setTopRow(73);
-        chart4.setRightColumn(16);
-        chart4.setBottomRow(93);
-        
-        chart4.setChartType(ExcelChartType.ColumnStacked);
-        
-        chart4.setChartTitle("Nyitott és lezárt visszajelzés és reklamáció");
-        chart4.getChartTitleArea().isBold(true);
-        chart4.getChartTitleArea().setSize(14);
-        chart4.getPrimaryCategoryAxis().setTitle("Hónapok");
-        chart4.getPrimaryCategoryAxis().getFont().isBold(true);
-        chart4.getPrimaryCategoryAxis().getTitleArea().isBold(true);
-        chart4.getPrimaryValueAxis().setTitle("Összesen");
-        chart4.getPrimaryValueAxis().hasMajorGridLines(false);
-        chart4.getPrimaryValueAxis().setMinValue(0);
-        chart4.getPrimaryValueAxis().getTitleArea().isBold(true);
-        chart4.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
-        
-        ChartSeries series4 = chart4.getSeries();
-        for (int i = 0;i < series4.size();i++)
-        {
-            ChartSerie cs4 = series4.get(i);
-            cs4.getFormat().getOptions().isVaryColor(true);
-            cs4.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
-        }
-        
-        chart4.getLegend().setPosition(LegendPositionType.Top);
-        
-        /****************************************Ötödik diagramm*****************************************************/
-        
-        sheet.getRange().get("O" + 1).setText("Hónap");
-        sheet.getRange().get("P" + 1).setText("Átlag nyitva");
-        
-        sheet.getRange().get("O" + 2).setText("Január");
-        sheet.getRange().get("O" + 3).setText("Február");
-        sheet.getRange().get("O" + 4).setText("Március");
-        sheet.getRange().get("O" + 5).setText("Április");
-        sheet.getRange().get("O" + 6).setText("Május");
-        sheet.getRange().get("O" + 7).setText("Június");
-        sheet.getRange().get("O" + 8).setText("Július");
-        sheet.getRange().get("O" + 9).setText("Augusztus");
-        sheet.getRange().get("O" + 10).setText("Szeptember");
-        sheet.getRange().get("O" + 11).setText("Október");
-        sheet.getRange().get("O" + 12).setText("November");
-        sheet.getRange().get("O" + 13).setText("December");
-        sheet.getRange().get("O" + 14).setText("Átlag");
-        
-        cella4 = 2;
-        sum = 0;
-        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
-        {         
-            sheet.getCellRange("P" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1)));           
-            cella4++;
-        }
-        
-        for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
-        {         
-           sum += Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1));          
-        }
-        atlag = sum / datatable4.getRows().size();
-        sheet.getCellRange("P14").setNumberValue(atlag);
-        
-        //Add a line chart to the worksheet
         Chart chart5 = sheet.getCharts().add();
         chart5.setChartTitle("Nyitott és lezárt visszajelzés és reklamáció");
         chart5.setDataRange(sheet.getCellRange("R1:W14"));
         chart5.setSeriesDataFromRange(false);
+        chart5.getPrimaryValueAxis().setTitle("Reklamáció db szám");
+        chart5.getSecondaryValueAxis().setTitle("Átlag nyitva nap");
  
         //Set position of the chart
         chart5.setLeftColumn(1);
-        chart5.setTopRow(94);
+        chart5.setTopRow(73);
         chart5.setRightColumn(14);
-        chart5.setBottomRow(114);
+        chart5.setBottomRow(93);
  
         //Apply different chart types to different data series
         ChartSerie cs5 = (ChartSerie)chart5.getSeries().get(0);
-        cs5.setSerieType(ExcelChartType.ColumnClustered);
+        cs5.setSerieType(ExcelChartType.ColumnStacked);
         ChartSerie cs6 = (ChartSerie)chart5.getSeries().get(4);
         cs6.setSerieType(ExcelChartType.LineMarkers);
  
         //Add a secondary Y axis to the chart
         cs6.setUsePrimaryAxis(false);
-        
-        
+ 
         
         sheet.getAllocatedRange().autoFitColumns();
         sheet.getAllocatedRange().autoFitRows();       
