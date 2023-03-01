@@ -5,33 +5,38 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 public class Retour extends JPanel 
 {
     static JTextField id_mezo;
-    private JTextField datum_mezo;
-    private JTextField beerkezett_mezo;
-    private JTextField elteres_mezo;
+    static JTextField datum_mezo;
+    static JTextField beerkezett_mezo;
+    static JTextField elteres_mezo;
     private JComboBox<String> projekt_box;
     private JComboBox<String> cikk_box;
     private JComboBox<String> javagy_box;
-    private JTextField rma_mezo;
-    private JTextField megjegyzes_mezo;
-    private JTextField hova_mezo;
-    private JTextField kiadas_mezo;
-    private JTextField felelos_mezo;
-    private JTextField teszt_mezo;
-    private JTextField felelos2_mezo;
-    private JTextField textField;
-    private JTextField felelos3_mezo;
+    static JTextField rma_mezo;
+    static JTextField megjegyzes_mezo;
+    static JTextField hova_mezo;
+    static JTextField kiadas_mezo;
+    static JTextField felelos_mezo;
+    static JTextField teszt_mezo;
+    static JTextField felelos2_mezo;
+    static JTextField veg_mezo;
+    static JTextField felelos3_mezo;
     private ComboBox combobox_tomb = new ComboBox();
-    private JTextField raktarra_mezo;
-    private JTextField textField_1;
-    private JTextField textField_2;
+    static JTextField raktarra_mezo;
+    static JTextField raktarradb_mezo;
+    static JTextField selejt_mezo;
+    private ArrayList<String> kivalasztott;
 
     /**
      * Create the panel.
@@ -51,10 +56,12 @@ public class Retour extends JPanel
         
         id_mezo = new JTextField();
         id_mezo.setBounds(85, 46, 46, 20);
+        id_mezo.addKeyListener(new Enter());
         add(id_mezo);
         id_mezo.setColumns(10);
         
         JButton id_keresgomb = new JButton("Keresés");
+        id_keresgomb.addActionListener(new ID());
         id_keresgomb.setBounds(141, 45, 89, 23);
         add(id_keresgomb);
         
@@ -73,6 +80,7 @@ public class Retour extends JPanel
         
         projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                      //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
         projekt_box.setBounds(316, 88, 143, 22);
+        projekt_box.addActionListener(new Kivalaszt());
         add(projekt_box);
         
         JLabel lblNewLabel_4 = new JLabel("Típus");
@@ -179,10 +187,10 @@ public class Retour extends JPanel
         lblNewLabel_14.setBounds(29, 370, 183, 14);
         add(lblNewLabel_14);
         
-        textField = new JTextField();
-        textField.setBounds(222, 367, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        veg_mezo = new JTextField();
+        veg_mezo.setBounds(222, 367, 86, 20);
+        add(veg_mezo);
+        veg_mezo.setColumns(10);
         
         JLabel lblNewLabel_15 = new JLabel("Felelős");
         lblNewLabel_15.setBounds(377, 370, 46, 14);
@@ -206,23 +214,26 @@ public class Retour extends JPanel
         lblNewLabel_17.setBounds(278, 418, 145, 14);
         add(lblNewLabel_17);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(433, 415, 46, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
+        raktarradb_mezo = new JTextField();
+        raktarradb_mezo.setBounds(433, 415, 46, 20);
+        add(raktarradb_mezo);
+        raktarradb_mezo.setColumns(10);
         
         JLabel lblNewLabel_18 = new JLabel("Selejt");
         lblNewLabel_18.setBounds(522, 418, 46, 14);
         add(lblNewLabel_18);
         
-        textField_2 = new JTextField();
-        textField_2.setBounds(578, 415, 46, 20);
-        add(textField_2);
-        textField_2.setColumns(10);
+        selejt_mezo = new JTextField();
+        selejt_mezo.setBounds(578, 415, 46, 20);
+        add(selejt_mezo);
+        selejt_mezo.setColumns(10);
         
         JButton folyamat_gomb = new JButton("Folyamat felvisz");
+        folyamat_gomb.addActionListener(new Folyamatok());
         folyamat_gomb.setBounds(505, 497, 119, 23);
         add(folyamat_gomb);
+        
+        kivalasztott = new ArrayList<String>();
 
     }
     
@@ -237,8 +248,151 @@ public class Retour extends JPanel
                         Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText());
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
                 Urlap_torlo torles = new Urlap_torlo();
-                torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo);
+                torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo, teszt_mezo, felelos2_mezo, veg_mezo, felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo);
             }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Folyamatok implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Db_iro iras = new Db_iro();
+                if(hova_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Hiányzó adat!! \n", "Hiba üzenet", 2);
+                }
+                else
+                {
+                    String sql = "UPDATE qualitydb.Retour set Hova = '" + hova_mezo.getText() +"', Hova_datum = '" + kiadas_mezo.getText() +"', Hova_felelos = '" + felelos_mezo.getText() +"' where id = '" + id_mezo.getText() +"'"; 
+                    iras.iro_retour_ido(sql);
+                    if(teszt_mezo.getText().equals(""))
+                    {
+                        
+                    }
+                    else
+                    {
+                        String sql2 = "UPDATE qualitydb.Retour set Teszt_datum = '" + teszt_mezo.getText() +"', Teszt_felelos = '" + felelos2_mezo.getText() +"' where id = '" + id_mezo.getText() +"'"; 
+                        iras.iro_retour_ido(sql2);
+                    }
+                    if(veg_mezo.getText().equals(""))
+                    {
+                        
+                    }
+                    else
+                    {
+                        String sql2 = "UPDATE qualitydb.Retour set Vegell_datum = '" + veg_mezo.getText() +"', Vegell_felelos = '" + felelos3_mezo.getText() +"' where id = '" + id_mezo.getText() +"'"; 
+                        iras.iro_retour_ido(sql2);
+                    }
+                    if(raktarra_mezo.getText().equals(""))
+                    {
+                        
+                    }
+                    else
+                    {
+                        String sql2 = "UPDATE qualitydb.Retour set raktar_datum = '" + raktarra_mezo.getText() +"', Raktar_db = '" + raktarradb_mezo.getText() +"', Selejt = '" + selejt_mezo.getText() +"'"
+                                + " where id = '" + id_mezo.getText() +"'"; 
+                        iras.iro_retour_ido(sql2);
+                    }
+                }
+                Urlap_torlo torles = new Urlap_torlo();
+                torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo, teszt_mezo, felelos2_mezo, veg_mezo, felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo);
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class ID implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                SQL visszair = new SQL();
+                visszair.retour_vissza(id_mezo.getText());
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            try 
+            {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    SQL visszair = new SQL();
+                    visszair.retour_vissza(id_mezo.getText());
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
+    
+    class Kivalaszt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                DefaultComboBoxModel<String> model;
+                String keresett = String.valueOf(projekt_box.getSelectedItem());
+                
+                    for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
+                    {
+                        if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].contains(keresett))
+                        {
+                            kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
+                        }
+                    }
+                    
+                    String[] ujmodell = new String[kivalasztott.size()];
+                    for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
+                    {
+                        ujmodell[szamlalo] = kivalasztott.get(szamlalo);
+                    }
+                    model = new DefaultComboBoxModel<>(ujmodell);
+                
+                cikk_box.setModel(model);
+                kivalasztott.clear();
+            } 
             catch (Exception e1) 
             {              
                 e1.printStackTrace();

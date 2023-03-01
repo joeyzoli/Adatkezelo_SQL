@@ -1990,6 +1990,121 @@ public class SQL
         }
     }
 	
+	public void retour_vissza(String id)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String sajat = "SELECT * FROM  qualitydb.Retour where ID = '"+ id +"'";         
+        stmt.execute(sajat);
+        resultSet = stmt.getResultSet();
+        
+        if(resultSet.next())
+        {
+            String[] datum = resultSet.getString(2).split(" ");
+            String[] datum2 = new String[2];        //resultSet.getString(11).split(" ");
+            String[] datum3 = new String[2];        //resultSet.getString(13).split(" ");
+            String[] datum4 = new String[2];        //resultSet.getString(15).split(" ");
+            String[] datum5 = new String[2];        //resultSet.getString(17).split(" ");
+            if(resultSet.getString(11) != null)
+            {
+                datum2 =resultSet.getString(11).split(" ");
+            }
+            else
+            {
+                datum2[0] = "";
+                datum2[1] = "";
+            }
+            if(resultSet.getString(13) != null)
+            {
+                datum3 =resultSet.getString(11).split(" ");
+            }
+            else
+            {
+                datum3[0] = "";
+                datum3[1] = "";
+            }
+            if(resultSet.getString(15) != null)
+            {
+                datum4 =resultSet.getString(11).split(" ");
+            }
+            else
+            {
+                datum4[0] = "";
+                datum4[1] = "";
+            }
+            if(resultSet.getString(17) != null)
+            {
+                datum5 =resultSet.getString(11).split(" ");
+            }
+            else
+            {
+                datum5[0] = "";
+                datum5[1] = "";
+            }
+            Retour.datum_mezo.setText(datum[0]);
+            Retour.beerkezett_mezo.setText(resultSet.getString(6));
+            Retour.elteres_mezo.setText(resultSet.getString(7));
+            Retour.rma_mezo.setText(resultSet.getString(8));
+            Retour.megjegyzes_mezo.setText(resultSet.getString(9));
+            Retour.hova_mezo.setText(resultSet.getString(10));
+            Retour.kiadas_mezo.setText(datum2[0]);
+            Retour.felelos_mezo.setText(resultSet.getString(12));
+            Retour.teszt_mezo.setText(datum3[0]);
+            Retour.felelos2_mezo.setText(resultSet.getString(14));
+            Retour.veg_mezo.setText(datum4[0]);
+            Retour.felelos3_mezo.setText(resultSet.getString(16));
+            Retour.raktarra_mezo.setText(datum5[0]);
+            Retour.raktarradb_mezo.setText(resultSet.getString(18));
+            Retour.selejt_mezo.setText(resultSet.getString(19));
+        }
+       
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
 	public void hitlista(String projekt, String cikk, String datumtol, String datumig, String poz)
     {
         Connection conn = null;
@@ -2180,6 +2295,229 @@ public class SQL
               se.printStackTrace();
             }  
         }   
+    }
+	
+	public void lekerdez_retour(String datumtol, String datumig, String id)
+    {
+    
+        String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
+        String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
+        String userName = "veasquality";                                    //fehasználónév
+        String password = "kg6T$kd14TWbs9&gd";                              //jelszó
+        Statement stmt = null;
+        try 
+        {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
+            stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql = "";       //"select * from qualitydb.Retour where ";
+            if(id.equals(""))
+            {
+                sql = "select * from qualitydb.Retour where Datum >= '"+ datumtol + "' and Datum <= '"+ datumig + "'";
+            }
+            else
+            {
+                sql = "select * from qualitydb.Retour where id = '"+ id + "'";
+            }
+                
+            stmt.execute(sql);
+            //String sql = "select * from " + DB;
+            ResultSet resultSet = stmt.getResultSet();
+            
+            Retour_lekerdez.table.setModel(buildTableModel(resultSet));
+
+            resultSet.close();
+            stmt.close();
+            connection.close();
+            
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
+	
+	public void retour_excel(String datumtol, String datumig, String id)
+    {
+    
+        String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
+        String url = "jdbc:mysql://172.20.22.29";                           //adatbázis IP címe
+        String userName = "veasquality";                                    //fehasználónév
+        String password = "kg6T$kd14TWbs9&gd";                              //jelszó
+        Statement stmt = null;
+        Statement stmt2 = null;
+        DataTable datatable = new DataTable();
+        ResultSet resultset2 = null;
+        try 
+        {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
+            stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt2 = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            
+            String sql = "select Vevo,\n"
+                    + " sum(Beerkezett),\n"
+                    + " sum(Raktar_db),\n"
+                    + " sum(Selejt)\n"
+                    + " from qualitydb.Retour\n"
+                    + " where Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"'\n"
+                    + " group by Vevo";
+           
+            stmt.execute(sql);
+            ResultSet resultSet = stmt.getResultSet();
+            
+            Workbook workbook = new Workbook();
+            Worksheet sheet = workbook.getWorksheets().get(0);         
+            sheet.setName("Diagrammok");           
+            JdbcAdapter jdbcAdapter = new JdbcAdapter();
+            
+            /***************************************************első diagramm*************************************/
+            
+            jdbcAdapter.fillDataTable(datatable, resultSet);
+            sheet.getRange().get("A" + 1).setText("Projekt");
+            sheet.getRange().get("B" + 1).setText("Selejt");
+            sheet.getRange().get("C" + 1).setText("Raktárra adva");
+            sheet.getRange().get("D" + 1).setText("Beérkezett");
+            
+            int cella = 2;
+            for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+            {          
+                sheet.getRange().get("A" + cella).setText(datatable.getRows().get(szamlalo).getString(0));
+                sheet.getCellRange("B" + cella).setNumberValue(Integer.parseInt(datatable.getRows().get(szamlalo).getString(3)));
+                sheet.getCellRange("C" + cella).setNumberValue(Integer.parseInt(datatable.getRows().get(szamlalo).getString(2)));
+                sheet.getCellRange("D" + cella).setNumberValue(Integer.parseInt(datatable.getRows().get(szamlalo).getString(1)));                         
+                cella++;
+            }
+            
+            Chart chart = sheet.getCharts().add();
+            chart.setDataRange(sheet.getCellRange("A1:D" +cella));
+            chart.setSeriesDataFromRange(false);
+            
+            chart.setLeftColumn(1);
+            chart.setTopRow(10);
+            chart.setRightColumn(16);
+            chart.setBottomRow(30);
+            
+            chart.setChartType(ExcelChartType.Column3DClustered);
+            chart.setChartType(ExcelChartType.Column3D);
+            
+            chart.setChartTitle("Retour darabok");
+            chart.getChartTitleArea().isBold(true);
+            chart.getChartTitleArea().setSize(14);
+            chart.getPrimaryCategoryAxis().setTitle("Projektek");
+            chart.getPrimaryCategoryAxis().getFont().isBold(true);
+            chart.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+            chart.getPrimaryValueAxis().setTitle("Összesen");
+            chart.getPrimaryValueAxis().hasMajorGridLines(false);
+            chart.getPrimaryValueAxis().setMinValue(0);
+            chart.getPrimaryValueAxis().getTitleArea().isBold(true);
+            chart.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+            
+            ChartSeries series = chart.getSeries();
+            for (int i = 0;i < series.size();i++)
+            {
+                ChartSerie cs = series.get(i);
+                cs.getFormat().getOptions().isVaryColor(true);
+                cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+            }
+            
+            chart.getLegend().setPosition(LegendPositionType.Top);
+            
+            /********************************************Második diagramm*************************************************/
+            
+            String sql2 = "select Vevo,\n"
+                    + "sum(Beerkezett),\n"
+                    + "AVG(if(Raktar_datum is null,DATEDIFF(now(), Datum),DATEDIFF(Raktar_datum, Datum))) AS 'Kulonbseg'       \n"
+                    + "from qualitydb.Retour\n"
+                    + "where 3 = 3\n"
+                    + "group by Vevo";
+            stmt2.execute(sql2);
+            resultset2 = stmt2.getResultSet();
+            sheet.getRange().get("G" + 1).setText("Projekt");
+            sheet.getRange().get("H" + 1).setText("Sum beérkezett");
+            sheet.getRange().get("I" + 1).setText("Üzemben átlag");
+            
+            int cella2 = 2;
+            while(resultset2.next())
+            {   
+                sheet.getRange().get("G" + cella2).setText(resultset2.getString(1));
+                sheet.getCellRange("H" + cella2).setNumberValue(Integer.parseInt(resultset2.getString(2)));
+                String[] atlag = resultset2.getString(3).split("\\.");
+                sheet.getCellRange("I" + cella2).setNumberValue(Integer.parseInt(atlag[0]));
+                cella2++;
+            }
+            
+            Chart chart5 = sheet.getCharts().add();
+            chart5.setChartTitle("VEAS-ban eltöltött napok átlaga a retourok esetében \n"
+                    + "");
+            chart5.setDataRange(sheet.getCellRange("G1:I" + cella2));
+            chart5.setSeriesDataFromRange(false);
+            chart5.getPrimaryValueAxis().setTitle("Retour db szám");
+            chart5.getSecondaryValueAxis().setTitle("Üzemben töltött átlag");
+     
+            //Set position of the chart
+            chart5.setLeftColumn(1);
+            chart5.setTopRow(31);
+            chart5.setRightColumn(18);
+            chart5.setBottomRow(51);
+     
+            //Apply different chart types to different data series
+            ChartSerie cs5 = (ChartSerie)chart5.getSeries().get(0);
+            cs5.setSerieType(ExcelChartType.ColumnStacked);
+            ChartSerie cs6 = (ChartSerie)chart5.getSeries().get(1);
+            cs6.setSerieType(ExcelChartType.LineMarkers);
+     
+            //Add a secondary Y axis to the chart
+            cs6.setUsePrimaryAxis(false);
+            
+            JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            mentes_helye.showOpenDialog(mentes_helye);
+            File fajl = mentes_helye.getSelectedFile();
+            //System.out.println(fajl.getAbsolutePath());
+            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);          
+            
+            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }
+                workbook2.setActiveSheet(0);
+                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                workbook2.write(output);
+                output.close();
+            }
+            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+                      
+            resultSet.close();
+            stmt.close();
+            connection.close();
+            
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
     }
 	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 

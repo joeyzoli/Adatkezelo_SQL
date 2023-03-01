@@ -10,8 +10,6 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,6 +52,7 @@ public class Foablak extends JFrame
 	private Vevoi_reklamacio_lekerdezes vevoi_leker;
 	private Vevoi_reklamacio_ujadat vevoi_ujadat;
 	private Retour retour;
+	private Retour_lekerdez retour_lekerdez;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -183,6 +182,10 @@ public class Foablak extends JFrame
 		JMenuItem hitlista = new JMenuItem("Hitlista lekérdezés");
 		hitlista.addActionListener(new PanelCsere_hitlista());
 		lekerdezes.add(hitlista);
+		
+		JMenuItem retour_lekerdezes = new JMenuItem("Retour");
+		retour_lekerdezes.addActionListener(new PanelCsere_retour_lekerdez());
+		lekerdezes.add(retour_lekerdezes);
 		/*
 		JMenu mnNewMenu = new JMenu("Műszaki");
 		menuBar.add(mnNewMenu);
@@ -222,7 +225,7 @@ public class Foablak extends JFrame
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		pack();
         setLocationRelativeTo(null);
-        sorszamol();
+        //sorszamol();
 
 	}
 	
@@ -412,6 +415,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_retour_lekerdez implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            retour_lekerdez = new Retour_lekerdez();
+            JScrollPane ablak = new JScrollPane(retour_lekerdez);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -502,7 +516,7 @@ public class Foablak extends JFrame
             lekerdez.vevoi_email();
         }
     }
-	
+	/*
 	public void sorszamol()
 	{
 	    String hely = "c:\\Users\\kovacs.zoltan\\eclipse-workspace\\Adat kezelo\\src\\";
@@ -552,6 +566,6 @@ public class Foablak extends JFrame
             e.printStackTrace();
         }    
 	    
-	}
+	}*/
 	
 }

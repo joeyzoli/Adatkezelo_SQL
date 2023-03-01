@@ -41,13 +41,24 @@ public class Urlap_torlo
         hibaoka2.setText("");
     }
 	
-	public void urlaptorles_retour(JTextField datum, JTextField beerkezett, JTextField elteres, JTextField rma, JTextField megjegyzes)
+	public void urlaptorles_retour(JTextField datum, JTextField beerkezett, JTextField elteres, JTextField rma, JTextField megjegyzes, JTextField hovamezo, JTextField hovadatum, JTextField hovafelelos, JTextField tesztdatum,
+	        JTextField tesztfelelos, JTextField vegdatum, JTextField vegfelelos, JTextField rakdatum, JTextField rakdb, JTextField selejt)
     {
         datum.setText("");
         beerkezett.setText("");
         elteres.setText("");     
         rma.setText("");
         megjegyzes.setText("");
+        hovamezo.setText("");
+        hovadatum.setText("");
+        hovafelelos.setText("");
+        tesztdatum.setText("");
+        tesztfelelos.setText("");
+        vegdatum.setText("");
+        vegfelelos.setText("");
+        rakdatum.setText("");
+        rakdb.setText("");
+        selejt.setText("");
     }
 
 }
