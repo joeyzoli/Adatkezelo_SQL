@@ -135,6 +135,8 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         hibaleiras_mezo = new JTextArea();
         hibaleiras_mezo.setBounds(323, 134, 274, 59);
+        hibaleiras_mezo.setLineWrap(true);
+        hibaleiras_mezo.setWrapStyleWord(true);
         add(hibaleiras_mezo);
         
         JLabel lblNewLabel_8 = new JLabel("Gyártás időpontja");
@@ -279,6 +281,8 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         intezkedes_elo = new JTextArea();
         intezkedes_elo.setBounds(180, 521, 215, 59);
+        intezkedes_elo.setLineWrap(true);
+        intezkedes_elo.setWrapStyleWord(true);
         add(intezkedes_elo);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
@@ -318,6 +322,8 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         
         intezkedes_det = new JTextArea();
         intezkedes_det.setBounds(180, 646, 215, 59);
+        intezkedes_det.setLineWrap(true);
+        intezkedes_det.setWrapStyleWord(true);
         add(intezkedes_det);
         
         JLabel lblNewLabel_21 = new JLabel("Felelős");

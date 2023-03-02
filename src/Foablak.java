@@ -33,7 +33,7 @@ public class Foablak extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 	static Foablak frame;
-	private static JPanel contentPane;
+	static JPanel contentPane;
 	private Gyartasi_adatok adatok;
 	private Uj_alapadat ujadat;
 	private EASQAS_adatok easqas;
@@ -53,6 +53,7 @@ public class Foablak extends JFrame
 	private Vevoi_reklamacio_ujadat vevoi_ujadat;
 	private Retour retour;
 	private Retour_lekerdez retour_lekerdez;
+	private Teszt_kezdes teszt_kezd;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -198,6 +199,17 @@ public class Foablak extends JFrame
 		adatleker_menu.addActionListener(new PanelCsere_muszaki_leker());
 		mnNewMenu.add(adatleker_menu);
 		*/
+		
+		JMenu vizsga = new JMenu("Vizsga");
+		vizsga.setForeground(new Color(255, 140, 0));
+		menuBar.add(vizsga);
+		
+		JMenuItem vizsga_teszt = new JMenuItem("Teszt");
+		vizsga_teszt.addActionListener(new PanelCsere_teszt_kezd());
+		vizsga.add(vizsga_teszt);
+		
+		JMenuItem vizsga_pontok = new JMenuItem("Pontok");
+		vizsga.add(vizsga_pontok);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -426,6 +438,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_teszt_kezd implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            teszt_kezd = new Teszt_kezdes();
+            JScrollPane ablak = new JScrollPane(teszt_kezd);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -437,6 +460,12 @@ public class Foablak extends JFrame
 		 }
 	}
 	
+	void csere(JPanel panel)
+	{	    
+        JScrollPane ablak = new JScrollPane(panel);
+        setContentPane(ablak);
+        pack();                      
+	}
 	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
 	{
 	    JPanel ablakos = new JPanel();
