@@ -88,10 +88,11 @@ public class Teszt_1 extends JPanel
         
         JButton kovi_gomb = new JButton("Következő");
         kovi_gomb.addActionListener(new Kovetkezo());
-        kovi_gomb.setBounds(965, 692, 89, 23);
+        kovi_gomb.setBounds(942, 692, 112, 23);
         add(kovi_gomb);
         
         beolvas();
+        visszair();
 
     }
     
@@ -101,6 +102,11 @@ public class Teszt_1 extends JPanel
          {
             try 
             {
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz1 = '" + valasz1.getText() +"', Valasz2 = '" + valasz2.getText() +"', Valasz3 = '" + valasz3.getText() +
+                        "', Valasz4 = '" + valasz4.getText() + "', Valasz5 = '" + valasz5.getText() + "' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
                 Teszt_2 masodik = new Teszt_2();
                 Foablak.frame.setContentPane(masodik);
                 Foablak.frame.pack();
@@ -125,5 +131,25 @@ public class Teszt_1 extends JPanel
         kerdes3.setText(dataTable.getRows().get(2).getString(0));
         kerdes4.setText(dataTable.getRows().get(3).getString(0));
         kerdes5.setText(dataTable.getRows().get(4).getString(0));
+    }
+    
+    private void visszair()
+    {
+        try
+        {
+        SQL_teszt eddigi = new SQL_teszt();
+        eddigi.beirva(Teszt_kezdes.id);
+        valasz1.setText(SQL_teszt.beirt.get(4));
+        valasz2.setText(SQL_teszt.beirt.get(5));
+        valasz3.setText(SQL_teszt.beirt.get(6));
+        valasz4.setText(SQL_teszt.beirt.get(7));
+        valasz5.setText(SQL_teszt.beirt.get(8));
+        }
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
     }
 }

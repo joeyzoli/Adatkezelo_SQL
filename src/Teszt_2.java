@@ -88,7 +88,7 @@ public class Teszt_2 extends JPanel
         
         JButton kovi_gomb = new JButton("Következő");
         kovi_gomb.addActionListener(new Kovetkezo());
-        kovi_gomb.setBounds(965, 692, 89, 23);
+        kovi_gomb.setBounds(944, 692, 110, 23);
         add(kovi_gomb);
         
         elozo_gomb = new JButton("Előző");
@@ -97,7 +97,7 @@ public class Teszt_2 extends JPanel
         add(elozo_gomb);
         
         beolvas();
-
+        visszair();
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -106,6 +106,11 @@ public class Teszt_2 extends JPanel
          {
             try 
             {
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz6 = '" + valasz1.getText() +"', Valasz7 = '" + valasz2.getText() +"', Valasz8 = '" + valasz3.getText() +
+                        "', Valasz9 = '" + valasz4.getText() + "', Valasz10 = '" + valasz5.getText() + "' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
                 Teszt_3 harmadik = new Teszt_3();
                 Foablak.frame.setContentPane(harmadik);
                 Foablak.frame.pack();
@@ -149,5 +154,25 @@ public class Teszt_2 extends JPanel
         kerdes3.setText(dataTable.getRows().get(7).getString(0));
         kerdes4.setText(dataTable.getRows().get(8).getString(0));
         kerdes5.setText(dataTable.getRows().get(9).getString(0));
+    }
+    
+    private void visszair()
+    {
+        try
+        {
+        SQL_teszt eddigi = new SQL_teszt();
+        eddigi.beirva(Teszt_kezdes.id);
+        valasz1.setText(SQL_teszt.beirt.get(9));
+        valasz2.setText(SQL_teszt.beirt.get(10));
+        valasz3.setText(SQL_teszt.beirt.get(11));
+        valasz4.setText(SQL_teszt.beirt.get(12));
+        valasz5.setText(SQL_teszt.beirt.get(13));
+        }
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
     }
 }

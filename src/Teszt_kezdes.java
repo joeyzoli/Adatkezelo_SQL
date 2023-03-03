@@ -5,6 +5,8 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -13,6 +15,8 @@ public class Teszt_kezdes extends JPanel
 {
     private JTextField nev_mezo;
     static int tesztszam;
+    static Long timer_start;
+    static int id = 0;
 
     /**
      * Create the panel.
@@ -48,19 +52,36 @@ public class Teszt_kezdes extends JPanel
          {
             try 
             {
-                if((int)(Math.random() * 21) < 5)
+                if(nev_mezo.getText().equals(""))
                 {
-                    tesztszam = 0;
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg nevet!!", "Hiba üzenet", 2);
+                    return;
                 }
                 else
                 {
-                    tesztszam = 1;
+                    int veletlen = (int)(Math.random() * 26);
+                    if(veletlen < 5)
+                    {
+                        tesztszam = 0;
+                    }
+                    else if(veletlen >= 5 && veletlen < 10)
+                    {
+                        tesztszam = 1;
+                    }
+                    else
+                    {
+                        tesztszam = 2;
+                    }
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+                    Date date = new Date();                  
+                    String sql = "INSERT INTO qualitydb.Ellenori_vizsga (Nev, Datum, Valtozat)VALUES ('" + nev_mezo.getText() +"', '"+ formatter.format(date) +"', '"+ tesztszam +"') ";
+                    SQL_teszt dbiras = new SQL_teszt();
+                    dbiras.iras(sql, nev_mezo.getText(), formatter.format(date));
+                    Teszt_1 elso = new Teszt_1();
+                    Foablak.frame.setContentPane(elso);
+                    Foablak.frame.pack();
+                    measureTime(true);
                 }
-                Teszt_1 elso = new Teszt_1();
-                Foablak.frame.setContentPane(elso);
-                Foablak.frame.pack();
-                System.out.println((int)(Math.random() * 21));
-                
             } 
             catch (Exception e1) 
             {              
@@ -69,5 +90,21 @@ public class Teszt_kezdes extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    static public float measureTime(boolean run)                    //idõmérõ metódus
+    {
+        long current_time = System.nanoTime();                      //a rendszeridõt nekiadjuk egy változónak
+                
+        if (run == true)                                            //ha igazra állítjuk elindul
+        {
+                timer_start = System.nanoTime();                    //idõzítõ indulási értéke a rendszer aktuális ideje
+                return (-1.0f);
+        }
+        else
+        {
+            long elapsed_time = current_time - timer_start;         //ha false lesz az érték
+            return (elapsed_time);                                  //visszatér a különbséggel
+        }
     }
 }

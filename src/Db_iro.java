@@ -600,6 +600,7 @@ public class Db_iro
         String query1 = sql;            //"UPDATE qualitydb.Retour set Hova = '" + hova +"', Hova_datum = '" + datum +"', Hova_felelos = '" + hova +"' where id = '" + id +"')"; 
         stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása     
         
+        
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik
         {

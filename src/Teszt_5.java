@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,39 +13,33 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
-public class Teszt_4 extends JPanel 
+public class Teszt_5 extends JPanel 
 {
     
     private String kerdesek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\kérdések\\kérdések.xlsx";
     private String kepek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\képek\\";
-    private DataTable dataTable;
     private JButton elozo_gomb;
-    private JLabel kerdes2;
-    private JLabel kerdes3;
-    private JTextField valasz1;
-    private JTextField valasz2;
-    private JTextField valasz3;
-    private JTextField valasz4;
-    private JLabel kerdes4;
-    private JLabel kerdes5;
-    private JTextField valasz5;
-    private JLabel kerdes6;
-    private JLabel kerdes1;
-    private JLabel kerdes7;
     private Dimension meretek = new Dimension(1200, 850);
     private BufferedImage kep1;
     private BufferedImage kep2;
-    private JTextField textField;
-    private JTextField textField_1;
+    private BufferedImage kep3;
+    private BufferedImage kep4;
+    private JTextField hibakod1_mezo;
+    private JTextField hibakod2_mezo;
+    private JButton eredeti3_gomb;
+    private JButton eredeti4_gomb;
+    private JLabel lblNewLabel_2;
+    private JTextField hibakod3_mezo;
+    private JLabel lblNewLabel_3;
+    private JTextField hibakod4_mezo;
 
     /**
      * Create the panel.
      */
-    public Teszt_4() 
+    public Teszt_5() 
     {
         setLayout(null);
         this.setPreferredSize(meretek);
@@ -58,86 +53,61 @@ public class Teszt_4 extends JPanel
         elozo_gomb.addActionListener(new Elozo());
         add(elozo_gomb);
         
-        kerdes2 = new JLabel("New label");
-        kerdes2.setBounds(29, 60, 583, 14);
-        add(kerdes2);
-        
-        kerdes3 = new JLabel("New label");
-        kerdes3.setBounds(29, 91, 583, 14);
-        add(kerdes3);
-        
-        valasz1 = new JTextField();
-        valasz1.setBounds(622, 57, 86, 20);
-        add(valasz1);
-        valasz1.setColumns(10);
-        
-        valasz2 = new JTextField();
-        valasz2.setBounds(622, 88, 86, 20);
-        add(valasz2);
-        valasz2.setColumns(10);
-        
-        valasz3 = new JTextField();
-        valasz3.setBounds(622, 119, 86, 20);
-        add(valasz3);
-        valasz3.setColumns(10);
-        
-        valasz4 = new JTextField();
-        valasz4.setBounds(622, 150, 86, 20);
-        add(valasz4);
-        valasz4.setColumns(10);
-        
-        kerdes4 = new JLabel("New label");
-        kerdes4.setBounds(29, 122, 583, 14);
-        add(kerdes4);
-        
-        kerdes5 = new JLabel("New label");
-        kerdes5.setBounds(29, 153, 583, 14);
-        add(kerdes5);
-        
-        valasz5 = new JTextField();
-        valasz5.setBounds(622, 181, 86, 20);
-        add(valasz5);
-        valasz5.setColumns(10);
-        
-        kerdes6 = new JLabel("New label");
-        kerdes6.setBounds(29, 184, 583, 14);
-        add(kerdes6);
-        
-        kerdes1 = new JLabel("New label");
-        kerdes1.setBounds(29, 22, 1097, 14);
-        add(kerdes1);
-        
-        kerdes7 = new JLabel("New label");
-        kerdes7.setBounds(29, 247, 1097, 14);
-        add(kerdes7);     
-        
         JButton eredeti1_gomb = new JButton("Eredeti kép");
         eredeti1_gomb.addActionListener(new Eredeti1());
-        eredeti1_gomb.setBounds(379, 381, 113, 23);
+        eredeti1_gomb.setBounds(379, 54, 113, 23);
         add(eredeti1_gomb);
         
         JButton eredeti2_gomb = new JButton("Eredeti kép");
         eredeti2_gomb.addActionListener(new Eredeti2());
-        eredeti2_gomb.setBounds(379, 549, 113, 23);
+        eredeti2_gomb.setBounds(379, 205, 113, 23);
         add(eredeti2_gomb);
         
         JLabel lblNewLabel = new JLabel("Hibakód");
-        lblNewLabel.setBounds(622, 385, 60, 14);
+        lblNewLabel.setBounds(622, 58, 60, 14);
         add(lblNewLabel);
         
-        textField = new JTextField();
-        textField.setBounds(692, 382, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        hibakod1_mezo = new JTextField();
+        hibakod1_mezo.setBounds(692, 55, 86, 20);
+        add(hibakod1_mezo);
+        hibakod1_mezo.setColumns(10);
         
         JLabel lblNewLabel_1 = new JLabel("Hibakód");
-        lblNewLabel_1.setBounds(622, 553, 60, 14);
+        lblNewLabel_1.setBounds(622, 209, 60, 14);
         add(lblNewLabel_1);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(692, 550, 86, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
+        hibakod2_mezo = new JTextField();
+        hibakod2_mezo.setBounds(692, 206, 86, 20);
+        add(hibakod2_mezo);
+        hibakod2_mezo.setColumns(10);
+        
+        eredeti3_gomb = new JButton("Eredeti kép");
+        eredeti3_gomb.setBounds(379, 353, 113, 23);
+        eredeti3_gomb.addActionListener(new Eredeti3());
+        add(eredeti3_gomb);
+        
+        eredeti4_gomb = new JButton("Eredeti kép");
+        eredeti4_gomb.setBounds(379, 535, 113, 23);
+        eredeti4_gomb.addActionListener(new Eredeti4());
+        add(eredeti4_gomb);
+        
+        lblNewLabel_2 = new JLabel("Hibakód");
+        lblNewLabel_2.setBounds(622, 357, 46, 14);
+        add(lblNewLabel_2);
+        
+        hibakod3_mezo = new JTextField();
+        hibakod3_mezo.setBounds(692, 354, 86, 20);
+        add(hibakod3_mezo);
+        hibakod3_mezo.setColumns(10);
+        
+        lblNewLabel_3 = new JLabel("Hibakód");
+        lblNewLabel_3.setBounds(622, 539, 46, 14);
+        add(lblNewLabel_3);
+        
+        hibakod4_mezo = new JTextField();
+        hibakod4_mezo.setBounds(692, 536, 86, 20);
+        add(hibakod4_mezo);
+        hibakod4_mezo.setColumns(10);
         
         beolvas();
     }
@@ -148,8 +118,8 @@ public class Teszt_4 extends JPanel
          {
             try 
             {
-                Teszt_5 otodik = new Teszt_5();
-                Foablak.frame.setContentPane(otodik);
+                Teszt_6 hatodik = new Teszt_6();
+                Foablak.frame.setContentPane(hatodik);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -167,8 +137,8 @@ public class Teszt_4 extends JPanel
          {
             try 
             {
-                Teszt_3 harmadik = new Teszt_3();
-                Foablak.frame.setContentPane(harmadik);
+                Teszt_4 negyedik = new Teszt_4();
+                Foablak.frame.setContentPane(negyedik);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -186,7 +156,7 @@ public class Teszt_4 extends JPanel
          {
             try 
             {
-                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\1.jpg");
+                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\3.jpg");
                 JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon);
             } 
             catch (Exception e1) 
@@ -204,7 +174,43 @@ public class Teszt_4 extends JPanel
          {
             try 
             {
-                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\2.jpg");
+                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\4.jpg");
+                JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Eredeti3 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\5.jpg");
+                JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Eredeti4 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                ImageIcon icon = new ImageIcon(kepek + Teszt_kezdes.tesztszam +"\\6.jpg");
                 JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon);
             } 
             catch (Exception e1) 
@@ -223,17 +229,12 @@ public class Teszt_4 extends JPanel
             Workbook excel = new Workbook();
             excel.loadFromFile(kerdesek);                                                                                          //infot tartalamzó excel betöltése
             Worksheet sheet = excel.getWorksheets().get(Teszt_kezdes.tesztszam);                                                                         //excel tábla létrehozása
-            dataTable = sheet.exportDataTable();
-            kerdes1.setText(dataTable.getRows().get(22).getString(0));
-            kerdes2.setText(dataTable.getRows().get(23).getString(0));
-            kerdes3.setText(dataTable.getRows().get(24).getString(0));
-            kerdes4.setText(dataTable.getRows().get(25).getString(0));
-            kerdes5.setText(dataTable.getRows().get(26).getString(0));
-            kerdes6.setText(dataTable.getRows().get(27).getString(0));
-            kerdes7.setText(dataTable.getRows().get(28).getString(0));
+            sheet.exportDataTable();
             
-            kep1 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\1.jpg"));
-            kep2 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\2.jpg"));            
+            kep1 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\3.jpg"));
+            kep2 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\4.jpg"));
+            kep3 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\5.jpg"));  
+            kep4 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\6.jpg"));  
         }
         catch (Exception e1) 
         {              
@@ -246,9 +247,10 @@ public class Teszt_4 extends JPanel
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(kep1, 60, 320, (kep1.getWidth())/3, (kep1.getHeight())/3, this); // see javadoc for more info on the parameters
-        g.drawImage(kep2, 60, 320 +(kep1.getHeight())/3 +20, (kep1.getWidth())/3, (kep1.getHeight())/3, this);
-        //g.drawImage(kep3, 29, 250, (kep1.getWidth())/3, (kep1.getHeight())/3, this);
-        //g.drawImage(kep4, 29, 250, (kep1.getWidth())/3, (kep1.getHeight())/3, this);
+        g.drawImage(kep1, 60, 20, (kep1.getWidth())/3, (kep1.getHeight())/3, this); // see javadoc for more info on the parameters
+        g.drawImage(kep2, 60, 20 +(kep1.getHeight())/3 +20, (kep2.getWidth())/3, (kep2.getHeight())/3, this);
+        g.drawImage(kep3, 60, 20 +(kep1.getHeight())/3 +20 +(kep2.getHeight())/3 , (kep3.getWidth())/3, (kep3.getHeight())/3, this);
+        g.drawImage(kep4, 60, 20 +(kep1.getHeight())/3 +20 + (kep2.getHeight())/3 + (kep3.getHeight())/3, (kep4.getWidth())/3, (kep4.getHeight())/3, this);
     }
+
 }

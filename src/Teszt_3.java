@@ -37,10 +37,8 @@ public class Teszt_3 extends JPanel
     private JLabel kerdes7;
     private JTextField valasz7;
     private JLabel kerdes8;
-    private JTextArea vlasz2;
+    private JTextArea valasz2;
     private JLabel kerdes3;
-    private JLabel kerdes9;
-    private JTextField valasz8;
     /**
      * Create the panel.
      */
@@ -60,7 +58,7 @@ public class Teszt_3 extends JPanel
         
         JButton kovi_gomb = new JButton("Következő");
         kovi_gomb.addActionListener(new Kovetkezo());
-        kovi_gomb.setBounds(965, 692, 89, 23);
+        kovi_gomb.setBounds(945, 692, 109, 23);
         add(kovi_gomb);
         
         elozo_gomb = new JButton("Előző");
@@ -139,22 +137,13 @@ public class Teszt_3 extends JPanel
         kerdes8.setBounds(29, 548, 583, 14);
         add(kerdes8);
         
-        vlasz2 = new JTextArea();
-        vlasz2.setBounds(39, 261, 1087, 63);
-        add(vlasz2);
+        valasz2 = new JTextArea();
+        valasz2.setBounds(39, 261, 1087, 63);
+        add(valasz2);
         
         kerdes3 = new JLabel("New label");
         kerdes3.setBounds(29, 384, 1097, 14);
         add(kerdes3);
-        
-        kerdes9 = new JLabel("New label");
-        kerdes9.setBounds(29, 583, 583, 14);
-        add(kerdes9);
-        
-        valasz8 = new JTextField();
-        valasz8.setBounds(622, 580, 86, 20);
-        add(valasz8);
-        valasz8.setColumns(10);
         
         beolvas();
     }
@@ -165,6 +154,29 @@ public class Teszt_3 extends JPanel
          {
             try 
             {
+                String valasz = "";
+                if(csekk1.isSelected())
+                {
+                    valasz = csekk1.getText();
+                }
+                else if(csekk2.isSelected())
+                {
+                    valasz = csekk2.getText();
+                }
+                else if(csekk3.isSelected())
+                {
+                    valasz = csekk3.getText();
+                }
+                else
+                {
+                    valasz = csekk4.getText();
+                }
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz11 = '" + valasz1.getText() +"', Valasz12 = '" + valasz +"', Valasz13 = '" + valasz2.getText() +
+                        "', Valasz14 = '" + valasz3.getText() + "', Valasz15 = '" + valasz4.getText() + "', Valasz16 = '" + valasz5.getText() +"', Valasz17 = '" + valasz6.getText()
+                                + "', Valasz18 = '" + valasz7.getText() +"' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
                 Teszt_4 negyedik = new Teszt_4();
                 Foablak.frame.setContentPane(negyedik);
                 Foablak.frame.pack();
@@ -209,13 +221,12 @@ public class Teszt_3 extends JPanel
         csekk3.setText(dataTable.getRows().get(13).getString(0));
         csekk4.setText(dataTable.getRows().get(14).getString(0));
         kerdes2.setText(dataTable.getRows().get(15).getString(0));
-        kerdes3.setText(dataTable.getRows().get(15).getString(0));
-        kerdes4.setText(dataTable.getRows().get(16).getString(0));
-        kerdes5.setText(dataTable.getRows().get(17).getString(0));
-        kerdes6.setText(dataTable.getRows().get(18).getString(0));
-        kerdes7.setText(dataTable.getRows().get(19).getString(0));
-        kerdes8.setText(dataTable.getRows().get(20).getString(0));
-        kerdes9.setText(dataTable.getRows().get(21).getString(0));
+        kerdes3.setText(dataTable.getRows().get(16).getString(0));
+        kerdes4.setText(dataTable.getRows().get(17).getString(0));
+        kerdes5.setText(dataTable.getRows().get(18).getString(0));
+        kerdes6.setText(dataTable.getRows().get(19).getString(0));
+        kerdes7.setText(dataTable.getRows().get(20).getString(0));
+        kerdes8.setText(dataTable.getRows().get(21).getString(0));
         
     }
 }
