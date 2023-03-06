@@ -129,7 +129,7 @@ public class Torlo extends JPanel
 			try
 			 {
 				Db_torlo torol = new Db_torlo();
-				String[] adatbazisok = {"qualitydb.Vevoireklamacio_alapadat", "qualitydb.Vevoireklamacio_felelosok", "qualitydb.Vevoireklamacio_detekt", "qualitydb.Vevoireklamacio_kepek", "qualitydb.Vevoireklamacio_excel"};
+				String[] adatbazisok = {"qualitydb.Ellenori_vizsga"};
 				for(int szamlalo = 0; szamlalo < adatbazisok.length; szamlalo++)
 				{
 				    torol.torlo(adatbazisok[szamlalo]);

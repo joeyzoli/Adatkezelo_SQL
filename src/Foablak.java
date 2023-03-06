@@ -54,6 +54,7 @@ public class Foablak extends JFrame
 	private Retour retour;
 	private Retour_lekerdez retour_lekerdez;
 	private Teszt_kezdes teszt_kezd;
+	private Teszt_lezaras teszt_lezar;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -210,6 +211,7 @@ public class Foablak extends JFrame
 		
 		JMenuItem vizsga_pontok = new JMenuItem("Pontok");
 		vizsga.add(vizsga_pontok);
+		vizsga_pontok.addActionListener(new PanelCsere_teszt_pont());
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -444,6 +446,17 @@ public class Foablak extends JFrame
          {
             teszt_kezd = new Teszt_kezdes();
             JScrollPane ablak = new JScrollPane(teszt_kezd);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_teszt_pont implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            teszt_lezar = new Teszt_lezaras();
+            JScrollPane ablak = new JScrollPane(teszt_lezar);
             setContentPane(ablak);
             pack();
          }

@@ -145,7 +145,13 @@ public class Teszt_3 extends JPanel
         kerdes3.setBounds(29, 384, 1097, 14);
         add(kerdes3);
         
+        valasz1.setLineWrap(true);
+        valasz1.setWrapStyleWord(true);
+        valasz2.setLineWrap(true);
+        valasz2.setWrapStyleWord(true);       
+        
         beolvas();
+        visszair();
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -228,5 +234,50 @@ public class Teszt_3 extends JPanel
         kerdes7.setText(dataTable.getRows().get(20).getString(0));
         kerdes8.setText(dataTable.getRows().get(21).getString(0));
         
+    }
+    
+    private void visszair()
+    {
+        try
+        {
+            SQL_teszt eddigi = new SQL_teszt();
+            eddigi.beirva(Teszt_kezdes.id);
+            valasz1.setText(SQL_teszt.beirt.get(14));
+            valasz2.setText(SQL_teszt.beirt.get(16));
+            valasz3.setText(SQL_teszt.beirt.get(17));
+            valasz4.setText(SQL_teszt.beirt.get(18));
+            valasz5.setText(SQL_teszt.beirt.get(19));
+            valasz6.setText(SQL_teszt.beirt.get(20));
+            valasz7.setText(SQL_teszt.beirt.get(21));
+            if(SQL_teszt.beirt.get(15) == null)
+            {
+                
+            }
+            else
+            {
+                if(SQL_teszt.beirt.get(15).equals(csekk1.getText()))
+                {
+                    csekk1.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(15).equals(csekk2.getText()))
+                {
+                    csekk2.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(15).equals(csekk3.getText()))
+                {
+                    csekk3.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(15).equals(csekk4.getText()))
+                {
+                    csekk4.setSelected(true);
+                }
+            }
+        }
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
     }
 }

@@ -59,7 +59,7 @@ public class Teszt_kezdes extends JPanel
                 }
                 else
                 {
-                    int veletlen = (int)(Math.random() * 26);
+                    int veletlen = (int)(Math.random() * 25);
                     if(veletlen < 5)
                     {
                         tesztszam = 0;

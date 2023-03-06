@@ -27,6 +27,7 @@ public class Teszt_1 extends JPanel
     private JTextArea valasz3;
     private JTextArea valasz4;
     private JTextArea valasz5;
+    static String val1;
     
     /**
      * Create the panel.
@@ -137,13 +138,13 @@ public class Teszt_1 extends JPanel
     {
         try
         {
-        SQL_teszt eddigi = new SQL_teszt();
-        eddigi.beirva(Teszt_kezdes.id);
-        valasz1.setText(SQL_teszt.beirt.get(4));
-        valasz2.setText(SQL_teszt.beirt.get(5));
-        valasz3.setText(SQL_teszt.beirt.get(6));
-        valasz4.setText(SQL_teszt.beirt.get(7));
-        valasz5.setText(SQL_teszt.beirt.get(8));
+            SQL_teszt eddigi = new SQL_teszt();
+            eddigi.beirva(Teszt_kezdes.id);
+            valasz1.setText(SQL_teszt.beirt.get(4));
+            valasz2.setText(SQL_teszt.beirt.get(5));
+            valasz3.setText(SQL_teszt.beirt.get(6));
+            valasz4.setText(SQL_teszt.beirt.get(7));
+            valasz5.setText(SQL_teszt.beirt.get(8));
         }
         catch (Exception e1) 
         {              

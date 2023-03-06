@@ -28,7 +28,7 @@ public class Db_torlo
 	    }
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");						//csatlakozás az SQL adatbázishoz
 	    stmt = (Statement) conn.createStatement();
-	    String torles = "DELETE FROM " + DB +" where id ='67'";																									//SQL utasítást tartalmazó String
+	    String torles = "DELETE FROM " + DB;																									//SQL utasítást tartalmazó String
 	    stmt.executeUpdate(torles);																												//String végrehajtása
 	    } 
 	    catch (SQLException e1) 

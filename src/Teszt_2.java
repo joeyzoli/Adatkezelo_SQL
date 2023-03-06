@@ -160,13 +160,13 @@ public class Teszt_2 extends JPanel
     {
         try
         {
-        SQL_teszt eddigi = new SQL_teszt();
-        eddigi.beirva(Teszt_kezdes.id);
-        valasz1.setText(SQL_teszt.beirt.get(9));
-        valasz2.setText(SQL_teszt.beirt.get(10));
-        valasz3.setText(SQL_teszt.beirt.get(11));
-        valasz4.setText(SQL_teszt.beirt.get(12));
-        valasz5.setText(SQL_teszt.beirt.get(13));
+            SQL_teszt eddigi = new SQL_teszt();
+            eddigi.beirva(Teszt_kezdes.id);
+            valasz1.setText(SQL_teszt.beirt.get(9));
+            valasz2.setText(SQL_teszt.beirt.get(10));
+            valasz3.setText(SQL_teszt.beirt.get(11));
+            valasz4.setText(SQL_teszt.beirt.get(12));
+            valasz5.setText(SQL_teszt.beirt.get(13));
         }
         catch (Exception e1) 
         {              

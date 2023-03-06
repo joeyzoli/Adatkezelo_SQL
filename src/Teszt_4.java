@@ -38,8 +38,10 @@ public class Teszt_4 extends JPanel
     private Dimension meretek = new Dimension(1200, 850);
     private BufferedImage kep1;
     private BufferedImage kep2;
-    private JTextField textField;
-    private JTextField textField_1;
+    private JTextField valasz6;
+    private JTextField valasz7;
+    private File kepfajl1 = new File(kepek + Teszt_kezdes.tesztszam +"\\1.jpg");
+    private File kepfajl2 = new File(kepek + Teszt_kezdes.tesztszam +"\\2.jpg");
 
     /**
      * Create the panel.
@@ -125,21 +127,22 @@ public class Teszt_4 extends JPanel
         lblNewLabel.setBounds(622, 385, 60, 14);
         add(lblNewLabel);
         
-        textField = new JTextField();
-        textField.setBounds(692, 382, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        valasz6 = new JTextField();
+        valasz6.setBounds(692, 382, 86, 20);
+        add(valasz6);
+        valasz6.setColumns(10);
         
         JLabel lblNewLabel_1 = new JLabel("Hibakód");
         lblNewLabel_1.setBounds(622, 553, 60, 14);
         add(lblNewLabel_1);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(692, 550, 86, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
+        valasz7 = new JTextField();
+        valasz7.setBounds(692, 550, 86, 20);
+        add(valasz7);
+        valasz7.setColumns(10);
         
         beolvas();
+        visszair();
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -148,6 +151,14 @@ public class Teszt_4 extends JPanel
          {
             try 
             {
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz19 = '" + valasz1.getText() +"', Valasz20 = '" + valasz2.getText() +"', Valasz21 = '" + valasz3.getText() +
+                        "', Valasz22 = '" + valasz4.getText() + "', Valasz23 = '" + valasz5.getText() + "', Valasz24 = '" + valasz6.getText() +"', Valasz25 = '" + valasz7.getText()
+                                 +"' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
+                dbiras.iro_kep(1, kepfajl1.getAbsolutePath(), Teszt_kezdes.id);
+                dbiras.iro_kep(2, kepfajl2.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_5 otodik = new Teszt_5();
                 Foablak.frame.setContentPane(otodik);
                 Foablak.frame.pack();
@@ -232,8 +243,30 @@ public class Teszt_4 extends JPanel
             kerdes6.setText(dataTable.getRows().get(27).getString(0));
             kerdes7.setText(dataTable.getRows().get(28).getString(0));
             
-            kep1 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\1.jpg"));
-            kep2 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\2.jpg"));            
+            kep1 = ImageIO.read(new File(kepfajl1.getAbsolutePath()));
+            kep2 = ImageIO.read(new File(kepfajl2.getAbsolutePath()));            
+        }
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    private void visszair()
+    {
+        try
+        {
+            SQL_teszt eddigi = new SQL_teszt();
+            eddigi.beirva(Teszt_kezdes.id);
+            valasz1.setText(SQL_teszt.beirt.get(22));
+            valasz2.setText(SQL_teszt.beirt.get(23));
+            valasz3.setText(SQL_teszt.beirt.get(24));
+            valasz4.setText(SQL_teszt.beirt.get(25));
+            valasz5.setText(SQL_teszt.beirt.get(26));
+            valasz6.setText(SQL_teszt.beirt.get(28));
+            valasz7.setText(SQL_teszt.beirt.get(30));          
         }
         catch (Exception e1) 
         {              

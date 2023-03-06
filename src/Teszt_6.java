@@ -27,14 +27,18 @@ public class Teszt_6 extends JPanel
     private BufferedImage kep2;
     private BufferedImage kep3;
     private BufferedImage kep4;
-    private JTextField hibakod1_mezo;
-    private JTextField hibakod2_mezo;
+    private JTextField valasz1;
+    private JTextField valasz2;
     private JButton eredeti3_gomb;
     private JButton eredeti4_gomb;
     private JLabel lblNewLabel_2;
-    private JTextField hibakod3_mezo;
+    private JTextField valasz3;
     private JLabel lblNewLabel_3;
-    private JTextField hibakod4_mezo;
+    private JTextField valasz4;
+    private File kepfajl1 = new File(kepek + Teszt_kezdes.tesztszam +"\\7.jpg");
+    private File kepfajl2 = new File(kepek + Teszt_kezdes.tesztszam +"\\8.jpg");
+    private File kepfajl3 = new File(kepek + Teszt_kezdes.tesztszam +"\\9.jpg");
+    private File kepfajl4 = new File(kepek + Teszt_kezdes.tesztszam +"\\10.jpg");
     /**
      * Create the panel.
      */
@@ -66,19 +70,19 @@ public class Teszt_6 extends JPanel
         lblNewLabel.setBounds(622, 58, 60, 14);
         add(lblNewLabel);
         
-        hibakod1_mezo = new JTextField();
-        hibakod1_mezo.setBounds(692, 55, 86, 20);
-        add(hibakod1_mezo);
-        hibakod1_mezo.setColumns(10);
+        valasz1 = new JTextField();
+        valasz1.setBounds(692, 55, 86, 20);
+        add(valasz1);
+        valasz1.setColumns(10);
         
         JLabel lblNewLabel_1 = new JLabel("Hibakód");
         lblNewLabel_1.setBounds(622, 209, 60, 14);
         add(lblNewLabel_1);
         
-        hibakod2_mezo = new JTextField();
-        hibakod2_mezo.setBounds(692, 206, 86, 20);
-        add(hibakod2_mezo);
-        hibakod2_mezo.setColumns(10);
+        valasz2 = new JTextField();
+        valasz2.setBounds(692, 206, 86, 20);
+        add(valasz2);
+        valasz2.setColumns(10);
         
         eredeti3_gomb = new JButton("Eredeti kép");
         eredeti3_gomb.setBounds(379, 353, 113, 23);
@@ -94,21 +98,22 @@ public class Teszt_6 extends JPanel
         lblNewLabel_2.setBounds(622, 357, 46, 14);
         add(lblNewLabel_2);
         
-        hibakod3_mezo = new JTextField();
-        hibakod3_mezo.setBounds(692, 354, 86, 20);
-        add(hibakod3_mezo);
-        hibakod3_mezo.setColumns(10);
+        valasz3 = new JTextField();
+        valasz3.setBounds(692, 354, 86, 20);
+        add(valasz3);
+        valasz3.setColumns(10);
         
         lblNewLabel_3 = new JLabel("Hibakód");
         lblNewLabel_3.setBounds(622, 539, 46, 14);
         add(lblNewLabel_3);
         
-        hibakod4_mezo = new JTextField();
-        hibakod4_mezo.setBounds(692, 536, 86, 20);
-        add(hibakod4_mezo);
-        hibakod4_mezo.setColumns(10);
+        valasz4 = new JTextField();
+        valasz4.setBounds(692, 536, 86, 20);
+        add(valasz4);
+        valasz4.setColumns(10);
         
         beolvas();
+        visszair();
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -117,6 +122,15 @@ public class Teszt_6 extends JPanel
          {
             try 
             {
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz30 = '" + valasz1.getText() +"', Valasz31 = '" + valasz2.getText() +"', Valasz32 = '" + valasz3.getText() +
+                        "', Valasz33 = '" + valasz4.getText() + "' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
+                dbiras.iro_kep(7, kepfajl1.getAbsolutePath(), Teszt_kezdes.id);
+                dbiras.iro_kep(8, kepfajl2.getAbsolutePath(), Teszt_kezdes.id);
+                dbiras.iro_kep(9, kepfajl3.getAbsolutePath(), Teszt_kezdes.id);
+                dbiras.iro_kep(10, kepfajl4.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_7 hetedik = new Teszt_7();
                 Foablak.frame.setContentPane(hetedik);
                 Foablak.frame.pack();
@@ -234,6 +248,26 @@ public class Teszt_6 extends JPanel
             kep2 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\8.jpg"));
             kep3 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\9.jpg"));  
             kep4 = ImageIO.read(new File(kepek + Teszt_kezdes.tesztszam +"\\10.jpg"));  
+        }
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    private void visszair()
+    {
+        try
+        {
+            SQL_teszt eddigi = new SQL_teszt();
+            eddigi.beirva(Teszt_kezdes.id);
+            valasz1.setText(SQL_teszt.beirt.get(40));
+            valasz2.setText(SQL_teszt.beirt.get(42));
+            valasz3.setText(SQL_teszt.beirt.get(44));
+            valasz4.setText(SQL_teszt.beirt.get(46));
+                
         }
         catch (Exception e1) 
         {              
