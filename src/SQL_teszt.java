@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.ExcelPicture;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -24,6 +25,8 @@ import com.spire.xls.Worksheet;
 public class SQL_teszt 
 {
     static ArrayList<String> beirt = new ArrayList<String>();
+    private String kerdesek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\kérdések\\kérdések.xlsx";
+    //private File kep = new File(System.getProperty("user.home") + "\\"+ 1 +".jpg");
     
     void iras(String sql, String nev, String datum)
     {   
@@ -274,6 +277,7 @@ public class SQL_teszt
         String userName = "veasquality";                                    //fehasználónév
         String password = "kg6T$kd14TWbs9&gd";                              //jelszó
         DataTable datatable = new DataTable();
+        DataTable datatable2 = new DataTable();
         try 
         {
             try 
@@ -320,11 +324,82 @@ public class SQL_teszt
             JdbcAdapter jdbcAdapter = new JdbcAdapter();
             jdbcAdapter.fillDataTable(datatable, resultSet);
             
-            Worksheet sheet = workbook.getWorksheets().get(0);
-            sheet.insertDataTable(datatable, true, 1, 1);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:G1"));
+            Worksheet sheet = workbook.getWorksheets().get(0);        
+            Workbook excel = new Workbook();
+            excel.loadFromFile(kerdesek);                                                                                          //infot tartalamzó excel betöltése
+            Worksheet sheet2 = excel.getWorksheets().get(Integer.parseInt(datatable.getRows().get(0).getString(2))); 
+            datatable2 = sheet2.exportDataTable();
+            
+            sheet.getRange().get("A1").setText("Név:");
+            sheet.getRange().get("A2").setText("Dátum:");
+            sheet.getRange().get("A3").setText("Változat:");
+            sheet.getRange().get("B1").setText(datatable.getRows().get(0).getString(0));
+            sheet.getRange().get("B2").setText(datatable.getRows().get(0).getString(1));
+            sheet.getRange().get("B3").setText(datatable.getRows().get(0).getString(2));
+            
+            int cella = 4;
+            int cella2 = 5;
+            int cella3 = 6;
+            int szamlalo;
+            int szamlalo2 = 0;
+            for(szamlalo = 3; szamlalo2 < 10; szamlalo++ )
+            {
+                sheet.getRange().get("A"+ cella).setText("Kérdés:");
+                sheet.getRange().get("A"+ cella2).setText("Válasz:");
+                sheet.getRange().get("A"+ cella3).setText("Pont:");
+                sheet.getRange().get("B"+ cella).setText(datatable2.getRows().get(szamlalo2).getString(0));
+                sheet.getRange().get("B"+ cella2).setText(datatable.getRows().get(0).getString(szamlalo));
+                cella += 3;
+                cella2 += 3;
+                cella3 += 3;
+                szamlalo2++;
+            }
+            sheet.getRange().get("A34").setText("Kérdés:");
+            sheet.getRange().get("A35").setText("Válasz:");
+            sheet.getRange().get("A36").setText("Válasz:");
+            sheet.getRange().get("A37").setText("Pont:");
+            sheet.getRange().get("B34").setText(datatable2.getRows().get(szamlalo2).getString(0));
+            sheet.getRange().get("B35").setText(datatable.getRows().get(0).getString(szamlalo));
+            szamlalo++;
+            sheet.getRange().get("B36").setText(datatable.getRows().get(0).getString(szamlalo));
+            sheet.getRange().get("A38").setText("Kérdés:");
+            szamlalo++;
+            szamlalo2++;
+            sheet.getRange().get("B38").setText(datatable2.getRows().get(szamlalo2).getString(0));
+            szamlalo2++;
+            
+            int sor = 39;
+            int kepszam = 1;
+            int valasz = 41;
+            for(int a = 0; a < 10; a++)
+            {
+                sheet.getRange().get("A" + valasz).setText(datatable.getRows().get(0).getString(szamlalo));
+                ExcelPicture picture = sheet.getPictures().add(sor,2,System.getProperty("user.home") + "\\"+ kepszam +".jpg");
+                picture.setHeight(picture.getHeight()/3);
+                picture.setWidth(picture.getWidth()/3);
+                kepszam++;
+                sor += 4;
+                valasz += 4;
+                szamlalo++;
+            }           
+            int vege = sheet.getLastRow() + 4;
+            
+            for(int a = 0; a < 5; a++)
+            {
+                sheet.getRange().get("A" + vege).setText("Kérdés:");
+                sheet.getRange().get("A" + (vege+1)).setText("Válasz:");
+                sheet.getRange().get("A" + (vege+2)).setText("Pont:");
+                sheet.getRange().get("B" + vege).setText(datatable2.getRows().get(szamlalo2).getString(0));
+                sheet.getRange().get("B" + (vege+1)).setText(datatable.getRows().get(0).getString(szamlalo));
+                szamlalo++;
+                szamlalo2++;
+                vege += 3;
+            }           
+            
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
+            
+            System.out.println(sheet.getLastRow());
             
             JFileChooser mentes_helye = new JFileChooser();
             mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

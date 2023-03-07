@@ -130,6 +130,11 @@ public class Teszt_2 extends JPanel
          {
             try 
             {
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz6 = '" + valasz1.getText() +"', Valasz7 = '" + valasz2.getText() +"', Valasz8 = '" + valasz3.getText() +
+                        "', Valasz9 = '" + valasz4.getText() + "', Valasz10 = '" + valasz5.getText() + "' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
                 Teszt_1 elso = new Teszt_1();
                 Foablak.frame.setContentPane(elso);
                 Foablak.frame.pack();

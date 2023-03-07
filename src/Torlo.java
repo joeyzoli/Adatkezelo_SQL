@@ -3,9 +3,6 @@ import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
 import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -30,67 +27,42 @@ public class Torlo extends JPanel
 	{
 		
 		JLabel lblNewLabel = new JLabel("Adatbázis átírása");
+		lblNewLabel.setBounds(132, 105, 104, 14);
 		
 		JLabel lblNewLabel_1 = new JLabel("Gyártási adatok törlse");
+		lblNewLabel_1.setBounds(412, 105, 134, 14);
 		
 		JButton db_atiro = new JButton("Átír");
+		db_atiro.setBounds(132, 163, 83, 23);
 		db_atiro.addActionListener(new DB_atiras());
 		
 		JButton gyartas_torles = new JButton("Törlés");
+		gyartas_torles.setBounds(412, 163, 77, 23);
 		gyartas_torles.addActionListener(new Torles_gyartas());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
+		lblNewLabel_2.setBounds(132, 236, 54, 14);
 		
 		JButton csv_gomb = new JButton("CSV");
+		csv_gomb.setBounds(132, 268, 54, 23);
 		csv_gomb.addActionListener(new CSV_gyart());
 		
 		JLabel lblNewLabel_3 = new JLabel("Adatbázis feltöltése");
+		lblNewLabel_3.setBounds(412, 236, 134, 14);
 		
 		JButton feltolt = new JButton("feltölt");
+		feltolt.setBounds(412, 268, 77, 23);
 		feltolt.addActionListener(new Feltolto());
-		
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-		    groupLayout.createParallelGroup(Alignment.LEADING)
-		        .addGroup(groupLayout.createSequentialGroup()
-		            .addGap(132)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-		                .addComponent(lblNewLabel)
-		                .addComponent(db_atiro)
-		                .addComponent(lblNewLabel_2)
-		                .addComponent(csv_gomb))
-		            .addGap(197)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-		                .addComponent(feltolt)
-		                .addComponent(lblNewLabel_3)
-		                .addComponent(gyartas_torles)
-		                .addComponent(lblNewLabel_1))
-		            .addContainerGap(317, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-		    groupLayout.createParallelGroup(Alignment.LEADING)
-		        .addGroup(groupLayout.createSequentialGroup()
-		            .addGap(105)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-		                .addComponent(lblNewLabel)
-		                .addComponent(lblNewLabel_1))
-		            .addGap(44)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-		                .addComponent(db_atiro)
-		                .addComponent(gyartas_torles))
-		            .addGap(50)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-		                .addComponent(lblNewLabel_2)
-		                .addComponent(lblNewLabel_3))
-		            .addGap(18)
-		            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-		                .addComponent(csv_gomb)
-		                .addComponent(feltolt))
-		            .addContainerGap(244, Short.MAX_VALUE))
-		);
 		setBackground(Foablak.hatter_szine);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblNewLabel);
+		add(db_atiro);
+		add(lblNewLabel_2);
+		add(csv_gomb);
+		add(feltolt);
+		add(lblNewLabel_3);
+		add(gyartas_torles);
+		add(lblNewLabel_1);
 
 	}
 	

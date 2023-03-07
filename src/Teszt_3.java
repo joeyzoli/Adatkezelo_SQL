@@ -202,6 +202,29 @@ public class Teszt_3 extends JPanel
          {
             try 
             {
+                String valasz = "";
+                if(csekk1.isSelected())
+                {
+                    valasz = csekk1.getText();
+                }
+                else if(csekk2.isSelected())
+                {
+                    valasz = csekk2.getText();
+                }
+                else if(csekk3.isSelected())
+                {
+                    valasz = csekk3.getText();
+                }
+                else
+                {
+                    valasz = csekk4.getText();
+                }
+                SQL_teszt dbiras = new SQL_teszt();
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz11 = '" + valasz1.getText() +"', Valasz12 = '" + valasz +"', Valasz13 = '" + valasz2.getText() +
+                        "', Valasz14 = '" + valasz3.getText() + "', Valasz15 = '" + valasz4.getText() + "', Valasz16 = '" + valasz5.getText() +"', Valasz17 = '" + valasz6.getText()
+                                + "', Valasz18 = '" + valasz7.getText() +"' where ID = '" + Teszt_kezdes.id +"'";
+                
+                dbiras.iras(sql, "", "");
                 Teszt_2 masodik = new Teszt_2();
                 Foablak.frame.setContentPane(masodik);
                 Foablak.frame.pack();

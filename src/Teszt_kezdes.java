@@ -68,7 +68,7 @@ public class Teszt_kezdes extends JPanel
                     {
                         tesztszam = 1;
                     }
-                    else
+                    else  if(veletlen >= 10)
                     {
                         tesztszam = 2;
                     }

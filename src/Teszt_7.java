@@ -76,13 +76,7 @@ setLayout(null);
         nemelfog2 = new JCheckBox("New check box");
         nemelfog2.setBounds(319, 190, 235, 23);
         add(nemelfog2);
-        
-        ButtonGroup csoport = new ButtonGroup();
-        csoport.add(elfog1);
-        csoport.add(nemelfog1);
-        csoport.add(elfog2);
-        csoport.add(nemelfog2);
-        
+               
         kerdes2 = new JLabel("New label");
         kerdes2.setBounds(29, 69, 1097, 14);
         add(kerdes2);
@@ -126,6 +120,26 @@ setLayout(null);
         nemelfog5 = new JCheckBox("Nem elfogadható");
         nemelfog5.setBounds(320, 493, 155, 23);
         add(nemelfog5);
+        
+        ButtonGroup csoport1 = new ButtonGroup();
+        csoport1.add(elfog1);
+        csoport1.add(nemelfog1);
+        
+        ButtonGroup csoport2 = new ButtonGroup();
+        csoport2.add(elfog2);
+        csoport2.add(nemelfog2);
+        
+        ButtonGroup csoport3 = new ButtonGroup();
+        csoport3.add(elfog3);
+        csoport3.add(nemelfog3);
+        
+        ButtonGroup csoport4 = new ButtonGroup();
+        csoport4.add(elfog4);
+        csoport4.add(nemelfog4);
+        
+        ButtonGroup csoport5 = new ButtonGroup();
+        csoport5.add(elfog5);
+        csoport5.add(nemelfog5);
         
         lblNewLabel = new JLabel("Viszga befejezése:");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -187,9 +201,7 @@ setLayout(null);
                 String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz34 = '" + valasz1 +"', Valasz35 = '" + valasz2 +"', Valasz36 = '" + valasz3 +
                         "', Valasz37 = '" + valasz4 + "', Valasz38 = '" + valasz5 + "', Vizsga_hossza = '" + (Teszt_kezdes.measureTime(false)/1000000000) + "' where ID = '" + Teszt_kezdes.id +"'";
                 
-                dbiras.iras(sql, "", "");
-                System.out.println((Teszt_kezdes.measureTime(false)/1000000000));
-                JOptionPane.showMessageDialog(null, "Teszt sikeresen mentve!", "Infó", 1);
+                dbiras.iras(sql, "", "");               
                 Teszt_vege  vege= new Teszt_vege();
                 Foablak.frame.setContentPane(vege);
                 Foablak.frame.pack();
@@ -295,49 +307,47 @@ setLayout(null);
             
             if(SQL_teszt.beirt.get(47) != null)
             {
-                
+                if(SQL_teszt.beirt.get(47).equals(elfog1.getText()));
+                {
+                    elfog1.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(47).equals(nemelfog1.getText()));
+                {
+                    nemelfog1.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(48).equals(elfog2.getText()));
+                {
+                    elfog2.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(48).equals(nemelfog2.getText()));
+                {
+                    nemelfog2.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(49).equals(elfog3.getText()));
+                {
+                    elfog3.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(49).equals(nemelfog3.getText()));
+                {
+                    nemelfog3.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(50).equals(elfog4.getText()));
+                {
+                    elfog4.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(50).equals(nemelfog4.getText()));
+                {
+                    nemelfog4.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(51).equals(elfog5.getText()));
+                {
+                    elfog5.setSelected(true);
+                }
+                if(SQL_teszt.beirt.get(51).equals(nemelfog5.getText()));
+                {
+                    nemelfog5.setSelected(true);
+                }          
             }
-            if(SQL_teszt.beirt.get(47).equals(elfog1.getText()));
-            {
-                elfog1.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(47).equals(nemelfog1.getText()));
-            {
-                nemelfog1.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(48).equals(elfog2.getText()));
-            {
-                elfog2.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(48).equals(nemelfog2.getText()));
-            {
-                nemelfog2.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(49).equals(elfog3.getText()));
-            {
-                elfog3.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(49).equals(nemelfog3.getText()));
-            {
-                nemelfog3.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(50).equals(elfog4.getText()));
-            {
-                elfog4.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(50).equals(nemelfog4.getText()));
-            {
-                nemelfog4.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(51).equals(elfog5.getText()));
-            {
-                elfog5.setSelected(true);
-            }
-            if(SQL_teszt.beirt.get(51).equals(nemelfog5.getText()));
-            {
-                nemelfog5.setSelected(true);
-            }
-            
         }
         catch (Exception e1) 
         {              
