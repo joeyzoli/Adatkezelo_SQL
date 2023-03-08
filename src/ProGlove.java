@@ -320,22 +320,25 @@ public class ProGlove extends JPanel
                 {
                     if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
                     {
-                        ImageIcon icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));
-                        Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(570, 475,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                        kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                        textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése
                         File letezik = new  File(dataTable.getRows().get(szamlalo).getString(6));
+                        ImageIcon icon2 = null;
                         if(letezik.exists())
-                        {    
+                        {
+                            icon2 = new ImageIcon(dataTable.getRows().get(szamlalo).getString(6));
+                            Image icon = icon2.getImage();  
+                            Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/2, icon2.getIconHeight()/2,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                            ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                            kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                            textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése
                             JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
                             eredetikep.setBackground(Color.GREEN);
                         }
                         else
                         {
+                            ImageIcon meretezett = new ImageIcon();                                                             //kép képldányosítása
+                            kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                             eredetikep.setBackground(Color.RED);
-                        }
+                        }                       
                     }
                 }              
                 SQL sql = new SQL();

@@ -1153,15 +1153,18 @@ public class SQL
         Statement stmt4 = null;
         Statement stmt5 = null;
         Statement stmt6 = null;
+        Statement stmt7 = null;
         DataTable datatable2 = new DataTable();
         DataTable datatable3 = new DataTable();
         DataTable datatable4 = new DataTable();
         DataTable datatable6 = new DataTable();
+        DataTable datatable7 = new DataTable();
         ResultSet resultSet2;
         ResultSet resultSet3;
         ResultSet resultSet4;
         ResultSet resultSet5;
         ResultSet resultSet6;
+        ResultSet resultSet7;
         try 
         {
            try 
@@ -1181,12 +1184,14 @@ public class SQL
         stmt4 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt5 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt6 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt7 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sql = "";
         String sql2 = "";
         String sql3 = "";
         String sql4 = "";
         String sql5 = "";
         String sql6 = "";
+        String sql7 = "";
 
         if(projekt.equals("-"))
         {
@@ -1223,7 +1228,7 @@ public class SQL
                 + "                group by Projekt, Hónap order by Hónap asc";
         
         sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
-                                    "' and Datum <= '"+ datumig +"'";
+                                    "' and Datum <= '"+ datumig +"' order by ID asc";
         sql5 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',            \n"
                 + "        sum(if(rek_vagy = 'Reklamáció' && Nyitva is null, 1,0)) as 'Nyitott reklamáció',\n"
                 + "        sum(if(rek_vagy = 'Reklamáció' && Nyitva is not null, 1,0)) as 'Lezárt reklamáció',\n"
@@ -1233,11 +1238,15 @@ public class SQL
                 + "                    where 3=3\n"
                 + "                    group by Hónap order by Hónap asc";
         
-        sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',            \n"
-                + "                cast(AVG(Nyitva) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                + "                from qualitydb.Vevoireklamacio_alapadat\n"
-                + "                    where 3=3\n"
-                + "                    group by Hónap order by Hónap asc";
+        sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
+                + "   cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                + "           from qualitydb.Vevoireklamacio_alapadat\n"
+                + "       where 3=3\n"
+                + "             group by Hónap order by Hónap asc";
+        
+        sql7 = "select id, Intezkedes, felelos \n"
+                + "from qualitydb.Vevoireklamacio_detekt \n"
+                + "where 3 = 3 order by ID asc ";
         
         stmt.execute(sql);
         stmt2.execute(sql2);
@@ -1245,12 +1254,14 @@ public class SQL
         stmt4.execute(sql4);
         stmt5.execute(sql5);
         stmt6.execute(sql6);
+        stmt7.execute(sql7);
         resultSet = stmt.getResultSet();
         resultSet2 = stmt2.getResultSet();
         resultSet3 = stmt3.getResultSet();
         resultSet4 = stmt4.getResultSet();
         resultSet5 = stmt5.getResultSet();
         resultSet6 = stmt6.getResultSet();
+        resultSet7 = stmt7.getResultSet();
         
         ArrayList<String[]> adatok = new ArrayList<String[]>();
         ArrayList<String[]> minden = new ArrayList<String[]>();  
@@ -1290,10 +1301,12 @@ public class SQL
         JdbcAdapter jdbcAdapter3 = new JdbcAdapter();    
         JdbcAdapter jdbcAdapter4 = new JdbcAdapter();   
         JdbcAdapter jdbcAdapter6 = new JdbcAdapter();   
+        JdbcAdapter jdbcAdapter7 = new JdbcAdapter();   
         jdbcAdapter2.fillDataTable(datatable2, resultSet2);
         jdbcAdapter3.fillDataTable(datatable3, resultSet3);
         jdbcAdapter4.fillDataTable(datatable4, resultSet5);
         jdbcAdapter6.fillDataTable(datatable6, resultSet6);
+        jdbcAdapter7.fillDataTable(datatable7, resultSet7);
         
         sheet2.getRange().get("A" + 1).setText("ID");
         sheet2.getRange().get("B" + 1).setText("Dátum");
@@ -1333,11 +1346,7 @@ public class SQL
             sheet2.getRange().get("P" + szamlalo2).setText(minden.get(szamlalo)[15]);
             sheet2.getRange().get("Q" + szamlalo2).setText(minden.get(szamlalo)[16]);
             szamlalo2++;
-        }       
-        sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Q1"));
-        sheet2.getAllocatedRange().autoFitColumns();
-        sheet2.getAllocatedRange().autoFitRows();       
-        sheet2.getCellRange("A1:Q1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        }             
         
         /********************************Első diagramm***************************************/
         
@@ -1765,7 +1774,33 @@ public class SQL
  
         //Add a secondary Y axis to the chart
         cs6.setUsePrimaryAxis(false);
- 
+        
+        /****************************************beírom a hiányzó adatokat a második oldalra****************************************/
+        String intezkedes = "";
+        String felelos = "";
+        int sor = 2;
+        sheet2.getRange().get("R" + 1).setText("Intézkedés");
+        sheet2.getRange().get("S" + 1).setText("Felelős");
+        for(int a = 0; a < minden.size(); a++)
+        {
+            for(int b = 0; b < datatable7.getRows().size(); b++)
+            {
+                if(minden.get(a)[0].equals(datatable7.getRows().get(b).getString(0)))
+                {
+                    intezkedes += datatable7.getRows().get(b).getString(1) + "\n";
+                    felelos += datatable7.getRows().get(b).getString(2) + "\n";
+                }
+            }
+            sheet2.getRange().get("R" + sor).setText(intezkedes);
+            sheet2.getRange().get("S" + sor).setText(felelos);
+            sor++;
+            intezkedes = "";
+            felelos = "";
+        }
+        sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:S1"));
+        sheet2.getAllocatedRange().autoFitColumns();
+        sheet2.getAllocatedRange().autoFitRows();       
+        sheet2.getCellRange("A1:S1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
         sheet.getAllocatedRange().autoFitColumns();
         sheet.getAllocatedRange().autoFitRows();       

@@ -364,13 +364,41 @@ public class SQL_teszt
             sheet.getRange().get("B36").setText(datatable.getRows().get(0).getString(szamlalo));
             sheet.getRange().get("A38").setText("Kérdés:");
             szamlalo++;
+            szamlalo2 += 5;
+            cella = 38;
+            cella2 = 39;
+            cella3 = 40;
+            sheet.getRange().get("A"+ cella).setText("Kérdés:");
+            sheet.getRange().get("A"+ cella2).setText("Válasz:");
+            sheet.getRange().get("A"+ cella3).setText("Pont:");
+            sheet.getRange().get("B"+ cella).setText(datatable2.getRows().get(szamlalo2).getString(0));
+            sheet.getRange().get("B"+ cella2).setText(datatable.getRows().get(0).getString(szamlalo));
+            cella += 3;
+            cella2 += 3;
+            cella3 += 3;
+            szamlalo++;
             szamlalo2++;
-            sheet.getRange().get("B38").setText(datatable2.getRows().get(szamlalo2).getString(0));
             szamlalo2++;
-            
-            int sor = 39;
+            for(int a = 0; a < 10; a++)
+            {
+                if(a == 5)
+                {
+                    szamlalo2++;
+                }
+                sheet.getRange().get("A"+ cella).setText("Kérdés:");
+                sheet.getRange().get("A"+ cella2).setText("Válasz:");
+                sheet.getRange().get("A"+ cella3).setText("Pont:");
+                sheet.getRange().get("B"+ cella).setText(datatable2.getRows().get(szamlalo2).getString(0));
+                sheet.getRange().get("B"+ cella2).setText(datatable.getRows().get(0).getString(szamlalo));
+                cella += 3;
+                cella2 += 3;
+                cella3 += 3;
+                szamlalo++;
+                szamlalo2++;
+            }
+            int sor = 73;
             int kepszam = 1;
-            int valasz = 41;
+            int valasz = 74;
             for(int a = 0; a < 10; a++)
             {
                 sheet.getRange().get("A" + valasz).setText(datatable.getRows().get(0).getString(szamlalo));
