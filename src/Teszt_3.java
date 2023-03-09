@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -6,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.spire.data.table.DataTable;
@@ -39,12 +41,14 @@ public class Teszt_3 extends JPanel
     private JLabel kerdes8;
     private JTextArea valasz2;
     private JLabel kerdes3;
+    private Dimension meretek = new Dimension(1100, 870);
     /**
      * Create the panel.
      */
     public Teszt_3()
     {
         setLayout(null);
+        this.setPreferredSize(meretek);
         
         kerdes1 = new JLabel("New label");
         kerdes1.setBounds(29, 24, 1097, 14);
@@ -184,7 +188,10 @@ public class Teszt_3 extends JPanel
                 
                 dbiras.iras(sql, "", "");
                 Teszt_4 negyedik = new Teszt_4();
-                Foablak.frame.setContentPane(negyedik);
+                JScrollPane ablak = new JScrollPane(negyedik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -226,6 +233,9 @@ public class Teszt_3 extends JPanel
                 
                 dbiras.iras(sql, "", "");
                 Teszt_2 masodik = new Teszt_2();
+                JScrollPane ablak = new JScrollPane(masodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                 Foablak.frame.setContentPane(masodik);
                 Foablak.frame.pack();
             } 

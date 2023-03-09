@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -7,6 +8,7 @@ import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,14 +30,15 @@ public class Teszt_1 extends JPanel
     private JTextArea valasz4;
     private JTextArea valasz5;
     static String val1;
+    private Dimension meretek = new Dimension(1100, 870);
     
     /**
      * Create the panel.
      */
     public Teszt_1() 
     {
-        setLayout(null);
-        
+        this.setPreferredSize(meretek);
+     
         kerdes1 = new JLabel("New label");
         kerdes1.setBounds(29, 24, 1097, 14);
         add(kerdes1);
@@ -94,7 +97,7 @@ public class Teszt_1 extends JPanel
         
         beolvas();
         visszair();
-
+        setLayout(null);  
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -109,7 +112,10 @@ public class Teszt_1 extends JPanel
                 
                 dbiras.iras(sql, "", "");
                 Teszt_2 masodik = new Teszt_2();
-                Foablak.frame.setContentPane(masodik);
+                JScrollPane ablak = new JScrollPane(masodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

@@ -446,6 +446,8 @@ public class Foablak extends JFrame
          {
             teszt_kezd = new Teszt_kezdes();
             JScrollPane ablak = new JScrollPane(teszt_kezd);
+            ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             setContentPane(ablak);
             pack();
          }

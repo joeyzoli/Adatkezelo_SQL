@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.spire.xls.Workbook;
@@ -22,7 +23,7 @@ public class Teszt_5 extends JPanel
     private String kerdesek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\kérdések\\kérdések.xlsx";
     private String kepek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\képek\\";
     private JButton elozo_gomb;
-    private Dimension meretek = new Dimension(1200, 850);
+    private Dimension meretek = new Dimension(1200, 870);
     private BufferedImage kep1;
     private BufferedImage kep2;
     private BufferedImage kep3;
@@ -39,6 +40,7 @@ public class Teszt_5 extends JPanel
     private File kepfajl2 = new File(kepek + Teszt_kezdes.tesztszam +"\\4.jpg");
     private File kepfajl3 = new File(kepek + Teszt_kezdes.tesztszam +"\\5.jpg");
     private File kepfajl4 = new File(kepek + Teszt_kezdes.tesztszam +"\\6.jpg");
+    
 
     /**
      * Create the panel.
@@ -47,6 +49,7 @@ public class Teszt_5 extends JPanel
     {
         setLayout(null);
         this.setPreferredSize(meretek);
+        
         JButton kovi_gomb = new JButton("Következő");
         kovi_gomb.addActionListener(new Kovetkezo());
         kovi_gomb.setBounds(947, 692, 107, 23);
@@ -133,7 +136,10 @@ public class Teszt_5 extends JPanel
                 dbiras.iro_kep(5, kepfajl3.getAbsolutePath(), Teszt_kezdes.id);
                 dbiras.iro_kep(6, kepfajl4.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_6 hatodik = new Teszt_6();
-                Foablak.frame.setContentPane(hatodik);
+                JScrollPane ablak = new JScrollPane(hatodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -161,7 +167,10 @@ public class Teszt_5 extends JPanel
                 dbiras.iro_kep(5, kepfajl3.getAbsolutePath(), Teszt_kezdes.id);
                 dbiras.iro_kep(6, kepfajl4.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_4 negyedik = new Teszt_4();
-                Foablak.frame.setContentPane(negyedik);
+                JScrollPane ablak = new JScrollPane(negyedik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

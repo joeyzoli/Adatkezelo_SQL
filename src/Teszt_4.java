@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.spire.data.table.DataTable;
@@ -35,7 +36,7 @@ public class Teszt_4 extends JPanel
     private JLabel kerdes6;
     private JLabel kerdes1;
     private JLabel kerdes7;
-    private Dimension meretek = new Dimension(1200, 850);
+    private Dimension meretek = new Dimension(1200, 870);
     private BufferedImage kep1;
     private BufferedImage kep2;
     private JTextField valasz6;
@@ -160,7 +161,10 @@ public class Teszt_4 extends JPanel
                 dbiras.iro_kep(1, kepfajl1.getAbsolutePath(), Teszt_kezdes.id);
                 dbiras.iro_kep(2, kepfajl2.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_5 otodik = new Teszt_5();
-                Foablak.frame.setContentPane(otodik);
+                JScrollPane ablak = new JScrollPane(otodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -187,7 +191,10 @@ public class Teszt_4 extends JPanel
                 dbiras.iro_kep(1, kepfajl1.getAbsolutePath(), Teszt_kezdes.id);
                 dbiras.iro_kep(2, kepfajl2.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_3 harmadik = new Teszt_3();
-                Foablak.frame.setContentPane(harmadik);
+                JScrollPane ablak = new JScrollPane(harmadik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

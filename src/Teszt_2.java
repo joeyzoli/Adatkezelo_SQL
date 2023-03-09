@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -5,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.spire.data.table.DataTable;
@@ -27,6 +29,7 @@ public class Teszt_2 extends JPanel
     private JTextArea valasz4;
     private JTextArea valasz5;
     private JButton elozo_gomb;
+    private Dimension meretek = new Dimension(1100, 870);
     
     /**
      * Create the panel.
@@ -34,6 +37,7 @@ public class Teszt_2 extends JPanel
     public Teszt_2() 
     {
         setLayout(null);
+        this.setPreferredSize(meretek);
         
         kerdes1 = new JLabel("New label");
         kerdes1.setBounds(29, 24, 1097, 14);
@@ -112,7 +116,10 @@ public class Teszt_2 extends JPanel
                 
                 dbiras.iras(sql, "", "");
                 Teszt_3 harmadik = new Teszt_3();
-                Foablak.frame.setContentPane(harmadik);
+                JScrollPane ablak = new JScrollPane(harmadik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 
@@ -136,7 +143,10 @@ public class Teszt_2 extends JPanel
                 
                 dbiras.iras(sql, "", "");
                 Teszt_1 elso = new Teszt_1();
-                Foablak.frame.setContentPane(elso);
+                JScrollPane ablak = new JScrollPane(elso);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

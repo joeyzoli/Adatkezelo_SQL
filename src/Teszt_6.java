@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.spire.xls.Workbook;
@@ -22,7 +23,7 @@ public class Teszt_6 extends JPanel
     private String kerdesek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\kérdések\\kérdések.xlsx";
     private String kepek = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\képek\\";
     private JButton elozo_gomb;
-    private Dimension meretek = new Dimension(1200, 850);
+    private Dimension meretek = new Dimension(1200, 870);
     private BufferedImage kep1;
     private BufferedImage kep2;
     private BufferedImage kep3;
@@ -39,6 +40,8 @@ public class Teszt_6 extends JPanel
     private File kepfajl2 = new File(kepek + Teszt_kezdes.tesztszam +"\\8.jpg");
     private File kepfajl3 = new File(kepek + Teszt_kezdes.tesztszam +"\\9.jpg");
     private File kepfajl4 = new File(kepek + Teszt_kezdes.tesztszam +"\\10.jpg");
+    
+    
     /**
      * Create the panel.
      */
@@ -160,7 +163,10 @@ public class Teszt_6 extends JPanel
                 dbiras.iro_kep(9, kepfajl3.getAbsolutePath(), Teszt_kezdes.id);
                 dbiras.iro_kep(10, kepfajl4.getAbsolutePath(), Teszt_kezdes.id);
                 Teszt_5 otodik = new Teszt_5();
-                Foablak.frame.setContentPane(otodik);
+                JScrollPane ablak = new JScrollPane(otodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

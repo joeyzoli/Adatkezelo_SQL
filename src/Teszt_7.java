@@ -7,10 +7,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 public class Teszt_7 extends JPanel 
@@ -40,12 +43,15 @@ public class Teszt_7 extends JPanel
     private String valasz3;
     private String valasz4;
     private String valasz5;
+    private Dimension meretek = new Dimension(1100, 870);
+    
     /**
      * Create the panel.
      */
     public Teszt_7() 
     {
-setLayout(null);
+        setLayout(null);
+        this.setPreferredSize(meretek);
         
         kerdes1 = new JLabel("New label");
         kerdes1.setBounds(29, 24, 1097, 14);
@@ -267,7 +273,10 @@ setLayout(null);
                 
                 dbiras.iras(sql, "", "");
                 Teszt_6 hatodik = new Teszt_6();
-                Foablak.frame.setContentPane(hatodik);
+                JScrollPane ablak = new JScrollPane(hatodik);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
                 Foablak.frame.pack();
             } 
             catch (Exception e1) 

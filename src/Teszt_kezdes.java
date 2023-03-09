@@ -1,7 +1,9 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ public class Teszt_kezdes extends JPanel
     static int tesztszam;
     static Long timer_start;
     static int id = 0;
+    private Dimension meretek = new Dimension(1100, 870);
 
     /**
      * Create the panel.
@@ -24,7 +27,7 @@ public class Teszt_kezdes extends JPanel
     public Teszt_kezdes() 
     {
         setLayout(null);
-        
+        this.setPreferredSize(meretek);
         JLabel lblNewLabel = new JLabel("Üdvözöllek a folyamatellenőri vizsgán!");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         lblNewLabel.setBounds(434, 60, 301, 27);
@@ -78,7 +81,10 @@ public class Teszt_kezdes extends JPanel
                     SQL_teszt dbiras = new SQL_teszt();
                     dbiras.iras(sql, nev_mezo.getText(), formatter.format(date));
                     Teszt_1 elso = new Teszt_1();
-                    Foablak.frame.setContentPane(elso);
+                    JScrollPane ablak = new JScrollPane(elso);
+                    ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    Foablak.frame.setContentPane(ablak);
                     Foablak.frame.pack();
                     measureTime(true);
                 }
