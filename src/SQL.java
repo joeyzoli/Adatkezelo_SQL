@@ -2401,9 +2401,9 @@ public class SQL
             
             String sql = "select Vevo,\n"
                     + " sum(Beerkezett),\n"
-                    + " sum(Raktar_db),\n"
-                    + " sum(Selejt)\n"
-                    + " from qualitydb.Retour\n"
+                    + " sum(if(raktar_db is null, 0, raktar_db)),\n"
+                    + " sum(if(selejt is null, 0, selejt)) \n"
+                    + " from qualitydb.Retour \n"
                     + " where Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"'\n"
                     + " group by Vevo";
            

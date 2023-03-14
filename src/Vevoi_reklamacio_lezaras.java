@@ -77,8 +77,8 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         lezar_gomb.addActionListener(new Visszair());
         add(lezar_gomb);
         
-        JLabel lblNewLabel_3 = new JLabel("Vevői raklamáció lezárás időpontja");
-        lblNewLabel_3.setBounds(310, 597, 180, 14);
+        JLabel lblNewLabel_3 = new JLabel("Vevői reklamáció lezárás időpontja");
+        lblNewLabel_3.setBounds(291, 597, 208, 14);
         add(lblNewLabel_3);
         
         veglegido_mezo = new JTextField();

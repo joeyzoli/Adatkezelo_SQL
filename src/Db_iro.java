@@ -789,7 +789,8 @@ public class Db_iro
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
                                                                                                                     //sql utasítás végrehajtása
-        String query = "update qualitydb.Gyartasi_adatok set  VT_azon = '"+ vt +"', Datum = '"+ datum +"', Muszak = '"+ muszak +"', Ellenor_neve = '"+ ellenor_neve +"', Hibagyujtes_helye = '"+ hiba_helye +"' "
+        String query = "update qualitydb.Gyartasi_adatok set  VT_azon = '"+ vt +"', Cikksz = '"+ cikkszam +"', Vevo = '"+ vevo +"', Vevoi_megnev = '"+ vevoi_megnev +"', "
+                        + "Datum = '"+ datum +"', Muszak = '"+ muszak +"', Ellenor_neve = '"+ ellenor_neve +"', Hibagyujtes_helye = '"+ hiba_helye +"' "
                         + ", Felajanlott = '"+ felajanlott +"', Minta_nagysag = '"+ minta_nagysag +"', PCB_sorszam = '"+ pcb +"', hibakod = '"+ hibakod +"', Pozicio = '"+ pozicio +"' "
                                 + ", Hibak_szam = '"+ hibak_szama +"', Sor = '"+ sor +"' where Id= '" + id + "'";
         stmt.executeUpdate(query);
