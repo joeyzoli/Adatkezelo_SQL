@@ -268,8 +268,8 @@ public class Teszt_7 extends JPanel
                     valasz5 = nemelfog5.getText();
                 }
                 SQL_teszt dbiras = new SQL_teszt();
-                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz19 = '" + valasz1 +"', Valasz20 = '" + valasz2 +"', Valasz21 = '" + valasz3 +
-                        "', Valasz22 = '" + valasz4 + "' where ID = '" + Teszt_kezdes.id +"'";
+                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz34 = '" + valasz1 +"', Valasz35 = '" + valasz2 +"', Valasz36 = '" + valasz3 +
+                        "', Valasz37 = '" + valasz4 + "', Valasz38 = '" + valasz5 +  "' where ID = '" + Teszt_kezdes.id +"'";
                 
                 dbiras.iras(sql, "", "");
                 Teszt_6 hatodik = new Teszt_6();

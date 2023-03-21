@@ -7,9 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -75,11 +74,11 @@ public class Teszt_kezdes extends JPanel
                     {
                         tesztszam = 2;
                     }
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-                    Date date = new Date();                  
-                    String sql = "INSERT INTO qualitydb.Ellenori_vizsga (Nev, Datum, Valtozat)VALUES ('" + nev_mezo.getText() +"', '"+ formatter.format(date) +"', '"+ tesztszam +"') ";
+                    SimpleDateFormat idopont = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());                 
+                    String sql = "INSERT INTO qualitydb.Ellenori_vizsga (Nev, Datum, Valtozat)VALUES ('" + nev_mezo.getText() +"', '"+ idopont.format(timestamp) +"', '"+ tesztszam +"') ";
                     SQL_teszt dbiras = new SQL_teszt();
-                    dbiras.iras(sql, nev_mezo.getText(), formatter.format(date));
+                    dbiras.iras(sql, nev_mezo.getText(), idopont.format(timestamp));
                     Teszt_1 elso = new Teszt_1();
                     JScrollPane ablak = new JScrollPane(elso);
                     ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
