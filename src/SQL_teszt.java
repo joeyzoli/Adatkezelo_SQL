@@ -396,6 +396,10 @@ public class SQL_teszt
                 szamlalo++;
                 szamlalo2++;
             }
+            sheet.getRange().get("A"+ cella).setText("Kérdés:");
+            sheet.getRange().get("B"+ cella).setText(datatable2.getRows().get(szamlalo2).getString(0));
+            cella += 3;
+            szamlalo2++;
             int sor = 73;
             int kepszam = 1;
             int valasz = 74;
@@ -410,7 +414,10 @@ public class SQL_teszt
                 valasz += 4;
                 szamlalo++;
             }           
-            int vege = sheet.getLastRow() + 4;
+            int vege = sheet.getLastRow() + 12;
+            sheet.getRange().get("A" + (vege-1)).setText("Kérdés:");
+            sheet.getRange().get("B"+ (vege-1)).setText(datatable2.getRows().get(szamlalo2).getString(0));
+            szamlalo2++;
             
             for(int a = 0; a < 5; a++)
             {
