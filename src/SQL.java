@@ -2555,6 +2555,52 @@ public class SQL
  
     }
 	
+	public void lekerdez_ellenorok(String querry, String datum_tol, String datum_ig)
+    {
+    
+	    Connection conn = null;
+        Statement stmt = null;
+      
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+            conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql = "SELECT * from qualitydb.Folyamatellenori_alap where datum >= '"+ datum_tol + "' and datum <= '"+ datum_ig +"'";  //group by Pozicio
+            stmt.execute(sql);
+            resultSet = stmt.getResultSet();
+            
+            Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
+
+            resultSet.close();
+            stmt.close();
+            conn.close();
+            
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
+	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
     {
         ResultSetMetaData metaData = rs.getMetaData();
