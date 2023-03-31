@@ -2555,7 +2555,7 @@ public class SQL
  
     }
 	
-	public void lekerdez_ellenorok(String querry, String datum_tol, String datum_ig)
+	public void lekerdez_ellenorok(String querry, String querry2)
     {
     
 	    Connection conn = null;
@@ -2574,12 +2574,15 @@ public class SQL
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
            }
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = "SELECT * from qualitydb.Folyamatellenori_alap where datum >= '"+ datum_tol + "' and datum <= '"+ datum_ig +"'";  //group by Pozicio
-            stmt.execute(sql);
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);           
+            stmt.execute(querry);
             resultSet = stmt.getResultSet();
             
             Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
+            
+            stmt.execute(querry2);
+            resultSet = stmt.getResultSet();
+            Gepes_ellenorok.table_1.setModel(buildTableModel(resultSet));
 
             resultSet.close();
             stmt.close();

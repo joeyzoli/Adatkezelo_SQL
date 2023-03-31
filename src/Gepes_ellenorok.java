@@ -15,9 +15,11 @@ public class Gepes_ellenorok extends JPanel
 {
     private JTextField datumtol_mezo;
     private JTextField datumig_mezo;
-    private JTextField textField_1;
-    private JTextField textField;
+    private JTextField ellenor_mezo;
+    private JTextField nxt_mezo;
     static JTable table;
+    private JTextField cikkszam_mezo;
+    static JTable table_1;
 
     /**
      * Create the panel.
@@ -32,40 +34,40 @@ public class Gepes_ellenorok extends JPanel
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Dátum -tól");
-        lblNewLabel_1.setBounds(493, 75, 69, 14);
+        lblNewLabel_1.setBounds(493, 58, 69, 14);
         add(lblNewLabel_1);
         
         JLabel lblNewLabel_2 = new JLabel("Dátum -ig");
-        lblNewLabel_2.setBounds(493, 100, 69, 14);
+        lblNewLabel_2.setBounds(493, 89, 69, 14);
         add(lblNewLabel_2);
         
         datumtol_mezo = new JTextField();
-        datumtol_mezo.setBounds(618, 72, 86, 20);
+        datumtol_mezo.setBounds(618, 55, 86, 20);
         add(datumtol_mezo);
         datumtol_mezo.setColumns(10);
         
         datumig_mezo = new JTextField();
-        datumig_mezo.setBounds(618, 103, 86, 20);
+        datumig_mezo.setBounds(618, 86, 86, 20);
         add(datumig_mezo);
         datumig_mezo.setColumns(10);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(618, 134, 86, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
+        ellenor_mezo = new JTextField();
+        ellenor_mezo.setBounds(618, 117, 86, 20);
+        add(ellenor_mezo);
+        ellenor_mezo.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Ellenőr");
-        lblNewLabel_3.setBounds(492, 131, 46, 14);
+        lblNewLabel_3.setBounds(493, 120, 46, 14);
         add(lblNewLabel_3);
         
         JLabel lblNewLabel_4 = new JLabel("NXT sor");
-        lblNewLabel_4.setBounds(492, 168, 46, 14);
+        lblNewLabel_4.setBounds(493, 151, 46, 14);
         add(lblNewLabel_4);
         
-        textField = new JTextField();
-        textField.setBounds(618, 165, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        nxt_mezo = new JTextField();
+        nxt_mezo.setBounds(618, 148, 86, 20);
+        add(nxt_mezo);
+        nxt_mezo.setColumns(10);
         
         JButton keres_gomb = new JButton("Keresés");
         keres_gomb.addActionListener(new Ellenorzes_mutat());
@@ -76,6 +78,20 @@ public class Gepes_ellenorok extends JPanel
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(61, 270, 1039, 172);
         add(gorgeto);
+        
+        cikkszam_mezo = new JTextField();
+        cikkszam_mezo.setBounds(618, 179, 86, 20);
+        add(cikkszam_mezo);
+        cikkszam_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_5 = new JLabel("Cikkszám");
+        lblNewLabel_5.setBounds(493, 182, 69, 14);
+        add(lblNewLabel_5);
+        
+        table_1 = new JTable();
+        JScrollPane gorgeto2 = new JScrollPane(table_1);
+        gorgeto2.setBounds(61, 453, 1039, 239);
+        add(gorgeto2);
 
     }
     
@@ -86,9 +102,33 @@ public class Gepes_ellenorok extends JPanel
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                String ellenor ="";
+                String nxt = "";
+                String cikk = "";
+                if(ellenor_mezo.getText().equals("")){             
+                    ellenor = "%";
+                }
+                else{              
+                    ellenor = ellenor_mezo.getText();
+                }
+                if(nxt_mezo.getText().equals("")) {
+                    nxt = "%";
+                }
+                else {
+                    nxt = nxt_mezo.getText();
+                }
+                if(cikkszam_mezo.getText().equals("")) {
+                    cikk = "%";
+                }
+                else {
+                    cikk = cikkszam_mezo.getText();
+                }
+                String sql = "select * from qualitydb.Folyamatellenori_gyartas where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                                "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";                                                                 //tárolt eljárás Stringje
+                String sql2 = "select * from qualitydb.Folyamatellenori_nxt where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() + "' and Nev like '"+ ellenor +                       
+                                "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                lekerdezo.lekerdez_ellenorok(querry, datumtol_mezo.getText(), datumig_mezo.getText());   //függvénymeghívása a paraméterekkel
+                lekerdezo.lekerdez_ellenorok(sql, sql2);   //függvénymeghívása a paraméterekkel
              
                 Foablak.frame.setCursor(null);
             }
