@@ -28,7 +28,7 @@ public class Retour_lekerdez extends JPanel
      */
     public Retour_lekerdez() 
     {
-        this.setPreferredSize(new Dimension(1160, 700));
+        this.setPreferredSize(new Dimension(1906, 700));
         setLayout(null);
         
         new ComboBox();
@@ -65,7 +65,7 @@ public class Retour_lekerdez extends JPanel
         
         table = new JTable();
         JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(54, 288, 1070, 226);
+        pane.setBounds(54, 288, 1806, 226);
         add(pane);
         
         id_mezo = new JTextField();
