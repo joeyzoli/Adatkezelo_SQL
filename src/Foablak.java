@@ -54,6 +54,7 @@ public class Foablak extends JFrame
 	private Retour retour;
 	private Retour_lekerdez retour_lekerdez;
 	private Gepes_ellenorok ellenorok;
+	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
 	private Teszt_lezaras teszt_lezar;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
@@ -159,6 +160,10 @@ public class Foablak extends JFrame
 		JMenuItem retour = new JMenuItem("Retour");
 		retour.addActionListener(new PanelCsere_retour());
 		menu.add(retour);
+		
+		JMenuItem ellenori_nevsor = new JMenuItem("Ellenőrök");
+		ellenori_nevsor.addActionListener(new PanelCsere_ellenorok_nevek());
+		menu.add(ellenori_nevsor);
 		menu.add(ujadat);
 		menu.add(adat_torles);
 		menu.add(torles);
@@ -451,6 +456,17 @@ public class Foablak extends JFrame
          {
             ellenorok = new Gepes_ellenorok();
             JScrollPane ablak = new JScrollPane(ellenorok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_ellenorok_nevek implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            ellenori_nevek = new Ellenorok();
+            JScrollPane ablak = new JScrollPane(ellenori_nevek);
             setContentPane(ablak);
             pack();
          }

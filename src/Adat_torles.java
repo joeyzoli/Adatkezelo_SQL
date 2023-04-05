@@ -36,7 +36,7 @@ public class Adat_torles extends JPanel
 	 */
 	public Adat_torles() 
 	{
-		this.setPreferredSize(new Dimension(1100, 650));
+		this.setPreferredSize(new Dimension(1175, 713));
 		
 		combobox_tomb = new ComboBox();
 		
@@ -78,7 +78,7 @@ public class Adat_torles extends JPanel
 		hibahelye_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));				//combobox_tomb.getCombobox2(ComboBox.hiba_helye)
 		hibahelye_box.setBounds(495, 145, 193, 22);
 		
-		vt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));						//combobox_tomb.getCombobox(ComboBox.vt_azon)
+		vt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vt_azon));						//combobox_tomb.getCombobox(ComboBox.vt_azon
 		vt_box.setBounds(495, 50, 193, 22);
 		
 		felajanlott = new JTextField();
@@ -119,6 +119,11 @@ public class Adat_torles extends JPanel
 		ujra.addActionListener(new Visszair());
 		ujra.setBounds(495, 585, 89, 23);
 		add(ujra);
+		
+		JButton sortorles_gomb = new JButton("Sor törlése");
+		sortorles_gomb.addActionListener(new Sortorles());
+		sortorles_gomb.setBounds(477, 636, 121, 23);
+		add(sortorles_gomb);
 
 	}
 	
@@ -182,7 +187,24 @@ public class Adat_torles extends JPanel
                     Integer.parseInt(table.getValueAt(szamlalo, 15).toString()), table.getValueAt(szamlalo, 16).toString());
             }
             Foablak.frame.setCursor(null);
-            JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Hiba üzenet", 2); 
+            JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Info", 1); 
+         }
+    }
+	
+	class Sortorles implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Db_iro visszair = new Db_iro();
+            int column = 0;
+            int row = table.getSelectedRow();
+            String id = table.getModel().getValueAt(row, column).toString();
+            String sql = "DELETE FROM qualitydb.Gyartasi_adatok where id = '" + id +"'";
+            visszair.ujrair_vevoi(sql);
+            
+            Foablak.frame.setCursor(null);
+            JOptionPane.showMessageDialog(null, "Törlés sikeres!", "Info", 1); 
          }
     }
 }

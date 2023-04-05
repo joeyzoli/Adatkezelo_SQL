@@ -2604,6 +2604,88 @@ public class SQL
  
     }
 	
+	public void lekerdez_ellenori_nevsor(String querry, int szam)
+    {
+    
+        Connection conn = null;
+        Statement stmt = null;
+      
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+            conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);           
+            stmt.execute(querry);
+            resultSet = stmt.getResultSet();
+            
+            if(szam == 1)
+            {
+                Ellenorok.table.setModel(buildTableModel(resultSet));    
+            }
+            else
+            {
+                Workbook workbook = new Workbook();
+                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                DataTable datatable = new DataTable();
+                jdbcAdapter.fillDataTable(datatable, resultSet);
+     
+                //Get the first worksheet
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                sheet.insertDataTable(datatable, true, 1, 1);
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:C1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                
+                sheet.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                
+                String hova = System.getProperty("user.home") + "\\Desktop\\Ellenőrök.xlsx";
+                workbook.saveToFile(hova, ExcelVersion.Version2016);
+                
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Ellenőrök.xlsx néven!", "Info", 1); 
+            }
+            
+               
+
+            resultSet.close();
+            stmt.close();
+            conn.close();
+            
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            String hibauzenet2 = e.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+ 
+    }
+	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
     {
         ResultSetMetaData metaData = rs.getMetaData();
