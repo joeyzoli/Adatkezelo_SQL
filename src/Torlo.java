@@ -2,6 +2,12 @@ import javax.swing.JPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
@@ -141,8 +147,43 @@ public class Torlo extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
-            Db_iro feltolto = new Db_iro();
-            feltolto.feltolt();
+            try
+            {  
+              //step1 load the driver class  
+              DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+              Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                
+              //step2 create  the connection object  
+              Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");  
+                
+              //step3 create the statement object  
+              Statement stmt = con.createStatement();
+              SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+              Date date = new Date();
+              System.out.println(formatter.format(date));
+                
+              //step4 execute query  
+              ResultSet rs = stmt.executeQuery("select PART_NO,\n"
+                      + "        manuf_date\n"
+                      + "from ifsapp.C_OPER_TRACY_OVW \n"
+                      + "where 3=3 \n"
+                      + "and SCAN_LOC = 'NXT01'\n"
+                      + "and MANUF_DATE between to_date( '20230405000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20230405235959', 'YYYYMMDDHH24:MI:SS' )\n"
+                      + "order by manuf_date DESC \n"
+                      + "FETCH FIRST 1 ROWS ONLY");  
+              while(rs.next())
+              { 
+                  System.out.println(rs.getString(1));  
+              }
+              //step5 close the connection object  
+              con.close();  
+                
+              }
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+            }  
+                               
          }
     }
 }

@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/Spire.Xls.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ojdbc14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -53,6 +53,7 @@ public class Foablak extends JFrame
 	private Vevoi_reklamacio_ujadat vevoi_ujadat;
 	private Retour retour;
 	private Retour_lekerdez retour_lekerdez;
+	private Retour_Mile retour_mile;
 	private Gepes_ellenorok ellenorok;
 	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
@@ -193,23 +194,15 @@ public class Foablak extends JFrame
 		
 		JMenuItem retour_lekerdezes = new JMenuItem("Retour");
 		retour_lekerdezes.addActionListener(new PanelCsere_retour_lekerdez());
+		
+		JMenuItem retour_mile = new JMenuItem("Hager Retour");
+		retour_mile.addActionListener(new PanelCsere_retour_mile());
+		lekerdezes.add(retour_mile);
 		lekerdezes.add(retour_lekerdezes);
 		
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
 		folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
 		lekerdezes.add(folyamatellenorok);
-		/*
-		JMenu mnNewMenu = new JMenu("Műszaki");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem ujadat_menu = new JMenuItem("Új adat felvitele");
-		ujadat_menu.addActionListener(new PanelCsere_muszaki_ujadat());
-		mnNewMenu.add(ujadat_menu);
-		
-		JMenuItem adatleker_menu = new JMenuItem("Adatok lekérdezése");
-		adatleker_menu.addActionListener(new PanelCsere_muszaki_leker());
-		mnNewMenu.add(adatleker_menu);
-		*/
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -339,29 +332,7 @@ public class Foablak extends JFrame
             pack();
          }
     }
-	/*
-	class PanelCsere_muszaki_ujadat implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
-    {
-        public void actionPerformed(ActionEvent e)
-         {
-            muszaki_adatok = new Uj_adatok();
-            JScrollPane ablak = new JScrollPane(muszaki_adatok);
-            setContentPane(ablak);
-            pack();
-         }
-    }
 	
-	class PanelCsere_muszaki_leker implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
-    {
-        public void actionPerformed(ActionEvent e)
-         {
-            muszaki_leker = new Muszaki_leker();
-            JScrollPane ablak = new JScrollPane(muszaki_leker);
-            setContentPane(ablak);
-            pack();
-         }
-    }
-	*/
 	class PanelCsere_proglove implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -445,6 +416,17 @@ public class Foablak extends JFrame
          {
             retour_lekerdez = new Retour_lekerdez();
             JScrollPane ablak = new JScrollPane(retour_lekerdez);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_retour_mile implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            retour_mile = new Retour_Mile();
+            JScrollPane ablak = new JScrollPane(retour_mile);
             setContentPane(ablak);
             pack();
          }
