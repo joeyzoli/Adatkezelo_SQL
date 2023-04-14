@@ -1,6 +1,8 @@
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,16 +11,20 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.JRadioButton;
 
 public class Beszallitoi_PPM extends JPanel 
 {
@@ -68,7 +74,7 @@ public class Beszallitoi_PPM extends JPanel
         add(gorgeto);
         
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Megnevezés", "Beérkezve", "Fehasználva", "Selejt", "PPM"});
+        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Beszállító", "Beérkezve", "Fehasználva", "Selejt", "PPM"});
         table.setModel(modell);
         
         JButton excel_gomb = new JButton("Excel");
@@ -84,6 +90,7 @@ public class Beszallitoi_PPM extends JPanel
          {
             try
             {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 String[] datumtol = datumtol_mezo.getText().split("\\.");
                 String[] datumig = datumig_mezo.getText().split("\\.");
                 String cikkszam = "";
@@ -101,59 +108,38 @@ public class Beszallitoi_PPM extends JPanel
                 Statement stmt = con.createStatement();
                 
                 ResultSet rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
-                        + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes,\r\n"
+                        + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes\r\n"
                         + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
                         + "    where 3=3\r\n"
                         + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"                      
                         + "    and (LOCATION_NO = '80' or LOCATION_NO = '91') group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)");
-                
+
                 while(rs.next())
                 {
                     cikkszamok.add(rs.getString(1));
                 }
                 for(int szamlalo = 0; szamlalo < cikkszamok.size(); szamlalo++)
                 {
-                    rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
-                            + "ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes,\r\n"
-                            + "sum(QUANTITY) as Beerkezve\r\n"
+                    rs = stmt.executeQuery("select ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO)\r\n"
+                            + "    from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
+                            + "    where 3=3\r\n"
+                            + "    and PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
+                    if(rs.next())
+                    {
+                        cikkszam = cikkszamok.get(szamlalo);
+                        megnevezes = rs.getString(1);                      
+                    }
+                    
+                    rs = stmt.executeQuery("select \r\n"
+                            + "sum(QUANTITY) as Fogyas\r\n"
                             + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
                             + "    where 3=3\r\n"
                             + "    and TRANSACTION_CODE = 'ARRIVAL'\r\n"
                             + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"' group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)");
+                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
                     if(rs.next())
-                    {
-                        cikkszam = rs.getString(1);
-                        megnevezes = rs.getString(2);
-                        beerkezve = rs.getInt(3);
-                    }
-                    if(valaszthato_gomb.isSelected())
-                    {
-                        rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
-                                + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes,\r\n"
-                                + "sum(QUANTITY) as Selejt\r\n"
-                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
-                                + "    where 3=3\r\n"
-                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                                + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'"
-                                + "    and (LOCATION_NO = '80' or LOCATION_NO = '91') group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)");
-                    }
-                    else
-                    {
-                        rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
-                                + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes,\r\n"
-                                + "sum(QUANTITY) as Selejt\r\n"
-                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
-                                + "    where 3=3\r\n"
-                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                                + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'"
-                                + "    and LOCATION_NO = '91' group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)"); 
-                    }
-                    if(rs.next())
-                    {
-                        cikkszam = rs.getString(1);
-                        megnevezes = rs.getString(2);
-                        selejt = rs.getInt(3);
+                    {            
+                        beerkezve = rs.getInt(1);
                     }
                     
                     rs = stmt.executeQuery("select \r\n"
@@ -162,15 +148,35 @@ public class Beszallitoi_PPM extends JPanel
                             + "    where 3=3\r\n"
                             + "    and TRANSACTION_CODE = 'BACFLUSH'\r\n"
                             + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                            + "    and  PART_NO = '"+ cikkszam_mezo.getText() +"'");
+                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
                     if(rs.next())
                     {            
                         felhasznalva = rs.getInt(1);
                     }
-                    ppm = ((float)selejt/(float)felhasznalva)*(float)1000000;                  
-                    modell.addRow(new Object[]{cikkszam, megnevezes, beerkezve, felhasznalva, selejt, ppm});
-                    table.setModel(modell);
+                    
+                    rs = stmt.executeQuery("select \r\n"
+                            + "sum(QUANTITY) as Fogyas\r\n"
+                            + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                            + "    where 3=3\r\n"
+                            + "    and (LOCATION_NO = '80' or LOCATION_NO = '91')\r\n"
+                            + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
+                    if(rs.next())
+                    {            
+                        selejt = rs.getInt(1);
+                    }
+                    ppm = ((float)selejt/(float)felhasznalva)*(float)1000000; 
+                    ppmek.add(new Object[]{cikkszam, megnevezes, beerkezve, felhasznalva, selejt, ppm});
+                    modell.addRow(new Object[]{cikkszam, megnevezes, beerkezve, felhasznalva, selejt, ppm});                   
                 }
+                table.setModel(modell);
+                TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+                table.setRowSorter(sorter);
+                List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+                sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
+                sorter.setSortKeys(sortKeys);
+                sorter.sort();    
+
                 con.close();  
                 Foablak.frame.setCursor(null);          
                   
