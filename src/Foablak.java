@@ -54,6 +54,7 @@ public class Foablak extends JFrame
 	private Retour retour;
 	private Retour_lekerdez retour_lekerdez;
 	private Retour_Mile retour_mile;
+	private Beszallitoi_PPM ppm;
 	private Gepes_ellenorok ellenorok;
 	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
@@ -202,6 +203,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
 		folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
+		
+		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
+		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
+		lekerdezes.add(beszallitoi_ppm);
 		lekerdezes.add(folyamatellenorok);
 		
 		JMenu vizsga = new JMenu("Vizsga");
@@ -427,6 +432,17 @@ public class Foablak extends JFrame
          {
             retour_mile = new Retour_Mile();
             JScrollPane ablak = new JScrollPane(retour_mile);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_beszallitoi_ppm implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            ppm = new Beszallitoi_PPM();
+            JScrollPane ablak = new JScrollPane(ppm);
             setContentPane(ablak);
             pack();
          }
