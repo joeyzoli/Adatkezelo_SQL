@@ -55,6 +55,8 @@ public class Foablak extends JFrame
 	private Retour_lekerdez retour_lekerdez;
 	private Retour_Mile retour_mile;
 	private Beszallitoi_PPM ppm;
+	private Telecom_utolso utolsofolyamat;
+	private Tracy_utolso utolsotracy;
 	private Gepes_ellenorok ellenorok;
 	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
@@ -207,6 +209,14 @@ public class Foablak extends JFrame
 		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
 		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
 		lekerdezes.add(beszallitoi_ppm);
+		
+		JMenuItem telecom_utolso = new JMenuItem("Telecom utolsó folyamat");
+		telecom_utolso.addActionListener(new PanelCsere_telecom_utolso());
+		
+		JMenuItem tracy_utolso = new JMenuItem("Tracy utosló folyamat");
+		tracy_utolso.addActionListener(new PanelCsere_tracy_utolso());
+		lekerdezes.add(tracy_utolso);
+		lekerdezes.add(telecom_utolso);
 		lekerdezes.add(folyamatellenorok);
 		
 		JMenu vizsga = new JMenu("Vizsga");
@@ -443,6 +453,28 @@ public class Foablak extends JFrame
          {
             ppm = new Beszallitoi_PPM();
             JScrollPane ablak = new JScrollPane(ppm);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_telecom_utolso implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            utolsofolyamat = new Telecom_utolso();
+            JScrollPane ablak = new JScrollPane(utolsofolyamat);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_tracy_utolso implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            utolsotracy = new Tracy_utolso();
+            JScrollPane ablak = new JScrollPane(utolsotracy);
             setContentPane(ablak);
             pack();
          }
