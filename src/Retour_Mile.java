@@ -149,6 +149,9 @@ public class Retour_Mile extends JPanel {
             catch(Exception e1)
             { 
                 System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
             }  
                                
          }

@@ -58,6 +58,7 @@ public class Foablak extends JFrame
 	private Telecom_utolso utolsofolyamat;
 	private Tracy_utolso utolsotracy;
 	private Gepes_ellenorok ellenorok;
+	private AVM_csomagoloanyag avm;
 	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
 	private Teszt_lezaras teszt_lezar;
@@ -208,6 +209,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
 		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
+		
+		JMenuItem avm_csomagolas = new JMenuItem("AVM csomagolás PPM");
+		avm_csomagolas.addActionListener(new PanelCsere_avm());
+		lekerdezes.add(avm_csomagolas);
 		lekerdezes.add(beszallitoi_ppm);
 		
 		JMenuItem telecom_utolso = new JMenuItem("Telecom utolsó folyamat");
@@ -475,6 +480,17 @@ public class Foablak extends JFrame
          {
             utolsotracy = new Tracy_utolso();
             JScrollPane ablak = new JScrollPane(utolsotracy);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_avm implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            avm = new AVM_csomagoloanyag();
+            JScrollPane ablak = new JScrollPane(avm);
             setContentPane(ablak);
             pack();
          }

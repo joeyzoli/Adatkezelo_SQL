@@ -39,7 +39,7 @@ public class Tracy_utolso extends JPanel {
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Panaleszámok megniytása");
-        lblNewLabel_1.setBounds(386, 156, 152, 14);
+        lblNewLabel_1.setBounds(386, 156, 165, 14);
         add(lblNewLabel_1);
         
         JButton megnyit_gomb = new JButton("Megnyitás");
@@ -159,6 +159,9 @@ public class Tracy_utolso extends JPanel {
             catch(Exception e1)
             { 
                 System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
             }  
                                
          }
