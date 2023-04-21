@@ -74,16 +74,20 @@ public class AVM_csomagoloanyag extends JPanel {
          {
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Workbook workbook = new Workbook();
-            Worksheet sheet = workbook.getWorksheets().get(0);           
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            Worksheet sheet2 = workbook.getWorksheets().get(1); 
             sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
             sheet.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
             sheet.getRange().get("C" + cellaszam).setText("Felhasználva");
             sheet.getRange().get("D" + cellaszam).setText("Zárolt");
             sheet.getRange().get("E" + cellaszam).setText("Hiba százalék");
-            sheet.getRange().get("F" + cellaszam).setText("Készlet");
-            sheet.getRange().get("G" + cellaszam).setText("Beszerzett db");
-            sheet.getRange().get("H" + cellaszam).setText("Rendlési szám");
-            cellaszam++;
+            sheet.getRange().get("F" + cellaszam).setText("Készlet");            
+            sheet2.getRange().get("A" + cellaszam).setText("Cikkszám");
+            sheet2.getRange().get("B" + cellaszam).setText("Beérkezett db");
+            sheet2.getRange().get("C" + cellaszam).setText("Rendlési szám");
+            sheet2.getRange().get("D" + cellaszam).setText("Felhasználva");
+            sheet2.getRange().get("E" + cellaszam).setText("Készlet");
+            cellaszam++;                      
             try
             {                           
                 String[] datumtol = datumtol_mezo.getText().split("\\.");
@@ -93,6 +97,7 @@ public class AVM_csomagoloanyag extends JPanel {
                 int zarolt = 0;
                 int keszlet = 0;
                 float ppm;
+                int cellaszam2 = 2;
                 ArrayList<String> cikkszamok = new ArrayList<String>();
                 ArrayList<String> megnevezes = new ArrayList<String>();
                 ArrayList<String> avm_cikkszamok = new ArrayList<String>();
@@ -169,63 +174,64 @@ public class AVM_csomagoloanyag extends JPanel {
                         keszlet = rs.getInt(1);
                     }
                     
-                    rs = stmt.executeQuery("select QTY_ARRIVED,\r\n"
-                            + "RECEIPT_REFERENCE,\r\n"
+                    rs = stmt.executeQuery("select sum(QTY_ARRIVED),\r\n"
+                            + "RECEIPT_REFERENCE\r\n"
                             + "ARRIVAL_DATE\r\n"
                             + "from ifsapp.PURCHASE_RECEIPT_NEW\r\n"
                             + "where 3 = 3\r\n"
                             + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'\r\n"
-                            + "order by ARRIVAL_DATE DESC FETCH FIRST 8 ROWS ONLY");
+                            + "group by RECEIPT_REFERENCE\r\n"
+                            + "order by ARRIVAL_DATE DESC\r\n"
+                            + "FETCH FIRST 8 ROWS ONLY");
                     while(rs.next())
                     {            
                         beszerzett_db.add(rs.getInt(1));
                         rendelesi_azonosito.add(rs.getInt(2));
                     }                 
-        
+                    
+                    for(int szamlalo2 = 0; szamlalo2 < beszerzett_db.size() -1; szamlalo2++)
+                    {
+                        sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
+                        sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                        sheet2.getCellRange("C" + cellaszam2).setNumberValue(rendelesi_azonosito.get(szamlalo2));
+                        sheet2.getCellRange("D" + cellaszam2).setNumberValue(felhasznalva + zarolt);
+                        sheet2.getCellRange("E" + cellaszam2).setNumberValue(keszlet);
+                        cellaszam2++;
+                    }                        
+                    
+                    cellaszam2++;
                     ppm = (((float)zarolt/((float)felhasznalva+(float)zarolt)));
-                    System.out.println(cellaszam);
                     sheet.getRange().get("A" + cellaszam).setText(cikkszam);
                     sheet.getRange().get("B" + cellaszam).setText(megnevezes.get(szamlalo));
                     sheet.getCellRange("C" + cellaszam).setNumberValue(felhasznalva + zarolt);                        
                     sheet.getCellRange("D" + cellaszam).setNumberValue(zarolt);
                     sheet.getCellRange("E" + cellaszam).setNumberValue(ppm);
                     sheet.getCellRange("F" + cellaszam).setNumberValue(keszlet);
-                    
-                    for(int a = 0; a < beszerzett_db.size(); a++)
-                    {                      
-                        sheet.getCellRange("G" + cellaszam).setNumberValue(beszerzett_db.get(a));
-                        sheet.getCellRange("H" + cellaszam).setNumberValue(rendelesi_azonosito.get(a));
-                        System.out.println(cellaszam);
-                        //System.out.println(cellaszam);
-                        cellaszam++;
-                    }
+                                       
                     beszerzett_db.clear();
                     rendelesi_azonosito.clear();
                     //cellaszam = sheet.getLastRow()+5;
-                    System.out.println(cellaszam + "- ez a következő sor");
-                }/*                
-                cellaszam = 2;
-                for(int a = 0; a < beszerzett_db.size(); a++)
-                {                      
-                    sheet.getCellRange("G" + cellaszam).setNumberValue(beszerzett_db.get(a));
-                    sheet.getCellRange("H" + cellaszam).setNumberValue(rendelesi_azonosito.get(a));
-                    //System.out.println(cellaszam);
                     cellaszam++;
-                }*/
+                }                
+               
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
                 sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 sheet.getCellRange("E2:E"+sheet.getLastRow()).setNumberFormat("0.00%");
-                workbook.getDataSorter().getSortColumns().add(7, SortComparsionType.Values, OrderBy.Descending);
-                workbook.getDataSorter().sort(sheet.getCellRange("A1:I"+ sheet.getLastRow()));
+                workbook.getDataSorter().getSortColumns().add(4, SortComparsionType.Values, OrderBy.Descending);
+                workbook.getDataSorter().sort(sheet.getCellRange("A1:F"+ sheet.getLastRow()));
                 
+                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
                 
                 workbook.saveToFile(hova, ExcelVersion.Version2016);
                 FileInputStream fileStream = new FileInputStream(hova);
                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
                 {
-                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
                     {    
                         workbook3.removeSheetAt(i); 
                     }      

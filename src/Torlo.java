@@ -1,15 +1,14 @@
 import javax.swing.JPanel;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import com.spire.data.table.DataTable;
+import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
@@ -24,6 +23,9 @@ public class Torlo extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String hova = System.getProperty("user.home") + "\\Desktop\\log_0201_15.xlsx";
+    private Workbook workbook = new Workbook();
+    private Worksheet sheet;
 
 	/**
 	 * Ez a panel csak adtbázi törlésére van meg tesztelni, a végső változsatban nem lesz benne, nehogy valaki véletlen kitörölje az egész adatbázist
@@ -58,7 +60,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("feltölt");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Feltolto());
+		feltolt.addActionListener(new Oszloptorles());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -107,7 +109,7 @@ public class Torlo extends JPanel
 			try
 			 {
 				Db_torlo torol = new Db_torlo();
-				String[] adatbazisok = {"qualitydb.Ellenori_vizsga"};
+				String[] adatbazisok = {"qualitydb.Folyamatellenori_alap", "qualitydb.Folyamatellenori_gyartas", "qualitydb.Folyamatellenori_nxt"};
 				for(int szamlalo = 0; szamlalo < adatbazisok.length; szamlalo++)
 				{
 				    torol.torlo(adatbazisok[szamlalo]);
@@ -142,48 +144,126 @@ public class Torlo extends JPanel
 			
 		 }
 	}
-	
-	class Feltolto implements ActionListener                                                                                      //csv-t gyárt a gomb
+	/*
+	class Logolvasas implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
         public void actionPerformed(ActionEvent e)
          {
             try
-            {  
-              //step1 load the driver class  
-              DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-              Class.forName("oracle.jdbc.OracleDriver");  //.driver
-                
-              //step2 create  the connection object  
-              Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");  
-                
-              //step3 create the statement object  
-              Statement stmt = con.createStatement();
-              SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-              Date date = new Date();
-              System.out.println(formatter.format(date));
-                
-              //step4 execute query  
-              ResultSet rs = stmt.executeQuery("select PART_NO,\n"
-                      + "        manuf_date\n"
-                      + "from ifsapp.C_OPER_TRACY_OVW \n"
-                      + "where 3=3 \n"
-                      + "and SCAN_LOC = 'NXT01'\n"
-                      + "and MANUF_DATE between to_date( '20230405000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20230405235959', 'YYYYMMDDHH24:MI:SS' )\n"
-                      + "order by manuf_date DESC \n"
-                      + "FETCH FIRST 1 ROWS ONLY");  
-              while(rs.next())
-              { 
-                  System.out.println(rs.getString(1));  
-              }
-              //step5 close the connection object  
-              con.close();  
-                
-              }
-            catch(Exception e1)
-            { 
-                System.out.println(e1);
-            }  
-                               
+            {   
+                workbook.setVersion(ExcelVersion.Version2016);
+                FileInputStream fis;
+                sheet  = workbook.getWorksheets().get(0);
+                for(int sorok = 1; sorok < 7; sorok++)
+                {
+                    File f = new File("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\extra lekérdezések\\log fájlok\\0313_27\\"+sorok+"\\");                                         //mappa beolvasása
+                                       
+                    FilenameFilter filter = new FilenameFilter()                                            //fájlnév filter metódus                
+                    {                   
+                        @Override
+                        public boolean accept(File f, String name) 
+                        {                                                                                                       // csak az xlsx fájlokat listázza ki 
+                            return name.endsWith(".log");   
+                        }
+                    };
+                    
+                    File[] files = f.listFiles(filter);                                                         //a beolvasott adatok egy fájl tömbbe rakja
+                    System.out.println(files.length);                    
+                    
+                    int cellaszam = 1;
+                    int oszlop = 1;
+                    for (int i = 0; i < files.length; i++)
+                    {
+                        fis = new FileInputStream("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\extra lekérdezések\\log fájlok\\0313_27\\"+sorok+"\\" +files[i].getName());   
+                        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                        String sor;
+                        br.readLine();
+                        br.readLine();
+                        br.readLine();
+                        while((sor = br.readLine()) != null)
+                        {
+                            String[] tarolo = sor.split(",");
+                            for (int a = 0; a < tarolo.length; a++)
+                            {
+                                sheet.getRange().get(oszlop, cellaszam).setText(tarolo[a]);                     
+                                cellaszam++;                               
+                            }
+                            oszlop++;
+                            cellaszam = 1;
+                        }
+                        System.out.println("Vajon hányszor fut le");
+                    }
+                }
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                workbook.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+            }       
+                catch (Exception e1) 
+                {
+                }
+            }         
+            }                                  
+    }*/
+	
+	class Oszloptorles implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+             {
+                workbook.setVersion(ExcelVersion.Version2016);
+                workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\0201_15.xlsx");
+                sheet  = workbook.getWorksheets().get(0);
+                int cellaszam = 11;                
+                for (int a = 0; a < sheet.getLastColumn(); a++)
+                {
+                    String adat = sheet.getRange().get(1, cellaszam).toString();
+                    if(adat.contains("value"))
+                    {
+                        
+                    }
+                    else
+                    {
+                        sheet.deleteColumn(cellaszam);
+                    }
+                    cellaszam++;                               
+                }
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                workbook.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+               
+             }
+            catch(Exception ex2)
+             {
+                ex2.printStackTrace();
+                String hibauzenet2 = ex2.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+             }
+            
          }
     }
 }
