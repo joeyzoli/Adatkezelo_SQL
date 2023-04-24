@@ -59,6 +59,7 @@ public class Foablak extends JFrame
 	private Tracy_utolso utolsotracy;
 	private Gepes_ellenorok ellenorok;
 	private AVM_csomagoloanyag avm;
+	private IQC_ellenorzes iqc;
 	private Ellenorok ellenori_nevek;
 	private Teszt_kezdes teszt_kezd;
 	private Teszt_lezaras teszt_lezar;
@@ -220,6 +221,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem tracy_utolso = new JMenuItem("Tracy utosló folyamat");
 		tracy_utolso.addActionListener(new PanelCsere_tracy_utolso());
+		
+		JMenuItem iqc = new JMenuItem("IQC ellenőrzés");
+		iqc.addActionListener(new PanelCsere_iqc());
+		lekerdezes.add(iqc);
 		lekerdezes.add(tracy_utolso);
 		lekerdezes.add(telecom_utolso);
 		lekerdezes.add(folyamatellenorok);
@@ -491,6 +496,17 @@ public class Foablak extends JFrame
          {
             avm = new AVM_csomagoloanyag();
             JScrollPane ablak = new JScrollPane(avm);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_iqc implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            iqc = new IQC_ellenorzes();
+            JScrollPane ablak = new JScrollPane(iqc);
             setContentPane(ablak);
             pack();
          }

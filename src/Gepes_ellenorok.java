@@ -76,7 +76,7 @@ public class Gepes_ellenorok extends JPanel
         
         table = new JTable();
         JScrollPane gorgeto = new JScrollPane(table);
-        gorgeto.setBounds(61, 270, 1039, 172);
+        gorgeto.setBounds(10, 270, 1170, 172);
         add(gorgeto);
         
         cikkszam_mezo = new JTextField();
@@ -90,7 +90,7 @@ public class Gepes_ellenorok extends JPanel
         
         table_1 = new JTable();
         JScrollPane gorgeto2 = new JScrollPane(table_1);
-        gorgeto2.setBounds(61, 453, 1039, 239);
+        gorgeto2.setBounds(10, 453, 1170, 239);
         add(gorgeto2);
 
     }
