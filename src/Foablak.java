@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -42,8 +43,6 @@ public class Foablak extends JFrame
 	private Sajat_SQL sajat_sql;
 	private PO_szam po;
 	private Hitlista hitlista;
-	//private Uj_adatok muszaki_adatok;
-	//private Muszaki_leker muszaki_leker;
 	private ProGlove proglove;
 	private Loxone loxon;
 	private Hatter_beallitas hatterbeall;
@@ -463,6 +462,8 @@ public class Foablak extends JFrame
          {
             ppm = new Beszallitoi_PPM();
             JScrollPane ablak = new JScrollPane(ppm);
+            ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             setContentPane(ablak);
             pack();
          }

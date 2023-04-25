@@ -79,6 +79,7 @@ public class Telecom_utolso extends JPanel {
                   sheet2.getRange().get("B" + cellaszam).setText("Feldolgozás dátuma");
                   sheet2.getRange().get("C" + cellaszam).setText("Munkahely száma");
                   sheet2.getRange().get("D" + cellaszam).setText("Eredmény");
+                  sheet2.getRange().get("E" + cellaszam).setText("Új fej státusz");
                   cellaszam++;
                   
                   for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
@@ -86,7 +87,7 @@ public class Telecom_utolso extends JPanel {
                       ResultSet rs = stmt.executeQuery("select TRACY_SERIAL_NO,\r\n"
                               + "PROCESS_DATE,\r\n"
                               + "WORK_CENTER_NO, \r\n"
-                              + "PASS "
+                              + "PASS, NEW_HEAD_STATE "
                               + "from ifsapp.C_OPER_TRACY_OVW, \r\n"
                               + "(select TRACY_SERIAL_NO as szeriaszam,\r\n"
                               + "MAX(PROCESS_DATE) as maxido\r\n"
@@ -101,7 +102,8 @@ public class Telecom_utolso extends JPanel {
                           sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
                           sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
                           sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                          sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4)); 
+                          sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                          sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
                       }                      
                       else
                       {
