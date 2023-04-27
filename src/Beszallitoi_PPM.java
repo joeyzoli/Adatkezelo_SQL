@@ -28,6 +28,7 @@ import com.spire.xls.Worksheet;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 public class Beszallitoi_PPM extends JPanel 
 {
@@ -88,6 +89,18 @@ public class Beszallitoi_PPM extends JPanel
         excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(544, 488, 89, 23);
         add(excel_gomb);
+        
+        JLabel lblNewLabel_3 = new JLabel("Megjegyzés:");
+        lblNewLabel_3.setBounds(695, 492, 96, 14);
+        add(lblNewLabel_3);
+        
+        JTextArea megjegyzes_mezo = new JTextArea();
+        megjegyzes_mezo.setBounds(784, 487, 275, 102);
+        megjegyzes_mezo.setText("A PPM értékeknél a mínusz eredmény azért keletkezik, mert az adott hónapban több db-ot mozgattak ki a raktárhelyről mint amennyit be. Ennek az az oka, hogy előző hónapról volt ott már anyag.");
+        megjegyzes_mezo.setLineWrap(true);
+        megjegyzes_mezo.setWrapStyleWord(true);
+        megjegyzes_mezo.setEditable(false);
+        add(megjegyzes_mezo);
 
     }
     
