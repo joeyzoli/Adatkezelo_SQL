@@ -16,7 +16,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.spire.data.table.DataTable;
@@ -82,7 +86,7 @@ public class Beszallitoi_PPM extends JPanel
         add(gorgeto);
                
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"Cikkszám","Cikk megnevezés", "Beszállító", "Beérkezve", "Fehasználva", "Zárolt", "Felszabadítva", "PPM", "Osztály", "Csoport", "Típus", "Beszállítói target", "Cikkcsoport target"});
+        modell.setColumnIdentifiers(new Object[]{"Cikkszám","Cikk megnevezés", "Beszállító", "Beérkezve", "Fehasználva", "Zárolt", "Felszabadítva", "PPM", "Csoport", "Osztály", "Típus", "Beszállítói target", "Cikkcsoport target"});
         table.setModel(modell);
         
         JButton excel_gomb = new JButton("Excel");
@@ -265,8 +269,8 @@ public class Beszallitoi_PPM extends JPanel
                                 sheet.getCellRange("F" + cellaszam).setNumberValue(selejt);
                                 sheet.getCellRange("G" + cellaszam).setNumberValue(visszakonyvelve);
                                 sheet.getCellRange("H" + cellaszam).setNumberValue(Integer.valueOf(simappm[0]));
-                                sheet.getRange().get("I" + cellaszam).setText(osztaly);
-                                sheet.getRange().get("J" + cellaszam).setText(csoport);
+                                sheet.getRange().get("J" + cellaszam).setText(osztaly);
+                                sheet.getRange().get("I" + cellaszam).setText(csoport);
                                 sheet.getRange().get("K" + cellaszam).setText(tipus);
                             }
                             else
@@ -279,8 +283,8 @@ public class Beszallitoi_PPM extends JPanel
                                 sheet.getCellRange("F" + cellaszam).setNumberValue(selejt);
                                 sheet.getCellRange("G" + cellaszam).setNumberValue(visszakonyvelve);
                                 sheet.getCellRange("H" + cellaszam).setNumberValue(ppm);
-                                sheet.getRange().get("I" + cellaszam).setText(osztaly);
-                                sheet.getRange().get("J" + cellaszam).setText(csoport);
+                                sheet.getRange().get("J" + cellaszam).setText(osztaly);
+                                sheet.getRange().get("I" + cellaszam).setText(csoport);
                                 sheet.getRange().get("K" + cellaszam).setText(tipus);
                             }
                         }
@@ -308,7 +312,10 @@ public class Beszallitoi_PPM extends JPanel
                                 datatable.getRows().get(szamlalo).getString(9), datatable.getRows().get(szamlalo).getString(10)});
                     }
                       
-                table.setModel(modell);               
+                table.setModel(modell);
+                RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modell);
+
+                table.setRowSorter(sorter);
                 ellenorzo = 1;               
                 con.close();
                 Foablak.frame.setCursor(null);                            
