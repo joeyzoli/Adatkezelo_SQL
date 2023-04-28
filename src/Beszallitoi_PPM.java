@@ -226,17 +226,22 @@ public class Beszallitoi_PPM extends JPanel
                                 + "from ifsapp.INVENTORY_PART_CHAR_ALL\r\n"
                                 + "where 3=3\r\n"
                                 + "and part_no = '"+ cikkszamok.get(szamlalo) +"'");
-                        if(rs.next())
-                        {                       
-                            osztaly = rs.getString(1);                        
-                        }
-                        if(rs.next())
-                        {                       
-                            csoport = rs.getString(1);                        
-                        }
-                        if(rs.next())
-                        {                       
-                            tipus = rs.getString(1);                        
+                        int a = 1;
+                        while(rs.next())
+                        {
+                            if(a == 1)
+                            {                       
+                                osztaly = rs.getString(1);                        
+                            }
+                            if(a == 2)
+                            {                       
+                                csoport = rs.getString(1);                        
+                            }
+                            if(a == 3)
+                            {                       
+                                tipus = rs.getString(1);                        
+                            }
+                            a++;
                         }
                         selejt = selejt - visszakonyvelve;
                         if(selejt == 0)
@@ -279,6 +284,9 @@ public class Beszallitoi_PPM extends JPanel
                                 sheet.getRange().get("K" + cellaszam).setText(tipus);
                             }
                         }
+                        osztaly = "";
+                        csoport = "";
+                        tipus = "";
                         
                         cellaszam++;
                     }                    
@@ -287,12 +295,12 @@ public class Beszallitoi_PPM extends JPanel
                     sheet.getAllocatedRange().autoFitRows();
                     sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                     workbook.getDataSorter().getSortColumns().add(7, SortComparsionType.Values, OrderBy.Descending);
-                    workbook.getDataSorter().sort(sheet.getCellRange("A1:I"+ sheet.getLastRow()));
+                    workbook.getDataSorter().sort(sheet.getCellRange("A1:K"+ sheet.getLastRow()));
                     sheet = workbook.getWorksheets().get(0);
                     DataTable datatable = new DataTable();
                     datatable = sheet.exportDataTable();
 
-                    for(int szamlalo = 2; szamlalo < datatable.getRows().size(); szamlalo++)
+                    for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                     {
                         modell.addRow(new Object[]{datatable.getRows().get(szamlalo).getString(0), datatable.getRows().get(szamlalo).getString(1), datatable.getRows().get(szamlalo).getString(2),
                                 datatable.getRows().get(szamlalo).getString(3), datatable.getRows().get(szamlalo).getString(4), datatable.getRows().get(szamlalo).getString(5),

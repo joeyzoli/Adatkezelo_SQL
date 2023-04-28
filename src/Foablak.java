@@ -242,6 +242,7 @@ public class Foablak extends JFrame
 		vizsga_pontok.addActionListener(new PanelCsere_teszt_pont());
 		
 		JMenu monitoring = new JMenu("Monitoring");
+		monitoring.setForeground(new Color(0, 153, 0));
 		menuBar.add(monitoring);
 		
 		JMenuItem oqc = new JMenuItem("OQC átvételek");
