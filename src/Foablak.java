@@ -121,7 +121,6 @@ public class Foablak extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                       //JFrame.EXIT_ON_CLOSE
         this.setPreferredSize(meretek);
         setTitle("Minőségügyi Adatbázis kezelő");
-        
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
