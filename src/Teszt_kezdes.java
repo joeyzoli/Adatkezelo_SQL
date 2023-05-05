@@ -66,11 +66,11 @@ public class Teszt_kezdes extends JPanel
                     {
                         tesztszam = 0;
                     }
-                    else if(veletlen >= 5 && veletlen < 10)
+                    else if(veletlen >= 5 && veletlen < 11)
                     {
                         tesztszam = 1;
                     }
-                    else  if(veletlen >= 10)
+                    else  if(veletlen >= 11)
                     {
                         tesztszam = 2;
                     }

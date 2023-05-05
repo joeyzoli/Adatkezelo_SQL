@@ -163,54 +163,65 @@ public class Teszt_7 extends JPanel
          {
             try 
             {
-                if(elfog1.isSelected())
+                int res = JOptionPane.showConfirmDialog(null,                                                                           //megerősítést kérő üzenet jelenik meg
+                        "Figyelem! Biztosan ezt akarod? \n Ezzel befejezed a tesztet!", 
+                        "Figyelmeztetés", 
+                        JOptionPane.YES_NO_OPTION);
+                if (res == JOptionPane.YES_OPTION)                                                                                      //igen gomb megnyomásakot törli a megadott sort
                 {
-                    valasz1 = elfog1.getText();
+                    if(elfog1.isSelected())
+                    {
+                        valasz1 = elfog1.getText();
+                    }
+                    else
+                    {
+                        valasz1 = nemelfog1.getText();
+                    }
+                    if(elfog2.isSelected())
+                    {
+                        valasz2 = elfog2.getText();
+                    }
+                    else
+                    {
+                        valasz2 = nemelfog2.getText();
+                    }
+                    if(elfog3.isSelected())
+                    {
+                        valasz3 = elfog3.getText();
+                    }
+                    else
+                    {
+                        valasz3 = nemelfog3.getText();
+                    }
+                    if(elfog4.isSelected())
+                    {
+                        valasz4 = elfog4.getText();
+                    }
+                    else
+                    {
+                        valasz4 = nemelfog4.getText();
+                    }
+                    if(elfog5.isSelected())
+                    {
+                        valasz5 = elfog5.getText();
+                    }
+                    else
+                    {
+                        valasz5 = nemelfog5.getText();
+                    }
+                    SQL_teszt dbiras = new SQL_teszt();
+                    String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz34 = '" + valasz1 +"', Valasz35 = '" + valasz2 +"', Valasz36 = '" + valasz3 +
+                            "', Valasz37 = '" + valasz4 + "', Valasz38 = '" + valasz5 + "', Vizsga_hossza = '" + (Teszt_kezdes.measureTime(false)/1000000000) + "' where ID = '" + Teszt_kezdes.id +"'";
+                    
+                    dbiras.iras(sql, "", "");               
+                    Teszt_vege  vege= new Teszt_vege();
+                    Foablak.frame.setContentPane(vege);
+                    Foablak.frame.pack();
                 }
-                else
+                else                                                                                                                    //nem válasz estén hibaüzenet és a pcb sorszám törlése
                 {
-                    valasz1 = nemelfog1.getText();
+                                  
                 }
-                if(elfog2.isSelected())
-                {
-                    valasz2 = elfog2.getText();
-                }
-                else
-                {
-                    valasz2 = nemelfog2.getText();
-                }
-                if(elfog3.isSelected())
-                {
-                    valasz3 = elfog3.getText();
-                }
-                else
-                {
-                    valasz3 = nemelfog3.getText();
-                }
-                if(elfog4.isSelected())
-                {
-                    valasz4 = elfog4.getText();
-                }
-                else
-                {
-                    valasz4 = nemelfog4.getText();
-                }
-                if(elfog5.isSelected())
-                {
-                    valasz5 = elfog5.getText();
-                }
-                else
-                {
-                    valasz5 = nemelfog5.getText();
-                }
-                SQL_teszt dbiras = new SQL_teszt();
-                String sql = "UPDATE qualitydb.Ellenori_vizsga set Valasz34 = '" + valasz1 +"', Valasz35 = '" + valasz2 +"', Valasz36 = '" + valasz3 +
-                        "', Valasz37 = '" + valasz4 + "', Valasz38 = '" + valasz5 + "', Vizsga_hossza = '" + (Teszt_kezdes.measureTime(false)/1000000000) + "' where ID = '" + Teszt_kezdes.id +"'";
-                
-                dbiras.iras(sql, "", "");               
-                Teszt_vege  vege= new Teszt_vege();
-                Foablak.frame.setContentPane(vege);
-                Foablak.frame.pack();
             } 
             catch (Exception e1) 
             {              
@@ -316,47 +327,47 @@ public class Teszt_7 extends JPanel
             
             if(SQL_teszt.beirt.get(47) != null)
             {
-                if(SQL_teszt.beirt.get(47).equals(elfog1.getText()));
+                if(SQL_teszt.beirt.get(47).equals(elfog1.getText()))
                 {
                     elfog1.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(47).equals(nemelfog1.getText()));
+                else if(SQL_teszt.beirt.get(47).equals(nemelfog1.getText()))
                 {
                     nemelfog1.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(48).equals(elfog2.getText()));
+                if(SQL_teszt.beirt.get(48).equals(elfog2.getText()))
                 {
                     elfog2.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(48).equals(nemelfog2.getText()));
+                else if(SQL_teszt.beirt.get(48).equals(nemelfog2.getText()))
                 {
                     nemelfog2.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(49).equals(elfog3.getText()));
+                if(SQL_teszt.beirt.get(49).equals(elfog3.getText()))
                 {
                     elfog3.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(49).equals(nemelfog3.getText()));
+                else if(SQL_teszt.beirt.get(49).equals(nemelfog3.getText()))
                 {
                     nemelfog3.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(50).equals(elfog4.getText()));
+                if(SQL_teszt.beirt.get(50).equals(elfog4.getText()))
                 {
                     elfog4.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(50).equals(nemelfog4.getText()));
+                else if(SQL_teszt.beirt.get(50).equals(nemelfog4.getText()))
                 {
                     nemelfog4.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(51).equals(elfog5.getText()));
+                if(SQL_teszt.beirt.get(51).equals(elfog5.getText()))
                 {
                     elfog5.setSelected(true);
                 }
-                if(SQL_teszt.beirt.get(51).equals(nemelfog5.getText()));
+                else if(SQL_teszt.beirt.get(51).equals(nemelfog5.getText()))
                 {
                     nemelfog5.setSelected(true);
-                }          
-            }
+                }        
+            }            
         }
         catch (Exception e1) 
         {              

@@ -111,14 +111,17 @@ public class Teszt_lezaras extends JPanel
          {
             try 
             {
+                int column = 0;
+                int row = table.getSelectedRow();
+                String id = table.getModel().getValueAt(row, column).toString();
                 SQL_teszt lekerdez = new SQL_teszt();
-                lekerdez.eredmenyek_excel(nev_mezo.getText());
+                lekerdez.eredmenyek_excel(id);
             } 
             catch (Exception e1) 
             {              
                 e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                //String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, "Nincs sor kiválasztva!!", "Hiba üzenet", 2);
             }
          }
     }

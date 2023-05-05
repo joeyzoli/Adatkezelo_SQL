@@ -125,7 +125,7 @@ public class SQL_teszt
       
         while(result.next())
         {
-            for(int szamlalo = 1; szamlalo < 52; szamlalo++)
+            for(int szamlalo = 1; szamlalo < 53; szamlalo++)
             {
                 beirt.add(result.getString(szamlalo));
             }           
@@ -267,7 +267,7 @@ public class SQL_teszt
  
     }
        
-    public void eredmenyek_excel(String nev)
+    public void eredmenyek_excel(String id)
     {   
         Connection con = null;
         PreparedStatement ps = null;
@@ -292,7 +292,7 @@ public class SQL_teszt
             }
            
             con = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
-            ps= con.prepareStatement("SELECT Kep1, Kep2, Kep3, Kep4, Kep5, Kep6, Kep7, Kep8, Kep9, Kep10 FROM qualitydb.Ellenori_vizsga WHERE nev = '"+ nev +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+            ps= con.prepareStatement("SELECT Kep1, Kep2, Kep3, Kep4, Kep5, Kep6, Kep7, Kep8, Kep9, Kep10 FROM qualitydb.Ellenori_vizsga WHERE ID = '"+ id +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
             ResultSet rset = ps.executeQuery();         
             byte b[];
             Blob blob;
@@ -300,8 +300,7 @@ public class SQL_teszt
             if(rset.next())
             {
                 for(int szamlalo = 0; szamlalo < 10; szamlalo++)
-                {
-                    
+                {                    
                     File f = new File(System.getProperty("user.home") + "\\"+ szam +".jpg");
                     fs = new FileOutputStream(f);
                     blob = rset.getBlob("Kep"+ szam);
@@ -317,7 +316,7 @@ public class SQL_teszt
             String sql = "select nev, datum, valtozat, valasz1, valasz2, valasz3, valasz4, valasz5, valasz6, valasz7, valasz8, valasz9, valasz10, valasz11, valasz12, valasz13, valasz14, valasz15, valasz16, valasz17, "
                     + "valasz18, valasz19, valasz20, valasz21, valasz22, valasz23, valasz24, valasz25, valasz26, valasz27, valasz28, valasz29, valasz30, valasz31, valasz32, valasz33, valasz34, valasz35, valasz36,"
                     + " valasz37, valasz38 "
-                    + " from qualitydb.Ellenori_vizsga WHERE nev = '"+ nev +"'";
+                    + " from qualitydb.Ellenori_vizsga WHERE ID = '"+ id +"'";
             stmt.execute(sql);
             ResultSet resultSet = stmt.getResultSet();
             Workbook workbook = new Workbook();
