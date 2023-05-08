@@ -375,68 +375,6 @@ public class SQL
 	    JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);
 	}
 	
-	
-	public void muszaki_lekerdezo(String tipus)
-    {
-        Connection conn = null;
-        Statement stmt = null;
-        //DataTable datatable = new DataTable();
-        try 
-        {
-           try 
-           {
-              Class.forName("com.mysql.cj.jdbc.Driver");
-           } 
-           catch (Exception e) 
-           {
-              System.out.println(e);
-              String hibauzenet2 = e.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-           }
-        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String sajat = "SELECT * FROM  qualitydb.Muszaki_adatok where Tipus = '"+ tipus +"'";
-        stmt.execute(sajat);
-        resultSet = stmt.getResultSet();
-        
-        Muszaki_leker.eredmeny.setModel(buildTableModel(resultSet));
-        System.out.print("elment");
-        
-       
-        resultSet.close();
-        stmt.close();
-        conn.close();
-        
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-        } 
-        catch (Exception e) 
-        {
-           e.printStackTrace();
-        } 
-        finally 
-        {
-           try 
-           {
-              if (stmt != null)
-                 conn.close();
-           } 
-           catch (SQLException se) {}
-           try 
-           {
-              if (conn != null)
-                 conn.close();
-           } 
-           catch (SQLException se) 
-           {
-              se.printStackTrace();
-           }  
-        }
-        JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);  
-    }
-	
 	public void top_hiba(String tipus)
     {
         Connection conn = null;
@@ -2555,7 +2493,7 @@ public class SQL
  
     }
 	
-	public void lekerdez_ellenorok(String querry, String querry2)
+	public void lekerdez_ellenorok(String querry, String querry2, String querry3)
     {
     
 	    Connection conn = null;
@@ -2583,7 +2521,28 @@ public class SQL
             stmt.execute(querry2);
             resultSet = stmt.getResultSet();
             Gepes_ellenorok.table_1.setModel(buildTableModel(resultSet));
-
+            
+            stmt.execute(querry3);
+            resultSet = stmt.getResultSet();
+            FileOutputStream fs=null;
+            byte b[];
+            Blob blob;
+            int szam = 0;
+            while(resultSet.next())
+            {        
+                File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
+                fs = new FileOutputStream(f);
+                blob = resultSet.getBlob("Kep");
+                b = blob.getBytes(1, (int)blob.length());
+                fs.write(b);
+                fs.close();
+                szam++;
+            }            
+            
+            if(szam > 0)
+            { 
+                JOptionPane.showMessageDialog(null, "Képek mentve az asztalra", "Info", 1);
+            }
             resultSet.close();
             stmt.close();
             conn.close();

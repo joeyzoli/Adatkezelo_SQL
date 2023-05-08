@@ -127,8 +127,10 @@ public class Gepes_ellenorok extends JPanel
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";                                                                 //tárolt eljárás Stringje
                 String sql2 = "select * from qualitydb.Folyamatellenori_nxt where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() + "' and Nev like '"+ ellenor +                       
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
+                String sql3 = "select Kep, Kep_nev from qualitydb.Folyamatellenori_kepek where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                        "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                lekerdezo.lekerdez_ellenorok(sql, sql2);   //függvénymeghívása a paraméterekkel
+                lekerdezo.lekerdez_ellenorok(sql, sql2, sql3);   //függvénymeghívása a paraméterekkel
              
                 Foablak.frame.setCursor(null);
             }
