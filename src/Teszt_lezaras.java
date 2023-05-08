@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -34,6 +36,7 @@ public class Teszt_lezaras extends JPanel
         
         nev_mezo = new JTextField();
         nev_mezo.setBounds(527, 134, 156, 20);
+        nev_mezo.addKeyListener(new Enter());
         add(nev_mezo);
         nev_mezo.setColumns(10);
         
@@ -70,7 +73,7 @@ public class Teszt_lezaras extends JPanel
             try 
             {
                 SQL_teszt lekerdez = new SQL_teszt();
-                String sql= "select id, nev, datum, pont from qualitydb.Ellenori_vizsga where 3 = 3 and nev = '" + nev_mezo.getText() + "'";
+                String sql= "select id, nev, datum, pont from qualitydb.Ellenori_vizsga where 3 = 3 and nev like '" + nev_mezo.getText() + "'";
                 lekerdez.lekerdez_mutat(sql, "igen");
             } 
             catch (Exception e1) 
@@ -80,6 +83,40 @@ public class Teszt_lezaras extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                try 
+                {
+                    SQL_teszt lekerdez = new SQL_teszt();
+                    String sql= "select id, nev, datum, pont from qualitydb.Ellenori_vizsga where 3 = 3 and nev like '" + nev_mezo.getText() + "'";
+                    lekerdez.lekerdez_mutat(sql, "igen");
+                } 
+                catch (Exception e1) 
+                {              
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
     
     class Pontoz implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
