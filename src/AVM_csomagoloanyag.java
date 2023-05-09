@@ -24,13 +24,17 @@ import com.spire.xls.SortComparsionType;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class AVM_csomagoloanyag extends JPanel {
     private JTextField datumtol_mezo;
     private JTextField datumig_mezo;
     static int cellaszam = 1;
-    private String hova = System.getProperty("user.home") + "\\Desktop\\AVM csomagolóanyag PPM.xlsx";;
+    private String hova = System.getProperty("user.home") + "\\Desktop\\AVM csomagolóanyag PPM.xlsx";
+    private JComboBox<String> beszallito_box;
+    private DefaultComboBoxModel<String> model;
 
     /**
      * Create the panel.
@@ -63,8 +67,17 @@ public class AVM_csomagoloanyag extends JPanel {
         
         JButton keres_gomb = new JButton("Keresés");
         keres_gomb.addActionListener(new Excel());
-        keres_gomb.setBounds(451, 224, 89, 23);
+        keres_gomb.setBounds(452, 281, 89, 23);
         add(keres_gomb);
+        
+        JLabel lblNewLabel_3 = new JLabel("Beszállító");
+        lblNewLabel_3.setBounds(399, 215, 70, 14);
+        add(lblNewLabel_3);
+        
+        beszallito_box = new JComboBox<String>();
+        beszallito_box.setBounds(492, 211, 455, 22);
+        add(beszallito_box);
+        beolvasas();
 
     }
     
@@ -86,7 +99,6 @@ public class AVM_csomagoloanyag extends JPanel {
             sheet2.getRange().get("B" + cellaszam).setText("Beérkezett db");
             sheet2.getRange().get("C" + cellaszam).setText("Rendlési szám");
             sheet2.getRange().get("D" + cellaszam).setText("Felhasználva");
-            sheet2.getRange().get("E" + cellaszam).setText("Készlet");
             cellaszam++;                      
             try
             {                           
@@ -102,18 +114,18 @@ public class AVM_csomagoloanyag extends JPanel {
                 ArrayList<String> megnevezes = new ArrayList<String>();
                 ArrayList<String> avm_cikkszamok = new ArrayList<String>();
                 ArrayList<Integer> beszerzett_db = new ArrayList<Integer>();
-                ArrayList<Integer> rendelesi_azonosito = new ArrayList<Integer>();
+                ArrayList<String> rendelesi_azonosito = new ArrayList<String>();
                 //ArrayList<Object[]> ppmek = new ArrayList<Object[]>();
                 DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
                 Class.forName("oracle.jdbc.OracleDriver");  //.driver
                                     
                 Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                 Statement stmt = con.createStatement();
-                
+                String[] beszszam = String.valueOf(beszallito_box.getSelectedItem()).split(":");
                 ResultSet rs = stmt.executeQuery("select PART_NO\r\n"
                         + "from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
                         + "where 3 = 3\r\n"
-                        + "and VENDOR_NO = '36976'");
+                        + "and VENDOR_NO = '"+ beszszam[1] +"'");
                 while(rs.next())
                 {
                     avm_cikkszamok.add(rs.getString(1));
@@ -186,17 +198,41 @@ public class AVM_csomagoloanyag extends JPanel {
                     while(rs.next())
                     {            
                         beszerzett_db.add(rs.getInt(1));
-                        rendelesi_azonosito.add(rs.getInt(2));
+                        rendelesi_azonosito.add(rs.getString(2));
                     }                 
-                    
-                    for(int szamlalo2 = 0; szamlalo2 < beszerzett_db.size() -1; szamlalo2++)
+                    int fel1 = 0;
+                    int fel2 = 0;
+                    int eredmeny = 0;
+                    int seged = 0;
+                    int felhasznalt = felhasznalva + zarolt;
+                    for(int szamlalo2 = 0; eredmeny <= felhasznalt; szamlalo2++)
                     {
-                        sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
-                        sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
-                        sheet2.getCellRange("C" + cellaszam2).setNumberValue(rendelesi_azonosito.get(szamlalo2));
-                        sheet2.getCellRange("D" + cellaszam2).setNumberValue(felhasznalva + zarolt);
-                        sheet2.getCellRange("E" + cellaszam2).setNumberValue(keszlet);
-                        cellaszam2++;
+                        fel1 = beszerzett_db.get(szamlalo2);
+                        fel2 += fel1;
+                        if(fel2 > keszlet)
+                        {            
+                            seged =  fel2 - keszlet;
+                            sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
+                            sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                            sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
+                            sheet2.getCellRange("D" + cellaszam2).setNumberValue(seged);
+                            cellaszam2++;
+                            eredmeny += seged;
+                            szamlalo2++;
+                            while(eredmeny <= felhasznalt)
+                            {
+                                eredmeny += beszerzett_db.get(szamlalo2);
+                                sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
+                                sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
+                                sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                cellaszam2++;
+                                szamlalo2++;
+                            }
+                            cellaszam2--;szamlalo2--;
+                            seged = eredmeny- felhasznalt;
+                            sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2)-seged);
+                        }                      
                     }                        
                     
                     cellaszam2++;
@@ -212,6 +248,7 @@ public class AVM_csomagoloanyag extends JPanel {
                     rendelesi_azonosito.clear();
                     //cellaszam = sheet.getLastRow()+5;
                     cellaszam++;
+                    zarolt = 0;felhasznalva = 0;keszlet = 0;                   
                 }                
                
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
@@ -243,14 +280,52 @@ public class AVM_csomagoloanyag extends JPanel {
                 con.close();  
                 Foablak.frame.setCursor(null);          
               
-        }           
+            }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                Foablak.frame.setCursor(null);
+            }  
+        }    
+    }
+    
+    private void beolvasas()
+    {
+        try
+        {
+            DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+            Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+            Statement stmt = con.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("select ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO),\r\n"
+                    + "VENDOR_NO\r\n"
+                    + "from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
+                    + "where 3=3\r\n"
+                    + "group by VENDOR_NO ORDER by ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO) asc");
+            ArrayList<String> adatok = new ArrayList<String>();
+            while(rs.next())
+            {
+                adatok.add(rs.getString(1) +":"+ rs.getString(2));
+            }
+            String[] beszallitok = new String[adatok.size()];
+            for(int szamlalo = 0; szamlalo < adatok.size(); szamlalo++)
+            {
+                beszallitok[szamlalo] = adatok.get(szamlalo);
+            }
+            model = new DefaultComboBoxModel<>(beszallitok);
+            beszallito_box.setModel(model);
+        }
         catch(Exception e1)
         { 
             System.out.println(e1);
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
             JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
-        }  
-         }    
+        }
     }
 }

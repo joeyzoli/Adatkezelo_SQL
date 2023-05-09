@@ -7,6 +7,9 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -41,12 +44,14 @@ public class Gepes_ellenorok extends JPanel
         lblNewLabel_2.setBounds(493, 89, 69, 14);
         add(lblNewLabel_2);
         
-        datumtol_mezo = new JTextField();
+        datumtol_mezo = new JTextField("2023.04.21");
         datumtol_mezo.setBounds(618, 55, 86, 20);
         add(datumtol_mezo);
         datumtol_mezo.setColumns(10);
         
-        datumig_mezo = new JTextField();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date();
+        datumig_mezo = new JTextField(formatter.format(date));
         datumig_mezo.setBounds(618, 86, 86, 20);
         add(datumig_mezo);
         datumig_mezo.setColumns(10);
