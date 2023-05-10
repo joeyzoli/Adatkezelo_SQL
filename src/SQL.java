@@ -2493,7 +2493,7 @@ public class SQL
  
     }
 	
-	public void lekerdez_ellenorok(String querry, String querry2, String querry3)
+	public void lekerdez_ellenorok(String querry, String querry2, String querry3, int valtozat)
     {
     
 	    Connection conn = null;
@@ -2513,35 +2513,101 @@ public class SQL
            }
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);           
-            stmt.execute(querry);
-            resultSet = stmt.getResultSet();
-            
-            Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
-            
-            stmt.execute(querry2);
-            resultSet = stmt.getResultSet();
-            Gepes_ellenorok.table_1.setModel(buildTableModel(resultSet));
-            
-            stmt.execute(querry3);
-            resultSet = stmt.getResultSet();
-            FileOutputStream fs=null;
-            byte b[];
-            Blob blob;
-            int szam = 0;
-            while(resultSet.next())
-            {        
-                File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
-                fs = new FileOutputStream(f);
-                blob = resultSet.getBlob("Kep");
-                b = blob.getBytes(1, (int)blob.length());
-                fs.write(b);
-                fs.close();
-                szam++;
-            }            
-            
-            if(szam > 0)
-            { 
-                JOptionPane.showMessageDialog(null, "Képek mentve az asztalra", "Info", 1);
+            if(valtozat == 1)
+            {
+                stmt.execute(querry);
+                resultSet = stmt.getResultSet();
+                
+                Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
+                
+                stmt.execute(querry2);
+                resultSet = stmt.getResultSet();
+                Gepes_ellenorok.table_1.setModel(buildTableModel(resultSet));
+                
+                stmt.execute(querry3);
+                resultSet = stmt.getResultSet();
+                FileOutputStream fs=null;
+                byte b[];
+                Blob blob;
+                int szam = 0;
+                while(resultSet.next())
+                {        
+                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
+                    fs = new FileOutputStream(f);
+                    blob = resultSet.getBlob("Kep");
+                    b = blob.getBytes(1, (int)blob.length());
+                    fs.write(b);
+                    fs.close();
+                    szam++;
+                }            
+                
+                if(szam > 0)
+                { 
+                    JOptionPane.showMessageDialog(null, "Képek mentve az asztalra", "Info", 1);
+                }
+            }
+            if(valtozat == 2)
+            {
+                stmt.execute(querry);
+                resultSet = stmt.getResultSet();
+                Workbook workbook = new Workbook();
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                Worksheet sheet2 = workbook.getWorksheets().get(1);
+                DataTable datatable = new DataTable();
+                DataTable datatable2 = new DataTable();
+                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                jdbcAdapter.fillDataTable(datatable, resultSet);
+                sheet.insertDataTable(datatable, true, 1, 1);
+                
+                stmt.execute(querry2);
+                resultSet = stmt.getResultSet();
+                jdbcAdapter.fillDataTable(datatable2, resultSet);
+                sheet2.insertDataTable(datatable2, true, 1, 1);
+                
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();                
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();                
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás                
+                
+                stmt.execute(querry3);
+                resultSet = stmt.getResultSet();
+                FileOutputStream fs=null;
+                byte b[];
+                Blob blob;
+                int szam = 0;
+                while(resultSet.next())
+                {        
+                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
+                    fs = new FileOutputStream(f);
+                    blob = resultSet.getBlob("Kep");
+                    b = blob.getBytes(1, (int)blob.length());
+                    fs.write(b);
+                    fs.close();
+                    szam++;
+                }            
+                
+                if(szam > 0)
+                { 
+                    JOptionPane.showMessageDialog(null, "Képek mentve az asztalra", "Info", 1);
+                }
+                workbook.saveToFile(System.getProperty("user.home") + "\\Desktop\\Gépes folyamatellenőrzés.xlsx", ExcelVersion.Version2016);               
+                
+                FileInputStream fileStream = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\Gépes folyamatellenőrzés.xlsx");
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\Gépes folyamatellenőrzés.xlsx");
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Excel mentve az asztalra Gépes folyamatellenőrzés.xlsx néven", "Info", 1);
             }
             resultSet.close();
             stmt.close();

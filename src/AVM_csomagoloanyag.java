@@ -88,7 +88,9 @@ public class AVM_csomagoloanyag extends JPanel {
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Workbook workbook = new Workbook();
             Worksheet sheet = workbook.getWorksheets().get(0);
-            Worksheet sheet2 = workbook.getWorksheets().get(1); 
+            Worksheet sheet2 = workbook.getWorksheets().get(1);
+            sheet.setName("PPM");
+            sheet2.setName("Felhasználás");
             sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
             sheet.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
             sheet.getRange().get("C" + cellaszam).setText("Felhasználva");
@@ -187,18 +189,19 @@ public class AVM_csomagoloanyag extends JPanel {
                     }
                     
                     rs = stmt.executeQuery("select sum(QTY_ARRIVED),\r\n"
-                            + "RECEIPT_REFERENCE\r\n"
+                            + "RECEIPT_REFERENCE,\r\n"
                             + "ARRIVAL_DATE\r\n"
                             + "from ifsapp.PURCHASE_RECEIPT_NEW\r\n"
                             + "where 3 = 3\r\n"
                             + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'\r\n"
-                            + "group by RECEIPT_REFERENCE\r\n"
+                            + "group by RECEIPT_REFERENCE, ARRIVAL_DATE\r\n"
                             + "order by ARRIVAL_DATE DESC\r\n"
                             + "FETCH FIRST 8 ROWS ONLY");
                     while(rs.next())
                     {            
                         beszerzett_db.add(rs.getInt(1));
                         rendelesi_azonosito.add(rs.getString(2));
+                        System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
                     }                 
                     int fel1 = 0;
                     int fel2 = 0;
@@ -216,9 +219,8 @@ public class AVM_csomagoloanyag extends JPanel {
                             sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
                             sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
                             sheet2.getCellRange("D" + cellaszam2).setNumberValue(seged);
-                            cellaszam2++;
-                            eredmeny += seged;
-                            szamlalo2++;
+                            cellaszam2++;szamlalo2++;
+                            eredmeny += seged;                            
                             while(eredmeny <= felhasznalt)
                             {
                                 eredmeny += beszerzett_db.get(szamlalo2);
