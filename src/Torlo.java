@@ -6,8 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
+import com.spire.pdf.FileFormat;
+import com.spire.pdf.PdfDocument;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -53,14 +61,14 @@ public class Torlo extends JPanel
 		
 		JButton csv_gomb = new JButton("CSV");
 		csv_gomb.setBounds(132, 268, 54, 23);
-		csv_gomb.addActionListener(new CSV_gyart());
+		csv_gomb.addActionListener(new PDF());
 		
 		JLabel lblNewLabel_3 = new JLabel("Adatbázis feltöltése");
 		lblNewLabel_3.setBounds(412, 236, 134, 14);
 		
 		JButton feltolt = new JButton("feltölt");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Oszloptorles());
+		feltolt.addActionListener(new Atallas());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -264,6 +272,91 @@ public class Torlo extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
              }
             
+         }
+    }
+	
+	class PDF implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            PdfDocument pdf = new PdfDocument();
+            pdf.loadFromFile(System.getProperty("user.home") + "\\Desktop\\L2216691.pdf");
+            pdf.saveToFile(System.getProperty("user.home") + "\\Desktop\\L2216691.xlsx", FileFormat.XLSX);
+         }
+    }
+	
+	class Atallas implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet resultSet = null; 
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+                conn = DriverManager.getConnection("jdbc:mysql://192.168.28.2", "veasnxt", "Veas8000");
+                stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);           
+                stmt.execute("SELECT\n"
+                        + "folyamat_tabla.id,\n"
+                        + "folyamat_tabla.user_id,\n"
+                        + "folyamat_tabla.machine_id,\n"
+                        + "folyamat_tabla.allas_id,\n"
+                        + "folyamat_tabla.allas_ok_id,\n"
+                        + "folyamat_tabla.`comment`,\n"
+                        + "folyamat_tabla.start_tstamp,\n"
+                        + "folyamat_tabla.end_tstamp,\n"
+                        + "folyamat_tabla.auto_store,\n"
+                        + "folyamat_tabla.end_date,\n"
+                        + "folyamat_tabla.nxt_job_id,\n"
+                        + "allas_tabla.allas_name,\n"
+                        + "allas_ok_tabla.allas_ok_name\n"
+                        + "FROM\n"
+                        + "folyamat_tabla\n"
+                        + "INNER JOIN allas_tabla ON allas_tabla.id = folyamat_tabla.allas_id\n"
+                        + "INNER JOIN allas_ok_tabla ON allas_ok_tabla.id_allas = folyamat_tabla.allas_id AND allas_ok_tabla.id = folyamat_tabla.allas_ok_id\n"
+                        + "where ((allas_id = 1 and (allas_ok_id = 3 or allas_ok_id = 10)) or (allas_id = 3 and allas_ok_id = 5))\n"
+                        + "and start_tstamp >= now() \n"
+                        + "");
+                resultSet = stmt.getResultSet();
+                
+                while(resultSet.next())
+                {
+                    System.out.println(resultSet.getString(1));
+                }
+                
+               
+                
+                
+                   
+
+                resultSet.close();
+                stmt.close();
+                conn.close();
+                
+            } 
+            catch (SQLException e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            } 
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
          }
     }
 }

@@ -196,12 +196,11 @@ public class AVM_csomagoloanyag extends JPanel {
                             + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'\r\n"
                             + "group by RECEIPT_REFERENCE, ARRIVAL_DATE\r\n"
                             + "order by ARRIVAL_DATE DESC\r\n"
-                            + "FETCH FIRST 8 ROWS ONLY");
+                            + "FETCH FIRST 18 ROWS ONLY");
                     while(rs.next())
                     {            
                         beszerzett_db.add(rs.getInt(1));
                         rendelesi_azonosito.add(rs.getString(2));
-                        System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
                     }                 
                     int fel1 = 0;
                     int fel2 = 0;
