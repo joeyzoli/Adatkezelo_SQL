@@ -247,7 +247,7 @@ public class Loxone extends JPanel
         mentes.addActionListener(new Mentes());
         add(mentes);
         
-        JLabel lblNewLabel_16 = new JLabel("Informásió az ellenőrzött termékről");
+        JLabel lblNewLabel_16 = new JLabel("Információ az ellenőrzött termékről");
         lblNewLabel_16.setBounds(528, 50, 205, 14);
         add(lblNewLabel_16);
         

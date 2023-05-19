@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
-public class ProGlove extends JPanel 
+public class Socomec extends JPanel 
 {
     private JTextField idopont;
     private JTextField ell_varo;
@@ -75,7 +75,7 @@ public class ProGlove extends JPanel
      * Create the panel.
      * @throws ParseException 
      */
-    public ProGlove()
+    public Socomec()
     {
         this.setPreferredSize(new Dimension(1100, 800));
         setLayout(null);
@@ -139,7 +139,7 @@ public class ProGlove extends JPanel
         add(ellenorizendo);
         ellenorizendo.setColumns(10);
         
-        JLabel lblNewLabel_6 = new JLabel("Socomec folyamat ellenőrzés és végátvétel");
+        JLabel lblNewLabel_6 = new JLabel("ProGlove folyamat ellenőrzés és végátvétel");
         lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel_6.setBounds(444, 11, 289, 14);
         add(lblNewLabel_6);
@@ -820,3 +820,4 @@ public class ProGlove extends JPanel
         }
     }
 }
+

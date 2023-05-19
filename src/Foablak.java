@@ -152,6 +152,10 @@ public class Foablak extends JFrame
 		JMenuItem loxone = new JMenuItem("Loxone");
 		loxone.addActionListener(new PanelCsere_loxone());
 		menu.add(loxone);
+		
+		JMenuItem socomec = new JMenuItem("Socomec");
+		socomec.addActionListener(new PanelCsere_socomec());
+		menu.add(socomec);
 		menu.add(vevoi_reklamaciok);
 		
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
@@ -377,6 +381,17 @@ public class Foablak extends JFrame
     }
 	
 	class PanelCsere_loxone implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            loxon = new Loxone();
+            JScrollPane ablak = new JScrollPane(loxon);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_socomec implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
