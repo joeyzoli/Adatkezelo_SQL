@@ -2532,7 +2532,7 @@ public class SQL
                 int szam = 0;
                 while(resultSet.next())
                 {        
-                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
+                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2));
                     fs = new FileOutputStream(f);
                     blob = resultSet.getBlob("Kep");
                     b = blob.getBytes(1, (int)blob.length());
@@ -2581,7 +2581,7 @@ public class SQL
                 int szam = 0;
                 while(resultSet.next())
                 {        
-                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2) +".jpg");
+                    File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ resultSet.getString(2));
                     fs = new FileOutputStream(f);
                     blob = resultSet.getBlob("Kep");
                     b = blob.getBytes(1, (int)blob.length());

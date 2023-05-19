@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.spire.data.table.DataTable;
-import com.spire.data.table.common.JdbcAdapter;
 import com.spire.pdf.FileFormat;
 import com.spire.pdf.PdfDocument;
 import com.spire.xls.ExcelVersion;
