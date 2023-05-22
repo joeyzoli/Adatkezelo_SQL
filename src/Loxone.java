@@ -317,7 +317,7 @@ public class Loxone extends JPanel
                 
                 for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                               //for ciklus megkeresi a kiválasztott elemhez tartozó adatokat
                 {
-                    if(valasztott.contains(dataTable.getRows().get(szamlalo).getString(0)))
+                    if(valasztott.equals(dataTable.getRows().get(szamlalo).getString(0)))
                     {
                         File letezik = new  File(dataTable.getRows().get(szamlalo).getString(6));
                         ImageIcon icon2 = null;
