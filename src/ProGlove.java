@@ -139,7 +139,7 @@ public class ProGlove extends JPanel
         add(ellenorizendo);
         ellenorizendo.setColumns(10);
         
-        JLabel lblNewLabel_6 = new JLabel("Socomec folyamat ellenőrzés és végátvétel");
+        JLabel lblNewLabel_6 = new JLabel("ProGlove folyamat ellenőrzés és végátvétel");
         lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel_6.setBounds(444, 11, 289, 14);
         add(lblNewLabel_6);

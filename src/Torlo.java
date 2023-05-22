@@ -60,7 +60,7 @@ public class Torlo extends JPanel
 		
 		JButton csv_gomb = new JButton("CSV");
 		csv_gomb.setBounds(132, 268, 54, 23);
-		csv_gomb.addActionListener(new PDF());
+		csv_gomb.addActionListener(new CSV_gyart());
 		
 		JLabel lblNewLabel_3 = new JLabel("Adatbázis feltöltése");
 		lblNewLabel_3.setBounds(412, 236, 134, 14);

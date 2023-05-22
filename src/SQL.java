@@ -395,7 +395,7 @@ public class SQL
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "SELECT Pozicio as \"Pozíció\", Hiba_megnevezes as \"Hiba megnevezés\", sum(Hibak_szam) as \"Hibák száma\" FROM  qualitydb.Gyartasi_adatok "
-                        + "where VT_azon = '"+ tipus +"' and not Hibak_szam = '0' group by Pozicio order by Hibak_szam desc limit 7";  //group by Pozicio
+                        + "where VT_azon = '"+ tipus +"' and not Hibak_szam = '0' group by Pozicio order by sum(Hibak_szam) desc limit 7";  //group by Pozicio
         stmt.execute(sajat);
         resultSet = stmt.getResultSet();
         

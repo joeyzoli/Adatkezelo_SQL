@@ -25,6 +25,8 @@ public class ComboBox
 	static final String vevoi_projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői projektek.csv";
 	static final String vevoi_cikk = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői cikkszámok.csv";
 	static final String vevoi_proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői proglove.csv";
+	static final String socomec = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_termekek.csv";
+	static final String socomec_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_rovid.csv";
 	
 	private void listakeszito(String hely)																						//VT-azonosítókat dolgozza fel
 	{

@@ -45,6 +45,7 @@ public class Foablak extends JFrame
 	private Hitlista hitlista;
 	private ProGlove proglove;
 	private Loxone loxon;
+	private Socomec socomec;
 	private Hatter_beallitas hatterbeall;
 	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private Vevoi_reklamacio_lezaras vevoi_lezar;
@@ -395,8 +396,8 @@ public class Foablak extends JFrame
     {
         public void actionPerformed(ActionEvent e)
          {
-            loxon = new Loxone();
-            JScrollPane ablak = new JScrollPane(loxon);
+            socomec = new Socomec();
+            JScrollPane ablak = new JScrollPane(socomec);
             setContentPane(ablak);
             pack();
          }
