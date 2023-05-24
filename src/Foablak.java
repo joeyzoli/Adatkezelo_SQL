@@ -46,6 +46,7 @@ public class Foablak extends JFrame
 	private ProGlove proglove;
 	private Loxone loxon;
 	private Socomec socomec;
+	private Hager hager;
 	private Hatter_beallitas hatterbeall;
 	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private Vevoi_reklamacio_lezaras vevoi_lezar;
@@ -131,48 +132,52 @@ public class Foablak extends JFrame
 		menuBar.add(menu);
 		
 		JMenuItem gyartasi = new JMenuItem("Gyártási adtok");
-		//gyartasi.addActionListener(new PanelCsere_adatok());
+		gyartasi.addActionListener(new PanelCsere_adatok());
 		menu.add(gyartasi);
         
 		JMenuItem torles = new JMenuItem("Dev");
-		//torles.addActionListener(new PanelCsere_torles());
+		torles.addActionListener(new PanelCsere_torles());
 		
 		JMenuItem adat_torles = new JMenuItem("Adat törlés");
-		//adat_torles.addActionListener(new PanelCsere_adat_torles());
+		adat_torles.addActionListener(new PanelCsere_adat_torles());
 		
 		JMenuItem ujadat = new JMenuItem("Új alapadat");
-		//ujadat.addActionListener(new PanelCsere_uj_adatok());
+		ujadat.addActionListener(new PanelCsere_uj_adatok());
 		
 		JMenuItem proglove = new JMenuItem("ProGlove");
 		proglove.addActionListener(new PanelCsere_proglove());
 		menu.add(proglove);
 		
 		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
-		//vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
+		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
 		
 		JMenuItem loxone = new JMenuItem("Loxone");
-		//loxone.addActionListener(new PanelCsere_loxone());
+		loxone.addActionListener(new PanelCsere_loxone());
 		menu.add(loxone);
 		
 		JMenuItem socomec = new JMenuItem("Socomec");
 		socomec.addActionListener(new PanelCsere_socomec());
 		menu.add(socomec);
+		
+		JMenuItem hager = new JMenuItem("Hager");
+		hager.addActionListener(new PanelCsere_hager());
+		menu.add(hager);
 		menu.add(vevoi_reklamaciok);
 		
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
-		//vevoi_lezaras.addActionListener(new PanelCsere_vevoi_lezaras());
+		vevoi_lezaras.addActionListener(new PanelCsere_vevoi_lezaras());
 		menu.add(vevoi_lezaras);
 		
 		JMenuItem vevoi_ujadat = new JMenuItem("Vevői új adat");
-		//vevoi_ujadat.addActionListener(new PanelCsere_vevoi_ujadat());
+		vevoi_ujadat.addActionListener(new PanelCsere_vevoi_ujadat());
 		menu.add(vevoi_ujadat);
 		
 		JMenuItem retour = new JMenuItem("Retour");
-		//retour.addActionListener(new PanelCsere_retour());
+		retour.addActionListener(new PanelCsere_retour());
 		menu.add(retour);
 		
 		JMenuItem ellenori_nevsor = new JMenuItem("Ellenőrök");
-		//ellenori_nevsor.addActionListener(new PanelCsere_ellenorok_nevek());
+		ellenori_nevsor.addActionListener(new PanelCsere_ellenorok_nevek());
 		menu.add(ellenori_nevsor);
 		menu.add(ujadat);
 		menu.add(adat_torles);
@@ -186,48 +191,48 @@ public class Foablak extends JFrame
 		lekerdezes.add(easqas);
 		
 		JMenuItem sajat_sql = new JMenuItem("Saját SQL");
-		//sajat_sql.addActionListener(new PanelCsere_sajat_sql());
+		sajat_sql.addActionListener(new PanelCsere_sajat_sql());
 		
 		JMenuItem vevoi_lekerdezes = new JMenuItem("Vevői reklamációk");
-		//vevoi_lekerdezes.addActionListener(new PanelCsere_vevoi_lekerdezes());
+		vevoi_lekerdezes.addActionListener(new PanelCsere_vevoi_lekerdezes());
 		lekerdezes.add(vevoi_lekerdezes);
 		lekerdezes.add(sajat_sql);
 		
 		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
-		//po_szam.addActionListener(new PanelCsere_po_szam());
+		po_szam.addActionListener(new PanelCsere_po_szam());
 		lekerdezes.add(po_szam);
 		
 		JMenuItem hitlista = new JMenuItem("Hitlista lekérdezés");
-		//hitlista.addActionListener(new PanelCsere_hitlista());
+		hitlista.addActionListener(new PanelCsere_hitlista());
 		lekerdezes.add(hitlista);
 		
 		JMenuItem retour_lekerdezes = new JMenuItem("Retour");
-		//retour_lekerdezes.addActionListener(new PanelCsere_retour_lekerdez());
+		retour_lekerdezes.addActionListener(new PanelCsere_retour_lekerdez());
 		
 		JMenuItem retour_mile = new JMenuItem("Hager Retour");
-		//retour_mile.addActionListener(new PanelCsere_retour_mile());
+		retour_mile.addActionListener(new PanelCsere_retour_mile());
 		lekerdezes.add(retour_mile);
 		lekerdezes.add(retour_lekerdezes);
 		
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
-		//folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
+		folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
 		
 		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
-		//beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
+		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
 		
 		JMenuItem avm_csomagolas = new JMenuItem("AVM csomagolás PPM");
-		//avm_csomagolas.addActionListener(new PanelCsere_avm());
+		avm_csomagolas.addActionListener(new PanelCsere_avm());
 		lekerdezes.add(avm_csomagolas);
 		lekerdezes.add(beszallitoi_ppm);
 		
 		JMenuItem telecom_utolso = new JMenuItem("Telecom utolsó folyamat");
-		//telecom_utolso.addActionListener(new PanelCsere_telecom_utolso());
+		telecom_utolso.addActionListener(new PanelCsere_telecom_utolso());
 		
 		JMenuItem tracy_utolso = new JMenuItem("Tracy utosló folyamat");
-		//tracy_utolso.addActionListener(new PanelCsere_tracy_utolso());
+		tracy_utolso.addActionListener(new PanelCsere_tracy_utolso());
 		
 		JMenuItem iqc = new JMenuItem("IQC ellenőrzés");
-		//iqc.addActionListener(new PanelCsere_iqc());
+		iqc.addActionListener(new PanelCsere_iqc());
 		lekerdezes.add(iqc);
 		lekerdezes.add(tracy_utolso);
 		lekerdezes.add(telecom_utolso);
@@ -238,11 +243,11 @@ public class Foablak extends JFrame
 		menuBar.add(vizsga);
 		
 		JMenuItem vizsga_teszt = new JMenuItem("Teszt");
-		//vizsga_teszt.addActionListener(new PanelCsere_teszt_kezd());
+		vizsga_teszt.addActionListener(new PanelCsere_teszt_kezd());
 		vizsga.add(vizsga_teszt);
 		
 		JMenuItem vizsga_pontok = new JMenuItem("Pontok");
-		//vizsga.add(vizsga_pontok);
+		vizsga.add(vizsga_pontok);
 		vizsga_pontok.addActionListener(new PanelCsere_teszt_pont());
 		
 		JMenu monitoring = new JMenu("Monitoring");
@@ -251,7 +256,7 @@ public class Foablak extends JFrame
 		
 		JMenuItem oqc = new JMenuItem("OQC átvételek");
 		monitoring.add(oqc);
-		//oqc.addActionListener(new PanelCsere_monitoring());
+		oqc.addActionListener(new PanelCsere_monitoring());
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -259,7 +264,7 @@ public class Foablak extends JFrame
 		hatterszin.addActionListener(new PanelCsere_hatter());
 		
 		beallitasok.add(hatterszin);
-		//easqas.addActionListener(new PanelCsere_easqas());
+		easqas.addActionListener(new PanelCsere_easqas());
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -398,6 +403,17 @@ public class Foablak extends JFrame
          {
             socomec = new Socomec();
             JScrollPane ablak = new JScrollPane(socomec);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_hager implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            hager = new Hager();
+            JScrollPane ablak = new JScrollPane(hager);
             setContentPane(ablak);
             pack();
          }

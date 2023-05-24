@@ -31,6 +31,7 @@ public class CSV_gyarto
 			 
 		//Save the document to CSV
 		mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
         mentes_helye.showOpenDialog(mentes_helye);
         File fajl = mentes_helye.getSelectedFile();
 		sheet.saveToFile(fajl.getAbsolutePath(), ",", Charset.forName("UTF-8"));												//mentés a kiválasztott helyre

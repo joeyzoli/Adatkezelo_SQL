@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
-public class Socomec extends JPanel 
+public class Hager extends JPanel 
 {
     private JTextField idopont;
     private JTextField ell_varo;
@@ -52,7 +52,7 @@ public class Socomec extends JPanel
     private JComboBox<String> termek;
     private JComboBox<String> folyamat;
     private JComboBox<String> hibakod;
-    private final String infohelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_info.xlsx";
+    private final String infohelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager_info.xlsx";
     private JLabel kepkeret;
     private JTextArea textArea;
     private DataTable dataTable;
@@ -75,7 +75,7 @@ public class Socomec extends JPanel
      * Create the panel.
      * @throws ParseException 
      */
-    public Socomec()
+    public Hager()
     {
         this.setPreferredSize(new Dimension(1100, 800));
         setLayout(null);
@@ -104,7 +104,7 @@ public class Socomec extends JPanel
         lblNewLabel_2.setBounds(148, 106, 86, 14);
         add(lblNewLabel_2);
         
-        String[] folyamatok = {"100% ellenőrzés", "KKS Végátvétel"};
+        String[] folyamatok = {"KKS Végátvétel", "100% ellenőrzés"};
         ell_helye = new JComboBox<String>(folyamatok);                                  //folyamatok
         ell_helye.setBounds(148, 131, 113, 22);
         ell_helye.addActionListener(new Hely_valaszto());
@@ -114,7 +114,7 @@ public class Socomec extends JPanel
         lblNewLabel_3.setBounds(309, 107, 46, 14);
         add(lblNewLabel_3);
         
-        termek = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.socomec_rovid));               //combobox_tomb.getCombobox(ComboBox.proglove)
+        termek = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hager_rovid));               //combobox_tomb.getCombobox(ComboBox.proglove)
         termek.setBounds(309, 131, 153, 22);
         termek.addActionListener(new Elem_valaszto());
         add(termek);
@@ -139,7 +139,7 @@ public class Socomec extends JPanel
         add(ellenorizendo);
         ellenorizendo.setColumns(10);
         
-        JLabel lblNewLabel_6 = new JLabel("Socomec folyamat ellenőrzés és végátvétel");
+        JLabel lblNewLabel_6 = new JLabel("Hager végátvétel");
         lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel_6.setBounds(444, 11, 289, 14);
         add(lblNewLabel_6);
@@ -526,7 +526,7 @@ public class Socomec extends JPanel
                     JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
                     return;
                 }
-                String[] proglove = combobox_tomb.getCombobox(ComboBox.socomec);
+                String[] proglove = combobox_tomb.getCombobox(ComboBox.hager);
                 String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 String[] koztes2 = String.valueOf(hibakod.getSelectedItem()).split(" - ");
                 if(koztes2[0].equals("0") || hibas_alkatresz.getText().equals(""))
@@ -569,7 +569,7 @@ public class Socomec extends JPanel
                     JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
                     return;
                 }
-                String[] proglove = combobox_tomb.getCombobox(ComboBox.socomec);
+                String[] proglove = combobox_tomb.getCombobox(ComboBox.hager);
                 String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 modell.addRow(new Object[]{koztes[0], "", "0", jo_mezo.getText()});
                 table.setModel(modell);

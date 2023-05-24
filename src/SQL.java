@@ -403,9 +403,17 @@ public class SQL
         {
             ProGlove.table_1.setModel(buildTableModel(resultSet));
         }
-        else
+        else if(Loxone.table_1 != null)
         {
             Loxone.table_1.setModel(buildTableModel(resultSet));
+        }
+        else if(Socomec.table_1 != null)
+        {
+            Socomec.table_1.setModel(buildTableModel(resultSet));
+        }
+        else
+        {
+            Hager.table_1.setModel(buildTableModel(resultSet));
         }
 
         resultSet.close();
