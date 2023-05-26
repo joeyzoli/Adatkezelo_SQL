@@ -94,7 +94,7 @@ public class Torlo extends JPanel
 	            DataTable dataTable = sheet.exportDataTable();
 	            for (int i = 0; i < dataTable.getRows().size(); i++) 
 	            {
-	                atiras.atir(dataTable.getRows().get(i).getString(0), dataTable.getRows().get(i).getString(1));
+	                atiras.atir("924", "Óngolyó (HotBar, Szelektív)");
 	            }
 	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);
    

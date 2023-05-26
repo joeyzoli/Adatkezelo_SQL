@@ -62,7 +62,7 @@ public class SQL
             //Get the first worksheet
             Worksheet sheet = workbook.getWorksheets().get(0);
             sheet.insertDataTable(datatable, true, 1, 1);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:G1"));
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
@@ -2180,7 +2180,7 @@ public class SQL
         }
     }
 	
-	void po_kereses(String po)
+	void po_kereses(String po, String datum)
     {
 	    Connection con = null;
         Statement stmt = null;
@@ -2205,7 +2205,7 @@ public class SQL
                     + "videoton.fkov.dolgozo \n"
                     + "from videoton.fkov \n"
                     + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                    + " where hely = '26' and ido > '2022.06.01' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
+                    + " where ido > '"+ datum +"' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
                     
             Statement cstmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,

@@ -13,6 +13,7 @@ import javax.swing.JButton;
 public class PO_szam extends JPanel 
 {
     private JTextField po_szam_mezo;
+    private JTextField datum_mezo;
 
     /**
      * Create the panel.
@@ -23,7 +24,7 @@ public class PO_szam extends JPanel
         
         JLabel lblNewLabel = new JLabel("PO számok lekérdezése");
         lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 13));
-        lblNewLabel.setBounds(499, 63, 190, 14);
+        lblNewLabel.setBounds(442, 100, 190, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("PO szám:");
@@ -36,9 +37,18 @@ public class PO_szam extends JPanel
         po_szam_mezo.setColumns(10);
         
         JButton keres_gomb = new JButton("Keresés");
-        keres_gomb.setBounds(694, 178, 89, 23);
+        keres_gomb.setBounds(499, 286, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
+        
+        JLabel lblNewLabel_2 = new JLabel("Dátum -tól");
+        lblNewLabel_2.setBounds(409, 233, 64, 14);
+        add(lblNewLabel_2);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.setBounds(499, 230, 86, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
 
     }
     
@@ -50,7 +60,7 @@ public class PO_szam extends JPanel
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 SQL po_kereses = new SQL();
-                po_kereses.po_kereses(po_szam_mezo.getText());
+                po_kereses.po_kereses(po_szam_mezo.getText(), datum_mezo.getText());
                 Foablak.frame.setCursor(null);
             }
             catch (Exception e1) 
