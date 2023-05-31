@@ -106,7 +106,7 @@ public class Gyartasi_adatok extends JPanel
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_2.setBounds(378, 206, 111, 14);
 		
-		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.hiba_helye));           //combobox_tomb.getCombobox2(ComboBox.hiba_helye)
+		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));           //combobox_tomb.getCombobox2(ComboBox.hiba_helye)
 		hiba_combobox.setBounds(499, 202, 156, 22);
 		
 		JLabel lblNewLabel_3 = new JLabel("Felajánlott mennyiség");

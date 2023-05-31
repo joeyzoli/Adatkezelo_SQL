@@ -904,7 +904,7 @@ public class Db_iro
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
                                                                                                                  
-        String query = "update qualitydb.Gyartasi_adatok set  Vevo = '" + mire + "' where VT_azon = '" + mit + "'";
+        String query = "update qualitydb.Gyartasi_adatok set  Hibagyujtes_helye = '" + mire + "' where Hibagyujtes_helye = '" + mit + "'";
         stmt.executeUpdate(query);
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

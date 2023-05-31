@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,6 +37,7 @@ public class Foablak extends JFrame
 	private Gyartasi_adatok adatok;
 	private Uj_alapadat ujadat;
 	private EASQAS_adatok easqas;
+	private Ell_szeriaszam szeriaszam;
 	private Adat_torles adattorlo;
 	private Torlo torles;
 	private Sajat_SQL sajat_sql;
@@ -196,6 +196,10 @@ public class Foablak extends JFrame
 		JMenuItem vevoi_lekerdezes = new JMenuItem("Vevői reklamációk");
 		vevoi_lekerdezes.addActionListener(new PanelCsere_vevoi_lekerdezes());
 		lekerdezes.add(vevoi_lekerdezes);
+		
+		JMenuItem szeriaszam = new JMenuItem("Ellenőrzött sz.szám");
+		szeriaszam.addActionListener(new PanelCsere_szeriaszamok());
+		lekerdezes.add(szeriaszam);
 		lekerdezes.add(sajat_sql);
 		
 		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
@@ -341,6 +345,17 @@ public class Foablak extends JFrame
 			pack();
 		 }
 	}
+	
+	class PanelCsere_szeriaszamok implements ActionListener                                                                                      //menüelem kiválasztásakor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            szeriaszam = new Ell_szeriaszam();                                                                                                   //példányosítás
+            JScrollPane ablak = new JScrollPane(szeriaszam);
+            setContentPane(ablak);                                                                                                          //új contentpane megadása
+            pack();
+         }
+    }
 	
 	class PanelCsere_sajat_sql implements ActionListener																					//mentés gomb megnyomáskor hívodik meg
 	{

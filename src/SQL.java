@@ -2719,6 +2719,89 @@ public class SQL
  
     }
 	
+	public void lekerdez_szeriaszamok(String sql, String menteshelye)
+    {
+    
+	    Connection conn = null;
+        Statement stmt = null;
+        DataTable datatable = new DataTable();
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        String sajat = sql;
+        stmt.execute(sajat);
+        ResultSet resultSet = stmt.getResultSet();
+        
+        Workbook workbook = new Workbook();
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+
+        //Get the first worksheet
+        Worksheet sheet = workbook.getWorksheets().get(0);
+        sheet.insertDataTable(datatable, true, 1, 1);
+        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+        sheet.getAllocatedRange().autoFitColumns();
+        sheet.getAllocatedRange().autoFitRows();
+        
+        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        
+        workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(menteshelye);
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(menteshelye);
+            workbook2.write(output);
+            output.close();
+        }
+        JOptionPane.showMessageDialog(null, "Mentve az asztalra Átvételi adatok.xlsx néven", "Info", 1);
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+        } finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+        JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);
+    }
+	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
     {
         ResultSetMetaData metaData = rs.getMetaData();
