@@ -2,8 +2,10 @@ import javax.swing.JPanel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -22,6 +24,7 @@ import com.spire.xls.Worksheet;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 public class Torlo extends JPanel 
 {
@@ -56,10 +59,10 @@ public class Torlo extends JPanel
 		gyartas_torles.addActionListener(new Torles_gyartas());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
-		lblNewLabel_2.setBounds(132, 236, 54, 14);
+		lblNewLabel_2.setBounds(132, 236, 83, 14);
 		
 		JButton csv_gomb = new JButton("CSV");
-		csv_gomb.setBounds(132, 268, 54, 23);
+		csv_gomb.setBounds(132, 268, 83, 23);
 		csv_gomb.addActionListener(new CSV_gyart());
 		
 		JLabel lblNewLabel_3 = new JLabel("Adatbázis feltöltése");
@@ -67,7 +70,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("feltölt");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Atallas());
+		feltolt.addActionListener(new IFS());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -356,6 +359,86 @@ public class Torlo extends JPanel
                 String hibauzenet2 = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
             }
+         }
+    }
+	
+	class IFS implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(fajl.getAbsolutePath());
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                DataTable datatable = new DataTable();
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                
+                Workbook workbook2 = new Workbook();
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                 
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                  int cellaszam = 1;
+                  sheet2.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet2.getRange().get("B" + cellaszam).setText("Gyártó száma");
+                  sheet2.getRange().get("C" + cellaszam).setText("Gyártó cikkszáma");
+                  sheet2.getRange().get("D" + cellaszam).setText("Preferált gyártó cikke");
+                  sheet2.getRange().get("E" + cellaszam).setText("Jóváhagyva");
+                  cellaszam++;
+                  
+                  for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                  {
+                      ResultSet rs = stmt.executeQuery("select part_no, manufacturer_id, manu_part_no, preferred_manu_part, ifsapp.PART_MANU_PART_NO_API.Get_Approved(part_no,manufacturer_id,MANU_PART_NO)\n"
+                              + "from ifsapp.PURCH_PART_SUPP_MANUF_PART\n"
+                              + "where PART_NO ='"+ datatable.getRows().get(szamlalo).getString(0) + "'");
+                      while(rs.next())
+                      {                        
+                          sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                          sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                          sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                          sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                          sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                          cellaszam++;
+                      }                                        
+                  }
+                  
+                  sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                  sheet2.getAllocatedRange().autoFitColumns();
+                  sheet2.getAllocatedRange().autoFitRows();
+                  sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  String hova = System.getProperty("user.home") + "\\Desktop\\Beszerzési cikk szállítója.xlsx";
+                  workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                  FileInputStream fileStream = new FileInputStream(hova);
+                  try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                      {    
+                          workbook3.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(hova);
+                      workbook3.write(output);
+                      output.close();
+                  }
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                  con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }                                         
          }
     }
 }

@@ -501,7 +501,6 @@ public class Loxone extends JPanel
                         kiirando.get(szamlalo)[8], kiirando.get(szamlalo)[9], Integer.parseInt(kiirando.get(szamlalo)[10]), kiirando.get(szamlalo)[11]  , rogzites.format(timestamp));
                     //szam++;
                 }
-                JOptionPane.showMessageDialog(null, "Mentés kész", "Info", 1);
                 torlo();
             } 
             catch (Exception e1) 
@@ -790,7 +789,16 @@ public class Loxone extends JPanel
             {
                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                        //for ciklus végigmegy az excelen
                {
-                   if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))                                       //találat esetén lefut
+                   if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 100)
+                   {
+                       ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
+                   }
+                   else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 5)
+                   {
+                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + "0"+ dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                   }
+                   else
                    {
                        String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
                        ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
@@ -804,8 +812,20 @@ public class Loxone extends JPanel
                 {
                     if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
                     {
-                        String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
-                        ellenorizendo.setText(koztes2[0]);
+                        if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 100)
+                        {
+                            ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
+                        }
+                         else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 5)
+                        {
+                             String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo +"0"+ dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
+                             ellenorizendo.setText(koztes2[0]);
+                        }
+                        else
+                        {
+                            String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+                            ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                        }
                     }
                       
                 }    
