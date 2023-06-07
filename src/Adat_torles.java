@@ -10,7 +10,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -162,6 +161,7 @@ public class Adat_torles extends JPanel
             {             
                 SQL lekerdez = new SQL();
                 lekerdez.adat_modositashoz(datum.getText());
+                //resizeColumnWidth(table);
             }
             catch(Exception e1)
             {
@@ -170,8 +170,23 @@ public class Adat_torles extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n Nincs ilyen adat!!", "Hiba üzenet", 2); 
             }           
          }
-    }
-	
+     }
+	 /*
+	 public void resizeColumnWidth(JTable table) {
+         final TableColumnModel columnModel = table.getColumnModel();
+         for (int column = 0; column < table.getColumnCount(); column++) {
+             int width = 15; // Min width
+             for (int row = 0; row < table.getRowCount(); row++) {
+                 TableCellRenderer renderer = table.getCellRenderer(row, column);
+                 Component comp = table.prepareRenderer(renderer, row, column);
+                 width = Math.max(comp.getPreferredSize().width +1 , width);
+             }
+             if(width > 300)
+                 width=300;
+             columnModel.getColumn(column).setPreferredWidth(width);
+         }
+	 }
+	*/
 	class Visszair implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)

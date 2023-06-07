@@ -526,8 +526,7 @@ public class Torlo extends JPanel
                             cellaszam++;
                         }
                     }
-                    cellaszam = utolsosor;
-                    
+                    cellaszam = utolsosor;                   
                     jovahagyva = 0;
                     for(int szamlalo2 = 0; szamlalo2 < datatable3.getRows().size(); szamlalo2++)
                     {

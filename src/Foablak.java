@@ -65,6 +65,7 @@ public class Foablak extends JFrame
 	private Teszt_kezdes teszt_kezd;
 	private Teszt_lezaras teszt_lezar;
 	private Monitoring monitor;
+	private OQC_adatok oqcadatok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JTextField mezo;
@@ -197,7 +198,7 @@ public class Foablak extends JFrame
 		vevoi_lekerdezes.addActionListener(new PanelCsere_vevoi_lekerdezes());
 		lekerdezes.add(vevoi_lekerdezes);
 		
-		JMenuItem szeriaszam = new JMenuItem("Ellenőrzött sz.szám");
+		JMenuItem szeriaszam = new JMenuItem("Átvételi adatok");
 		szeriaszam.addActionListener(new PanelCsere_szeriaszamok());
 		lekerdezes.add(szeriaszam);
 		lekerdezes.add(sajat_sql);
@@ -261,6 +262,16 @@ public class Foablak extends JFrame
 		JMenuItem oqc = new JMenuItem("OQC átvételek");
 		monitoring.add(oqc);
 		oqc.addActionListener(new PanelCsere_monitoring());
+		
+		JMenu oqc_menu = new JMenu("OQC");
+		menuBar.add(oqc_menu);
+		
+		JMenuItem oqc_adatbevitel = new JMenuItem("OQC adatbevitel");
+		oqc_menu.add(oqc_adatbevitel);
+		
+		JMenuItem oqc_adatok = new JMenuItem("OQC adatok");
+		oqc_adatok.addActionListener(new PanelCsere_oqcadatok());
+		oqc_menu.add(oqc_adatok);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -620,6 +631,17 @@ public class Foablak extends JFrame
          {
             monitor = new Monitoring();
             JScrollPane ablak = new JScrollPane(monitor);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_oqcadatok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            oqcadatok = new OQC_adatok();
+            JScrollPane ablak = new JScrollPane(oqcadatok);
             setContentPane(ablak);
             pack();
          }

@@ -2799,7 +2799,6 @@ public class SQL
               se.printStackTrace();
            }  
         }
-        JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);
     }
 	
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException 
