@@ -111,6 +111,15 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         id_mezo.addKeyListener(new Enter());
         add(id_mezo);
         id_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_5 = new JLabel("Kiválasztott felelős törlése");
+        lblNewLabel_5.setBounds(761, 540, 143, 14);
+        add(lblNewLabel_5);
+        
+        JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Felelos_torles());
+        torles_gomb.setBounds(914, 536, 89, 23);
+        add(torles_gomb);
 
     }
     
@@ -305,6 +314,42 @@ public class Vevoi_reklamacio_lezaras extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Felelos_torles implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Db_iro visszair = new Db_iro();
+                int szamlalo = table.getSelectedRow();
+                if(szamlalo > -1)
+                {
+                    String sql = "delete from qualitydb.Vevoireklamacio_felelosok where felelos = '"+ table.getValueAt(szamlalo, 8).toString() +"'"
+                            +" and id ='"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                    visszair.ujrair_vevoi(sql);
+                }
+                szamlalo = table_1.getSelectedRow();
+                if(szamlalo > -1)
+                {
+                    
+                    String sql = "delete from qualitydb.Vevoireklamacio_detekt where felelos = '"+ table.getValueAt(szamlalo, 4).toString() +"'"
+                            +" and id ='"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                    visszair.ujrair_vevoi(sql);
+                }
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Törlés sikeres!", "Infó", 1);
+            }
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }

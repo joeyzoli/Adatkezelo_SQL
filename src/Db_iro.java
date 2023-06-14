@@ -449,7 +449,7 @@ public class Db_iro
         }
     }
 	
-	void ujrair_alapadat(int id, String datum, String cikkszam, int talalt, String gyokerok, String gyokerokozo, String gyokerok2, String gyokerokozo2, String zarolt )
+	void ujrair_alapadat(int id, String datum, String cikkszam, int talalt, String gyokerok, String gyokerokozo, String gyokerok2, String gyokerokozo2, String zarolt, int rekdb, String hibaleiras)
     {         
         Connection conn = null;
         Statement stmt = null;
@@ -474,7 +474,8 @@ public class Db_iro
         String query = "update qualitydb.Vevoireklamacio_felelosok set  Talalt_db = '"+ talalt +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "' and Zarolt = '" + zarolt + "'";
         stmt.executeUpdate(query);
         
-        String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo + "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"
+        String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo + 
+                "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"+ ", Rek_db = '"+ rekdb + "', Hibaleiras = '"+ hibaleiras +"'"
                 + " where ID = '" + id + "'";
         stmt2.executeUpdate(query2);
         

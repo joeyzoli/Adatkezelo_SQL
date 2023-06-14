@@ -139,7 +139,7 @@ public class Foablak extends JFrame
 		JMenuItem torles = new JMenuItem("Dev");
 		torles.addActionListener(new PanelCsere_torles());
 		
-		JMenuItem adat_torles = new JMenuItem("Adat törlés");
+		JMenuItem adat_torles = new JMenuItem("Adat módosítás/törlés");
 		adat_torles.addActionListener(new PanelCsere_adat_torles());
 		
 		JMenuItem ujadat = new JMenuItem("Új alapadat");

@@ -21,8 +21,6 @@ import javax.swing.table.DefaultTableModel;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.JButton;
 
 public class OQC_adatok extends JPanel {
@@ -74,10 +72,10 @@ public class OQC_adatok extends JPanel {
                         {
                             rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FB7530 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
                         }
-                        /*else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FD302"))
+                        else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FD302"))
                         {
                             rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FD302 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
-                        }*/
+                        }
                         else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FR1200"))
                         {
                             rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FR1200 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
@@ -90,10 +88,10 @@ public class OQC_adatok extends JPanel {
                         {
                             rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FR600 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
                         }
-                        /*else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FD301"))
+                        else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FD301"))
                         {
                             rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FD301 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
-                        } */
+                        }
                         if (modell2.getRowCount() > 0) {
                             for (int i = modell2.getRowCount() - 1; i > -1; i--) {
                                 modell2.removeRow(i);
@@ -254,10 +252,10 @@ public class OQC_adatok extends JPanel {
                     {
                         rs2 = stmt2.executeQuery("select count(raklapszam), Kiajanlva, Zarolva from qualitydb.OQC_FB7530 where 3=3 and Raklapszam = '"+ rs.getString(8) +"'");
                     }
-                    /*else if(rs.getString(3).contains("FD302"))
+                    else if(rs.getString(3).contains("FD302"))
                     {
                         rs2 = stmt2.executeQuery("select count(raklapszam), Kiajanlva, Zarolva from qualitydb.OQC_FD302 where 3=3 and Raklapszam = '"+ rs.getString(8) +"'");
-                    }*/
+                    }
                     else if(rs.getString(3).contains("FR1200"))
                     {
                         rs2 = stmt2.executeQuery("select count(raklapszam), Kiajanlva, Zarolva from qualitydb.OQC_FR1200 where 3=3 and Raklapszam = '"+ rs.getString(8) +"'");
@@ -270,10 +268,10 @@ public class OQC_adatok extends JPanel {
                     {
                         rs2 = stmt2.executeQuery("select count(raklapszam), Kiajanlva, Zarolva from qualitydb.OQC_FR600 where 3=3 and Raklapszam = '"+ rs.getString(8) +"'");
                     }
-                    /*else if(rs.getString(3).contains("FD301"))
+                    else if(rs.getString(3).contains("FD301"))
                     {
                         rs2 = stmt2.executeQuery("select count(raklapszam), Kiajanlva, Zarolva from qualitydb.OQC_FD301 where 3=3 and Raklapszam = '"+ rs.getString(8) +"'");
-                    } */
+                    } 
                     if(rs2 != null)
                     {
                         if(rs2.next())
