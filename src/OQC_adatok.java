@@ -10,16 +10,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -36,6 +49,8 @@ public class OQC_adatok extends JPanel {
     private String[] cikkszamok;
     private JComboBox<String> termek_box;
     private ArrayList<String[]> adatok = new ArrayList<String[]>();
+    private ArrayList<String> raklapok = new ArrayList<String>();
+    
     /**
      * Create the panel.
      */
@@ -60,6 +75,7 @@ public class OQC_adatok extends JPanel {
                    int row = target.getSelectedRow(); // select a row
                    modell3.addRow(new Object[]{table.getValueAt(row, 2)});
                    table_3.setModel(modell3);
+                   raklapok.add(String.valueOf(table.getValueAt(row, 1))+ ";" +String.valueOf(table.getValueAt(row, 2)));      //String.valueOf()
                 }
                 else if (me.getClickCount() == 1) {     // to detect doble click events
                     try
@@ -74,7 +90,7 @@ public class OQC_adatok extends JPanel {
                         }
                         else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FD302"))
                         {
-                            rs2 = stmt2.executeQuery("select Szeriaszam_termek, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FD302 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
+                            rs2 = stmt2.executeQuery("select Szeriaszam_doboz, hiba, Hibacsoport, megjegyzes, Kritikus_hiba,Sulyos_hiba, Enyhe_hiba from qualitydb.OQC_FD302 where 3=3 and Raklapszam = '"+ table.getValueAt(table.getSelectedRow(), 2).toString() +"'");
                         }
                         else if(table.getValueAt(table.getSelectedRow(), 1).toString().contains("FR1200"))
                         {
@@ -177,6 +193,7 @@ public class OQC_adatok extends JPanel {
         table_3.setModel(modell3);
         
         JButton excel_gomb = new JButton("Excel");
+        excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(473, 705, 89, 23);
         add(excel_gomb);
         
@@ -398,6 +415,147 @@ public class OQC_adatok extends JPanel {
                 table.setModel(modell);
                 termekdb_mezo.setText(String.valueOf(termek));
                 dobozdb_mezo.setText(String.valueOf(table.getRowCount()));
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Excel implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                Connection conn = null;
+                Statement stmt = null;
+                DataTable datatable = new DataTable();
+                try 
+                {
+                   try 
+                   {
+                      Class.forName("com.mysql.cj.jdbc.Driver");
+                   } 
+                   catch (Exception e1) 
+                   {
+                      System.out.println(e1);
+                      String hibauzenet2 = e1.toString();
+                      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) conn.createStatement();
+                ResultSet resultSet = null;
+                Workbook workbook = new Workbook();
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                sheet.getRange().get("A" + 1).setText("ID");
+                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                String tipus = "";
+                String[] koztes2 = raklapok.get(0).split(";");
+                if(koztes2[0].contains("FB7530"))
+                {
+                    tipus = "FB7530";
+                }
+                else if(koztes2[0].contains("FD301"))
+                {
+                    tipus = "FD301";
+                }
+                else if(koztes2[0].contains("FD302"))
+                {
+                    tipus = "FD302";
+                }
+                else if(koztes2[0].contains("FR1200"))
+                {
+                    tipus = "FR1200";
+                }
+                else if(koztes2[0].contains("FR2400"))
+                {
+                    tipus = "FR2400";
+                }
+                else
+                {
+                    tipus = "FR600";
+                }
+                ArrayList<String> raklapszamok = new ArrayList<String>();               
+                for(int szamlalo = 0; szamlalo < raklapok.size();szamlalo++)
+                {
+                    String[] koztes = raklapok.get(szamlalo).split(";");
+                    raklapszamok.add(koztes[1]);
+                }
+                for(int szamlalo = 0; szamlalo < raklapszamok.size();szamlalo++)
+                {                              
+                    String sajat = "select * from qualitydb.OQC_"+ tipus +" where raklapszam = '"+ raklapszamok.get(szamlalo) +"'";
+                    stmt.execute(sajat);
+                    resultSet = stmt.getResultSet();                                
+                    jdbcAdapter.fillDataTable(datatable, resultSet);                               
+                    sheet.insertDataTable(datatable, false, sheet.getLastRow()+1, 1);
+                }
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                //System.out.println(fajl.getAbsolutePath());
+                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                resultSet.close();
+                stmt.close();
+                conn.close();
+                
+                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+                } 
+                catch (SQLException e1) 
+                {
+                   e1.printStackTrace();
+                   e1.printStackTrace();
+                   String hibauzenet2 = e1.toString();
+                   JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                } 
+                catch (Exception e1) 
+                {
+                   e1.printStackTrace();
+                   e1.printStackTrace();
+                   String hibauzenet2 = e1.toString();
+                   JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                } finally 
+                {
+                   try 
+                   {
+                      if (stmt != null)
+                         conn.close();
+                   } 
+                   catch (SQLException se) {se.printStackTrace();}
+                   try 
+                   {
+                      if (conn != null)
+                         conn.close();
+                   } 
+                   catch (SQLException se) 
+                   {
+                      se.printStackTrace();
+                   }  
+                }
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
             catch (Exception e1) 
