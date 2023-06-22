@@ -449,7 +449,7 @@ public class SQL
         }
     }
 	
-	public void adat_modositashoz(String datum)
+	public void adat_modositashoz(String sql)
     {
         Connection conn = null;
         Statement stmt = null;
@@ -468,7 +468,7 @@ public class SQL
            }
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String sajat = "SELECT * FROM  qualitydb.Gyartasi_adatok where Datum = '"+ datum +"' ";
+        String sajat = sql;
         stmt.execute(sajat);
         resultSet = stmt.getResultSet();
         

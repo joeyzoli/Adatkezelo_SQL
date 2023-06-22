@@ -66,12 +66,12 @@ public class Torlo extends JPanel
 		csv_gomb.setBounds(132, 268, 83, 23);
 		csv_gomb.addActionListener(new CSV_gyart());
 		
-		JLabel lblNewLabel_3 = new JLabel("Adatbázis feltöltése");
+		JLabel lblNewLabel_3 = new JLabel("Mindenes");
 		lblNewLabel_3.setBounds(412, 236, 134, 14);
 		
-		JButton feltolt = new JButton("feltölt");
+		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Excel_osszefuz());
+		feltolt.addActionListener(new Excel_szeriaszamgyart());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -562,6 +562,76 @@ public class Torlo extends JPanel
                 sheet4.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 String hova = System.getProperty("user.home") + "\\Desktop\\Összefésült.xlsx";
                 workbook4.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook5.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook5.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
+                Foablak.frame.setCursor(null);  
+            }                        
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class Excel_szeriaszamgyart implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\traciben keresendő.xlsx";                             
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(excelfile1);
+                Workbook workbook2 = new Workbook();               
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);                
+                DataTable datatable = new DataTable();
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );               
+                sheet2.getRange().get("A" + 1).setText("Szériaszámok");
+                
+                int cellaszam = 2;
+                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                {
+                    cellaszam = sheet2.getLastRow()+1;
+                    int panelhelye = Integer.parseInt(datatable.getRows().get(szamlalo).getString(4));
+                    int sorszam = Integer.parseInt(datatable.getRows().get(szamlalo).getString(1));
+                    int start = sorszam -(panelhelye-1);
+                    for(int szamlalo2 = 0; szamlalo2 < 12; szamlalo2++)
+                    {
+                        if(sorszam < 1000)
+                        {
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3) + datatable.getRows().get(szamlalo).getString(2) +"0"+ start + datatable.getRows().get(szamlalo).getString(5));
+                        }
+                        else
+                        {
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3) + datatable.getRows().get(szamlalo).getString(2) + start + datatable.getRows().get(szamlalo).getString(5));
+                        }
+                        cellaszam++;
+                        start++;
+                    }
+                    
+                }
+                
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Szériaszámok.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
                 FileInputStream fileStream = new FileInputStream(hova);
                 try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
                 {

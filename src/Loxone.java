@@ -36,7 +36,11 @@ import javax.swing.JTextArea;
 
 public class Loxone extends JPanel 
 {
-    private JTextField idopont;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField idopont;
     private JTextField ell_varo;
     private JTextField ellenorizendo;
     private JTextField ellenorzott_db;
@@ -53,6 +57,7 @@ public class Loxone extends JPanel
     private JComboBox<String> folyamat;
     private JComboBox<String> hibakod;
     private final String infohelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_info.xlsx";
+    private final String cikkszamok = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek.xlsx";
     private JLabel kepkeret;
     private JTextArea textArea;
     private DataTable dataTable;
@@ -69,7 +74,8 @@ public class Loxone extends JPanel
     private Date date;
     private JButton info;
     private JButton eredetikep;
-    
+    private String[] rovidcikk;
+    private String[] hosszucikk;
 
     /**
      * Create the panel.
@@ -95,8 +101,8 @@ public class Loxone extends JPanel
         lblNewLabel_1.setBounds(309, 50, 46, 14);
         add(lblNewLabel_1);
         
-        
-        nev = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));              //combobox_tomb.getCombobox2(ComboBox.ellenorok)
+        beolvasas();
+        nev = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok_loxone));              //combobox_tomb.getCombobox2(ComboBox.ellenorok)
         nev.setBounds(309, 74, 153, 22);
         add(nev);
         
@@ -114,7 +120,7 @@ public class Loxone extends JPanel
         lblNewLabel_3.setBounds(309, 107, 46, 14);
         add(lblNewLabel_3);
         
-        termek = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.loxone_rovid));               //combobox_tomb.getCombobox(ComboBox.proglove)
+        termek = new JComboBox<String>(rovidcikk);               //combobox_tomb.getCombobox(ComboBox.proglove)
         termek.setBounds(309, 131, 153, 22);
         termek.addActionListener(new Elem_valaszto());
         add(termek);
@@ -329,7 +335,7 @@ public class Loxone extends JPanel
                             ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                             kepkeret.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                             textArea.setText(dataTable.getRows().get(szamlalo).getString(5));                                               //info szöveg megjelenítése                          
-                            JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
+                            //JOptionPane.showMessageDialog( null, "", "Hello", JOptionPane.INFORMATION_MESSAGE, icon2);
                             eredetikep.setBackground(Color.GREEN);
                         }
                         else
@@ -524,7 +530,7 @@ public class Loxone extends JPanel
                     JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
                     return;
                 }
-                String[] proglove = combobox_tomb.getCombobox(ComboBox.loxone);
+                String[] proglove = hosszucikk;
                 String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 String[] koztes2 = String.valueOf(hibakod.getSelectedItem()).split(" - ");
                 if(koztes2[0].equals("0") || hibas_alkatresz.getText().equals(""))
@@ -567,7 +573,7 @@ public class Loxone extends JPanel
                     JOptionPane.showMessageDialog(null, "Nem adtál meg darab számot!", "Hiba üzenet", 2);
                     return;
                 }
-                String[] proglove = combobox_tomb.getCombobox(ComboBox.loxone);
+                String[] proglove = hosszucikk;
                 String[] koztes = proglove[termek.getSelectedIndex()].split(" - ");
                 modell.addRow(new Object[]{koztes[0], "", "0", jo_mezo.getText()});
                 table.setModel(modell);
@@ -681,13 +687,7 @@ public class Loxone extends JPanel
         SimpleDateFormat rovid = new SimpleDateFormat("dd-MMM-yyyy");
         SimpleDateFormat hosszu = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         Date mai = new Date();
-        Date mai2 = new Date();
         String maiido = rovid.format(mai);
-        String maihosszu = hosszu.format(mai2);
-        
-        System.out.println(maiido);
-        System.out.println(maihosszu);
-        
         Date reggelvege = hosszu.parse(maiido+" 13:55:00");
         Date reggelkezd = hosszu.parse(maiido + " 05:55:00");
         Date delutanvege = hosszu.parse(maiido+" 21:55:00");
@@ -695,27 +695,22 @@ public class Loxone extends JPanel
         
         if(reggelvege.compareTo(d3) > 0) 
         {
-           System.out.println("De "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
            melyikmuszak = "De";
         }
         if(reggelkezd.compareTo(d3) < 0) 
         {
-           System.out.println("De "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
            melyikmuszak = "De";
         }
         else 
-        {
-            System.out.println("Éj " + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
+        {;
             melyikmuszak = "Éj";
         }
         if(reggelvege.compareTo(d3) < 0) 
         {
-           System.out.println("Du "  + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
            melyikmuszak = "Du";
         }
         if(delutanvege.compareTo(d3) < 0) 
         {
-            System.out.println("Éj " + d3 +" "+ reggelvege +" "+ reggelkezd +" "+ delutanvege);
             melyikmuszak = "Éj";
         }
         return melyikmuszak;
@@ -789,19 +784,22 @@ public class Loxone extends JPanel
             {
                for (int szamlalo = 0; szamlalo < dataTable.getRows().size(); szamlalo++)                                        //for ciklus végigmegy az excelen
                {
-                   if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 100)
+                   if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))                                       //találat esetén lefut
                    {
-                       ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
-                   }
-                   else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 5)
-                   {
-                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + "0"+ dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
-                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
-                   }
-                   else
-                   {
-                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
-                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                	   if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 100)
+                	   {
+                		   ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
+                	   }
+                	   else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(3)) == 5)
+                	   {
+                		   String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + "0"+ dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+	                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                	   }
+                	   else
+                	   {
+	                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(3))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+	                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                	   }
                    }
                      
                }
@@ -812,20 +810,20 @@ public class Loxone extends JPanel
                 {
                     if(koztes[0].contains(dataTable.getRows().get(szamlalo).getString(0)))
                     {
-                        if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 100)
-                        {
-                            ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
-                        }
-                         else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 5)
-                        {
-                             String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo +"0"+ dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
-                             ellenorizendo.setText(koztes2[0]);
-                        }
-                        else
-                        {
-                            String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
-                            ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
-                        }
+                    	if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 100)
+                  	   {
+                  		   ellenorizendo.setText(String.valueOf(ellenorizendo_menny));
+                  	   }
+                    	else if(Integer.parseInt(dataTable.getRows().get(szamlalo).getString(4)) == 5)
+                   	   {
+                    		String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo +"0"+ dataTable.getRows().get(szamlalo).getString(4))).split("\\.");
+                    		ellenorizendo.setText(koztes2[0]);
+                   	   }
+                  	   else
+                  	   {
+  	                       String[] koztes2 = String.valueOf(ellenorizendo_menny * Float.parseFloat(szorzo + dataTable.getRows().get(szamlalo).getString(4))).split("\\.");             //az excelben levő százalék alapján kiszámolja az ellenőrizendő mennyiséget
+  	                       ellenorizendo.setText(koztes2[0]);                                                                                                                           //beállítja az ellenőrizendő mennyiséget
+                  	   }
                     }
                       
                 }    
@@ -837,5 +835,22 @@ public class Loxone extends JPanel
             String hibauzenet2 = e1.toString();
             JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }
+    }
+    
+    public void beolvasas()
+    {
+    	Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+        Workbook excel = new Workbook();
+        excel.loadFromFile(cikkszamok);
+        Worksheet sheet = excel.getWorksheets().get(0);
+        rovidcikk = new String[sheet.getLastRow()];
+        hosszucikk = new String[sheet.getLastRow()];
+        DataTable datatable = sheet.exportDataTable();
+        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)                                        //for ciklus végigmegy az excelen
+        {
+        	rovidcikk[szamlalo] = datatable.getRows().get(szamlalo).getString(0);
+        	hosszucikk[szamlalo] = datatable.getRows().get(szamlalo).getString(0)+" - "+datatable.getRows().get(szamlalo).getString(1)+" - "+datatable.getRows().get(szamlalo).getString(2)+" - "+datatable.getRows().get(szamlalo).getString(3);
+        }
+        Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
     }
 }

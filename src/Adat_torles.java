@@ -22,6 +22,9 @@ public class Adat_torles extends JPanel
 	private JTextField datum;
 	static JTable table;
 	private JScrollPane scrollPane;
+	private JTextField nev_mezo;
+	private JTextField projekt_mezo;
+	private JTextField cikkszam_mezo;
 	/**
 	 * Create the panel.
 	 */
@@ -37,10 +40,10 @@ public class Adat_torles extends JPanel
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JLabel lblNewLabel_3 = new JLabel("Dátum");
-		lblNewLabel_3.setBounds(343, 86, 86, 14);
+		lblNewLabel_3.setBounds(399, 71, 86, 14);
 		
 		datum = new JTextField();
-		datum.setBounds(495, 83, 193, 20);
+		datum.setBounds(495, 68, 193, 20);
 		datum.setColumns(10);
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
@@ -49,25 +52,52 @@ public class Adat_torles extends JPanel
 		add(datum);
 		
 		JButton leker_gomb = new JButton("Lekérdés");
-		leker_gomb.setBounds(495, 151, 89, 23);
+		leker_gomb.setBounds(495, 211, 89, 23);
 		leker_gomb.addActionListener(new Lekerdezo());
 		add(leker_gomb);
 		
 		table = new JTable();
 		scrollPane = new JScrollPane(table);
 		//table.setBounds(63, 410, 948, -51);
-		scrollPane.setBounds(63, 210, 1458, 352);
+		scrollPane.setBounds(61, 264, 1458, 352);
 		add(scrollPane);
 		
 		JButton ujra = new JButton("Újraír");
 		ujra.addActionListener(new Visszair());
-		ujra.setBounds(495, 585, 89, 23);
+		ujra.setBounds(495, 627, 89, 23);
 		add(ujra);
 		
 		JButton sortorles_gomb = new JButton("Sor törlése");
 		sortorles_gomb.addActionListener(new Sortorles());
-		sortorles_gomb.setBounds(477, 636, 121, 23);
+		sortorles_gomb.setBounds(474, 661, 121, 23);
 		add(sortorles_gomb);
+		
+		JLabel lblNewLabel_1 = new JLabel("Név");
+		lblNewLabel_1.setBounds(399, 102, 46, 14);
+		add(lblNewLabel_1);
+		
+		nev_mezo = new JTextField();
+		nev_mezo.setBounds(495, 99, 193, 20);
+		add(nev_mezo);
+		nev_mezo.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Projekt");
+		lblNewLabel_2.setBounds(399, 133, 46, 14);
+		add(lblNewLabel_2);
+		
+		projekt_mezo = new JTextField();
+		projekt_mezo.setBounds(495, 130, 193, 20);
+		add(projekt_mezo);
+		projekt_mezo.setColumns(10);
+		
+		JLabel lblNewLabel_4 = new JLabel("Cikkszám");
+		lblNewLabel_4.setBounds(399, 173, 65, 14);
+		add(lblNewLabel_4);
+		
+		cikkszam_mezo = new JTextField();
+		cikkszam_mezo.setBounds(495, 170, 193, 20);
+		add(cikkszam_mezo);
+		cikkszam_mezo.setColumns(10);
 
 	}
 	
@@ -76,9 +106,35 @@ public class Adat_torles extends JPanel
         public void actionPerformed(ActionEvent e)
          {
             try
-            {             
+            {
+                String nev;String projekt;String cikk;
+                if(nev_mezo.getText().equals(""))
+                {
+                    nev = "%";                   
+                }
+                else
+                {
+                    nev = nev_mezo.getText() +"%";
+                }
+                if(projekt_mezo.getText().equals(""))
+                {
+                    projekt = "%";                   
+                }
+                else
+                {
+                    projekt = projekt_mezo.getText() +"%";
+                }
+                if(cikkszam_mezo.getText().equals(""))
+                {
+                    cikk = "%";                   
+                }
+                else
+                {
+                    cikk = cikkszam_mezo.getText() +"%";
+                }
+                String sql = "SELECT * FROM  qualitydb.Gyartasi_adatok where Datum = '"+ datum.getText() +"' and Ellenor_neve like '"+ nev +"' and Vevo like '"+ projekt +"' and VT_azon like '"+ cikk +"'";
                 SQL lekerdez = new SQL();
-                lekerdez.adat_modositashoz(datum.getText());
+                lekerdez.adat_modositashoz(sql);
                 //resizeColumnWidth(table);
             }
             catch(Exception e1)

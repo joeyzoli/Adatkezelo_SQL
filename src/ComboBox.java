@@ -11,24 +11,27 @@ public class ComboBox
 	private String[] combobox_tomb;
 	private Adat_beolvaso beolvas;
 	static final String vt_azon = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\vt_lista.csv";
-	static final String projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.csv";
-	static final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
-	static final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
-	static final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
-	static final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
-	static final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
-	static final String vevoi_hibaok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok.csv";
-	static final String vevoi_hibaok2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok2.csv";
-	static final String proglove_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek_rovid.csv";
-	static final String loxone = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek.csv";
-	static final String loxone_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek_rovid.csv";
-	static final String vevoi_projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői projektek.csv";
-	static final String vevoi_cikk = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői cikkszámok.csv";
-	static final String vevoi_proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői proglove.csv";
-	static final String socomec = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_termekek.csv";
-	static final String socomec_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_rovid.csv";
-	static final String hager = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager.csv";
-	static final String hager_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager_rovid.csv";
+    static final String projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.csv";
+    static final String hiba_helye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\hiba_helye.csv";
+    static final String ellenorok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök.csv";
+    static final String ellenorok_proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök_proglove.csv";
+    static final String ellenorok_loxone = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ellenőrök_loxone.csv";
+    static final String hibakodok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hibakód.csv";
+    static final String proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek.csv";
+    static final String folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Folyamat.csv";
+    static final String vevoi_hibaok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok.csv";
+    static final String vevoi_hibaok2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői_hibaokok2.csv";
+    static final String proglove_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Proglove_termekek_rovid.csv";
+    static final String loxone = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek.csv";
+    static final String loxone_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Loxone_termekek_rovid.csv";
+    static final String vevoi_projekt = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői projektek.csv";
+    static final String vevoi_cikk = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői cikkszámok.csv";
+    static final String vevoi_proglove = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Vevői proglove.csv";
+    static final String socomec = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_termekek.csv";
+    static final String socomec_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_rovid.csv";
+    static final String hager = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager.csv";
+    static final String hager_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager_rovid.csv";
+    
 	
 	private void listakeszito(String hely)																						//VT-azonosítókat dolgozza fel
 	{
