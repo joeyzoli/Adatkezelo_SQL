@@ -98,7 +98,7 @@ public class Torlo extends JPanel
 	            DataTable dataTable = sheet.exportDataTable();
 	            for (int i = 0; i < dataTable.getRows().size(); i++) 
 	            {
-	                atiras.atir("﻿100% ellenőrzés", "100% ellenőrzés");
+	                atiras.atir("visszajelzés", "Visszajelzés");
 	            }
 	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);
    
@@ -120,7 +120,7 @@ public class Torlo extends JPanel
 			try
 			 {
 				Db_torlo torol = new Db_torlo();
-				String[] adatbazisok = {"qualitydb.OQC_FB7530"};
+				String[] adatbazisok = {"qualitydb.Vevoireklamacio_alapadat","qualitydb.Vevoireklamacio_detekt","qualitydb.Vevoireklamacio_excel","qualitydb.Vevoireklamacio_felelosok","qualitydb.Vevoireklamacio_kepek"};
 				for(int szamlalo = 0; szamlalo < adatbazisok.length; szamlalo++)
 				{
 				    torol.torlo(adatbazisok[szamlalo]);

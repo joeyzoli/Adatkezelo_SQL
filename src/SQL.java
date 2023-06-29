@@ -1329,7 +1329,7 @@ public class SQL
         
         for (int szamlalo = 0; szamlalo < adatok.size(); szamlalo++) 
         {
-            if(adatok.get(szamlalo)[0].equals("202301"))
+            if(adatok.get(szamlalo)[0].equals("202201"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1340,7 +1340,7 @@ public class SQL
                     visszajelzes_jan++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202302"))
+            else if(adatok.get(szamlalo)[0].equals("202202"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1351,7 +1351,7 @@ public class SQL
                     visszajelzes_feb++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202303"))
+            else if(adatok.get(szamlalo)[0].equals("202203"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1362,7 +1362,7 @@ public class SQL
                     visszajelzes_mar++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202304"))
+            else if(adatok.get(szamlalo)[0].equals("202204"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1373,7 +1373,7 @@ public class SQL
                     visszajelzes_apr++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202305"))
+            else if(adatok.get(szamlalo)[0].equals("202205"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1384,7 +1384,7 @@ public class SQL
                     visszajelzes_maj++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202306"))
+            else if(adatok.get(szamlalo)[0].equals("202206"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1395,7 +1395,7 @@ public class SQL
                     visszajelzes_jun++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202307"))
+            else if(adatok.get(szamlalo)[0].equals("202207"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1406,7 +1406,7 @@ public class SQL
                     visszajelzes_jul++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202308"))
+            else if(adatok.get(szamlalo)[0].equals("202208"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1417,7 +1417,7 @@ public class SQL
                     visszajelzes_aug++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202309"))
+            else if(adatok.get(szamlalo)[0].equals("202209"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1428,7 +1428,7 @@ public class SQL
                     visszajelzes_sze++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202310"))
+            else if(adatok.get(szamlalo)[0].equals("202210"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1439,7 +1439,7 @@ public class SQL
                     visszajelzes_okt++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202311"))
+            else if(adatok.get(szamlalo)[0].equals("202211"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1450,7 +1450,139 @@ public class SQL
                     visszajelzes_nov++;
                 }
             }
-            if(adatok.get(szamlalo)[0].equals("202312"))
+            else if(adatok.get(szamlalo)[0].equals("202212"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_dec++;                     
+                }
+                else
+                {
+                    visszajelzes_dec++;
+                }
+            }///idáig kell           
+            else if(adatok.get(szamlalo)[0].equals("202301"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_jan++;                     
+                }
+                else
+                {
+                    visszajelzes_jan++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202302"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_feb++;                     
+                }
+                else
+                {
+                    visszajelzes_feb++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202303"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_mar++;                     
+                }
+                else
+                {
+                    visszajelzes_mar++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202304"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_apr++;                     
+                }
+                else
+                {
+                    visszajelzes_apr++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202305"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_maj++;                     
+                }
+                else
+                {
+                    visszajelzes_maj++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202306"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_jun++;                     
+                }
+                else
+                {
+                    visszajelzes_jun++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202307"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_jul++;                     
+                }
+                else
+                {
+                    visszajelzes_jul++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202308"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_aug++;                     
+                }
+                else
+                {
+                    visszajelzes_aug++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202309"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_sze++;                     
+                }
+                else
+                {
+                    visszajelzes_sze++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202310"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_okt++;                     
+                }
+                else
+                {
+                    visszajelzes_okt++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202311"))
+            {            
+                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
+                {
+                   reklamacio_nov++;                     
+                }
+                else
+                {
+                    visszajelzes_nov++;
+                }
+            }
+            else if(adatok.get(szamlalo)[0].equals("202312"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1751,18 +1883,14 @@ public class SQL
         sheet.getAllocatedRange().autoFitColumns();
         sheet.getAllocatedRange().autoFitRows();       
         sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-        
-        JFileChooser mentes_helye = new JFileChooser();
-        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        mentes_helye.showOpenDialog(mentes_helye);
-        File fajl = mentes_helye.getSelectedFile();
-        //System.out.println(fajl.getAbsolutePath());
-        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                
+        String mentes_helye = System.getProperty("user.home") + "\\Desktop\\Vevői reklamáció kimutatás.xlsx";
+        workbook.saveToFile(mentes_helye, ExcelVersion.Version2016);
         resultSet.close();
         stmt.close();
         conn.close();
         
-        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        FileInputStream fileStream = new FileInputStream(mentes_helye);
         try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
         {
             for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
@@ -1770,11 +1898,11 @@ public class SQL
                 workbook2.removeSheetAt(i); 
             }
             workbook2.setActiveSheet(0);
-            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            FileOutputStream output = new FileOutputStream(mentes_helye);
             workbook2.write(output);
             output.close();
         }
-        JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+        JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevői reklamáció kimutatás.xlsx néven", "Info", 1);
 
         resultSet.close();
         stmt.close();
