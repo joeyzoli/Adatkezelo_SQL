@@ -24,9 +24,11 @@ import com.spire.xls.SortComparsionType;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 
 public class AVM_csomagoloanyag extends JPanel {
     private JTextField datumtol_mezo;
@@ -35,6 +37,8 @@ public class AVM_csomagoloanyag extends JPanel {
     private String hova = System.getProperty("user.home") + "\\Desktop\\AVM csomagolóanyag PPM.xlsx";
     private JComboBox<String> beszallito_box;
     private DefaultComboBoxModel<String> model;
+    private JRadioButton ppm_gomb;
+    private JRadioButton felhasznalas_gomb;
 
     /**
      * Create the panel.
@@ -67,7 +71,7 @@ public class AVM_csomagoloanyag extends JPanel {
         
         JButton keres_gomb = new JButton("Keresés");
         keres_gomb.addActionListener(new Excel());
-        keres_gomb.setBounds(452, 281, 89, 23);
+        keres_gomb.setBounds(492, 320, 89, 23);
         add(keres_gomb);
         
         JLabel lblNewLabel_3 = new JLabel("Beszállító");
@@ -77,6 +81,20 @@ public class AVM_csomagoloanyag extends JPanel {
         beszallito_box = new JComboBox<String>();
         beszallito_box.setBounds(492, 211, 455, 22);
         add(beszallito_box);
+        
+        ppm_gomb = new JRadioButton("PPM");
+        ppm_gomb.setSelected(true);;
+        ppm_gomb.setBounds(492, 270, 70, 23);
+        add(ppm_gomb);
+
+        felhasznalas_gomb = new JRadioButton("Felhasználás");
+        felhasznalas_gomb.setBounds(564, 270, 109, 23);
+        add(felhasznalas_gomb);
+        
+        ButtonGroup csoport = new ButtonGroup();
+        csoport.add(ppm_gomb);
+        csoport.add(felhasznalas_gomb);
+        
         beolvasas();
 
     }
@@ -132,125 +150,173 @@ public class AVM_csomagoloanyag extends JPanel {
                 {
                     avm_cikkszamok.add(rs.getString(1));
                 }
-                
-                for(int szamlalo = 0; szamlalo < avm_cikkszamok.size(); szamlalo++)
+                if(ppm_gomb.isSelected())
                 {
-                    rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
-                            + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes\r\n"
-                            + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
-                            + "    where 3=3\r\n"
-                            + "     and part_no = '"+ avm_cikkszamok.get(szamlalo) +"' "    
-                            + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"                      
-                            + "    and LOCATION_NO = '91' group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)");
-                    if(rs.next())
+                    for(int szamlalo = 0; szamlalo < avm_cikkszamok.size(); szamlalo++)
                     {
-                        cikkszamok.add(rs.getString(1));
-                        megnevezes.add(rs.getString(2));
+                        rs = stmt.executeQuery("select PART_NO as Cikkszam,\r\n"
+                                + " ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes\r\n"
+                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                                + "    where 3=3\r\n"
+                                + "     and part_no = '"+ avm_cikkszamok.get(szamlalo) +"' "    
+                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"                      
+                                + "    and LOCATION_NO = '91' group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)");
+                        if(rs.next())
+                        {
+                            cikkszamok.add(rs.getString(1));
+                            megnevezes.add(rs.getString(2));
+                        }
                     }
-                }
-                //cikkszamok.size()
-                for(int szamlalo = 0; szamlalo < cikkszamok.size(); szamlalo++)
-                {
-                    
-                    cikkszam = cikkszamok.get(szamlalo);
-                    
-                    rs = stmt.executeQuery("select \r\n"
-                            + "sum(QUANTITY) as Fogyas\r\n"
-                            + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
-                            + "    where 3=3\r\n"
-                            + "    and TRANSACTION_CODE = 'BACFLUSH'\r\n"
-                            + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
-                    if(rs.next())
-                    {            
-                        felhasznalva = rs.getInt(1);
-                    }
-            
-                    rs = stmt.executeQuery("select \r\n"
-                            + "sum(QUANTITY) as Fogyas\r\n"
-                            + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
-                            + "    where 3=3\r\n"
-                            + "    and LOCATION_NO = '91'\r\n"
-                            + "    and TRANSACTION_CODE = 'INVM-IN'\r\n"
-                            + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
-                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
-                    if(rs.next())
-                    {            
-                        zarolt = rs.getInt(1);
-                    }
-                    
-                    rs = stmt.executeQuery("select sum(QTY_ONHAND)\r\n"
-                            + "from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                            + "where 3 = 3\r\n"
-                            + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
-                    if(rs.next())
-                    {            
-                        keszlet = rs.getInt(1);
-                    }
-                    
-                    rs = stmt.executeQuery("select sum(QTY_ARRIVED),\r\n"
-                            + "RECEIPT_REFERENCE,\r\n"
-                            + "ARRIVAL_DATE\r\n"
-                            + "from ifsapp.PURCHASE_RECEIPT_NEW\r\n"
-                            + "where 3 = 3\r\n"
-                            + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'\r\n"
-                            + "group by RECEIPT_REFERENCE, ARRIVAL_DATE\r\n"
-                            + "order by ARRIVAL_DATE DESC\r\n"
-                            + "FETCH FIRST 18 ROWS ONLY");
-                    while(rs.next())
-                    {            
-                        beszerzett_db.add(rs.getInt(1));
-                        rendelesi_azonosito.add(rs.getString(2));
-                    }                 
-                    int fel1 = 0;
-                    int fel2 = 0;
-                    int eredmeny = 0;
-                    int seged = 0;
-                    int felhasznalt = felhasznalva + zarolt;
-                    for(int szamlalo2 = 0; eredmeny <= felhasznalt; szamlalo2++)
+                    //cikkszamok.size()
+                    for(int szamlalo = 0; szamlalo < cikkszamok.size(); szamlalo++)
                     {
-                        fel1 = beszerzett_db.get(szamlalo2);
-                        fel2 += fel1;
-                        if(fel2 > keszlet)
+                        
+                        cikkszam = cikkszamok.get(szamlalo);
+                        
+                        rs = stmt.executeQuery("select \r\n"
+                                + "sum(QUANTITY) as Fogyas\r\n"
+                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                                + "    where 3=3\r\n"
+                                + "    and TRANSACTION_CODE = 'BACFLUSH'\r\n"
+                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                                + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
+                        if(rs.next())
                         {            
-                            seged =  fel2 - keszlet;
-                            sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
-                            sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
-                            sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
-                            sheet2.getCellRange("D" + cellaszam2).setNumberValue(seged);
-                            cellaszam2++;szamlalo2++;
-                            eredmeny += seged;                            
-                            while(eredmeny <= felhasznalt)
-                            {
-                                eredmeny += beszerzett_db.get(szamlalo2);
+                            felhasznalva = rs.getInt(1);
+                        }
+                
+                        rs = stmt.executeQuery("select \r\n"
+                                + "sum(QUANTITY) as Fogyas\r\n"
+                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                                + "    where 3=3\r\n"
+                                + "    and LOCATION_NO = '91'\r\n"
+                                + "    and TRANSACTION_CODE = 'INVM-IN'\r\n"
+                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                                + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
+                        if(rs.next())
+                        {            
+                            zarolt = rs.getInt(1);
+                        }
+                        
+                        rs = stmt.executeQuery("select sum(QTY_ONHAND)\r\n"
+                                + "from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
+                                + "where 3 = 3\r\n"
+                                + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'");
+                        if(rs.next())
+                        {            
+                            keszlet = rs.getInt(1);
+                        }
+                        
+                        rs = stmt.executeQuery("select sum(QTY_ARRIVED),\r\n"
+                                + "RECEIPT_REFERENCE,\r\n"
+                                + "ARRIVAL_DATE\r\n"
+                                + "from ifsapp.PURCHASE_RECEIPT_NEW\r\n"
+                                + "where 3 = 3\r\n"
+                                + "and PART_NO = '"+ cikkszamok.get(szamlalo) +"'\r\n"
+                                + "group by RECEIPT_REFERENCE, ARRIVAL_DATE\r\n"
+                                + "order by ARRIVAL_DATE DESC\r\n"
+                                + "FETCH FIRST 18 ROWS ONLY");
+                        while(rs.next())
+                        {            
+                            beszerzett_db.add(rs.getInt(1));
+                            rendelesi_azonosito.add(rs.getString(2));
+                        }                 
+                        int fel1 = 0;
+                        int fel2 = 0;
+                        int eredmeny = 0;
+                        int seged = 0;
+                        int felhasznalt = felhasznalva + zarolt;
+                        for(int szamlalo2 = 0; eredmeny <= felhasznalt; szamlalo2++)
+                        {
+                            fel1 = beszerzett_db.get(szamlalo2);
+                            fel2 += fel1;
+                            if(fel2 > keszlet)
+                            {            
+                                seged =  fel2 - keszlet;
                                 sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
                                 sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
                                 sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
-                                sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
-                                cellaszam2++;
-                                szamlalo2++;
-                            }
-                            cellaszam2--;szamlalo2--;
-                            seged = eredmeny- felhasznalt;
-                            sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2)-seged);
-                        }                      
-                    }                        
-                    
-                    cellaszam2++;
-                    ppm = (((float)zarolt/((float)felhasznalva+(float)zarolt)));
-                    sheet.getRange().get("A" + cellaszam).setText(cikkszam);
-                    sheet.getRange().get("B" + cellaszam).setText(megnevezes.get(szamlalo));
-                    sheet.getCellRange("C" + cellaszam).setNumberValue(felhasznalva + zarolt);                        
-                    sheet.getCellRange("D" + cellaszam).setNumberValue(zarolt);
-                    sheet.getCellRange("E" + cellaszam).setNumberValue(ppm);
-                    sheet.getCellRange("F" + cellaszam).setNumberValue(keszlet);
-                                       
-                    beszerzett_db.clear();
-                    rendelesi_azonosito.clear();
-                    //cellaszam = sheet.getLastRow()+5;
+                                sheet2.getCellRange("D" + cellaszam2).setNumberValue(seged);
+                                cellaszam2++;szamlalo2++;
+                                eredmeny += seged;                            
+                                while(eredmeny <= felhasznalt)
+                                {
+                                    eredmeny += beszerzett_db.get(szamlalo2);
+                                    sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
+                                    sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                    sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
+                                    sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                    cellaszam2++;
+                                    szamlalo2++;
+                                }
+                                cellaszam2--;szamlalo2--;
+                                seged = eredmeny- felhasznalt;
+                                sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2)-seged);
+                            }                      
+                        }                        
+                        
+                        cellaszam2++;
+                        ppm = (((float)zarolt/((float)felhasznalva+(float)zarolt)));
+                        sheet.getRange().get("A" + cellaszam).setText(cikkszam);
+                        sheet.getRange().get("B" + cellaszam).setText(megnevezes.get(szamlalo));
+                        sheet.getCellRange("C" + cellaszam).setNumberValue(felhasznalva + zarolt);                        
+                        sheet.getCellRange("D" + cellaszam).setNumberValue(zarolt);
+                        sheet.getCellRange("E" + cellaszam).setNumberValue(ppm);
+                        sheet.getCellRange("F" + cellaszam).setNumberValue(keszlet);
+                                           
+                        beszerzett_db.clear();
+                        rendelesi_azonosito.clear();
+                        //cellaszam = sheet.getLastRow()+5;
+                        cellaszam++;
+                        zarolt = 0;felhasznalva = 0;keszlet = 0;                   
+                    }
+                }
+                else
+                {
+                    cellaszam = 1;
+                    sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                    sheet.getRange().get("B" + cellaszam).setText("Beérkezve");
+                    sheet.getRange().get("C" + cellaszam).setText("Felhasználva");
+                    sheet.getRange().get("D" + cellaszam).setText("");
+                    sheet.getRange().get("E" + cellaszam).setText("");
+                    sheet.getRange().get("F" + cellaszam).setText("");       
                     cellaszam++;
-                    zarolt = 0;felhasznalva = 0;keszlet = 0;                   
-                }                
+                    for(int szamlalo = 0; szamlalo < avm_cikkszamok.size(); szamlalo++)
+                    {
+                        sheet.getRange().get("A" + cellaszam).setText(avm_cikkszamok.get(szamlalo));
+                        rs = stmt.executeQuery("select \r\n"
+                                + "sum(QUANTITY) as Fogyas\r\n"
+                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                                + "    where 3=3\r\n"
+                                + "    and TRANSACTION_CODE = 'ARRIVAL'\r\n"
+                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                                + "    and  PART_NO = '"+ avm_cikkszamok.get(szamlalo) +"'");
+                        if(rs.next())
+                        {            
+                            sheet.getRange().get("B" + cellaszam).setText(rs.getString(1));
+                        }
+                        else
+                        {
+                            sheet.getRange().get("B" + cellaszam).setText("0");
+                        }
+                        rs = stmt.executeQuery("select \r\n"
+                                + "sum(QUANTITY) as Fogyas\r\n"
+                                + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\r\n"
+                                + "    where 3=3\r\n"
+                                + "    and TRANSACTION_CODE = 'BACFLUSH'\r\n"
+                                + "    and DATE_CREATED between to_date( '"+datumtol[0]+ datumtol[1]+ datumtol[2] +"000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '"+ datumig[0]+datumig[1]+datumig[2]+ "235959', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                                + "    and  PART_NO = '"+ avm_cikkszamok.get(szamlalo) +"'");
+                        if(rs.next())
+                        {            
+                            sheet.getRange().get("C" + cellaszam).setText(rs.getString(1));
+                        }
+                        else
+                        {
+                            sheet.getRange().get("C" + cellaszam).setText("0");
+                        }
+                        cellaszam++;
+                    }
+                }
                
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
@@ -260,11 +326,13 @@ public class AVM_csomagoloanyag extends JPanel {
                 workbook.getDataSorter().getSortColumns().add(4, SortComparsionType.Values, OrderBy.Descending);
                 workbook.getDataSorter().sort(sheet.getCellRange("A1:F"+ sheet.getLastRow()));
                 
-                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
-                sheet2.getAllocatedRange().autoFitColumns();
-                sheet2.getAllocatedRange().autoFitRows();
-                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
-                
+                if(ppm_gomb.isSelected())
+                {
+                    sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                    sheet2.getAllocatedRange().autoFitColumns();
+                    sheet2.getAllocatedRange().autoFitRows();
+                    sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
+                }
                 workbook.saveToFile(hova, ExcelVersion.Version2016);
                 FileInputStream fileStream = new FileInputStream(hova);
                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 

@@ -14,8 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -1638,11 +1636,11 @@ public class SQL
                 reklamacio_nov + reklamacio_dec;        
         int sumvissza = visszajelzes_jan + visszajelzes_feb + visszajelzes_mar + visszajelzes_apr + visszajelzes_maj + visszajelzes_jun + visszajelzes_jul + visszajelzes_aug + visszajelzes_sze + visszajelzes_okt + 
                 visszajelzes_nov + visszajelzes_dec;
-        Date date = new Date();
-        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int month = localDate.getMonthValue();
-        Float atlagrek = (float) (sumrek / month);
-        Float atlagvissza = (float) (sumvissza/month);
+        //Date date = new Date();
+        //LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        // int month = localDate.getMonthValue();
+        Float atlagrek = (float) (sumrek / 12);           //month
+        Float atlagvissza = (float) (sumvissza / 12);       //month
         sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
         sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);
                
