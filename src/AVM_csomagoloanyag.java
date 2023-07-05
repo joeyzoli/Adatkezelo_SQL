@@ -276,10 +276,7 @@ public class AVM_csomagoloanyag extends JPanel {
                     cellaszam = 1;
                     sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
                     sheet.getRange().get("B" + cellaszam).setText("Beérkezve");
-                    sheet.getRange().get("C" + cellaszam).setText("Felhasználva");
-                    sheet.getRange().get("D" + cellaszam).setText("");
-                    sheet.getRange().get("E" + cellaszam).setText("");
-                    sheet.getRange().get("F" + cellaszam).setText("");       
+                    sheet.getRange().get("C" + cellaszam).setText("Felhasználva");                                       
                     cellaszam++;
                     for(int szamlalo = 0; szamlalo < avm_cikkszamok.size(); szamlalo++)
                     {
@@ -331,23 +328,48 @@ public class AVM_csomagoloanyag extends JPanel {
                     sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                     sheet2.getAllocatedRange().autoFitColumns();
                     sheet2.getAllocatedRange().autoFitRows();
-                    sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
+                    sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    
+                    workbook.saveToFile(hova, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(hova);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(hova);
+                        workbook3.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra AVM csomagolóanyag PPM.xlsx néven!", "Info", 1); 
+                    con.close();  
+                    Foablak.frame.setCursor(null);  
                 }
-                workbook.saveToFile(hova, ExcelVersion.Version2016);
-                FileInputStream fileStream = new FileInputStream(hova);
-                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                else
                 {
-                    for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
-                    {    
-                        workbook3.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(hova);
-                    workbook3.write(output);
-                    output.close();
+                    sheet2.remove();
+                    sheet.getRange().get("D" + 1).setText("");
+                    sheet.getRange().get("E" + 1).setText("");
+                    sheet.getRange().get("F" + 1).setText("");
+                    sheet.setName("Beérkezett és fehasznált mennyiség");
+                    workbook.saveToFile(hova, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(hova);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(hova);
+                        workbook3.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra AVM csomagolóanyag PPM.xlsx néven!", "Info", 1); 
+                    con.close();  
+                    Foablak.frame.setCursor(null);  
                 }
-                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra AVM csomagolóanyag PPM.xlsx néven!", "Info", 1); 
-                con.close();  
-                Foablak.frame.setCursor(null);          
+                        
               
             }           
             catch(Exception e1)

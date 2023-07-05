@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Email 
 {
-    public void emailkuldes(String felado, String feladoemail, String cimzett, String cc, String id, String datum, String cikk, String intezkedes)
+    public void emailkuldes(String felado, String feladoemail, String cimzett, String cc, String id, String datum, String cikk, String intezkedes, String hibaleiras)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -37,6 +37,7 @@ public class Email
                     + "\n Reklamáció ID: " + id
                     + "\n Reklamáció dátuma: \n " + datum
                     + "\n Reklamált cikkszám: \n " + cikk
+                    + "\n Hiba leírása: \n " + hibaleiras
                     + "\n Elvégzendő feladat: \n " + intezkedes
                     + "\n Kérem minnél elöbb zárja le!");                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           

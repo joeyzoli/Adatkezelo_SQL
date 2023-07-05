@@ -1941,14 +1941,14 @@ public class SQL
         Statement stmt = null;
         Statement stmt2 = null;
         Statement stmt3 = null;
-        //Statement stmt4 = null;
+        Statement stmt4 = null;
         DataTable datatable = new DataTable();
         DataTable datatable2 = new DataTable();
         //DataTable datatable3 = new DataTable();
         //DataTable datatable4 = new DataTable();
         ResultSet resultSet2;
         ResultSet resultSet3;
-        //ResultSet resultSet4;
+        ResultSet resultSet4;
         try 
         {
            try 
@@ -1965,6 +1965,7 @@ public class SQL
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        stmt4 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
        
         String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Zarolt FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
         String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Intezkedes  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";     
@@ -2049,9 +2050,12 @@ public class SQL
                     if(felelosok.get(szamlalo).equals(felelosexcel.getRows().get(szamlalo2).getString(0)))
                     {                       
                         String[] adat = adatok.get(szamlalo).split(",");
+                        String sql4 = "select hibaleiras from qualitydb.Vevoireklamacio_alapadat where id = '"+ adat[0] +"'";
+                        stmt4.execute(sql4);       
+                        resultSet4 = stmt4.getResultSet();
                         Email emailkuldes = new Email();
                         emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
-                               felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3), adat[0], adat[1], adat[2], adat[3]);
+                               felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3), adat[0], adat[1], adat[2], adat[3], resultSet4.getString(1));
                         System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " 
                                + felelosexcel.getRows().get(szamlalo2).getString(3));
                         String modosit = "update qualitydb.Vevoireklamacio_felelosok set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
