@@ -598,8 +598,16 @@ public class SQL
             Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText(datatable3.getRows().get(0).getString(2));
             
         }
+        sql = "SELECT intezkedes, felelos, hatarido FROM qualitydb.Vevoireklamacio_detekt where ID = '"+ id +"'";
         
-        
+        stmt.execute(sql);       
+        resultSet = stmt.getResultSet();
+        while(resultSet.next())
+        {
+            String[] ido = resultSet.getString(3).split(" ");
+            Vevoi_reklmacio_bevitel.modell3.addRow(new Object[]{resultSet.getString(1), resultSet.getString(2),ido[0]});
+        }
+        Vevoi_reklmacio_bevitel.table.setModel(Vevoi_reklmacio_bevitel.modell3);
         
         resultSet.close();
         resultSet2.close();
@@ -1967,8 +1975,8 @@ public class SQL
         stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt4 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
        
-        String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Zarolt FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
-        String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Intezkedes  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";     
+        String sql = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Zarolt, Ujra_ertesitve FROM  qualitydb.Vevoireklamacio_felelosok where Lezarva is null";                
+        String sql2 = "SELECT Felelos, Hatarido, ID, Datum, Cikkszam, Ertesitve, Intezkedes, Ujra_ertesitve  FROM  qualitydb.Vevoireklamacio_detekt where Lezarva is null ";     
                     
         stmt.execute(sql);
         stmt2.execute(sql2);       
@@ -1990,6 +1998,8 @@ public class SQL
         CallableStatement cstmt = conn.prepareCall("{call qualitydb.vevoi_ertesites(?,?) }");                                   //tárolt eljárást hívja meg
         ArrayList<String> felelosok = new ArrayList<String>();
         ArrayList<String> adatok = new ArrayList<String>();
+        ArrayList<String> lejart_felelosok = new ArrayList<String>();
+        ArrayList<String> lejart_adatok = new ArrayList<String>();
         for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
         {
             Date hatarido = formatter.parse(datatable.getRows().get(szamlalo).getString(1));
@@ -2000,12 +2010,20 @@ public class SQL
             resultSet3 = cstmt.getResultSet();           
             if(resultSet3.next())
             {              
-                if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+                if(Integer.parseInt(resultSet3.getString(1)) <= 5 && Integer.parseInt(resultSet3.getString(1)) >= 0)
                 {
                     if(datatable.getRows().get(szamlalo).getString(5).equals("Nem"))
                     {
                         felelosok.add(datatable.getRows().get(szamlalo).getString(0));
                         adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                    }
+                }
+                if(Integer.parseInt(resultSet3.getString(1)) < 0)
+                {
+                    if(datatable.getRows().get(szamlalo).getString(5).equals("Igen") && datatable.getRows().get(szamlalo).getString(7).equals("Nem"))
+                    {
+                        lejart_felelosok.add(datatable.getRows().get(szamlalo).getString(0));
+                        lejart_adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
                     }
                 }
             }
@@ -2021,12 +2039,20 @@ public class SQL
             resultSet3 = cstmt.getResultSet();
             if(resultSet3.next())
             {
-                if(Integer.parseInt(resultSet3.getString(1)) <= 5)
+                if(Integer.parseInt(resultSet3.getString(1)) <= 5 && Integer.parseInt(resultSet3.getString(1)) >= 0)
                 {
                     if(datatable2.getRows().get(szamlalo).getString(5).equals("Nem"))
                     {
                         felelosok.add(datatable2.getRows().get(szamlalo).getString(0));
                         adatok.add(datatable2.getRows().get(szamlalo).getString(2)+ ","+ datatable2.getRows().get(szamlalo).getString(3)+ ","+ datatable2.getRows().get(szamlalo).getString(4)+ ","+datatable2.getRows().get(szamlalo).getString(6));
+                    }
+                }
+                if(Integer.parseInt(resultSet3.getString(1)) < 0)
+                {
+                    if(datatable2.getRows().get(szamlalo).getString(5).equals("Igen") && datatable2.getRows().get(szamlalo).getString(7).equals("Nem"))
+                    {
+                        lejart_felelosok.add(datatable2.getRows().get(szamlalo).getString(0));
+                        lejart_adatok.add(datatable2.getRows().get(szamlalo).getString(2)+ ","+ datatable2.getRows().get(szamlalo).getString(3)+ ","+ datatable2.getRows().get(szamlalo).getString(4)+ ","+datatable2.getRows().get(szamlalo).getString(6));
                     }
                 }
             }
@@ -2035,6 +2061,10 @@ public class SQL
         for(int szamlalo = 0; szamlalo < felelosok.size(); szamlalo++)
         {          
             System.out.println(felelosok.get(szamlalo));
+        }
+        for(int szamlalo = 0; szamlalo < lejart_felelosok.size(); szamlalo++)
+        {          
+            System.out.println("Lejárt: "+lejart_felelosok.get(szamlalo));
         }
         
         if(felelosok.size() > 0)
@@ -2053,15 +2083,51 @@ public class SQL
                         String sql4 = "select hibaleiras from qualitydb.Vevoireklamacio_alapadat where id = '"+ adat[0] +"'";
                         stmt4.execute(sql4);       
                         resultSet4 = stmt4.getResultSet();
-                        Email emailkuldes = new Email();
-                        emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
-                               felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3), adat[0], adat[1], adat[2], adat[3], resultSet4.getString(1));
-                        System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " 
-                               + felelosexcel.getRows().get(szamlalo2).getString(3));
-                        String modosit = "update qualitydb.Vevoireklamacio_felelosok set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
-                        String modosit2 = "update qualitydb.Vevoireklamacio_detekt set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
-                        stmt3.executeUpdate(modosit);
-                        stmt3.executeUpdate(modosit2); 
+                        if(resultSet4.next())
+                        {
+                            Email emailkuldes = new Email();
+                            emailkuldes.sima_emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
+                                   felelosexcel.getRows().get(szamlalo2).getString(1), adat[0], adat[1], adat[2], adat[3], resultSet4.getString(1));
+                            System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " 
+                                   + felelosexcel.getRows().get(szamlalo2).getString(3));
+                            String modosit = "update qualitydb.Vevoireklamacio_felelosok set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
+                            String modosit2 = "update qualitydb.Vevoireklamacio_detekt set  Ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ felelosok.get(szamlalo)  +"'";
+                            stmt3.executeUpdate(modosit);
+                            stmt3.executeUpdate(modosit2);
+                        }
+                    }
+                }
+            }
+            
+        }
+        if(lejart_felelosok.size() > 0)
+        {
+            Workbook workbook = new Workbook();
+            workbook.loadFromFile(emaillista);
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            DataTable felelosexcel = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+            for(int szamlalo = 0; szamlalo < lejart_felelosok.size(); szamlalo++)
+            {          
+                for(int szamlalo2 = 0; szamlalo2 < felelosexcel.getRows().size(); szamlalo2++)
+                {          
+                    if(lejart_felelosok.get(szamlalo).equals(felelosexcel.getRows().get(szamlalo2).getString(0)))
+                    {                       
+                        String[] adat = lejart_adatok.get(szamlalo).split(",");
+                        String sql4 = "select hibaleiras from qualitydb.Vevoireklamacio_alapadat where id = '"+ adat[0] +"'";
+                        stmt4.execute(sql4);       
+                        resultSet4 = stmt4.getResultSet();
+                        if(resultSet4.next())
+                        {
+                            Email emailkuldes = new Email();
+                            emailkuldes.emailkuldes(felelosexcel.getRows().get(szamlalo2).getString(0), felelosexcel.getRows().get(szamlalo2).getString(1), 
+                                   felelosexcel.getRows().get(szamlalo2).getString(1), felelosexcel.getRows().get(szamlalo2).getString(3), adat[0], adat[1], adat[2], adat[3], resultSet4.getString(1));
+                            System.out.println(felelosexcel.getRows().get(szamlalo2).getString(0)+ " " + felelosexcel.getRows().get(szamlalo2).getString(1) + " "+ felelosexcel.getRows().get(szamlalo2).getString(1)+" " 
+                                   + felelosexcel.getRows().get(szamlalo2).getString(3));
+                            String modosit = "update qualitydb.Vevoireklamacio_felelosok set  Ujra_ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ lejart_felelosok.get(szamlalo)  +"'";
+                            String modosit2 = "update qualitydb.Vevoireklamacio_detekt set  Ujra_ertesitve = 'Igen' where ID = '"+ adat[0]  +"' and Felelos = '"+ lejart_felelosok.get(szamlalo)  +"'";
+                            stmt3.executeUpdate(modosit);
+                            stmt3.executeUpdate(modosit2);
+                        }
                     }
                 }
             }
