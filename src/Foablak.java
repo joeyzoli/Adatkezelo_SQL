@@ -57,6 +57,7 @@ public class Foablak extends JFrame
 	private Retour_Mile retour_mile;
 	private Beszallitoi_PPM ppm;
 	private Telecom_utolso utolsofolyamat;
+	private IFS_archive archive;
 	private Tracy_utolso utolsotracy;
 	private Gepes_ellenorok ellenorok;
 	private AVM_csomagoloanyag avm;
@@ -241,6 +242,10 @@ public class Foablak extends JFrame
 		lekerdezes.add(iqc);
 		lekerdezes.add(tracy_utolso);
 		lekerdezes.add(telecom_utolso);
+		
+		JMenuItem ifs_archive = new JMenuItem("IFS archive");
+		ifs_archive.addActionListener(new PanelCsere_ifs_archive());
+		lekerdezes.add(ifs_archive);
 		lekerdezes.add(folyamatellenorok);
 		
 		JMenu vizsga = new JMenu("Vizsga");
@@ -552,6 +557,17 @@ public class Foablak extends JFrame
          {
             utolsotracy = new Tracy_utolso();
             JScrollPane ablak = new JScrollPane(utolsotracy);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_ifs_archive implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            archive = new IFS_archive();
+            JScrollPane ablak = new JScrollPane(archive);
             setContentPane(ablak);
             pack();
          }
