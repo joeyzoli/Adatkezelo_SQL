@@ -77,6 +77,8 @@ public class Vevoi_reklamacio_ujadat extends JPanel
         mentes_gomb.addActionListener(new Ujcikkszam());
         mentes_gomb.setBounds(513, 396, 89, 23);
         add(mentes_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

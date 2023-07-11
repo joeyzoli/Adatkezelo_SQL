@@ -139,6 +139,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         excelmentes.addActionListener(new Excelmentes());
         add(excelmentes);
         ido();
+        
+        setBackground(Foablak.hatter_szine);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

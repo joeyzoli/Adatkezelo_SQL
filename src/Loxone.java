@@ -303,7 +303,7 @@ public class Loxone extends JPanel
         eredetikep.setBounds(917, 671, 100, 23);
         eredetikep.addActionListener(new Eredeti_kep());
         add(eredetikep);
-     
+        setBackground(Foablak.hatter_szine);
         kiirando = new ArrayList<String[]>();
         
     }

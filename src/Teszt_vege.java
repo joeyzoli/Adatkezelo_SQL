@@ -33,6 +33,7 @@ public class Teszt_vege extends JPanel
         JLabel lblNewLabel_2 = new JLabel("Másodperc");
         lblNewLabel_2.setBounds(673, 240, 94, 14);
         add(lblNewLabel_2);
-
+        
+        setBackground(Foablak.hatter_szine);
     }
 }

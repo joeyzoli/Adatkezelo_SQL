@@ -55,7 +55,7 @@ public class Teszt_4 extends JPanel
         kovi_gomb.addActionListener(new Kovetkezo());
         kovi_gomb.setBounds(947, 692, 107, 23);
         add(kovi_gomb);
-        
+        setBackground(Foablak.hatter_szine);
         elozo_gomb = new JButton("Előző");
         elozo_gomb.setBounds(97, 692, 89, 23);
         elozo_gomb.addActionListener(new Elozo());

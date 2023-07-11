@@ -49,7 +49,7 @@ public class Teszt_3 extends JPanel
     {
         setLayout(null);
         this.setPreferredSize(meretek);
-        
+        setBackground(Foablak.hatter_szine);
         kerdes1 = new JLabel("New label");
         kerdes1.setBounds(29, 24, 1097, 14);
         add(kerdes1);

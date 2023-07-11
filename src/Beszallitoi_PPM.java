@@ -105,6 +105,8 @@ public class Beszallitoi_PPM extends JPanel
         megjegyzes_mezo.setWrapStyleWord(true);
         megjegyzes_mezo.setEditable(false);
         add(megjegyzes_mezo);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

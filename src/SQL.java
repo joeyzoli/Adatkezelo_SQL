@@ -670,15 +670,18 @@ public class SQL
         stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String sajat = "";
         String sajat2 = "";
+        String sajat3 = "";
         if(id.equals(""))
         {
             sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";                
             sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
+            sajat3 = "SELECT Belso_koltseg, fuvar_koltseg, Selejt_koltseg, Egyeb_koltseg FROM  qualitydb.Vevoireklamacio_alapadat where Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"' ";
         }
         else
         {
             sajat = "SELECT * FROM  qualitydb.Vevoireklamacio_felelosok where ID = '"+ id +"'";                
             sajat2 = "SELECT * FROM  qualitydb.Vevoireklamacio_detekt where ID = '"+ id +"'";
+            sajat3 = "SELECT Belso_koltseg, fuvar_koltseg, Selejt_koltseg, Egyeb_koltseg FROM  qualitydb.Vevoireklamacio_alapadat where ID = '"+ id +"'";
         }
             
         stmt.execute(sajat);
@@ -688,6 +691,16 @@ public class SQL
         
         Vevoi_reklamacio_lezaras.table.setModel(buildTableModel(resultSet));
         Vevoi_reklamacio_lezaras.table_1.setModel(buildTableModel(resultSet2));
+        
+        stmt.execute(sajat3);
+        resultSet = stmt.getResultSet();
+        if(resultSet.next())
+        {
+            Vevoi_reklamacio_lezaras.koltseg_1.setText(resultSet.getString(1));
+            Vevoi_reklamacio_lezaras.koltseg_2.setText(resultSet.getString(2));
+            Vevoi_reklamacio_lezaras.koltseg_3.setText(resultSet.getString(3));
+            Vevoi_reklamacio_lezaras.koltseg_4.setText(resultSet.getString(4));
+        }
 
         resultSet.close();
         stmt.close();
@@ -1859,6 +1872,68 @@ public class SQL
  
         //Add a secondary Y axis to the chart
         cs6.setUsePrimaryAxis(false);
+        
+/**********************************************Ötödik diagramm******************************************/
+        
+        sheet.getRange().get("A" + 100).setText("Projekt");
+        sheet.getRange().get("B" + 100).setText("Belső költség");
+        sheet.getRange().get("C" + 100).setText("Fuvar költség");
+        sheet.getRange().get("D" + 100).setText("Selejt költség");
+        sheet.getRange().get("E" + 100).setText("Egyéb költség");
+        int cellaszam6 = 101;
+        int resultvege = 0;
+        sql = "select projekt,\n"
+                + "sum(belso_koltseg),\n"
+                + "sum(fuvar_koltseg),\n"
+                + "sum(fuvar_koltseg),\n"
+                + "sum(egyeb_koltseg)\n"
+                + "from qualitydb.Vevoireklamacio_alapadat\n"
+                + "where 3=3\n"
+                + "group by projekt order by projekt asc";
+        stmt.execute(sql);
+        resultSet = stmt.getResultSet();
+        while(resultSet.next())
+        {
+            sheet.getRange().get("A" + cellaszam6).setText(resultSet.getString(1));
+            sheet.getRange().get("B" + cellaszam6).setNumberValue(resultSet.getInt(2));
+            sheet.getRange().get("C" + cellaszam6).setNumberValue(resultSet.getInt(3));
+            sheet.getRange().get("D" + cellaszam6).setNumberValue(resultSet.getInt(4));
+            sheet.getRange().get("E" + cellaszam6).setNumberValue(resultSet.getInt(5));
+            cellaszam6++;
+            resultvege++;
+        }
+        Chart chart6 = sheet.getCharts().add();
+        chart6.setDataRange(sheet.getCellRange("A100:E"+ (100+resultvege)));            //
+        chart6.setSeriesDataFromRange(false);
+        
+        chart6.setLeftColumn(1);
+        chart6.setTopRow(105);
+        chart6.setRightColumn(11);
+        chart6.setBottomRow(135);
+        
+        chart6.setChartType(ExcelChartType.ColumnStacked);
+        
+        chart6.setChartTitle("Reklamáció költsége projektenként");
+        chart6.getChartTitleArea().isBold(true);
+        chart6.getChartTitleArea().setSize(14);
+        chart6.getPrimaryCategoryAxis().setTitle("Projektek");
+        chart6.getPrimaryCategoryAxis().getFont().isBold(true);
+        chart6.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+        chart6.getPrimaryValueAxis().setTitle("Összesen");
+        chart6.getPrimaryValueAxis().hasMajorGridLines(false);
+        chart6.getPrimaryValueAxis().setMinValue(0);
+        chart6.getPrimaryValueAxis().getTitleArea().isBold(true);
+        chart6.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+        
+        ChartSeries series6 = chart6.getSeries();
+        for (int i = 0;i < series6.size();i++)
+        {
+            ChartSerie cs = series6.get(i);
+            cs.getFormat().getOptions().isVaryColor(true);
+            cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+        }
+        
+        chart6.getLegend().setPosition(LegendPositionType.Top);
         
         /****************************************beírom a hiányzó adatokat a második oldalra****************************************/
         String intezkedes = "";

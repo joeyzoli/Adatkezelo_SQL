@@ -49,6 +49,8 @@ public class PO_szam extends JPanel
         datum_mezo.setBounds(499, 230, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

@@ -63,6 +63,8 @@ public class Teszt_lezaras extends JPanel
         excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(583, 453, 89, 23);
         add(excel_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

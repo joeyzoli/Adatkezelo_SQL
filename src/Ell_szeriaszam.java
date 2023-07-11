@@ -49,6 +49,8 @@ public class Ell_szeriaszam extends JPanel {
         keres_gomb.addActionListener(new Kereses());
         keres_gomb.setBounds(539, 245, 89, 23);
         add(keres_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

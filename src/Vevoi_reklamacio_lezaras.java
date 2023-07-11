@@ -26,6 +26,10 @@ public class Vevoi_reklamacio_lezaras extends JPanel
     private int tablavege1 = 0;
     private int tablavege2 = 0;
     private JTextField id_mezo;
+    static JTextField koltseg_1;
+    static JTextField koltseg_2;
+    static JTextField koltseg_3;
+    static JTextField koltseg_4;
 
     /**
      * Create the panel.
@@ -40,86 +44,133 @@ public class Vevoi_reklamacio_lezaras extends JPanel
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Dátum");
-        lblNewLabel_1.setBounds(453, 88, 46, 14);
+        lblNewLabel_1.setBounds(453, 72, 46, 14);
         add(lblNewLabel_1);
         
         datum_mezo = new JTextField();
-        datum_mezo.setBounds(509, 85, 86, 20);
+        datum_mezo.setBounds(509, 69, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_2 = new JLabel("Cikkszám");
-        lblNewLabel_2.setBounds(443, 128, 56, 14);
+        lblNewLabel_2.setBounds(443, 103, 56, 14);
         add(lblNewLabel_2);
         
         tipus_mezo = new JTextField();
-        tipus_mezo.setBounds(509, 125, 86, 20);
+        tipus_mezo.setBounds(509, 100, 86, 20);
         add(tipus_mezo);
         tipus_mezo.setColumns(10);
         
         JButton keres_gomb = new JButton("Keres");
-        keres_gomb.setBounds(509, 199, 89, 23);
+        keres_gomb.setBounds(509, 162, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
         table = new JTable();
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setBounds(72, 256, 986, 127);
+        scroll.setBounds(10, 205, 1054, 127);
         add(scroll);
         
         table_1 = new JTable();
         JScrollPane scroll2 = new JScrollPane(table_1);
-        scroll2.setBounds(199, 400, 738, 123);
+        scroll2.setBounds(10, 356, 1054, 123);
         add(scroll2);
         
         JButton lezar_gomb = new JButton("Lezárás");
-        lezar_gomb.setBounds(509, 536, 89, 23);
+        lezar_gomb.setBounds(506, 509, 89, 23);
         lezar_gomb.addActionListener(new Visszair());
         add(lezar_gomb);
         
         JLabel lblNewLabel_3 = new JLabel("Vevői reklamáció lezárás időpontja");
-        lblNewLabel_3.setBounds(291, 597, 208, 14);
+        lblNewLabel_3.setBounds(291, 565, 208, 14);
         add(lblNewLabel_3);
         
         veglegido_mezo = new JTextField();
-        veglegido_mezo.setBounds(509, 594, 86, 20);
+        veglegido_mezo.setBounds(509, 562, 86, 20);
         add(veglegido_mezo);
         veglegido_mezo.setColumns(10);
         
         JButton veglegzar_gomb = new JButton("Reklamáció zárása");
-        veglegzar_gomb.setBounds(605, 593, 157, 23);
+        veglegzar_gomb.setBounds(606, 561, 157, 23);
         veglegzar_gomb.addActionListener(new Veglegzar());
         add(veglegzar_gomb);
         
         JButton sorgomb1 = new JButton("Sor hozzáadása");
-        sorgomb1.setBounds(1068, 309, 117, 23);
+        sorgomb1.setBounds(1084, 256, 117, 23);
         sorgomb1.addActionListener(new Sorhozzaad1());
         add(sorgomb1);
         
         JButton sorgomb2 = new JButton("Sor hozzáadása");
-        sorgomb2.setBounds(947, 453, 117, 23);
+        sorgomb2.setBounds(1084, 402, 117, 23);
         sorgomb2.addActionListener(new Sorhozzaad2());
         add(sorgomb2);
         
         JLabel lblNewLabel_4 = new JLabel("ID");
-        lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_4.setBounds(443, 159, 46, 14);
+        lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_4.setBounds(453, 134, 46, 14);
         add(lblNewLabel_4);
         
         id_mezo = new JTextField();
-        id_mezo.setBounds(509, 156, 86, 20);
+        id_mezo.setBounds(509, 131, 86, 20);
         id_mezo.addKeyListener(new Enter());
         add(id_mezo);
         id_mezo.setColumns(10);
         
         JLabel lblNewLabel_5 = new JLabel("Kiválasztott felelős törlése");
-        lblNewLabel_5.setBounds(761, 540, 143, 14);
+        lblNewLabel_5.setBounds(747, 513, 157, 14);
         add(lblNewLabel_5);
         
         JButton torles_gomb = new JButton("Törlés");
         torles_gomb.addActionListener(new Felelos_torles());
-        torles_gomb.setBounds(914, 536, 89, 23);
+        torles_gomb.setBounds(914, 509, 89, 23);
         add(torles_gomb);
+        
+        JLabel lblNewLabel_6 = new JLabel("Belső költség");
+        lblNewLabel_6.setBounds(399, 630, 90, 14);
+        add(lblNewLabel_6);
+        
+        koltseg_1 = new JTextField();
+        koltseg_1.setBounds(509, 627, 86, 20);
+        koltseg_1.setText("0");
+        add(koltseg_1);
+        koltseg_1.setColumns(10);
+        
+        koltseg_2 = new JTextField();
+        koltseg_2.setBounds(509, 658, 86, 20);
+        koltseg_2.setText("0");
+        add(koltseg_2);
+        koltseg_2.setColumns(10);
+        
+        koltseg_3 = new JTextField();
+        koltseg_3.setBounds(509, 689, 86, 20);
+        koltseg_3.setText("0");
+        add(koltseg_3);
+        koltseg_3.setColumns(10);
+        
+        koltseg_4 = new JTextField();
+        koltseg_4.setBounds(509, 720, 86, 20);
+        koltseg_4.setText("0");
+        add(koltseg_4);
+        koltseg_4.setColumns(10);
+        
+        JButton koltseghozza_gomb = new JButton("Költség hozzáadása");
+        koltseghozza_gomb.addActionListener(new Koltseg());
+        koltseghozza_gomb.setBounds(635, 668, 145, 23);
+        add(koltseghozza_gomb);
+        
+        JLabel lblNewLabel_7 = new JLabel("Fuvar költség");
+        lblNewLabel_7.setBounds(399, 661, 90, 14);
+        add(lblNewLabel_7);
+        
+        JLabel lblNewLabel_8 = new JLabel("Selejt költség");
+        lblNewLabel_8.setBounds(399, 692, 90, 14);
+        add(lblNewLabel_8);
+        
+        JLabel lblNewLabel_9 = new JLabel("Egyéb költség");
+        lblNewLabel_9.setBounds(399, 723, 90, 14);
+        add(lblNewLabel_9);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
@@ -134,6 +185,26 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 tablavege1 = table.getRowCount();
                 tablavege2 = table_1.getRowCount();
                 
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Koltseg implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Db_iro iras = new Db_iro();
+                String sql = "update qualitydb.Vevoireklamacio_alapadat set Belso_koltseg = '"+ koltseg_1.getText() +"', Fuvar_koltseg = '"+ koltseg_2.getText() +"', Selejt_koltseg = '"+ koltseg_3.getText()
+                +"', Egyeb_koltseg = '"+ koltseg_4.getText() +"' where ID = '"+  id_mezo.getText() +"'";
+                iras.ujrair_vevoi(sql);               
             } 
             catch (Exception e1) 
             {              

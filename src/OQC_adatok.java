@@ -204,8 +204,10 @@ public class OQC_adatok extends JPanel {
         JButton oqcadatok_gomb = new JButton("OQC adatok");
         oqcadatok_gomb.setBounds(581, 777, 120, 23);
         add(oqcadatok_gomb);
-        
+        setBackground(Foablak.hatter_szine);
         lekerdezes();
+        
+        setBackground(Foablak.hatter_szine);
     }
     
     public void lekerdezes()

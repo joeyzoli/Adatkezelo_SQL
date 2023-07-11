@@ -94,7 +94,7 @@ public class AVM_csomagoloanyag extends JPanel {
         ButtonGroup csoport = new ButtonGroup();
         csoport.add(ppm_gomb);
         csoport.add(felhasznalas_gomb);
-        
+        setBackground(Foablak.hatter_szine);
         beolvasas();
 
     }

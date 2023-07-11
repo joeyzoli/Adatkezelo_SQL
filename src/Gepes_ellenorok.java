@@ -114,7 +114,7 @@ public class Gepes_ellenorok extends JPanel
         excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(534, 740, 89, 23);
         add(excel_gomb);
-        
+        setBackground(Foablak.hatter_szine);
         Ellenori_nevsor();
     }
     

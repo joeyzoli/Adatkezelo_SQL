@@ -298,7 +298,7 @@ public class Hager extends JPanel
         eredetikep.addActionListener(new Eredeti_kep());
         add(eredetikep);
         
-        
+        setBackground(Foablak.hatter_szine);
         kiirando = new ArrayList<String[]>();
         
     }

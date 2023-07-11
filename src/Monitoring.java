@@ -50,6 +50,8 @@ public class Monitoring extends JPanel
         modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Megnevezés", "OQC-BE összesen", "OQC-BE ma", "OQC-BE tegnap", "OQC-BE régebben", "OQC-KI"});
         table.setModel(modell);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

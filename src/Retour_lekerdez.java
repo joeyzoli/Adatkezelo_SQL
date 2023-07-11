@@ -90,6 +90,8 @@ public class Retour_lekerdez extends JPanel
         excelmentes.setBounds(517, 561, 89, 23);
         add(excelmentes);
         ido();
+        
+        setBackground(Foablak.hatter_szine);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

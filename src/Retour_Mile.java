@@ -46,6 +46,8 @@ public class Retour_Mile extends JPanel {
         megnyit_gomb.addActionListener(new Lekerdezes());
         megnyit_gomb.setBounds(557, 243, 89, 23);
         add(megnyit_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

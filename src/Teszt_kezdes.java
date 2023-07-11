@@ -45,6 +45,8 @@ public class Teszt_kezdes extends JPanel
         start_gomb.addActionListener(new Start());
         start_gomb.setBounds(508, 333, 89, 23);
         add(start_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

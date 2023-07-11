@@ -60,6 +60,8 @@ public class IQC_ellenorzes extends JPanel {
         keres_gomb.addActionListener(new Lekerdezes());
         keres_gomb.setBounds(499, 200, 89, 23);
         add(keres_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

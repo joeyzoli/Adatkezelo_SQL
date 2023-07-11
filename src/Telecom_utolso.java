@@ -46,6 +46,8 @@ public class Telecom_utolso extends JPanel {
         megnyit_gomb.addActionListener(new Lekerdezes());
         megnyit_gomb.setBounds(548, 147, 89, 23);
         add(megnyit_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

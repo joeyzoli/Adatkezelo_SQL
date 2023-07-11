@@ -82,6 +82,8 @@ public class Torlo extends JPanel
 		add(lblNewLabel_3);
 		add(gyartas_torles);
 		add(lblNewLabel_1);
+		
+		setBackground(Foablak.hatter_szine);
 
 	}
 	
@@ -98,7 +100,7 @@ public class Torlo extends JPanel
 	            DataTable dataTable = sheet.exportDataTable();
 	            for (int i = 0; i < dataTable.getRows().size(); i++) 
 	            {
-	                atiras.atir("visszajelzés", "Visszajelzés");
+	                atiras.atir("reklamáció", "Reklamáció");
 	            }
 	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);
    

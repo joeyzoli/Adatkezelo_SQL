@@ -46,6 +46,8 @@ public class Tracy_utolso extends JPanel {
         megnyit_gomb.addActionListener(new Lekerdezes());
         megnyit_gomb.setBounds(548, 152, 89, 23);
         add(megnyit_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

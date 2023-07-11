@@ -104,7 +104,7 @@ public class Ellenorok extends JPanel
         pecset_mentes.addActionListener(new Pecset());
         pecset_mentes.setBounds(496, 525, 143, 23);
         add(pecset_mentes);
-
+        setBackground(Foablak.hatter_szine);
     }
     
     class Mentes implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg

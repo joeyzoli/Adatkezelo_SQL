@@ -49,7 +49,7 @@ public class Teszt_5 extends JPanel
     {
         setLayout(null);
         this.setPreferredSize(meretek);
-        
+        setBackground(Foablak.hatter_szine);
         JButton kovi_gomb = new JButton("Következő");
         kovi_gomb.addActionListener(new Kovetkezo());
         kovi_gomb.setBounds(947, 692, 107, 23);

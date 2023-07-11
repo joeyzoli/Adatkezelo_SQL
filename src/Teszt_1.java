@@ -98,6 +98,8 @@ public class Teszt_1 extends JPanel
         beolvas();
         visszair();
         setLayout(null);  
+        
+        setBackground(Foablak.hatter_szine);
     }
     
     class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
