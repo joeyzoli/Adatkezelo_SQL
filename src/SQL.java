@@ -2472,15 +2472,18 @@ public class SQL
             con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
             System.out.println("Connection established......");
                       
-            String sql = "select     videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+            /*String sql = "select     videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                     + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
                     + "videoton.fkov.kod2 as 'PO szám', videoton.fkov.szeriaszam, videoton.fkov.hibakod, videoton.fkov.torolt, "
                     + "videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                     + "videoton.fkov.dolgozo \n"
                     + "from videoton.fkov \n"
                     + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                    + " where ido > '"+ datum +"' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
-                    
+                    + " where videoton.fkovsor.nev = 'Loxone FCT' and ido > '"+ datum +"' and kod2 = 'AT-"+ po + "-10000' ";           //nev = 'Loxone FCT' and ido > '2022.06.01' and
+            */
+            String sql = "select *"    
+                    + "from videoton.fkov \n"
+                    + " where videoton.fkov.ido >= '"+ datum +"' and videoton.fkov.hely = '26' and  videoton.fkov.kod2 = 'AT-"+ po + "-10000' ";
             Statement cstmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
@@ -2508,6 +2511,7 @@ public class SQL
             con.close();
             workbook.setActiveSheetIndex(0);
             JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
             mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             mentes_helye.showOpenDialog(mentes_helye);
             File menteshelye = mentes_helye.getSelectedFile();
@@ -2624,7 +2628,8 @@ public class SQL
                     + " sum(if(raktar_db is null, 0, raktar_db)),\n"
                     + " sum(if(selejt is null, 0, selejt)) \n"
                     + " from qualitydb.Retour \n"
-                    + " where Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"'\n"
+                    + " where Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' and Vagy = 'Javítás' "
+                            + "and not Vevo ='Formlabs' and not Vevo = 'Techem' and not Vevo = 'EBM' and not Vevo = 'Innogy' and not Vevo = 'Alstom France' \n"
                     + " group by Vevo";
            
             stmt.execute(sql);
@@ -2693,7 +2698,8 @@ public class SQL
                     + "sum(Beerkezett),\n"
                     + "AVG(if(Raktar_datum is null,DATEDIFF(now(), Datum),DATEDIFF(Raktar_datum, Datum))) AS 'Kulonbseg'       \n"
                     + "from qualitydb.Retour\n"
-                    + "where 3 = 3\n"
+                    + "where 3 = 3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' and Vagy = 'Javítás' \n"
+                            + "and not Vevo ='Formlabs' and not Vevo = 'Techem' and not Vevo = 'EBM' and not Vevo = 'Innogy' and not Vevo = 'Alstom France' \n"
                     + "group by Vevo";
             stmt2.execute(sql2);
             resultset2 = stmt2.getResultSet();
@@ -2734,10 +2740,8 @@ public class SQL
             //Add a secondary Y axis to the chart
             cs6.setUsePrimaryAxis(false);
             
-            JFileChooser mentes_helye = new JFileChooser();
-            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            mentes_helye.showOpenDialog(mentes_helye);
-            File fajl = mentes_helye.getSelectedFile();
+            String hova = System.getProperty("user.home") + "\\Desktop\\Retour adatok.xlsx";
+            File fajl = new File(hova);
             //System.out.println(fajl.getAbsolutePath());
             workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);          
             
@@ -2753,7 +2757,7 @@ public class SQL
                 workbook2.write(output);
                 output.close();
             }
-            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+            JOptionPane.showMessageDialog(null, "Mentve az asztalra Retour adatok.xlsx néven!", "Info", 1);
                       
             resultSet.close();
             stmt.close();
