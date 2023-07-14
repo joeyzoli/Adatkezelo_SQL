@@ -56,7 +56,7 @@ public class IFS_archive extends JPanel {
         jellemzo_gomb.setBounds(619, 247, 108, 23);
         add(jellemzo_gomb);
         
-        JLabel lblNewLabel_3 = new JLabel("ME szám kereső");
+        JLabel lblNewLabel_3 = new JLabel("ME szám mibe épült");
         lblNewLabel_3.setBounds(423, 301, 139, 14);
         add(lblNewLabel_3);
         
@@ -66,6 +66,15 @@ public class IFS_archive extends JPanel {
         add(meszam_gomb);
         
         setBackground(Foablak.hatter_szine);
+        
+        JButton szeriaszam_gomb = new JButton("Megnyitás");
+        szeriaszam_gomb.addActionListener(new Lekerdezes_Szeriaszam_beepules());
+        szeriaszam_gomb.setBounds(619, 349, 108, 23);
+        add(szeriaszam_gomb);
+        
+        JLabel lblNewLabel_4 = new JLabel("Szériaszámba mi épült");
+        lblNewLabel_4.setBounds(423, 353, 167, 14);
+        add(lblNewLabel_4);
 
     }
     
@@ -529,7 +538,7 @@ public class IFS_archive extends JPanel {
                 sheet2.getAllocatedRange().autoFitColumns();
                 sheet2.getAllocatedRange().autoFitRows();
                 sheet2.getCellRange("A1:AD1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                String hova = System.getProperty("user.home") + "\\Desktop\\IFS Archive folyamat adatok.xlsx";
+                String hova = System.getProperty("user.home") + "\\Desktop\\IFS Archive ME szám beépülés.xlsx";
                 workbook2.saveToFile(hova, ExcelVersion.Version2016);
                 FileInputStream fileStream = new FileInputStream(hova);
                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
@@ -542,7 +551,107 @@ public class IFS_archive extends JPanel {
                     workbook3.write(output);
                     output.close();
                 }
-                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS Archive folyamat adatok.xlsx néven!", "Info", 1); 
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS Archive ME szám beépülés.xlsx néven!", "Info", 1); 
+                con.close();  
+                Foablak.frame.setCursor(null);  
+            }                      
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }  
+                               
+         }
+    }
+    
+    class Lekerdezes_Szeriaszam_beepules implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(fajl.getAbsolutePath());
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                DataTable datatable = new DataTable();
+                DataTable datatable2 = new DataTable();
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );                
+                Workbook workbook2 = new Workbook();
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                
+                String osszefuzott = "";
+                for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                {
+                    osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
+                }
+                osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                
+                DriverManager.registerDriver(new oracle.jdbc.OracleDriver());                
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver                                    
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt = con.createStatement();                                    
+                
+                ResultSet rs = stmt.executeQuery("select  belso.TRACY_SERIAL_NO as Szériaszám,\r\n"
+                        + "        belso.BARCODE_ID as ME_szam,\r\n"
+                        + "        kulso.PART_NO as Cikkszam \r\n"
+                        + "from ifsapp.INVENTORY_PART_BARCODE kulso,\r\n"
+                        + "        (select  c.TRACY_SERIAL_NO,\r\n"
+                        + "        m.BARCODE_ID\r\n"
+                        + "        --(select PART_NO from ifsapp.INVENTORY_PART_BARCODE where WAIV_DEV_REJ_NO = m.BARCODE_ID) as \"cikk\"\r\n"
+                        + "  from ifsapp.C_TRACY_ARC c, \r\n"
+                        + "       ifsapp.C_MTRL_TRACY_ARC m\r\n"
+                        + " where 3 = 3\r\n"
+                        + "   and c.TRACY_ID = m.TRACY_ID\r\n"
+                        + "   and (c.TRACY_SERIAL_NO in ("+ osszefuzott +")\r\n"
+                        + "        or c.ALT_TRACY_SERIAL_NO1 in ("+ osszefuzott +") \r\n"
+                        + "        or c.ALT_TRACY_SERIAL_NO2 in ("+ osszefuzott +") \r\n"
+                        + "        or c.ALT_TRACY_SERIAL_NO3 in ("+ osszefuzott +"))) belso  \r\n"
+                        + "        where 3=3\r\n"
+                        + "        -- and kulso.PART_NO = (select PART_NO from ifsapp.INVENTORY_PART_BARCODE where WAIV_DEV_REJ_NO = belso.me_szam)\r\n"
+                        + "        and CAST(kulso.WAIV_DEV_REJ_NO AS CHAR(15) ) = CAST(BELSO.BARCODE_ID AS CHAR(15)) ");
+                
+                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                jdbcAdapter.fillDataTable(datatable2, rs);
+                sheet2.insertDataTable(datatable2, true, 1, 1);
+                /*int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
+                sheet2.getRange().get("B" + cellaszam).setText("ME szám");
+                sheet2.getRange().get("C" + cellaszam).setText("Csomagolás ideje");                
+                cellaszam++;
+                for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+                {
+                    sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
+                    sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
+                    sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(2));                    
+                    cellaszam++;
+                }*/
+                //sheet2.insertDataTable(datatable2, true, 1, 1);
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:AD1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\IFS Archive szériaszám beépülések.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS Archive szériaszám beépülések néven!", "Info", 1); 
                 con.close();  
                 Foablak.frame.setCursor(null);  
             }                      

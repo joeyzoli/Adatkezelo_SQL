@@ -1182,7 +1182,8 @@ public class SQL
         // DATE_FORMAT(Datum,'%Y%m'), projekt, rek_vagy, nyitva, Rek_db
         sql2 = "select projekt, sum(Rek_db)\n"
                 + "from qualitydb.Vevoireklamacio_alapadat\n"
-                + "where 3=3\n"
+                + "where 3=3  and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' \n"
+           
                 + "group by projekt";
         
         sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
@@ -1190,7 +1191,7 @@ public class SQL
                 + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"1\", \"0\")) as 'Reklamáció', \n"
                 + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"0\", \"1\")) as 'Visszajelzés'\n"
                 + "            from qualitydb.Vevoireklamacio_alapadat\n"
-                + "                where 3=3\n"
+                + "                where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"'  \n"
                 + "                group by Projekt, Hónap order by Hónap asc";
         
         sql4 = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol +
@@ -1201,13 +1202,13 @@ public class SQL
                 + "        sum(if(rek_vagy = 'Visszajelzés' && Nyitva is null, 1,0)) as 'Nyitott visszajelzés',\n"
                 + "        sum(if(rek_vagy = 'Visszajelzés' && Nyitva is not null, 1,0)) as 'Lezárt visszajelzés'\n"
                 + "                from qualitydb.Vevoireklamacio_alapadat\n"
-                + "                    where 3=3\n"
+                + "                    where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' \n"
                 + "                    group by Hónap order by Hónap asc";
         
         sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
                 + "   cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                 + "           from qualitydb.Vevoireklamacio_alapadat\n"
-                + "       where 3=3\n"
+                + "       where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' \n"
                 + "             group by Hónap order by Hónap asc";
         
         sql7 = "select id, Intezkedes, felelos \n"
@@ -1922,6 +1923,7 @@ public class SQL
         chart6.getPrimaryValueAxis().setTitle("Összesen");
         chart6.getPrimaryValueAxis().hasMajorGridLines(false);
         chart6.getPrimaryValueAxis().setMinValue(0);
+        chart6.getPrimaryValueAxis().setMaxValue(500000);
         chart6.getPrimaryValueAxis().getTitleArea().isBold(true);
         chart6.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
         
