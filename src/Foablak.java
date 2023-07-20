@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -63,8 +64,9 @@ public class Foablak extends JFrame
 	private AVM_csomagoloanyag avm;
 	private IQC_ellenorzes iqc;
 	private Ellenorok ellenori_nevek;
+	private Proglove_kamera kamera;
 	private Teszt_kezdes teszt_kezd;
-	private Teszt_lezaras teszt_lezar;
+	private Teszt_bejelentkezes teszt_lezar;
 	private Monitoring monitor;
 	private OQC_adatok oqcadatok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
@@ -97,7 +99,8 @@ public class Foablak extends JFrame
                             contentPane.setBackground(szin);
                             hatter_szine = szin;
                         }
-    			        frame.setVisible(true);   			        
+    			        frame.setVisible(true);
+    			        System.out.println(System.getProperty("user.name"));
 					}
 					else
 					{
@@ -248,6 +251,10 @@ public class Foablak extends JFrame
 		lekerdezes.add(ifs_archive);
 		lekerdezes.add(folyamatellenorok);
 		
+		JMenuItem proglove_kamera = new JMenuItem("Proglove kamera reklamáció");
+		proglove_kamera.addActionListener(new PanelCsere_kamera());
+		lekerdezes.add(proglove_kamera);
+		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
 		menuBar.add(vizsga);
@@ -284,6 +291,13 @@ public class Foablak extends JFrame
 		hatterszin.addActionListener(new PanelCsere_hatter());
 		
 		beallitasok.add(hatterszin);
+		
+		JMenu leiras = new JMenu("Leírás");
+		menuBar.add(leiras);
+		
+		JMenuItem prog_leiras = new JMenuItem("Program leírása");
+		prog_leiras.addActionListener(new Leiras_megnyitas());
+		leiras.add(prog_leiras);
 		easqas.addActionListener(new PanelCsere_easqas());
 		
 		contentPane = new JPanel();
@@ -595,6 +609,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_kamera implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            kamera = new Proglove_kamera();
+            JScrollPane ablak = new JScrollPane(kamera);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_ellenorok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -634,7 +659,7 @@ public class Foablak extends JFrame
     {
         public void actionPerformed(ActionEvent e)
          {
-            teszt_lezar = new Teszt_lezaras();
+            teszt_lezar = new Teszt_bejelentkezes();
             JScrollPane ablak = new JScrollPane(teszt_lezar);
             setContentPane(ablak);
             pack();
@@ -673,6 +698,23 @@ public class Foablak extends JFrame
 			pack();
 		 }
 	}
+	
+	class Leiras_megnyitas implements ActionListener                                                                                  //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Desktop.getDesktop().open(new File("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Minőségügy adatbázis kezelő program leírása_v0.docx"));                            //megnyitja az excelben szereplő helyen levő infó fájlt
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+         }
+    }
 	
 	void csere(JPanel panel)
 	{	    

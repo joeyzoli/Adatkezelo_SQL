@@ -2483,7 +2483,7 @@ public class SQL
             */
             String sql = "select *"    
                     + "from videoton.fkov \n"
-                    + " where videoton.fkov.ido >= '"+ datum +"' and videoton.fkov.hely = '26' and  videoton.fkov.kod2 = 'AT-"+ po + "-10000' ";
+                    + " where videoton.fkov.hely = '26' and videoton.fkov.ido >= '"+ datum +"' and  videoton.fkov.kod2 = 'AT-"+ po + "-10000' ";
             Statement cstmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);

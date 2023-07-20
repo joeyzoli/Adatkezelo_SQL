@@ -78,20 +78,20 @@ public class IFS_archive extends JPanel {
 
     }
     
-    class Lekerdezes_folyamat implements ActionListener                                                                                      //csv-t gyárt a gomb
+    class Lekerdezes_folyamat implements ActionListener                                                                                      //Archive folyamatokban keres szériaszámok alapján
     {
         public void actionPerformed(ActionEvent e)
          {
             try
             {              
                 JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));                        //asztalon nyílik meg a JFileChooser
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Workbook workbook = new Workbook();
-                workbook.loadFromFile(fajl.getAbsolutePath());
+                Workbook workbook = new Workbook();                                                                                         //excel munkafüzet létrehozása
+                workbook.loadFromFile(fajl.getAbsolutePath());                                                                              //fájl betöltése
                 Worksheet sheet = workbook.getWorksheets().get(0);
                 DataTable datatable = new DataTable();
                 DataTable datatable2 = new DataTable();
@@ -100,18 +100,18 @@ public class IFS_archive extends JPanel {
                 Worksheet sheet2 = workbook2.getWorksheets().get(0);
                 
                 String osszefuzott = "";
-                for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)                                                    //beolvasott szériaszámokat összefűző for ciklus
                 {
                     osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
                 }
-                osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);                                                           //az utolsó vessző levágása
                 
                 DriverManager.registerDriver(new oracle.jdbc.OracleDriver());                
                 Class.forName("oracle.jdbc.OracleDriver");  //.driver                                    
-                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");  //kacsolat létrehozása                                      
                 Statement stmt = con.createStatement();                                    
                 
-                ResultSet rs = stmt.executeQuery("select c.TRACY_ID,\r\n"
+                ResultSet rs = stmt.executeQuery("select c.TRACY_ID,\r\n"                                                                   //sql utasítás végrehajtása
                         + "       c.contract,\r\n"
                         + "       c.PART_NO,\r\n"
                         + "       c.TRACY_SERIAL_NO,\r\n"
@@ -151,9 +151,9 @@ public class IFS_archive extends JPanel {
                         + "    order by o.OPER_TRACY_ID desc");
                 
                 JdbcAdapter jdbcAdapter = new JdbcAdapter();
-                jdbcAdapter.fillDataTable(datatable2, rs);
+                jdbcAdapter.fillDataTable(datatable2, rs);                                                                                          //result eredményét belerakja egy datattable-ba
                 int cellaszam = 1;
-                sheet2.getRange().get("A" + cellaszam).setText("Tracy ID");
+                sheet2.getRange().get("A" + cellaszam).setText("Tracy ID");                                                                         //Excelben az oszlopok neveinek megadáa
                 sheet2.getRange().get("B" + cellaszam).setText("Contract");
                 sheet2.getRange().get("C" + cellaszam).setText("Cikkszám");
                 sheet2.getRange().get("D" + cellaszam).setText("Tracy gyári szám");
@@ -184,7 +184,7 @@ public class IFS_archive extends JPanel {
                 sheet2.getRange().get("AC" + cellaszam).setText("Javítás óta ismétlés száma");
                 sheet2.getRange().get("AD" + cellaszam).setText("Dolgozó kódja");
                 cellaszam++;
-                for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+                for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)                                                       //adatok bemásolása az excel táblába
                 {
                     sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
                     sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
@@ -220,15 +220,15 @@ public class IFS_archive extends JPanel {
                 }
                 //sheet2.insertDataTable(datatable2, true, 1, 1);
                 sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
-                sheet2.getAllocatedRange().autoFitColumns();
-                sheet2.getAllocatedRange().autoFitRows();
-                sheet2.getCellRange("A1:AD1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                String hova = System.getProperty("user.home") + "\\Desktop\\IFS Archive folyamat adatok.xlsx";
+                sheet2.getAllocatedRange().autoFitColumns();                                                                                    //automata mértezés oszlopokra
+                sheet2.getAllocatedRange().autoFitRows();                                                                                       //automata mértezés sorokra
+                sheet2.getCellRange("A1:AD1").getCellStyle().getExcelFont().isBold(true);                                                       // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\IFS Archive folyamat adatok.xlsx";                                  //mentés helye 
                 workbook2.saveToFile(hova, ExcelVersion.Version2016);
                 FileInputStream fileStream = new FileInputStream(hova);
                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
                 {
-                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)                                                                    //felesleges sheet-ek kitörlése
                     {    
                         workbook3.removeSheetAt(i); 
                     }      
@@ -236,22 +236,22 @@ public class IFS_archive extends JPanel {
                     workbook3.write(output);
                     output.close();
                 }
-                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS Archive folyamat adatok.xlsx néven!", "Info", 1); 
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS Archive folyamat adatok.xlsx néven!", "Info", 1);          //értesítés a mentésről
                 con.close();  
                 Foablak.frame.setCursor(null);  
             }                      
-            catch(Exception e1)
+            catch(Exception e1)                                                                                                                 //kivétel esetén történik
             { 
                 System.out.println(e1);
                 e1.printStackTrace();
                 String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                             //kiírja a hibaüzenetet
             }  
                                
          }
     }
     
-    class Lekerdezes_jellemzo implements ActionListener                                                                                      //csv-t gyárt a gomb
+    class Lekerdezes_jellemzo implements ActionListener                                                                                         //Jellemzőkben keres
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -469,13 +469,13 @@ public class IFS_archive extends JPanel {
                 System.out.println(e1);
                 e1.printStackTrace();
                 String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                         //kiírja a hibaüzenetet
             }  
                                
          }
     }
     
-    class Lekerdezes_me_szam implements ActionListener                                                                                      //csv-t gyárt a gomb
+    class Lekerdezes_me_szam implements ActionListener                                                                                      //ME szám alaján keres az archivban
     {
         public void actionPerformed(ActionEvent e)
          {

@@ -237,7 +237,7 @@ public class Retour extends JPanel
 
     }
     
-    class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    class Mentes implements ActionListener                                                                                        //bevitt retour adatokat menti el
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -315,13 +315,13 @@ public class Retour extends JPanel
          }
     }
     
-    class ID implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    class ID implements ActionListener                                                                                        //ID alapján visszatölti az adatokat
     {
         public void actionPerformed(ActionEvent e)
          {
             try 
             {
-                SQL visszair = new SQL();
+                SQL visszair = new SQL();                                                               
                 visszair.retour_vissza(id_mezo.getText());
             }
             catch (Exception e1) 
@@ -333,7 +333,7 @@ public class Retour extends JPanel
          }
     }
     
-    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, ID alapján vissztölti az adatokat
     {
         public void keyPressed (KeyEvent e) 
         {    
