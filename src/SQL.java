@@ -2779,7 +2779,7 @@ public class SQL
  
     }
 	
-	public void lekerdez_ellenorok(String querry, String querry2, String querry3, int valtozat)
+	public void lekerdez_ellenorok(String querry, String querry2, String querry3, String querry4, int valtozat)
     {
     
 	    Connection conn = null;
@@ -2826,7 +2826,9 @@ public class SQL
                     fs.close();
                     szam++;
                 }            
-                
+                stmt.execute(querry4);
+                resultSet = stmt.getResultSet();
+                Gepes_ellenorok.table_2.setModel(buildTableModel(resultSet));
                 if(szam > 0)
                 { 
                     JOptionPane.showMessageDialog(null, "Képek mentve az asztalra", "Info", 1);

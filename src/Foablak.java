@@ -66,7 +66,7 @@ public class Foablak extends JFrame
 	private Ellenorok ellenori_nevek;
 	private Proglove_kamera kamera;
 	private Teszt_kezdes teszt_kezd;
-	private Teszt_bejelentkezes teszt_lezar;
+	private Teszt_lezaras teszt_lezar;
 	private Monitoring monitor;
 	private OQC_adatok oqcadatok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
@@ -100,7 +100,6 @@ public class Foablak extends JFrame
                             hatter_szine = szin;
                         }
     			        frame.setVisible(true);
-    			        System.out.println(System.getProperty("user.name"));
 					}
 					else
 					{
@@ -659,7 +658,7 @@ public class Foablak extends JFrame
     {
         public void actionPerformed(ActionEvent e)
          {
-            teszt_lezar = new Teszt_bejelentkezes();
+            teszt_lezar = new Teszt_lezaras();
             JScrollPane ablak = new JScrollPane(teszt_lezar);
             setContentPane(ablak);
             pack();

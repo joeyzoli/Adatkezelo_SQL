@@ -35,7 +35,7 @@ public class Gepes_ellenorok extends JPanel
     private ArrayList<String> ellenorok = new ArrayList<String>();
     private DefaultComboBoxModel<String> model;
     private JTextField cikkszam_mezo;
-    private Dimension meretek = new Dimension(1820, 850);
+    static JTable table_2;
 
     /**
      * Create the panel.
@@ -43,7 +43,7 @@ public class Gepes_ellenorok extends JPanel
     public Gepes_ellenorok() 
     {
         setLayout(null);
-        setPreferredSize(meretek);
+        setPreferredSize(new Dimension(1826, 962));
         JLabel lblNewLabel = new JLabel("Gépes folyamatellenőri adatok lekérdezése");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel.setBounds(466, 11, 294, 22);
@@ -112,9 +112,14 @@ public class Gepes_ellenorok extends JPanel
         
         JButton excel_gomb = new JButton("Excel");
         excel_gomb.addActionListener(new Excel());
-        excel_gomb.setBounds(534, 740, 89, 23);
+        excel_gomb.setBounds(534, 928, 89, 23);
         add(excel_gomb);
         setBackground(Foablak.hatter_szine);
+        
+        table_2 = new JTable();
+        JScrollPane gorgeto3 = new JScrollPane(table_2);
+        gorgeto3.setBounds(10, 703, 1765, 172);
+        add(gorgeto3);
         Ellenori_nevsor();
     }
     
@@ -152,8 +157,10 @@ public class Gepes_ellenorok extends JPanel
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
                 String sql3 = "select Kep, Kep_nev from qualitydb.Folyamatellenori_kepek where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
                         "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
+                String sql4 = "select * from qualitydb.Folyamatellenori_hiba where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                        "' and NXT like '"+ nxt +"'";
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                lekerdezo.lekerdez_ellenorok(sql, sql2, sql3, 1);   //függvénymeghívása a paraméterekkel
+                lekerdezo.lekerdez_ellenorok(sql, sql2, sql3, sql4, 1);   //függvénymeghívása a paraméterekkel
              
                 Foablak.frame.setCursor(null);
             }
@@ -200,8 +207,10 @@ public class Gepes_ellenorok extends JPanel
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
                 String sql3 = "select Kep, Kep_nev from qualitydb.Folyamatellenori_kepek where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
                         "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
+                String sql4 = "select * from qualitydb.Folyamatellenori_hiba where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                        "' and NXT like '"+ nxt +"'";
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                lekerdezo.lekerdez_ellenorok(sql, sql2, sql3, 2);   //függvénymeghívása a paraméterekkel
+                lekerdezo.lekerdez_ellenorok(sql, sql2, sql3, sql4, 2);   //függvénymeghívása a paraméterekkel
              
                 Foablak.frame.setCursor(null);
             }
