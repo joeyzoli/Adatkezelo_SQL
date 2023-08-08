@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.spire.data.table.DataTable;
 import com.spire.pdf.FileFormat;
@@ -57,7 +58,7 @@ public class Torlo extends JPanel
 		
 		JButton gyartas_torles = new JButton("Törlés");
 		gyartas_torles.setBounds(412, 163, 77, 23);
-		gyartas_torles.addActionListener(new Torles_gyartas());
+		gyartas_torles.addActionListener(new IFS_csomag());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
 		lblNewLabel_2.setBounds(132, 236, 83, 14);
@@ -71,7 +72,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Excel_szeriaszamgyart());
+		feltolt.addActionListener(new IFS_csomagoloanyag());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -435,6 +436,228 @@ public class Torlo extends JPanel
                   con.close();  
                   Foablak.frame.setCursor(null);  
                   }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class IFS_csomagoloanyag implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {                              
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                Workbook workbook2 = new Workbook();
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                    
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt = con.createStatement();                      
+                int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Cikkszám");
+                sheet2.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
+                sheet2.getRange().get("C" + cellaszam).setText("Beszállító");
+                sheet2.getRange().get("D" + cellaszam).setText("Idén beérkezve");
+                sheet2.getRange().get("E" + cellaszam).setText("Melyik cikk használja");
+                sheet2.getRange().get("F" + cellaszam).setText("Cikk csoport 2");
+                sheet2.getRange().get("G" + cellaszam).setText("Osztály");
+                sheet2.getRange().get("H" + cellaszam).setText("Csoport");
+                sheet2.getRange().get("I" + cellaszam).setText("Típus");
+                cellaszam++;
+                
+                ResultSet rs = stmt.executeQuery("select part_no, description, second_commodity\n"
+                        + "from ifsapp.INVENTORY_PART\n"
+                        + "where 3 = 3 \n"
+                        + "and (PART_PRODUCT_CODE = '14' or PART_PRODUCT_CODE = '24')");
+                /*ResultSet rs = stmt.executeQuery("select belso.part_no,\n"
+                        + "kulso.DESCRIPTION\n"
+                        + "from ifsapp.INVENTORY_PART kulso,\n"
+                        + "(select \n"
+                        + "part_no,\n"
+                        + "attr_value\n"
+                        + "from ifsapp.INVENTORY_PART_CHAR_ALL\n"
+                        + "where 3 = 3 \n"
+                        + "and attr_value = 'Packaging') belso\n"
+                        + "where 3 = 3\n"
+                        + "and kulso.part_no = belso.part_no");*/
+                
+                ArrayList<String> cikkszamok = new ArrayList<String>();
+                ArrayList<String> cikkmegnevezes = new ArrayList<String>();                
+                while(rs.next())
+                { 
+                    cikkszamok.add(rs.getString(1));
+                    cikkmegnevezes.add(rs.getString(2));                    
+                }
+                for(int szamlalo = 0; szamlalo < cikkszamok.size(); szamlalo++)
+                {
+                    sheet2.getRange().get("A" + cellaszam).setText(cikkszamok.get(szamlalo));
+                    sheet2.getRange().get("B" + cellaszam).setText(cikkmegnevezes.get(szamlalo));
+                    rs = stmt.executeQuery("select ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO)\n"
+                            + "from ifsapp.PURCHASE_PART_SUPPLIER\n"
+                            + "where 3 = 3\n"
+                            + "and part_no = '"+ cikkszamok.get(szamlalo) +"'");
+                    int regicella = cellaszam;
+                    //int szam = 1;
+                    while(rs.next())
+                    {
+                        sheet2.getRange().get("A" + cellaszam).setText(cikkszamok.get(szamlalo));
+                        sheet2.getRange().get("B" + cellaszam).setText(cikkmegnevezes.get(szamlalo));
+                        sheet2.getRange().get("C" + cellaszam).setText(rs.getString(1));
+                        cellaszam++;
+                        //System.out.println(rs.getString(1));
+                        //System.out.println(szam);
+                        //szam++;
+                    }
+                    int ujcella = cellaszam;
+                    cellaszam = regicella;
+                    rs = stmt.executeQuery("select PART_NO as Cikkszam,\n"
+                            + "ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO) as Megnevezes,\n"
+                            + "sum(QUANTITY) as Beerkezve\n"
+                            + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
+                            + "    where 3=3\n"
+                            + "    and TRANSACTION_CODE = 'ARRIVAL'\n"
+                            + "    and DATE_CREATED between to_date( '20230101000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20230801235959', 'YYYYMMDDHH24:MI:SS' )\n"
+                            + "    and  PART_NO = '"+ cikkszamok.get(szamlalo) +"' group by part_no, ifsapp.Inventory_Part_API.Get_Description(CONTRACT,PART_NO)\n"
+                            + "    ");
+                    if(rs.next())
+                    { 
+                        sheet2.getRange().get("D" + cellaszam).setText(rs.getString(3));
+                    }
+                    else
+                    {
+                        sheet2.getRange().get("D" + cellaszam).setText("0");
+                    }
+                    if(ujcella > cellaszam)
+                    {
+                        cellaszam = regicella;
+                    }
+                    rs = stmt.executeQuery("select belso.part_no,\n"
+                            + "kulso.second_commodity\n"
+                            + "from ifsapp.inventory_part kulso,\n"
+                            + "(select part_no\n"
+                            + "from ifsapp.MANUF_STRUCTURE\n"
+                            + "where 3 = 3\n"
+                            + "and component_part = '"+ cikkszamok.get(szamlalo) +"') belso\n"
+                            + "where 3 = 3\n"
+                            + "and kulso.part_no = belso.part_no");             //cikkszamok.get(szamlalo)
+                    int szam2 = 1;
+                    
+                    while(rs.next())
+                    {                       
+                        String tartalom = rs.getString(1);
+                        String tartalom2 = rs.getString(2);
+                        sheet2.getRange().get("A" + cellaszam).setText(cikkszamok.get(szamlalo));
+                        sheet2.getRange().get("B" + cellaszam).setText(cikkmegnevezes.get(szamlalo));
+                        sheet2.getRange().get("E" + cellaszam).setText(tartalom); 
+                        sheet2.getRange().get("F" + cellaszam).setText(tartalom2); 
+                        System.out.println("tartalom: " + tartalom);
+                        System.out.println(szam2);
+                        cellaszam++;
+                        szam2++;
+                    }                                      
+                    
+                    rs = stmt.executeQuery("select attr_value\r\n"
+                            + "from ifsapp.INVENTORY_PART_CHAR_ALL\r\n"
+                            + "where 3=3\r\n"
+                            + "and part_no = '"+ cikkszamok.get(szamlalo) +"'");
+                    int a = 1;
+                    String osztaly = ""; String tipus = ""; String csoport = "";
+                    while(rs.next())
+                    {
+                        if(a == 1)
+                        {                       
+                            osztaly = rs.getString(1);                        
+                        }
+                        if(a == 2)
+                        {                       
+                            csoport = rs.getString(1);                        
+                        }
+                        if(a == 3)
+                        {                       
+                            tipus = rs.getString(1);                        
+                        }
+                        a++;
+                    }
+                    sheet2.getRange().get("G" + (cellaszam-1)).setText(osztaly);
+                    sheet2.getRange().get("H" + (cellaszam-1)).setText(csoport);
+                    sheet2.getRange().get("I" + (cellaszam-1)).setText(tipus);
+                    if(ujcella > cellaszam)
+                    {
+                        cellaszam = ujcella;
+                        //cellaszam++;
+                    }  
+                }
+                
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Csomagolóanyagok.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Csomagolóanyag.xlsx néven!", "Info", 1); 
+                con.close();  
+                Foablak.frame.setCursor(null);  
+                 
+                  
+            }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class IFS_csomag implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {                              
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+                
+                DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                    
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt = con.createStatement();                      
+             
+                    ResultSet rs = stmt.executeQuery("select part_no\n"
+                            + "from ifsapp.MANUF_STRUCTURE\n"
+                            + "where 3 = 3\n"
+                            + "and component_part = '320-757-21-B'");             //cikkszamok.get(szamlalo)
+                    int szam2 = 1;
+                    while(rs.next())
+                    {
+                        String tartalom = rs.getString(1);
+                        
+                        System.out.println(tartalom); // +" "+ rs.getString(2)+ " "+ rs.getString(3)+" "+ rs.getString(4)
+                        System.out.println(szam2);
+                        szam2++;
+                    }
+                    con.close(); 
+                    Foablak.frame.setCursor(null);
+            }           
             catch(Exception e1)
             { 
                 System.out.println(e1);

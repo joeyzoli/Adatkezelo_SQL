@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
@@ -71,7 +71,7 @@ public class Foablak extends JFrame
 	private OQC_adatok oqcadatok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
-	private JTextField mezo;
+	private JPasswordField mezo;
 	private static final String jelszavam = "polip13";
 	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
 	static Dimension meretek = new Dimension(1200, 850);
@@ -724,12 +724,13 @@ public class Foablak extends JFrame
 	void Parbeszed()																														//jelszavas védelem a tábla törlő menüponthoz
 	{
 	    JPanel ablakos = new JPanel();
-		mezo = new JTextField(5);
+		mezo = new JPasswordField(5);
 		mezo.addKeyListener(new Enter());
 		JButton gomb = new JButton("Ok");
 		gomb.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
+			@SuppressWarnings("deprecation")
+            public void actionPerformed(ActionEvent e)
 			{
 				jelszo = mezo.getText();
 				if(jelszavam.equals(jelszo))																								//ha a jelszó stimmel, betölti a kért menüpontot
@@ -756,6 +757,7 @@ public class Foablak extends JFrame
 	
 	class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő
     {
+        @SuppressWarnings("deprecation")
         public void keyPressed (KeyEvent e) 
         {    
             int key = e.getKeyCode();
