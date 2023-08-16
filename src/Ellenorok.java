@@ -116,8 +116,9 @@ public class Ellenorok extends JPanel
                 Db_iro iro = new Db_iro();
                 String sql = "insert into qualitydb.Alapadatok_ellenorok (Nev, Pecset_szam) Values('"+ ujnev_mezo.getText() +"','"+ ujpecset_mezo.getText() +"')";
                 iro.ellenori_nevek(sql);
-                JOptionPane.showMessageDialog(null, "Kész!", "Info", 1); 
-                
+                JOptionPane.showMessageDialog(null, "Kész!", "Info", 1);
+                ujnev_mezo.setText("");
+                ujpecset_mezo.setText("");
             }
             catch(Exception e1)
             {

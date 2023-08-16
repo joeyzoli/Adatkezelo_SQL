@@ -54,7 +54,7 @@ public class EASQAS_adatok extends JPanel
 		combobox_tomb = new ComboBox();
 		
 		
-		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.projekt));                //combobox_tomb.getCombobox2(ComboBox.projekt)
+		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));                //combobox_tomb.getCombobox2(ComboBox.projekt)
 		projekt_box.setBounds(497, 74, 191, 22);
 		
 		JLabel lblNewLabel_2 = new JLabel("Időpont -tól");

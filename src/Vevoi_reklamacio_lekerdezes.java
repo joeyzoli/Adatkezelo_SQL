@@ -1,3 +1,4 @@
+import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
@@ -49,7 +50,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         lblNewLabel_1.setBounds(464, 57, 46, 14);
         add(lblNewLabel_1);
         
-        projekt_box = new JComboBox<String>(combobox.getCombobox2(ComboBox.projekt));                   //combobox.getCombobox2(ComboBox.projekt)
+        projekt_box = new JComboBox<String>(combobox.getCombobox(ComboBox.projekt));                   //combobox.getCombobox2(ComboBox.projekt)
         projekt_box.setBounds(520, 53, 172, 22);
         add(projekt_box);
         
@@ -60,7 +61,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         datumtol = new JTextField();
         datumtol.setBounds(520, 90, 86, 20);
-        datumtol.setText("2023.01.01");
+        datumtol.setText("2022.08.01");
         add(datumtol);
         datumtol.setColumns(10);
         
@@ -229,6 +230,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          {
             try 
             {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 String nyitott = "";
                 String lezart = "";
                 if(lezart_gomb.isSelected())
@@ -249,6 +251,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     nyitott = "nem";
                 }
                 lekerdezes.vevoi_lekerdezes_excel(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
+                Foablak.frame.setCursor(null);
             } 
             catch (Exception e1) 
             {              

@@ -1203,9 +1203,9 @@ public class SQL
                 + "        sum(if(rek_vagy = 'Visszajelzés' && Nyitva is not null, 1,0)) as 'Lezárt visszajelzés'\n"
                 + "                from qualitydb.Vevoireklamacio_alapadat\n"
                 + "                    where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' \n"
-                + "                    group by Hónap order by Hónap asc";
+                + "                    group by Hónap ";        //order by Hónap asc
         
-        sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
+        sql6 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"        // --
                 + "   cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                 + "           from qualitydb.Vevoireklamacio_alapadat\n"
                 + "       where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' \n"
@@ -1813,7 +1813,7 @@ public class SQL
         sheet.getRange().get("U" + 1).setText("Nyitott vissza");
         sheet.getRange().get("V" + 1).setText("Lezárt vissza");
         sheet.getRange().get("W" + 1).setText("Átlag nyitva");
-        
+        /*
         sheet.getRange().get("R" + 2).setText("Január");
         sheet.getRange().get("R" + 3).setText("Február");
         sheet.getRange().get("R" + 4).setText("Március");
@@ -1827,7 +1827,7 @@ public class SQL
         sheet.getRange().get("R" + 12).setText("November");
         sheet.getRange().get("R" + 13).setText("December");
         sheet.getRange().get("R" + 14).setText("Átlag");
-        
+        */
         int cella3 = 2;
         for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
         {          
@@ -1840,8 +1840,64 @@ public class SQL
         int cella4 = 2;
         int sum = 0;
         for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
-        {         
-            sheet.getCellRange("W" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1)));           
+        {
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+            {
+                sheet.getCellRange("W" + cella4).setNumberValue(69);
+            }
+            else
+            {
+                sheet.getCellRange("W" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1)));         //szamlalo
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("02"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Február");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Január");
+            }          
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("03"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Március");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("04"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Április");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("05"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Május");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("06"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Június");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("07"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Július");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("08"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Augusztus");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("09"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Szeptember");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("10"))
+            {
+                sheet.getCellRange("R" + cella4).setText("Október");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("11"))
+            {
+                sheet.getCellRange("R" + cella4).setText("November");
+            }
+            if(datatable6.getRows().get(szamlalo).getString(0).contains("12"))
+            {
+                sheet.getCellRange("R" + cella4).setText("December");
+            }
+            //sheet.getCellRange("R" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(0)));
             cella4++;
         }
         
@@ -1886,7 +1942,7 @@ public class SQL
         sql = "select projekt,\n"
                 + "sum(belso_koltseg),\n"
                 + "sum(fuvar_koltseg),\n"
-                + "sum(fuvar_koltseg),\n"
+                + "sum(selejt_koltseg),\n"
                 + "sum(egyeb_koltseg)\n"
                 + "from qualitydb.Vevoireklamacio_alapadat\n"
                 + "where 3=3\n"

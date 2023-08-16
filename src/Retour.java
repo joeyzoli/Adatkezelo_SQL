@@ -88,12 +88,12 @@ public class Retour extends JPanel
         add(lblNewLabel_4);
         
         cikk_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_cikk));                         //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
-        cikk_box.setBounds(557, 88, 261, 22);
+        cikk_box.setBounds(557, 88, 416, 22);
         add(cikk_box);
         
         String[] vagy = {"Javítás", "Átmunkálás"};
         javagy_box = new JComboBox<String>(vagy);                       //vagy
-        javagy_box.setBounds(877, 88, 132, 22);
+        javagy_box.setBounds(1021, 88, 132, 22);
         add(javagy_box);
         
         JLabel lblNewLabel_5 = new JLabel("Beérkezett mennyiség");
