@@ -69,6 +69,7 @@ public class Foablak extends JFrame
 	private Teszt_lezaras teszt_lezar;
 	private Monitoring monitor;
 	private OQC_adatok oqcadatok;
+	private SQA_bevitel sqa_rek;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -225,23 +226,11 @@ public class Foablak extends JFrame
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
 		folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
 		
-		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
-		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
-		
-		JMenuItem avm_csomagolas = new JMenuItem("AVM csomagolás PPM");
-		avm_csomagolas.addActionListener(new PanelCsere_avm());
-		lekerdezes.add(avm_csomagolas);
-		lekerdezes.add(beszallitoi_ppm);
-		
 		JMenuItem telecom_utolso = new JMenuItem("Telecom utolsó folyamat");
 		telecom_utolso.addActionListener(new PanelCsere_telecom_utolso());
 		
 		JMenuItem tracy_utolso = new JMenuItem("Tracy utosló folyamat");
 		tracy_utolso.addActionListener(new PanelCsere_tracy_utolso());
-		
-		JMenuItem iqc = new JMenuItem("IQC ellenőrzés");
-		iqc.addActionListener(new PanelCsere_iqc());
-		lekerdezes.add(iqc);
 		lekerdezes.add(tracy_utolso);
 		lekerdezes.add(telecom_utolso);
 		
@@ -249,10 +238,6 @@ public class Foablak extends JFrame
 		ifs_archive.addActionListener(new PanelCsere_ifs_archive());
 		lekerdezes.add(ifs_archive);
 		lekerdezes.add(folyamatellenorok);
-		
-		JMenuItem proglove_kamera = new JMenuItem("Proglove kamera reklamáció");
-		proglove_kamera.addActionListener(new PanelCsere_kamera());
-		lekerdezes.add(proglove_kamera);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -283,6 +268,29 @@ public class Foablak extends JFrame
 		JMenuItem oqc_adatok = new JMenuItem("OQC adatok");
 		oqc_adatok.addActionListener(new PanelCsere_oqcadatok());
 		oqc_menu.add(oqc_adatok);
+		
+		JMenu sqa = new JMenu("SQA");
+		menuBar.add(sqa);
+		
+		JMenuItem avm_csomagolas = new JMenuItem("AVM csomagolás PPM");
+		sqa.add(avm_csomagolas);
+		
+		JMenuItem beszallitoi_ppm = new JMenuItem("Beszállítói PPM");
+		sqa.add(beszallitoi_ppm);
+		
+		JMenuItem iqc_1 = new JMenuItem("IQC ellenőrzés");
+		sqa.add(iqc_1);
+		
+		JMenuItem proglove_kamera = new JMenuItem("Proglove kamera reklamáció");
+		sqa.add(proglove_kamera);
+		
+		JMenuItem beszallitoi_reklamacio = new JMenuItem("Beszállítói reklamációk");
+		beszallitoi_reklamacio.addActionListener(new PanelCsere_beszallitoi_reklamacio());
+		sqa.add(beszallitoi_reklamacio);
+		proglove_kamera.addActionListener(new PanelCsere_kamera());
+		iqc_1.addActionListener(new PanelCsere_iqc());
+		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
+		avm_csomagolas.addActionListener(new PanelCsere_avm());
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -682,6 +690,17 @@ public class Foablak extends JFrame
          {
             oqcadatok = new OQC_adatok();
             JScrollPane ablak = new JScrollPane(oqcadatok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class PanelCsere_beszallitoi_reklamacio implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            sqa_rek = new SQA_bevitel();
+            JScrollPane ablak = new JScrollPane(sqa_rek);
             setContentPane(ablak);
             pack();
          }

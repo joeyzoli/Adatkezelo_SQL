@@ -233,6 +233,7 @@ public class Retour extends JPanel
         folyamat_gomb.setBounds(505, 497, 119, 23);
         add(folyamat_gomb);
         
+        setBackground(Foablak.hatter_szine);
         kivalasztott = new ArrayList<String>();
 
     }

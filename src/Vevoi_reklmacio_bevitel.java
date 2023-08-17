@@ -308,11 +308,11 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         hozzaad3_gomb.setBounds(701, 557, 89, 23);
         add(hozzaad3_gomb);
         
-        helyesbito_tabla = new JTable();
-        JScrollPane gorgeto3 = new JScrollPane(helyesbito_tabla);
+        helyesbito_tabla = new JTable();        
         modell3 = new DefaultTableModel();
         modell3.setColumnIdentifiers(new Object[]{"Intézkedés", "Felelős", "Határidő"}); 
         helyesbito_tabla.setModel(modell3);
+        JScrollPane gorgeto3 = new JScrollPane(helyesbito_tabla);
         gorgeto3.setBounds(824, 526, 287, 105);
         add(gorgeto3);
         
@@ -624,7 +624,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
             try 
             {
                 modell3.addRow(new Object[]{intezkedes_elo.getText(), felelos2.getText(), hatarido2.getText()});
-                felelos_tabla.setModel(modell);
+                helyesbito_tabla.setModel(modell3);
                 szamlalo++;
                 intezkedes_elo.setText("");   
                 felelos2.setText("");
