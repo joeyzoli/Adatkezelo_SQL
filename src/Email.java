@@ -104,5 +104,49 @@ public class Email
      
             
     }
+    
+    public void sqa_emailkuldes(String felado, String feladoemail, String cimzett, String id, String datum, String intezkedes)
+    {
+        Properties props = new Properties(); //new Properties();     System.getProperties();
+        
+        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+        
+        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+        try 
+        {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(cimzett));                           //címzett beállítása
+            message.setSubject("Lejár a határidő!");                                            //tárgy beállítása
+           
+            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+           
+            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            
+            textPart.setText("Tisztelt " + felado + "! \n  \n 5 munkanapja nem történt semmi a reklamációnál amit Ön inditott!"
+                    + "\n Reklamáció ID: " + id
+                    + "\n Utolsó történés: \n " + datum                    
+                    + "\n Eddig történt: \n " + intezkedes
+                    + "\n Kérem minnél elöbb vegye fel a kapcsolatot az illetékessel!");                                          //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                   
+            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            
+            Transport.send(message);                                                        //levél küldése
+
+            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+        
+        }
+        catch (Exception e1) 
+        {
+            String hibauzenet2 = e1.toString();
+            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }
+     
+            
+    }
 
 }

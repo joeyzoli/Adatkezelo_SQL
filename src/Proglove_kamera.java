@@ -153,7 +153,7 @@ public class Proglove_kamera extends JPanel {
                     }            
                 }
                 
-                sheet3.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet3.getAutoFilters().setRange(sheet3.getCellRange("A1:Z1"));
                 sheet3.getAllocatedRange().autoFitColumns();
                 sheet3.getAllocatedRange().autoFitRows();                
                 sheet3.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           

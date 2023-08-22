@@ -70,6 +70,7 @@ public class Foablak extends JFrame
 	private Monitoring monitor;
 	private OQC_adatok oqcadatok;
 	private SQA_bevitel sqa_rek;
+	private Smelter_masolo smelter;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -136,7 +137,7 @@ public class Foablak extends JFrame
 		menu.setForeground(new Color(0, 0, 255));
 		menuBar.add(menu);
 		
-		JMenuItem gyartasi = new JMenuItem("Gyártási adtok");
+		JMenuItem gyartasi = new JMenuItem("Gyártási adatok");
 		gyartasi.addActionListener(new PanelCsere_adatok());
 		menu.add(gyartasi);
         
@@ -270,6 +271,7 @@ public class Foablak extends JFrame
 		oqc_menu.add(oqc_adatok);
 		
 		JMenu sqa = new JMenu("SQA");
+		sqa.setForeground(new Color(0, 0, 255));
 		menuBar.add(sqa);
 		
 		JMenuItem avm_csomagolas = new JMenuItem("AVM csomagolás PPM");
@@ -291,6 +293,13 @@ public class Foablak extends JFrame
 		iqc_1.addActionListener(new PanelCsere_iqc());
 		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
 		avm_csomagolas.addActionListener(new PanelCsere_avm());
+		
+		JMenu egyeb = new JMenu("Egyéb");
+		menuBar.add(egyeb);
+		
+		JMenuItem smelter_masolo = new JMenuItem("Smelter másoló");
+		smelter_masolo.addActionListener(new PanelCsere_Smelter());
+		egyeb.add(smelter_masolo);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -300,6 +309,7 @@ public class Foablak extends JFrame
 		beallitasok.add(hatterszin);
 		
 		JMenu leiras = new JMenu("Leírás");
+		leiras.setForeground(new Color(255, 140, 0));
 		menuBar.add(leiras);
 		
 		JMenuItem prog_leiras = new JMenuItem("Program leírása");
@@ -706,6 +716,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class PanelCsere_Smelter implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            smelter = new Smelter_masolo();
+            JScrollPane ablak = new JScrollPane(smelter);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -819,6 +840,8 @@ public class Foablak extends JFrame
         {
             SQL lekerdez = new SQL();
             lekerdez.vevoi_email();
+            //SQA_SQL sqa = new SQA_SQL();
+            //sqa.sqa_email();
         }
     }
 	/*

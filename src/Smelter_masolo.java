@@ -1,0 +1,185 @@
+import javax.swing.JPanel;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.spire.data.table.DataTable;
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+public class Smelter_masolo extends JPanel {
+    
+    private String hely = "";
+    private File mappa;
+    private File[] fajlok;
+    private String menteshelye = System.getProperty("user.home") + "\\Desktop\\Összefésült Smelterek.xlsx";
+
+    /**
+     * Create the panel.
+     */
+    public Smelter_masolo() {
+        setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("Smelter adatok összemásolása");
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lblNewLabel.setBounds(466, 88, 238, 14);
+        add(lblNewLabel);
+        
+        JButton megnyit_gomb = new JButton("Megnyitás");
+        megnyit_gomb.addActionListener(new Kereses());
+        megnyit_gomb.setBounds(584, 192, 89, 23);
+        add(megnyit_gomb);
+        
+        JLabel lblNewLabel_1 = new JLabel("Mappa megnyitása");
+        lblNewLabel_1.setBounds(441, 196, 118, 14);
+        add(lblNewLabel_1);
+
+    }
+    
+    class Kereses implements ActionListener                                                                                        //Gomb megnoymásakor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            File excel = null;
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\RoHS,Reach, CFSI\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                hely = fajl.getAbsolutePath();
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                mappa = new File(hely);                                         //mappa beolvasása
+                
+                FilenameFilter filter = new FilenameFilter()                                            //fájlnév filter metódus
+                {
+                    
+                    @Override
+                    public boolean accept(File f, String name) 
+                    {
+                                                                                                        // csak az xlsx fájlokat listázza ki 
+                        return name.endsWith(".xlsx");  
+                    }
+                };               
+                Workbook összesites = new Workbook();
+                Worksheet sheet3 = összesites.getWorksheets().get(0);
+                int cellaszam = 1;
+                
+                sheet3.getRange().get("A" + cellaszam).setText("Smelter Identification Number");
+                sheet3.getRange().get("B" + cellaszam).setText("Metal");
+                sheet3.getRange().get("C" + cellaszam).setText("Smelter Look-up");
+                sheet3.getRange().get("D" + cellaszam).setText("Smelter Name");
+                sheet3.getRange().get("E" + cellaszam).setText("Smelter Country");
+                sheet3.getRange().get("F" + cellaszam).setText("Smelter Identification");
+                sheet3.getRange().get("G" + cellaszam).setText("Source of Smelter");
+                sheet3.getRange().get("H" + cellaszam).setText("Fájl neve");
+                cellaszam++;
+                fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja    
+                Workbook workbook = new Workbook();
+                for(int szamlalo = 0; szamlalo < fajlok.length; szamlalo++)
+                {
+                    String fajlneve = fajlok[szamlalo].getName();
+                    if(fajlneve.startsWith("~$")){}
+                    else
+                    {               
+                        excel = new File(hely+ "\\" +fajlok[szamlalo].getName());
+                                     
+                        workbook.loadFromFile(excel.getAbsolutePath());
+                        Worksheet sheet = null;
+                        for (Object sheet2: workbook.getWorksheets()) {
+                            String sheetName = ((Worksheet) sheet2).getName();                            
+                            System.out.println(sheetName);
+                            if(sheetName.contains("Smelter List"))
+                            {
+                                sheet = workbook.getWorksheets().get(sheetName);
+                            }
+                        }
+                                           
+                        String[] nev = excel.getName().split("\\.");
+                        DataTable datatable = new DataTable();
+                        datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                        System.out.println(sheet.getLastRow());
+                        int cellaszam2 = 5;
+                        for(int szamlalo3 = 1; szamlalo3 < datatable.getRows().size(); szamlalo3++)
+                        {
+                            if(sheet.getRange().get("A" + cellaszam2).getValue().equals("")) {break;}
+                            else
+                            {
+                                sheet3.getRange().get("A" + cellaszam).setText(sheet.getRange().get("A" + cellaszam2).getText());           //sheet.getRange().get("A" + cellaszam2).getText()
+                                if(sheet.getRange().get("B" + cellaszam2).getText().equals(""))
+                                {
+                                    sheet3.getRange().get("B" + cellaszam).setText(sheet.getRange().get("B" + cellaszam2).getFormulaStringValue());                   //datatable.getRows().get(cellaszam2).getString(1)
+                                    sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("C" + cellaszam2).getFormulaStringValue());
+                                    sheet3.getRange().get("D" + cellaszam).setText(sheet.getRange().get("D" + cellaszam2).getFormulaStringValue());                                               
+                                    sheet3.getRange().get("E" + cellaszam).setText(sheet.getRange().get("E" + cellaszam2).getFormulaStringValue());
+                                    sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("F" + cellaszam2).getFormulaStringValue());
+                                    sheet3.getRange().get("G" + cellaszam).setText(sheet.getRange().get("G" + cellaszam2).getFormulaStringValue());
+                                    sheet3.getRange().get("H" + cellaszam).setText(nev[0]);
+                                    cellaszam++;
+                                    cellaszam2++;
+                                    System.out.println("Találat");
+                                }
+                                else
+                                {
+                                    sheet3.getRange().get("B" + cellaszam).setText(sheet.getRange().get("B" + cellaszam2).getText());                   //datatable.getRows().get(cellaszam2).getString(1)
+                                    sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("C" + cellaszam2).getText());
+                                    sheet3.getRange().get("D" + cellaszam).setText(sheet.getRange().get("D" + cellaszam2).getText());                                               
+                                    sheet3.getRange().get("E" + cellaszam).setText(sheet.getRange().get("E" + cellaszam2).getText());
+                                    sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("F" + cellaszam2).getText());
+                                    sheet3.getRange().get("G" + cellaszam).setText(sheet.getRange().get("G" + cellaszam2).getText());
+                                    sheet3.getRange().get("H" + cellaszam).setText(nev[0]);
+                                    cellaszam++;
+                                    cellaszam2++;
+                                    System.out.println("Találat");
+                                }
+                            }
+                        }
+                        System.out.println("Fájl átnézve");
+                    }
+                }
+                
+                sheet3.getAutoFilters().setRange(sheet3.getCellRange("A1:Z1"));
+                sheet3.getAllocatedRange().autoFitColumns();
+                sheet3.getAllocatedRange().autoFitRows();                
+                sheet3.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
+                összesites.saveToFile(menteshelye, ExcelVersion.Version2016);            
+                FileInputStream fileStream = new FileInputStream(menteshelye);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(menteshelye);
+                    workbook2.write(output);
+                    output.close();
+                }
+                Foablak.frame.setCursor(null); 
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Összefésült Smelterek.xlsx", "Info", 1);
+            } 
+            catch (Exception e1) 
+            {
+                System.out.println(excel.getName());
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                JOptionPane.showMessageDialog(null, excel.getName()+"  " +hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+}
