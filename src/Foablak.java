@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -69,7 +70,7 @@ public class Foablak extends JFrame
 	private Teszt_lezaras teszt_lezar;
 	private Monitoring monitor;
 	private OQC_adatok oqcadatok;
-	private SQA_bevitel sqa_rek;
+	private SQA_osszesito osszesit;
 	private Smelter_masolo smelter;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
@@ -709,8 +710,8 @@ public class Foablak extends JFrame
     {
         public void actionPerformed(ActionEvent e)
          {
-            sqa_rek = new SQA_bevitel();
-            JScrollPane ablak = new JScrollPane(sqa_rek);
+            osszesit = new SQA_osszesito();
+            JScrollPane ablak = new JScrollPane(osszesit);
             setContentPane(ablak);
             pack();
          }
@@ -839,9 +840,20 @@ public class Foablak extends JFrame
         public void run()
         {
             SQL lekerdez = new SQL();
-            lekerdez.vevoi_email();
-            //SQA_SQL sqa = new SQA_SQL();
-            //sqa.sqa_email();
+            lekerdez.vevoi_email();            
+            Calendar calendar = Calendar.getInstance();
+            int nap = calendar.get(Calendar.DAY_OF_WEEK);
+            if(nap == 2)
+            {
+                SQA_SQL sqa = new SQA_SQL();
+                sqa.sqa_email();
+                System.out.println("Lefutott az SQA email");
+            }
+            else
+            {
+                System.out.println("Ma nem fut le az SQA email rész");
+                System.out.println("A hét napja:" + nap);
+            }
         }
     }
 	/*
