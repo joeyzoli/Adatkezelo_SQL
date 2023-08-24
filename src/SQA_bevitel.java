@@ -770,7 +770,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_34);
         
         link_mezo = new JTextField();
-        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\");
+        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\");
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);
@@ -989,42 +989,11 @@ public class SQA_bevitel extends JPanel {
                     {
                         link2 += link[szamlalo] +"\\\\\\\\";
                     }
-                    if(megjelenes_ido.getText().equals(""))
-                    {
-                        if(reklamacio_ido.getText().equals(""))
-                        {
-                            sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
-                                    + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Deviza = '"
-                                    + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                                    + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                                    +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
-                        }
-                        else
-                        {
-                            sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
-                                    + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
-                                    + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                                    + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                                    +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
-                        }
-                        
-                    }
-                    else if(reklamacio_ido.getText().equals(""))
-                    {
-                        sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
-                                + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Deviza = '"
-                                + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                                + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                                +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
-                    }
-                    else
-                    {
-                        sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
-                                + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
-                                + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                                + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                                +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
-                    }
+                    sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
+                            + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
+                            + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
+                            + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
+                            +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
                 }
                 else
                 {
@@ -1052,62 +1021,16 @@ public class SQA_bevitel extends JPanel {
                     {
                         link2 += link[szamlalo] +"\\\\\\\\\\\\\\\\\\\\";
                     }
-                    if(megjelenes_ido.getText().equals(""))
-                    {
-                        if(reklamacio_ido.getText().equals(""))
-                        {
-                            sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
-                                    + "Hibaleiras,Belso_intezkedes,Hibasdb,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
-                                    + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
-                                    + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
-                                    +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                                    +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
-                                    +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"'"
-                                    +",'"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
-                                    +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
-                                    +"','"+link2+"','"+ d +"','"+ cn +"')";
-                        }
-                        else
-                        {
-                            sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
-                                    + "Hibaleiras,Belso_intezkedes,Hibasdb,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
-                                    + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
-                                    + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
-                                    +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                                    +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
-                                    +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+reklamacio_ido.getText()
-                                    +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
-                                    +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
-                                    +"','"+link2+"','"+ d +"','"+ cn +"')";
-                        }
-                        
-                    }
-                    else if(reklamacio_ido.getText().equals(""))
-                    {
-                        sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
-                                + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
-                                + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
-                                + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
-                                +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                                +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
-                                +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"',"
-                                +",'"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
-                                +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
-                                +"','"+link2+"','"+ d +"','"+ cn +"')";
-                    }
-                    else
-                    {
-                        sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
-                                + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
-                                + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
-                                + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
-                                +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                                +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
-                                +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"','"+reklamacio_ido.getText()
-                                +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
-                                +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
-                                +"','"+link2+"','"+ d +"','"+ cn +"')";
-                    }
+                    sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
+                            + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
+                            + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
+                            + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
+                            +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
+                            +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
+                            +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"','"+reklamacio_ido.getText()
+                            +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
+                            +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
+                            +"','"+link2+"','"+ d +"','"+ cn +"')";
                 }
                 lekerdezes.mindenes(sql);
                 futoid_mezo.setText("");
@@ -1189,10 +1112,8 @@ public class SQA_bevitel extends JPanel {
                         hibaleiras_mezo.setText(rs.getString(12));
                         intezkedes_mezo.setText(rs.getString(13));
                         hibasdb_mezo.setText(rs.getString(14));
-                        ido = rs.getString(15).split(" ");
-                        megjelenes_ido.setText(ido[0]);
-                        ido = rs.getString(16).split(" ");
-                        reklamacio_ido.setText(ido[0]);
+                        megjelenes_ido.setText(rs.getString(15));
+                        reklamacio_ido.setText(rs.getString(16));
                         deviza_mezo.setText(rs.getString(17));
                         egysegar_mezo.setText(rs.getString(18));
                         osszertek_mezo.setText(rs.getString(19));
@@ -1244,7 +1165,7 @@ public class SQA_bevitel extends JPanel {
                                 nyitva_mezo.setText(rs.getString(1));
                             } 
                         }
-                        //System.out.println(rs.getString(25));
+                        link_mezo.setText(link2);
                         Desktop.getDesktop().open(new File(link2));                            //megnyitja az excelben szereplő helyen levő infó fájlt         
                     }
                     stmt.close();
@@ -1302,7 +1223,7 @@ public class SQA_bevitel extends JPanel {
     class Tortenet implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
-         {
+        {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
@@ -1322,7 +1243,7 @@ public class SQA_bevitel extends JPanel {
     class Lezaras implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
-         {
+        {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
@@ -1480,7 +1401,7 @@ public class SQA_bevitel extends JPanel {
                         nyitva_mezo.setText(rs.getString(1));
                     } 
                 }
-                //System.out.println(rs.getString(25));
+                link_mezo.setText(link2);
                 Desktop.getDesktop().open(new File(link2));                            //megnyitja az excelben szereplő helyen levő infó fájlt         
             }
             stmt.close();
