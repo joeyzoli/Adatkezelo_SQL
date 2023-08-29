@@ -65,6 +65,7 @@ public class Zarolasok_osszesito extends JPanel {
         ujreki_gomb.setBounds(643, 570, 89, 23);
         add(ujreki_gomb);
         
+        setBackground(Foablak.hatter_szine);
         adatok();
 
     }
@@ -160,8 +161,8 @@ public class Zarolasok_osszesito extends JPanel {
                 else
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre                
-                    //String id = table.getValueAt(sor, 0).toString();
-                    Zarolasok_bevitel zarolasok = new Zarolasok_bevitel();
+                    String id = table.getValueAt(sor, 0).toString();
+                    Zarolasok_bevitel zarolasok = new Zarolasok_bevitel(id);
                     JScrollPane ablak = new JScrollPane(zarolasok);
                     ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                     ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

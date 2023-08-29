@@ -73,6 +73,7 @@ public class Foablak extends JFrame
 	private SQA_osszesito osszesit;
 	private Smelter_masolo smelter;
 	private Zarolasok_osszesito zarolas;
+	private Zarolasok_lekerdezes zarolas_kimutatas;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -212,6 +213,10 @@ public class Foablak extends JFrame
 		JMenuItem szeriaszam = new JMenuItem("Átvételi adatok");
 		szeriaszam.addActionListener(new PanelCsere_szeriaszamok());
 		lekerdezes.add(szeriaszam);
+		
+		JMenuItem zarolasok_kimutatasa = new JMenuItem("Zárolások");
+		zarolasok_kimutatasa.addActionListener(new Panelcsere_Zarolas_kimutatas());
+		lekerdezes.add(zarolasok_kimutatasa);
 		lekerdezes.add(sajat_sql);
 		
 		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
@@ -739,6 +744,17 @@ public class Foablak extends JFrame
          {
             zarolas = new Zarolasok_osszesito();
             JScrollPane ablak = new JScrollPane(zarolas);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Zarolas_kimutatas implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            zarolas_kimutatas = new Zarolasok_lekerdezes();
+            JScrollPane ablak = new JScrollPane(zarolas_kimutatas);
             setContentPane(ablak);
             pack();
          }
