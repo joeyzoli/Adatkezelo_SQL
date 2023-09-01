@@ -74,6 +74,7 @@ public class Foablak extends JFrame
 	private Smelter_masolo smelter;
 	private Zarolasok_osszesito zarolas;
 	private Zarolasok_lekerdezes zarolas_kimutatas;
+	private Kiszallitasi_minoseg kiszallitasi;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -311,6 +312,10 @@ public class Foablak extends JFrame
 		JMenuItem smelter_masolo = new JMenuItem("Smelter másoló");
 		smelter_masolo.addActionListener(new PanelCsere_Smelter());
 		egyeb.add(smelter_masolo);
+		
+		JMenuItem kiszallitasi_minoseg = new JMenuItem("Kiszállítási minőség");
+		kiszallitasi_minoseg.addActionListener(new Panelcsere_Kiszallitasi_minoseg());
+		egyeb.add(kiszallitasi_minoseg);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -755,6 +760,17 @@ public class Foablak extends JFrame
          {
             zarolas_kimutatas = new Zarolasok_lekerdezes();
             JScrollPane ablak = new JScrollPane(zarolas_kimutatas);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Kiszallitasi_minoseg implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            kiszallitasi = new Kiszallitasi_minoseg();
+            JScrollPane ablak = new JScrollPane(kiszallitasi);
             setContentPane(ablak);
             pack();
          }

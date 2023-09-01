@@ -613,7 +613,7 @@ public class Zarolasok_bevitel extends JPanel {
             nevek.add(resultSet.getString(1));
         }
         
-        ellenorok = nevek.toArray(new String[nevek.size()]);
+        ellenorok = nevek.toArray(new String[nevek.size()]);                                //sima tömbbé alakítja az ArrayListet
 
         resultSet.close();
         stmt.close();
