@@ -49,6 +49,7 @@ public class Zarolasok_bevitel extends JPanel {
     private JCheckBox technikus_csekk;
     private JComboBox<String> felelosterulet_box;
     private SQA_SQL lekerdezes = new SQA_SQL();
+    private JTextField meszam_mezo;
 
     /**
      * Create the panel.
@@ -298,6 +299,15 @@ public class Zarolasok_bevitel extends JPanel {
         id_mezo.setText(String.valueOf(kovetkezo + 1));
         
         setBackground(Foablak.hatter_szine);
+        
+        meszam_mezo = new JTextField();
+        meszam_mezo.setBounds(1044, 111, 164, 20);
+        add(meszam_mezo);
+        meszam_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_24 = new JLabel("Raklap ME szám");
+        lblNewLabel_24.setBounds(943, 114, 102, 14);
+        add(lblNewLabel_24);
 
     }
     
@@ -546,6 +556,16 @@ public class Zarolasok_bevitel extends JPanel {
         id_mezo.setText(String.valueOf(kovetkezo + 1));
         
         setBackground(Foablak.hatter_szine);
+        
+        meszam_mezo = new JTextField();
+        meszam_mezo.setBounds(1044, 111, 164, 20);
+        add(meszam_mezo);
+        meszam_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_24 = new JLabel("Raklap ME szám");
+        lblNewLabel_24.setBounds(943, 114, 102, 14);
+        add(lblNewLabel_24);
+        
         visszatolt(id);
 
     }
@@ -561,13 +581,20 @@ public class Zarolasok_bevitel extends JPanel {
                                 
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
             Statement stmt = con.createStatement();              
-            ResultSet rs = stmt.executeQuery("select part_no\r\n"
+            ResultSet rs = stmt.executeQuery("select part_no, REVISION_TEXT \r\n"
                     + "from ifsapp.PART_REVISION\r\n"
                     + "where 3 = 3");
             ArrayList<String> cikkszamok = new ArrayList<String>();
             while(rs.next())
             {
-                cikkszamok.add(rs.getString(1));
+                if(rs.getString(2) != null)
+                {
+                    cikkszamok.add(rs.getString(1)+ "-"+ rs.getString(2));
+                }
+                else
+                {
+                    cikkszamok.add(rs.getString(1));
+                }
             }
             cikkbox = cikkszamok.toArray(new String[cikkszamok.size()]);
             con.close();  
@@ -739,7 +766,7 @@ public class Zarolasok_bevitel extends JPanel {
                             + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
                             + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
                             + "Felelos ='"+ felelos_mezo.getText() +"',Hiba_gyokeroka ='"+ gyokerok_mezo.getText() +"',Gyokerok_intezkedes ='"+ gyokerintezkedes_mezo.getText() +"',"
-                            + "B2_zarolas ='"+ b2_mezo.getText() +"',visszaellenorzes ='"+ visszaellenorzes_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
+                            + "B2_zarolas ='"+ b2_mezo.getText() +"',visszaellenorzes ='"+ visszaellenorzes_mezo.getText() +"',ME_szam ='"+ meszam_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
                     
                 }
                 else
@@ -751,12 +778,13 @@ public class Zarolasok_bevitel extends JPanel {
                     }
                     sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
                             + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
-                            + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes) "
+                            + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam) "
                             + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                             + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
                             + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                             + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
-                            + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"')";
+                            + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
+                                    + ",'"+ meszam_mezo.getText() +"')";
                     
                 }
                 lekerdezes.mindenes(sql);
@@ -829,6 +857,7 @@ public class Zarolasok_bevitel extends JPanel {
                     String[] lezarva = rs.getString(24).split(" ");
                     lezaras_mezo.setText(lezarva[0]);
                 }
+                meszam_mezo.setText(rs.getString(25));
                 
                
                   

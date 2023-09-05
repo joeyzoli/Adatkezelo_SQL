@@ -893,8 +893,8 @@ public class Foablak extends JFrame
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             if(nap == 2)
             {
-                SQA_SQL sqa = new SQA_SQL();
-                sqa.sqa_email();
+                //SQA_SQL sqa = new SQA_SQL();
+                //sqa.sqa_email();
                 System.out.println("Lefutott az SQA email");
             }
             else

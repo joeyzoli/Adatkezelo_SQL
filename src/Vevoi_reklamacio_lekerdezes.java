@@ -50,7 +50,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         lblNewLabel_1.setBounds(464, 57, 46, 14);
         add(lblNewLabel_1);
         
-        projekt_box = new JComboBox<String>(combobox.getCombobox(ComboBox.projekt));                   //combobox.getCombobox2(ComboBox.projekt)
+        projekt_box = new JComboBox<String>(combobox.getCombobox(ComboBox.projekt));                   //combobox.getCombobox(ComboBox.projekt)
         projekt_box.setBounds(520, 53, 172, 22);
         add(projekt_box);
         
@@ -122,8 +122,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         d_gomb.addActionListener(new D_gyarto());
         add(d_gomb);
         
-        JLabel lblNewLabel_7 = new JLabel("Képek");
-        lblNewLabel_7.setBounds(430, 617, 46, 14);
+        JLabel lblNewLabel_7 = new JLabel("Csatolt Képek");
+        lblNewLabel_7.setBounds(420, 619, 90, 14);
         add(lblNewLabel_7);
         
         JButton mentes_gomb = new JButton("Mentés");
@@ -131,8 +131,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         mentes_gomb.setBounds(520, 615, 89, 23);
         add(mentes_gomb);
         
-        JLabel lblNewLabel_8 = new JLabel("Excel");
-        lblNewLabel_8.setBounds(430, 655, 46, 14);
+        JLabel lblNewLabel_8 = new JLabel("Csatolt Excel");
+        lblNewLabel_8.setBounds(420, 655, 80, 14);
         add(lblNewLabel_8);
         
         JButton excelmentes = new JButton("Mentés");
@@ -285,8 +285,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          {
             try 
             {
-                lekerdezes.vevoi_kepmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());
-                JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+                lekerdezes.vevoi_kepmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());                
             } 
             catch (Exception e1) 
             {              
@@ -303,8 +302,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          {
             try 
             {
-                lekerdezes.vevoi_excelmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());
-                JOptionPane.showMessageDialog(null, "Excel/ek mentve az asztalra", "Info", 1);
+                lekerdezes.vevoi_excelmentes(table.getValueAt(0, 1).toString(), table.getValueAt(0, 3).toString());                
             } 
             catch (Exception e1) 
             {              

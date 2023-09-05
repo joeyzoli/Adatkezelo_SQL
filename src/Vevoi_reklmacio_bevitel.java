@@ -90,11 +90,11 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Reklamáció időpont");
-        lblNewLabel_1.setBounds(34, 97, 101, 14);
+        lblNewLabel_1.setBounds(34, 97, 118, 14);
         add(lblNewLabel_1);
         
         datum_mezo = new JTextField();
-        datum_mezo.setBounds(145, 94, 81, 20);
+        datum_mezo.setBounds(162, 94, 81, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
@@ -181,15 +181,15 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(gorgeto2);
         
         JLabel lblNewLabel_11 = new JLabel("Műszaki dokumntáció megnézve?");
-        lblNewLabel_11.setBounds(776, 228, 164, 20);
+        lblNewLabel_11.setBounds(776, 228, 215, 20);
         add(lblNewLabel_11);
         
         muszaki_igen = new JCheckBox("Igen");
-        muszaki_igen.setBounds(946, 227, 66, 23);
+        muszaki_igen.setBounds(990, 227, 66, 23);
         add(muszaki_igen);
         
         muszaki_nem = new JCheckBox("Nem");
-        muszaki_nem.setBounds(1014, 227, 97, 23);
+        muszaki_nem.setBounds(1058, 227, 53, 23);
         add(muszaki_nem);
         
         ButtonGroup csoport = new ButtonGroup();
@@ -197,15 +197,15 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         csoport.add(muszaki_nem);
         
         JLabel lblNewLabel_12 = new JLabel("Termelés értesítése");
-        lblNewLabel_12.setBounds(839, 277, 101, 14);
+        lblNewLabel_12.setBounds(839, 277, 121, 14);
         add(lblNewLabel_12);
         
         termeles_igen = new JCheckBox("Igen");
-        termeles_igen.setBounds(946, 273, 53, 23);
+        termeles_igen.setBounds(990, 273, 53, 23);
         add(termeles_igen);
         
         termeles_nem = new JCheckBox("Nem");
-        termeles_nem.setBounds(1013, 273, 60, 23);
+        termeles_nem.setBounds(1058, 273, 60, 23);
         add(termeles_nem);
         
         ButtonGroup csoport2 = new ButtonGroup();
@@ -358,7 +358,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(gorgeto4);
         
         JButton mentes_gomb = new JButton("Mentés");
-        mentes_gomb.setBounds(489, 897, 89, 23);
+        mentes_gomb.setBounds(500, 897, 89, 23);
         mentes_gomb.addActionListener(new Mentes());
         add(mentes_gomb);
         
@@ -375,17 +375,17 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         zaroltdb_mezo.setColumns(10);
         
         JLabel lblNewLabel_24 = new JLabel("Válogatás során talált hiba db");
-        lblNewLabel_24.setBounds(34, 277, 155, 14);
+        lblNewLabel_24.setBounds(34, 277, 178, 14);
         add(lblNewLabel_24);
         
         talalthiba_mezo = new JTextField();
-        talalthiba_mezo.setBounds(199, 274, 46, 20);
+        talalthiba_mezo.setBounds(225, 274, 46, 20);
         talalthiba_mezo.setText("0");
         add(talalthiba_mezo);
         talalthiba_mezo.setColumns(10);
         
         JButton kephozzaadasa_gomb = new JButton("Kép hozzáadása");
-        kephozzaadasa_gomb.setBounds(478, 843, 119, 23);
+        kephozzaadasa_gomb.setBounds(478, 843, 137, 23);
         kephozzaadasa_gomb.addActionListener(new Kephozzadasa());
         add(kephozzaadasa_gomb);
         
@@ -437,7 +437,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
         add(id_keres_gomb);
         
         JButton excelhozzaadasa_gomb = new JButton("Excel hozzáadása");
-        excelhozzaadasa_gomb.setBounds(478, 787, 119, 23);
+        excelhozzaadasa_gomb.setBounds(478, 787, 137, 23);
         excelhozzaadasa_gomb.addActionListener(new Excelhozzadasa());
         add(excelhozzaadasa_gomb);
 
@@ -668,11 +668,17 @@ public class Vevoi_reklmacio_bevitel extends JPanel
             try 
             {
                 JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                //mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setMultiSelectionEnabled(true);
                 mentes_helye.showOpenDialog(mentes_helye);
-                File fajl = mentes_helye.getSelectedFile();
-                kephelye.add(fajl.getAbsolutePath());
-                kepneve.add(fajl.getName());
+                File[] fajl = mentes_helye.getSelectedFiles();
+                for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
+                {
+                    kephelye.add(fajl[szamlalo].getAbsolutePath());
+                    kepneve.add(fajl[szamlalo].getName()); 
+                }
+                
             } 
             catch (Exception e1) 
             {              
@@ -691,6 +697,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
             {
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
                 excelhelye.add(fajl.getAbsolutePath());

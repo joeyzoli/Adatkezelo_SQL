@@ -380,13 +380,13 @@ public class Kiszallitasi_minoseg extends JPanel {
                                 //System.out.println(sheet.getRange().get("B"+(szamlalo+2)).getText().toString());
                                 CellRange cell2 = sheet.getCellRange(szamlalo2, honaptol);
                                 cell2.convertToNumber();
-                                System.out.println(cell2.getValue());
+                                //System.out.println(cell2.getValue());
                                 //sheet2.getCellRange(2, oszlop).setValue(cell2.getValue());
                                 sheet2.getCellRange(2, oszlop).setNumberValue(sheet.getCellRange(szamlalo2, honaptol).getNumberValue());
                                 //sheet2.getCellRange(2, oszlop).setValue(datatable.getRows().get(szamlalo2).getString(honaptol));
                                 cell2 = sheet.getCellRange(szamlalo2+1, honaptol);
                                 cell2.convertToNumber();
-                                System.out.println(cell2.getValue());
+                                //System.out.println(cell2.getValue());
                                 //sheet2.getRange().get(3, oszlop).setValue(cell2.getValue());
                                 sheet2.getRange().get(3, oszlop).setNumberValue(sheet.getCellRange(szamlalo2+1, honaptol).getNumberValue());
                                 //sheet2.getRange().get(3, oszlop).setValue(datatable.getRows().get(szamlalo2+1).getString(honaptol));
@@ -403,7 +403,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                                 honaptol++;   
                             }                                      
                         }
-                        System.out.println("Kilépett");
+                        //System.out.println("Kilépett");
                         break;
                     }
                 }

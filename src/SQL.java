@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -606,9 +608,9 @@ public class SQL
         while(resultSet.next())
         {
             String[] ido = resultSet.getString(3).split(" ");
-            Vevoi_reklmacio_bevitel.modell3.addRow(new Object[]{resultSet.getString(1), resultSet.getString(2),ido[0]});
+            Vevoi_reklmacio_bevitel.modell4.addRow(new Object[]{resultSet.getString(1), resultSet.getString(2),ido[0]});
         }
-        Vevoi_reklmacio_bevitel.table.setModel(Vevoi_reklmacio_bevitel.modell3);
+        Vevoi_reklmacio_bevitel.table.setModel(Vevoi_reklmacio_bevitel.modell4);
         
         resultSet.close();
         resultSet2.close();
@@ -843,6 +845,7 @@ public class SQL
         ResultSet rset = ps.executeQuery();         
         byte b[];
         Blob blob;
+        int szam = 0;
         while(rset.next())
         {        
             File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ rset.getString(2));
@@ -851,7 +854,16 @@ public class SQL
             b = blob.getBytes(1, (int)blob.length());
             fs.write(b);
             fs.close();
-        }                                                                                                                                                                                                                      
+            szam++;
+        }
+        if(szam > 0)
+        {
+            JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Nincsen csatolt kép", "Info", 1);
+        }
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
@@ -908,6 +920,7 @@ public class SQL
         ResultSet rset = ps.executeQuery();       
         byte b[];
         Blob blob;
+        int szam = 0;
         while(rset.next())
         {
             File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ rset.getString(2));
@@ -916,7 +929,17 @@ public class SQL
             b = blob.getBytes(1, (int)blob.length());
             fs.write(b);
             fs.close();
-        }                                                                                                                                                                                                                      
+            szam++;
+        }
+        if(szam > 0)
+        {
+            JOptionPane.showMessageDialog(null, "Excel/ek mentve az asztalra", "Info", 1);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Nincsen csatolt excel", "Info", 1);
+        }
+        
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
@@ -1662,8 +1685,23 @@ public class SQL
         //Date date = new Date();
         //LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         // int month = localDate.getMonthValue();
-        Float atlagrek = (float) (sumrek / 12);           //month
-        Float atlagvissza = (float) (sumvissza / 12);       //month
+        String[] datum_tol = datumtol.split("\\.");
+        String[] datum_ig = datumig.split("\\.");
+        LocalDate start_date = LocalDate.of(Integer.parseInt(datum_tol[0]),Integer.parseInt(datum_tol[1]),Integer.parseInt(datum_tol[2]));
+        LocalDate end_date = LocalDate.of(Integer.parseInt(datum_ig[0]),Integer.parseInt(datum_ig[1]),Integer.parseInt(datum_ig[2]));
+        Period diff = Period.between(start_date,end_date);
+        Float atlagrek = null;
+        Float atlagvissza = null;
+        if(diff.getMonths() == 0)
+        {
+            atlagrek = (float) sumrek;
+            atlagvissza = (float) sumvissza;
+        }
+        else
+        {
+            atlagrek = (float) (sumrek / diff.getMonths());           //month
+            atlagvissza = (float) (sumvissza / diff.getMonths());       //month
+        }
         sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
         sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);
                
@@ -2052,10 +2090,14 @@ public class SQL
         catch (SQLException e1) 
         {
            e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         finally 
         {

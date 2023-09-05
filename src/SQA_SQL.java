@@ -191,8 +191,11 @@ public class SQA_SQL {
                         emailcim = datatable.getRows().get(szamlalo2).getString(1);
                     }
                 }
-                
-                emailkuldes.sqa_emailkuldes(adatok[1],emailcim,emailcim,adatok[0],adatok[3],adatok[2]);
+                if(emailcim.equals("")) {}
+                else
+                {
+                    emailkuldes.sqa_emailkuldes(adatok[1],emailcim,emailcim,adatok[0],adatok[3],adatok[2]);
+                }
             }
         }
         
