@@ -138,12 +138,13 @@ public class Kiszallitasi_minoseg extends JPanel {
                 Worksheet sheet2 = workbook2.getWorksheets().get(0);
                 //int sor = 2;
                 int oszlop = 2;
+                honap = 16;
                 sheet2.getRange().get("A2").setText("Kiszállított db");
                 sheet2.getRange().get("A3").setText("Kiesett db");
                 sheet2.getRange().get("A4").setText("PPM");
                 for(int szamlalo = 4; szamlalo < 102;szamlalo++)
                 {
-                    CellRange cell = sheet.getCellRange(szamlalo, honap);
+                    CellRange cell = sheet.getCellRange(szamlalo, honap);        //honap
                     //cell.convertToNumber();
                     //System.out.println(cell.getValue());
                     //System.out.println(cell.getCount());

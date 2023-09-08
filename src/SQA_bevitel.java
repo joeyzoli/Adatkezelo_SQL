@@ -72,6 +72,7 @@ public class SQA_bevitel extends JPanel {
     private JTextArea gyokerok_mezo;
     private JCheckBox d_csekk;
     private JCheckBox cn_csekk;
+    private JTextArea cikkszamok_mezo;
      
 
     /**
@@ -111,12 +112,12 @@ public class SQA_bevitel extends JPanel {
         add(cikkszam_box);
         
         JLabel lblNewLabel_3 = new JLabel("Alapanyag fajta");
-        lblNewLabel_3.setBounds(780, 132, 95, 14);
+        lblNewLabel_3.setBounds(912, 132, 95, 14);
         add(lblNewLabel_3);
         
         String[] fajtak = {"PCB","SMD","THT","Műanyag","Fém","Csomagolóanyag","Üveg","Egyéb"};
         fajta_box = new JComboBox<String>(fajtak);                                      //fajtak
-        fajta_box.setBounds(885, 128, 147, 22);
+        fajta_box.setBounds(1017, 128, 147, 22);
         add(fajta_box);
         
         JLabel lblNewLabel_4 = new JLabel("Gyártó");
@@ -397,7 +398,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_34);
         
         link_mezo = new JTextField();
-        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\");
+        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\2023\\");
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);
@@ -445,8 +446,18 @@ public class SQA_bevitel extends JPanel {
         
         JButton vissza_gomb = new JButton("Vissza");
         vissza_gomb.addActionListener(new Vissza());
-        vissza_gomb.setBounds(911, 49, 89, 23);
+        vissza_gomb.setBounds(1075, 11, 89, 23);
         add(vissza_gomb);
+        
+        JButton hozzaad_gomb = new JButton("Hozzáad");
+        hozzaad_gomb.addActionListener(new Hozzaad());
+        hozzaad_gomb.setBounds(736, 128, 89, 23);
+        add(hozzaad_gomb);
+        
+        cikkszamok_mezo = new JTextArea();
+        JScrollPane gorgeto = new JScrollPane(cikkszamok_mezo);
+        gorgeto.setBounds(737, 49, 372, 68);
+        add(gorgeto);
 
     }
     
@@ -484,12 +495,12 @@ public class SQA_bevitel extends JPanel {
         add(cikkszam_box);
         
         JLabel lblNewLabel_3 = new JLabel("Alapanyag fajta");
-        lblNewLabel_3.setBounds(780, 132, 95, 14);
+        lblNewLabel_3.setBounds(912, 132, 95, 14);
         add(lblNewLabel_3);
         
         String[] fajtak = {"PCB","SMD","THT","Műanyag","Fém","Csomagolóanyag","Üveg","Egyéb"};
         fajta_box = new JComboBox<String>(fajtak);                                      //fajtak
-        fajta_box.setBounds(885, 128, 147, 22);
+        fajta_box.setBounds(1017, 128, 147, 22);
         add(fajta_box);
         
         JLabel lblNewLabel_4 = new JLabel("Gyártó");
@@ -770,7 +781,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_34);
         
         link_mezo = new JTextField();
-        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\");
+        link_mezo.setText("\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\2023\\");
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);
@@ -818,8 +829,18 @@ public class SQA_bevitel extends JPanel {
         
         JButton vissza_gomb = new JButton("Vissza");
         vissza_gomb.addActionListener(new Vissza());
-        vissza_gomb.setBounds(911, 49, 89, 23);
+        vissza_gomb.setBounds(1075, 11, 89, 23);
         add(vissza_gomb);
+        
+        cikkszamok_mezo = new JTextArea();
+        JScrollPane gorgeto = new JScrollPane(cikkszamok_mezo);
+        gorgeto.setBounds(737, 49, 372, 68);
+        add(gorgeto);
+        
+        JButton hozzaad_gomb = new JButton("Hozzáad");
+        hozzaad_gomb.addActionListener(new Hozzaad());
+        hozzaad_gomb.setBounds(736, 128, 89, 23);
+        add(hozzaad_gomb);
         
         visszatolt(id);
 
@@ -838,19 +859,48 @@ public class SQA_bevitel extends JPanel {
                         + "from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
                         + "where 3 = 3\r\n"
                         + "and PART_NO = '"+ cikk[0] +"' and PRIMARY_VENDOR_DB = 'Y'";
-                beszallito_mezo.setText(lekerdezes.beszallito(sql));
-                
+                if(beszallito_mezo.getText().equals(""))
+                {
+                    beszallito_mezo.setText(lekerdezes.beszallito(sql));
+                }
+                else
+                {
+                    String osszefuzve = beszallito_mezo.getText();
+                    osszefuzve += "; "+lekerdezes.beszallito(sql);
+                    beszallito_mezo.setText(osszefuzve);
+                }           
                 sql = "select ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO)\r\n"
                         + "from ifsapp.PART_MANUFACTURER\r\n"
                         + "where 3 = 3\r\n"
                         + "and PART_NO = '"+ cikk[0] +"' and  PREFERRED_MANUFACTURER_DB = 'TRUE'";
-                gyarto_mezo.setText(lekerdezes.beszallito(sql));
-               
+                if(gyarto_mezo.getText().equals(""))
+                {
+                    gyarto_mezo.setText(lekerdezes.beszallito(sql));
+                }
+                else
+                {
+                    String osszefuzve = gyarto_mezo.getText();
+                    osszefuzve += "; "+lekerdezes.beszallito(sql);
+                    gyarto_mezo.setText(osszefuzve);
+                }                 
                 sql = "select second_commodity\r\n"
                         + "from ifsapp.INVENTORY_PART\r\n"
                         + "where 3 = 3 \r\n"
                         + "and part_no = '"+ cikk[0] +"'";
-                projekt_mezo.setText(lekerdezes.beszallito(sql));
+                if(projekt_mezo.getText().equals(""))
+                {
+                    projekt_mezo.setText(lekerdezes.beszallito(sql));
+                }
+                else
+                {
+                    String osszefuzve = projekt_mezo.getText();
+                    osszefuzve += "; "+lekerdezes.beszallito(sql);
+                    projekt_mezo.setText(osszefuzve);
+                }      
+                sql = "select inventory_value from ifsapp.INVENTORY_PART_UNIT_COST_SUM\r\n"
+                        + "where part_no =  '"+ cikk[0] +"'";
+                String[] egysegar = lekerdezes.beszallito(sql).split("\\.");
+                egysegar_mezo.setText(egysegar[0]);
                 String kontaktok = "";
                 gyarto_mezo.setForeground(Color.black);
                 beszallito_mezo.setForeground(Color.black);
@@ -945,124 +995,140 @@ public class SQA_bevitel extends JPanel {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                Connection conn = null;
-                Statement stmt = null;        
-                try 
+                if(datum_mezo.getText().equals(""))
                 {
-                   Class.forName("com.mysql.cj.jdbc.Driver");
-                } 
-                catch (Exception e1) 
-                {
-                   System.out.println(e);
-                   String hibauzenet2 = e.toString();
-                   JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }
-                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-                stmt = (Statement) conn.createStatement();
-                String SQL = "select * from qualitydb.SQA_reklamaciok where id = '"+ id_mezo.getText() +"'";
-                ResultSet rs = stmt.executeQuery(SQL);
-                String sql = "";
-                if(rs.next())
-                {
-                    String d = "";
-                    String cn = "";
-                    if(d_csekk.isSelected())
-                    {
-                        d = "igen";
-                    }
-                    else
-                    {
-                        d = "nem";
-                    }
-                    if(cn_csekk.isSelected())
-                    {
-                        cn = "igen";
-                    }
-                    else
-                    {
-                        cn = "nem";
-                    }
-                    String[] link = link_mezo.getText().split("\\\\");
-                    System.out.println(link[0]+" "+link[1]+" "+link[2]+" "+link[3]  );
-                    String link2 = "\\\\\\\\\\\\\\\\";
-                    for(int szamlalo = 1;szamlalo < link.length;szamlalo++)
-                    {
-                        link2 += link[szamlalo] +"\\\\\\\\";
-                    }
-                    sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', "
-                            + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
-                            + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                            + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                            +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
-                }
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátumot", "Hiba üzenet", 2); 
+                }               
                 else
                 {
-                    String d = "";
-                    String cn = "";
-                    if(d_csekk.isSelected())
+                    if(hibasdb_mezo.getText().equals(""))
                     {
-                        d = "igen";
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg db számot", "Hiba üzenet", 2); 
                     }
                     else
                     {
-                        d = "nem";
+                        Connection conn = null;
+                        Statement stmt = null;        
+                        try 
+                        {
+                           Class.forName("com.mysql.cj.jdbc.Driver");
+                        } 
+                        catch (Exception e1) 
+                        {
+                           System.out.println(e);
+                           String hibauzenet2 = e.toString();
+                           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                        }
+                        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                        stmt = (Statement) conn.createStatement();
+                        String SQL = "select * from qualitydb.SQA_reklamaciok where id = '"+ id_mezo.getText() +"'";
+                        ResultSet rs = stmt.executeQuery(SQL);
+                        String sql = "";
+                        if(rs.next())
+                        {
+                            String d = "";
+                            String cn = "";
+                            if(d_csekk.isSelected())
+                            {
+                                d = "igen";
+                            }
+                            else
+                            {
+                                d = "nem";
+                            }
+                            if(cn_csekk.isSelected())
+                            {
+                                cn = "igen";
+                            }
+                            else
+                            {
+                                cn = "nem";
+                            }
+                            String[] link = link_mezo.getText().split("\\\\");
+                            System.out.println(link[0]+" "+link[1]+" "+link[2]+" "+link[3]  );
+                            String link2 = "\\\\\\\\\\\\\\\\";
+                            for(int szamlalo = 1;szamlalo < link.length;szamlalo++)
+                            {
+                                link2 += link[szamlalo] +"\\\\\\\\";
+                            }
+                            sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', Inditotta = '"+String.valueOf(indito_box.getSelectedItem())+"',"
+                                    + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
+                                    + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Egysegar = '"+egysegar_mezo.getText()+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
+                                    + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
+                                    +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
+                        }
+                        else
+                        {
+                            String d = "";
+                            String cn = "";
+                            if(d_csekk.isSelected())
+                            {
+                                d = "igen";
+                            }
+                            else
+                            {
+                                d = "nem";
+                            }
+                            if(cn_csekk.isSelected())
+                            {
+                                cn = "igen";
+                            }
+                            else
+                            {
+                                cn = "nem";
+                            }
+                            String[] link = link_mezo.getText().split("\\\\");                    
+                            String link2 = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
+                            for(int szamlalo = 1;szamlalo < link.length;szamlalo++)
+                            {
+                                link2 += link[szamlalo] +"\\\\\\\\\\\\\\\\\\\\";
+                            }
+                            sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
+                                    + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
+                                    + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
+                                    + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
+                                    +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ cikkszamok_mezo.getText()+"','"+ String.valueOf(fajta_box.getSelectedItem())
+                                    +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
+                                    +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"','"+reklamacio_ido.getText()
+                                    +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
+                                    +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
+                                    +"','"+link2+"','"+ d +"','"+ cn +"')";
+                        }
+                        lekerdezes.mindenes(sql);
+                        futoid_mezo.setText("");
+                        datum_mezo.setText("");
+                        gyarto_mezo.setText("");
+                        beszallito_mezo.setText("");
+                        projekt_mezo.setText("");
+                        kontakt_mezo.setText("");
+                        hibaleiras_mezo.setText("");
+                        intezkedes_mezo.setText("");
+                        hibasdb_mezo.setText("");
+                        megjelenes_ido.setText("");
+                        reklamacio_ido.setText("");
+                        deviza_mezo.setText("0");
+                        egysegar_mezo.setText("0");
+                        osszertek_mezo.setText("0");
+                        valasz_mezo.setText("");
+                        gyokerok_mezo.setText("");
+                        karterites_mezo.setText("0");
+                        belsokoltseg_mezo.setText("0");
+                        veszteseg_mezo.setText("0");
+                        cikkszamok_mezo.setText("");
+                        d_csekk.setSelected(false);
+                        cn_csekk.setSelected(false);
+                        tortenesideje_mezo.setText("");
+                        Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
                     }
-                    if(cn_csekk.isSelected())
-                    {
-                        cn = "igen";
-                    }
-                    else
-                    {
-                        cn = "nem";
-                    }
-                    String[] link = link_mezo.getText().split("\\\\");                    
-                    String link2 = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
-                    for(int szamlalo = 1;szamlalo < link.length;szamlalo++)
-                    {
-                        link2 += link[szamlalo] +"\\\\\\\\\\\\\\\\\\\\";
-                    }
-                    sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
-                            + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
-                            + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
-                            + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
-                            +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ String.valueOf(cikkszam_box.getSelectedItem())+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                            +"','"+gyarto_mezo.getText()+"','"+beszallito_mezo.getText()+"','"+projekt_mezo.getText()+"','"+kontakt_mezo.getText()+"','"+hibaleiras_mezo.getText()
-                            +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"','"+reklamacio_ido.getText()
-                            +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar_mezo.getText()+"','"+osszertek_mezo.getText()
-                            +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
-                            +"','"+link2+"','"+ d +"','"+ cn +"')";
                 }
-                lekerdezes.mindenes(sql);
-                futoid_mezo.setText("");
-                datum_mezo.setText("");
-                gyarto_mezo.setText("");
-                beszallito_mezo.setText("");
-                projekt_mezo.setText("");
-                kontakt_mezo.setText("");
-                hibaleiras_mezo.setText("");
-                intezkedes_mezo.setText("");
-                hibasdb_mezo.setText("");
-                megjelenes_ido.setText("");
-                reklamacio_ido.setText("");
-                deviza_mezo.setText("0");
-                egysegar_mezo.setText("0");
-                osszertek_mezo.setText("0");
-                valasz_mezo.setText("");
-                gyokerok_mezo.setText("");
-                karterites_mezo.setText("0");
-                belsokoltseg_mezo.setText("0");
-                veszteseg_mezo.setText("0");
-                d_csekk.setSelected(false);
-                cn_csekk.setSelected(false);
-                tortenesideje_mezo.setText("");
-                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-            }
-            catch (Exception e1) 
-            {
-                e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-            }
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                }
+            
          }
     }
     
@@ -1103,6 +1169,7 @@ public class SQA_bevitel extends JPanel {
                         datum_mezo.setText(ido[0]);
                         indito_box.setSelectedItem(rs.getString(4));
                         intezkedes_box.setSelectedItem(rs.getString(5));
+                        cikkszamok_mezo.setText(rs.getString(6));
                         cikkszam_box.setSelectedItem(rs.getString(6));
                         fajta_box.setSelectedItem(rs.getString(7));
                         gyarto_mezo.setText(rs.getString(8));
@@ -1304,6 +1371,33 @@ public class SQA_bevitel extends JPanel {
          }
     }
     
+    class Hozzaad implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                if(cikkszamok_mezo.getText().equals(""))
+                {
+                    cikkszamok_mezo.setText(String.valueOf(cikkszam_box.getSelectedItem()));
+                }
+                else
+                {
+                    String cikk = cikkszamok_mezo.getText();
+                    cikk += "\n"+ String.valueOf(cikkszam_box.getSelectedItem());
+                    cikkszamok_mezo.setText(cikk);
+                }
+                 
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
     @SuppressWarnings("resource")
     public void visszatolt(String id)
     {
@@ -1337,6 +1431,8 @@ public class SQA_bevitel extends JPanel {
                 datum_mezo.setText(ido[0]);
                 indito_box.setSelectedItem(rs.getString(4));
                 intezkedes_box.setSelectedItem(rs.getString(5));
+                cikkszam_box.setSelectedItem(rs.getString(6));
+                cikkszamok_mezo.setText(rs.getString(6));
                 cikkszam_box.setSelectedItem(rs.getString(6));
                 fajta_box.setSelectedItem(rs.getString(7));
                 gyarto_mezo.setText(rs.getString(8));

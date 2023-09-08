@@ -6,9 +6,13 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,6 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
 import com.spire.pdf.FileFormat;
 import com.spire.pdf.PdfDocument;
 import com.spire.xls.ExcelVersion;
@@ -72,7 +77,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new IFS_csomagoloanyag());
+		feltolt.addActionListener(new Lekerdezes());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -878,6 +883,199 @@ public class Torlo extends JPanel
                 String hibauzenet2 = e1.toString();
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
             }                                         
+         }
+    }
+	
+	class Szeriaszam_kimnetes implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {                              
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                String hely = "";
+                File mappa;
+                File[] fajlok;
+                File fajl = new File(System.getProperty("user.home") + "\\Desktop\\N12 FAIL");
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Szériaszámok dátummal.xlsx";
+                hely = fajl.getAbsolutePath();
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                mappa = new File(hely);                                         //mappa beolvasása
+                
+                FilenameFilter filter = new FilenameFilter()                                            //fájlnév filter metódus
+                {
+                    
+                    @Override
+                    public boolean accept(File f, String name) 
+                    {
+                                                                                                        // csak az xlsx fájlokat listázza ki 
+                        return name.endsWith(".log");  
+                    }
+                };
+                fajlok = mappa.listFiles(filter); 
+                Workbook workbook = new Workbook();
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                int cellaszam = 1;
+                
+                sheet.getRange().get("A" + cellaszam).setText("Szériaszám");
+                sheet.getRange().get("B" + cellaszam).setText("Fájl neve");
+                
+                cellaszam++;
+                fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja    
+                for(int szamlalo = 0; szamlalo < fajlok.length; szamlalo++)
+                {
+                    String fajlneve = fajlok[szamlalo].getName();
+                    String[] nev = fajlneve.split("\\.");
+                    File adatok = new File(fajlok[szamlalo].getAbsolutePath());
+                    try (BufferedReader beolvaso = new BufferedReader(new FileReader(adatok, StandardCharsets.UTF_8))) 
+                    {
+                        String buffer = beolvaso.readLine();
+                        int szam    = 0; 
+                        while((buffer = beolvaso.readLine()) != null)                                       //addig fut amíg nem üres a sor, vagyis a fájl végéig
+                        {
+                            if(szam == 1)
+                            {                                
+                                String[] elso = buffer.split(" ");
+                                System.out.println(elso.length);
+                                String[] masodik = elso[3].split(";");
+                                sheet.getRange().get("A" + cellaszam).setText(masodik[0]);
+                                sheet.getRange().get("B" + cellaszam).setText(nev[0]);
+                                break;
+                            }
+                            szam++;
+                        }
+                    }           
+                    catch(Exception e1)                          //kivételkezelés
+                    {
+                        System.out.println(e1);
+                        String hibauzenet2 = e1.toString();
+                        JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                    }                    
+                    cellaszam++;
+                    
+                }
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();                
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
+                workbook.saveToFile(menteshelye, ExcelVersion.Version2016);            
+                FileInputStream fileStream = new FileInputStream(menteshelye);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(menteshelye);
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+                Foablak.frame.setCursor(null);
+            }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                DataTable datatable = new DataTable();
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Szériaszámok dátummal.xlsx";
+
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                  
+                  
+                  ResultSet rs = stmt.executeQuery("select majdnem.*,\n"
+                          + "nyilatkozatok.CF$_cmrt as CMRT,\n"
+                          + "nyilatkozatok.CF$_reach as Reach,\n"
+                          + "nyilatkozatok.CF$_Rohs as Rohs\n"
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\n"
+                          + "(select alap.*,\n"
+                          + "raktar.SECOND_COMMODITY as Projekt\n"
+                          + "from ifsapp.INVENTORY_PART raktar,\n"
+                          + "(select belso.Cikkszam, \n"
+                          + "belso.Megnevezes,\n"
+                          + "belso.Szallito,\n"
+                          + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\n"
+                          + "belso.Gyartoi_cikkszam\n"
+                          + "from ifsapp.PART_MANUFACTURER kulso,\n"
+                          + "(select PART_NO as Cikkszam,\n"
+                          + "DESCRIPTION as Megnevezes, \n"
+                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam\n"
+                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\n"
+                          + "where\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) and DATE_ENTERED > to_date( '20220801', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
+                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\n"
+                          + "DESCRIPTION, \n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \n"
+                          + "PROJECT_ID, \n"
+                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)) belso\n"
+                          + "Where 3 = 3\n"
+                          + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\n"
+                          + "and belso.Cikkszam = kulso.part_no) alap\n"
+                          + "where raktar.part_no = alap.cikkszam) majdnem\n"
+                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no");
+                  
+                  Workbook workbook = new Workbook();
+                  JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                  jdbcAdapter.fillDataTable(datatable, rs);
+       
+                  //Get the first worksheet
+                  Worksheet sheet = workbook.getWorksheets().get(0);
+                  sheet.insertDataTable(datatable, true, 1, 1);
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet.getAllocatedRange().autoFitColumns();
+                  sheet.getAllocatedRange().autoFitRows();
+                  
+                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  rs.close();
+                  stmt.close();
+                  con.close();
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook2.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook2.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                  con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            }  
+                               
          }
     }
 }

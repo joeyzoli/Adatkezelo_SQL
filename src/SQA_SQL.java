@@ -28,7 +28,7 @@ public class SQA_SQL {
             Statement stmt = con.createStatement();              
             ResultSet rs = stmt.executeQuery("select PART_NO , DESCRIPTION \r\n"
                     + "from ifsapp.INVENTORY_PART\r\n"
-                    + "where 3 = 3");
+                    + "where 3 = 3 order by part_no asc");
             ArrayList<String> cikkszamok = new ArrayList<String>();
             while(rs.next())
             {

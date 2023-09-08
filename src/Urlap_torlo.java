@@ -42,7 +42,7 @@ public class Urlap_torlo
     }
 	
 	public void urlaptorles_retour(JTextField datum, JTextField beerkezett, JTextField elteres, JTextField rma, JTextField megjegyzes, JTextField hovamezo, JTextField hovadatum, JTextField hovafelelos, JTextField tesztdatum,
-	        JTextField tesztfelelos, JTextField vegdatum, JTextField vegfelelos, JTextField rakdatum, JTextField rakdb, JTextField selejt)
+	        JTextField tesztfelelos, JTextField vegdatum, JTextField vegfelelos, JTextField rakdatum, JTextField rakdb, JTextField selejt, JTextField vevoirma, JTextField hibaleiras)
     {
         datum.setText("");
         beerkezett.setText("");
@@ -59,6 +59,8 @@ public class Urlap_torlo
         rakdatum.setText("");
         rakdb.setText("");
         selejt.setText("");
+        vevoirma.setText("");
+        hibaleiras.setText("");
     }
 
 }

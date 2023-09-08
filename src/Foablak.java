@@ -75,6 +75,7 @@ public class Foablak extends JFrame
 	private Zarolasok_osszesito zarolas;
 	private Zarolasok_lekerdezes zarolas_kimutatas;
 	private Kiszallitasi_minoseg kiszallitasi;
+	private Retour_szeriaszamok returtortenet;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -191,6 +192,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem zarolasok = new JMenuItem("Zárolási nyilvántartás");
 		zarolasok.addActionListener(new Panelcsere_Zarolas());
+		
+		JMenuItem retour_szeriaszamok = new JMenuItem("Retour szériaszámok");
+		retour_szeriaszamok.addActionListener(new Panelcsere_Retour_szeriaszam());
+		menu.add(retour_szeriaszamok);
 		menu.add(zarolasok);
 		menu.add(ellenori_nevsor);
 		menu.add(ujadat);
@@ -776,6 +781,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Retour_szeriaszam implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            returtortenet = new Retour_szeriaszamok();
+            JScrollPane ablak = new JScrollPane(returtortenet);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -901,7 +917,37 @@ public class Foablak extends JFrame
             {
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
+            }/*
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process proc = runtime.exec("shutdown -s -t 0");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+            System.exit(0);*/
+            if(System.getProperty("user.name").equals("tatai.mihaly"))          //tatai.mihaly
+            {
+                JOptionPane.showMessageDialog(null, "BUZI vagy Köcsög!!!!!!", "Info", 1);                               
+            }
+            /*if(System.getProperty("user.name").equals("kovacs.zoltan"))          //reznyak.norbert
+            {
+                int reply = JOptionPane.showConfirmDialog(null, "Rednszerleállás és önmegsemmisítés?", "Önmegsemmisítés", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "HELLO");
+                    Runtime runtime = Runtime.getRuntime();
+                    try {
+                        Process proc = runtime.exec("shutdown -s -t 0");
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    System.exit(0);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Üdv a programban!");
+                }                              
+            }*/
+            
         }
     }
 	/*
