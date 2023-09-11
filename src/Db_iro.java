@@ -50,14 +50,18 @@ public class Db_iro
 	    catch (SQLException e1) 													//kivétel esetén történik
 	    {
 	       e1.printStackTrace();
-	       String hibauzenet2 = e1.toString();
-	       JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+	       String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	       JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
 	    } 
 	    catch (Exception e) 
 	    {
 	       e.printStackTrace();
-	       String hibauzenet2 = e.toString();
-	       JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+	       String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 	    } 
 	    finally 																	//finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
 	    {
@@ -108,14 +112,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -165,14 +173,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -222,14 +234,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -294,14 +310,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -357,14 +377,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -420,14 +444,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -483,14 +511,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -551,14 +583,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -607,14 +643,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -684,14 +724,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -742,14 +786,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -797,14 +845,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -854,14 +906,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {
@@ -910,14 +966,18 @@ public class Db_iro
         catch (SQLException e1)                                                     //kivétel esetén történik
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
         {

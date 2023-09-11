@@ -604,8 +604,10 @@ public class Zarolasok_bevitel extends JPanel {
         { 
             System.out.println(e1);
             e1.printStackTrace();
-            String hibauzenet2 = e1.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
         return cikkbox;  
                            
@@ -650,14 +652,18 @@ public class Zarolasok_bevitel extends JPanel {
         catch (SQLException e1) 
         {
            e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
-           String hibauzenet2 = e.toString();
-           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         } 
         finally 
         {
@@ -675,8 +681,10 @@ public class Zarolasok_bevitel extends JPanel {
            catch (SQLException se) 
            {
               se.printStackTrace();
-              String hibauzenet2 = se.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+              String hibauzenet = se.toString();
+              Email hibakuldes = new Email();
+              hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+              JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
            }  
         }
         return ellenorok;
@@ -700,8 +708,10 @@ public class Zarolasok_bevitel extends JPanel {
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }
@@ -720,8 +730,10 @@ public class Zarolasok_bevitel extends JPanel {
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                    //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }
@@ -792,8 +804,10 @@ public class Zarolasok_bevitel extends JPanel {
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
             Foablak.frame.setCursor(null);                                                                                         //egér mutató alaphelyzetbe állítása
            
@@ -870,13 +884,17 @@ public class Zarolasok_bevitel extends JPanel {
             {
                e1.printStackTrace();
                String hibauzenet = e1.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             } 
             catch (Exception e1) 
             {
                e1.printStackTrace();
                String hibauzenet = e1.toString();
-               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);;
             } finally 
             {
                try 
@@ -901,6 +919,8 @@ public class Zarolasok_bevitel extends JPanel {
         {              
             e1.printStackTrace();
             String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }    
     }

@@ -219,8 +219,10 @@ public class Gyartasi_adatok extends JPanel
 			catch(Exception ex2)
 			 {
 				ex2.printStackTrace(); 
-				String hibauzenet2 = ex2.toString();
-				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+				String hibauzenet = ex2.toString();
+	            Email hibakuldes = new Email();
+	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+				JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 			 }
 		 }
 	}
@@ -258,8 +260,10 @@ public class Gyartasi_adatok extends JPanel
 				catch(Exception ex2)
 				 { 
 					ex2.printStackTrace(); 
-					String hibauzenet2 = ex2.toString();
-					JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+					String hibauzenet = ex2.toString();
+		            Email hibakuldes = new Email();
+		            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+					JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 				 }
 		    }
 		 

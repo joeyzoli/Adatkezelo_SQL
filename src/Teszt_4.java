@@ -171,6 +171,8 @@ public class Teszt_4 extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -201,6 +203,8 @@ public class Teszt_4 extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -219,6 +223,8 @@ public class Teszt_4 extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -237,6 +243,8 @@ public class Teszt_4 extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -265,6 +273,8 @@ public class Teszt_4 extends JPanel
         {              
             e1.printStackTrace();
             String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
     }
@@ -287,6 +297,8 @@ public class Teszt_4 extends JPanel
         {              
             e1.printStackTrace();
             String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
     }

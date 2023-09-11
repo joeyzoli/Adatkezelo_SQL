@@ -200,8 +200,10 @@ public class Uj_alapadat extends JPanel
 				catch (IOException e1) 
 				{
 					e1.printStackTrace();
-		            String hibauzenet2 = e1.toString();
-					JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+					String hibauzenet = e1.toString();
+		            Email hibakuldes = new Email();
+		            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+		            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 				}
 		 }
 	}
@@ -223,8 +225,10 @@ public class Uj_alapadat extends JPanel
             catch (IOException e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }
@@ -245,8 +249,10 @@ public class Uj_alapadat extends JPanel
                 catch (IOException e1) 
                 {
                     e1.printStackTrace();
-                    String hibauzenet2 = e1.toString();
-                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
                 }
          }
     }
@@ -307,8 +313,10 @@ public class Uj_alapadat extends JPanel
                     e2.printStackTrace();
                 }
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }

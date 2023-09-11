@@ -48,6 +48,8 @@ public class Smelter_masolo extends JPanel {
         JLabel lblNewLabel_1 = new JLabel("Mappa megnyitása");
         lblNewLabel_1.setBounds(441, 196, 118, 14);
         add(lblNewLabel_1);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
@@ -113,8 +115,8 @@ public class Smelter_masolo extends JPanel {
                                            
                         String[] nev = excel.getName().split("\\.");
                         DataTable datatable = new DataTable();
-                        datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
-                        System.out.println(sheet.getLastRow());
+                        datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );         //sheet.getAllocatedRange()
+                        //System.out.println(sheet.getLastRow());
                         int cellaszam2 = 5;
                         for(int szamlalo3 = 1; szamlalo3 < datatable.getRows().size(); szamlalo3++)
                         {
@@ -166,7 +168,7 @@ public class Smelter_masolo extends JPanel {
                     {    
                         workbook2.removeSheetAt(i); 
                     }      
-                    FileOutputStream output = new FileOutputStream(menteshelye);
+                    FileOutputStream output = new FileOutputStream("");               //menteshelye
                     workbook2.write(output);
                     output.close();
                 }
@@ -175,9 +177,12 @@ public class Smelter_masolo extends JPanel {
             } 
             catch (Exception e1) 
             {
+                
                 System.out.println(excel.getName());
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, excel.getName()+"  " +hibauzenet, "Hiba üzenet", 2);
             }
          }

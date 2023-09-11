@@ -929,8 +929,14 @@ public class Foablak extends JFrame
             if(System.getProperty("user.name").equals("tatai.mihaly"))          //tatai.mihaly
             {
                 JOptionPane.showMessageDialog(null, "BUZI vagy Köcsög!!!!!!", "Info", 1);                               
-            }
-            /*if(System.getProperty("user.name").equals("kovacs.zoltan"))          //reznyak.norbert
+            }           
+            /*if(System.getProperty("user.name").equals("csader.zsolt"))          //tatai.mihaly
+            {
+                JOptionPane.showMessageDialog(null, "A számítógép megsemmisíti Önmagát az OK gomb megnyomása után", "Info", 1);                               
+            }*/
+            JOptionPane.showMessageDialog(null, "Üdvözöllek "+System.getProperty("user.name")+ "\n Legyen szép napod!", "Üdvözlő üzenet", 1);
+            System.out.println(ProcessHandle.current().info().user().get());
+            /*if(System.getProperty("user.name").equals("reznyak.norbert"))          //reznyak.norbert
             {
                 int reply = JOptionPane.showConfirmDialog(null, "Rednszerleállás és önmegsemmisítés?", "Önmegsemmisítés", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {

@@ -52,8 +52,10 @@ public class ComboBox
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-			String hibauzenet2 = ex.toString();
-			JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+			String hibauzenet = ex.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+			JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 		}
 	}
 	
@@ -76,8 +78,10 @@ public class ComboBox
         catch(Exception ex)
         {
             ex.printStackTrace();
-            String hibauzenet2 = ex.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            String hibauzenet = ex.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
     }
 	

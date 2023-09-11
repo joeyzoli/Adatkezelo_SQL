@@ -325,6 +325,9 @@ public class Beszallitoi_PPM extends JPanel
             catch(Exception e1)
             { 
                 System.out.println(e1);
+                String hibauzenet = e.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             }                                 
        }
     }
@@ -558,6 +561,9 @@ public class Beszallitoi_PPM extends JPanel
         catch(Exception e1)
         { 
             System.out.println(e1);
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
         }  
          }    
     }

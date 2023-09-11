@@ -29,7 +29,6 @@ import java.awt.Font;
 public class Kiszallitasi_minoseg extends JPanel {
     
     private String[] honapok = {"Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"};
-    private JComboBox<String> honap_box;
     private JComboBox<String> honaptol_box;
     private JComboBox<String> honapig_box;
     private JComboBox<String> projekt_box ;
@@ -44,10 +43,6 @@ public class Kiszallitasi_minoseg extends JPanel {
     public Kiszallitasi_minoseg() {
         setLayout(null);
         
-        honap_box = new JComboBox<String>(honapok);                            //honapok
-        honap_box.setBounds(418, 91, 275, 22);
-        add(honap_box);
-        
         JButton start_gomb = new JButton("Start");
         start_gomb.addActionListener(new Excelcsinal());
         start_gomb.setBounds(507, 143, 89, 23);
@@ -58,15 +53,15 @@ public class Kiszallitasi_minoseg extends JPanel {
         lblNewLabel.setBounds(469, 37, 224, 14);
         add(lblNewLabel);
         
-        honaptol_box = new JComboBox<String>(honapok);
+        honaptol_box = new JComboBox<String>(honapok);                         //honapok
         honaptol_box.setBounds(418, 214, 275, 22);
         add(honaptol_box);
         
-        honapig_box = new JComboBox<String>(honapok);
+        honapig_box = new JComboBox<String>(honapok);                          //honapok
         honapig_box.setBounds(418, 260, 275, 22);
         add(honapig_box);
         
-        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));
+        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                          //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
         projekt_box.setBounds(418, 318, 275, 22);
         add(projekt_box);
         
@@ -74,6 +69,12 @@ public class Kiszallitasi_minoseg extends JPanel {
         start2_gomb.addActionListener(new Projekt());
         start2_gomb.setBounds(507, 373, 89, 23);
         add(start2_gomb);
+        
+        JLabel lblNewLabel_1 = new JLabel("Éves összesítő készítése");
+        lblNewLabel_1.setBounds(496, 118, 150, 14);
+        add(lblNewLabel_1);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
@@ -84,44 +85,7 @@ public class Kiszallitasi_minoseg extends JPanel {
             try
             {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                int honap = 0;
-                if(honap_box.getSelectedItem().equals("Január")){              
-                    honap = 4;
-                }
-                else if(honap_box.getSelectedItem().equals("Február")){              
-                    honap = 5;
-                }
-                else if(honap_box.getSelectedItem().equals("Március")){              
-                    honap = 6;
-                }
-                else if(honap_box.getSelectedItem().equals("Április")){              
-                    honap = 7;
-                }
-                else if(honap_box.getSelectedItem().equals("Május")){              
-                    honap = 8;
-                }
-                else if(honap_box.getSelectedItem().equals("Június")){              
-                    honap = 9;
-                }
-                else if(honap_box.getSelectedItem().equals("Július")){              
-                    honap = 10;
-                }
-                else if(honap_box.getSelectedItem().equals("Augusztus")){              
-                    honap = 11;
-                }
-                else if(honap_box.getSelectedItem().equals("Szeptember")){              
-                    honap = 12;
-                }
-                else if(honap_box.getSelectedItem().equals("Október")){              
-                    honap = 13;
-                }
-                else if(honap_box.getSelectedItem().equals("November")){              
-                    honap = 14;
-                }
-                else if(honap_box.getSelectedItem().equals("December")){              
-                    honap = 15;
-                }
-                
+                int honap = 16;                              
                 File excel = new File(hely);
                 Workbook workbook = new Workbook();             
                 workbook.loadFromFile(excel.getAbsolutePath());
@@ -138,38 +102,32 @@ public class Kiszallitasi_minoseg extends JPanel {
                 Worksheet sheet2 = workbook2.getWorksheets().get(0);
                 //int sor = 2;
                 int oszlop = 2;
-                honap = 16;
                 sheet2.getRange().get("A2").setText("Kiszállított db");
                 sheet2.getRange().get("A3").setText("Kiesett db");
                 sheet2.getRange().get("A4").setText("PPM");
-                for(int szamlalo = 4; szamlalo < 102;szamlalo++)
+                sheet2.getRange().get("A5").setText("Cél");
+                for(int szamlalo = 6; szamlalo < 102;szamlalo+=3)
                 {
-                    CellRange cell = sheet.getCellRange(szamlalo, honap);        //honap
-                    //cell.convertToNumber();
-                    //System.out.println(cell.getValue());
-                    //System.out.println(cell.getCount());
+                    CellRange cell = sheet.getCellRange(szamlalo, honap);        //honap                  
                     if(cell.hasFormula()) {
                         if(String.valueOf(cell.getFormulaValue()).equals("")) {
                             
                         }
                         else {
                             if(Float.parseFloat( String.valueOf(cell.getFormulaValue())) > 0) {
-                                //sheet.getRange().get("B"+szamlalo +":B"+(szamlalo+3)).unMerge();
-                                //System.out.println(sheet.getRange().get("B"+szamlalo).getText().toString());
-                                //System.out.println(sheet.getRange().get("B"+(szamlalo-2)).getText().toString());
+                                
                                 sheet2.getRange().get(1, oszlop).setText(sheet.getRange().get("B"+(szamlalo-2)).getText().toString());
-                                //System.out.println(sheet.getRange().get("B"+(szamlalo+2)).getText().toString());
                                 CellRange cell2 = sheet.getCellRange(szamlalo-2, honap);
                                 cell2.convertToNumber();
-                                //System.out.println(cell2.getValue());
-                                sheet2.getCellRange(2, oszlop).setValue(cell2.getValue());
+                                sheet2.getCellRange(2, oszlop).setValue(cell2.getFormulaValue().toString());
                                 cell2 = sheet.getCellRange(szamlalo-1, honap);
                                 cell2.convertToNumber();
-                                //System.out.println(cell2.getValue());
-                                sheet2.getRange().get(3, oszlop).setValue(cell2.getValue());
-                                //System.out.println(cell.getFormulaValue().toString());
+                                sheet2.getRange().get(3, oszlop).setValue(cell2.getFormulaValue().toString());
                                 String[] ppm = cell.getFormulaValue().toString().split("\\.");
-                                sheet2.getRange().get(4, oszlop).setValue(ppm[0]);
+                                sheet2.getRange().get(4, oszlop).setValue(ppm[0]);                                
+                                cell2 = sheet.getCellRange(szamlalo-2, 18);
+                                System.out.println(cell2.getValue().toString());
+                                sheet2.getRange().get(5, oszlop).setValue(cell2.getValue().toString()); 
                                 oszlop++;
                             }
                         }                    
@@ -178,9 +136,8 @@ public class Kiszallitasi_minoseg extends JPanel {
                 
               //Add a chart
                 Chart chart = sheet2.getCharts().add();
-
                 //Set region of chart data
-                chart.setDataRange(sheet2.getCellRange("A1:G4"));
+                chart.setDataRange(sheet2.getCellRange(1,1,5,sheet2.getLastColumn()));
                 chart.setSeriesDataFromRange(true);
 
                 //Set position of chart
@@ -217,9 +174,13 @@ public class Kiszallitasi_minoseg extends JPanel {
                 
                 ChartSerie cs6 = (ChartSerie)chart.getSeries().get(2);
                 cs6.setSerieType(ExcelChartType.LineMarkers);
+                
+                ChartSerie cs7 = (ChartSerie)chart.getSeries().get(3);
+                cs7.setSerieType(ExcelChartType.LineMarkers);
          
                 //Add a secondary Y axis to the chart
                 cs6.setUsePrimaryAxis(false);
+                cs7.setUsePrimaryAxis(false);
 
                 //Chart legend
                 chart.getLegend().setPosition(LegendPositionType.Top);
@@ -246,8 +207,10 @@ public class Kiszallitasi_minoseg extends JPanel {
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }
@@ -362,36 +325,21 @@ public class Kiszallitasi_minoseg extends JPanel {
                     {
                         for(int szamlalo = honaptol; szamlalo < (honapig+1);szamlalo++)        //(honapig+1)
                         {
-                            CellRange cell = sheet.getCellRange(szamlalo2+2, honaptol);
-                            //cell.convertToNumber();
-                            //System.out.println(cell.getValue());
-                            //System.out.println(cell.getCount());    datatable.getRows().get(szamlalo2).getString(1)
+                            CellRange cell = sheet.getCellRange(szamlalo2+2, honaptol);                            
                             if(String.valueOf(cell.getFormulaValue()).equals("")) {
                                 sheet2.getRange().get(1, oszlop).setText(sheet.getRange().get(3,honaptol).getText().toString());
                                 sheet2.getCellRange(2, oszlop).setValue("0");
                                 sheet2.getRange().get(3, oszlop).setValue("0");
                                 sheet2.getRange().get(4, oszlop).setValue("0");
                             }
-                            else {
-                                //System.out.println("Lefutott");
-                                //sheet.getRange().get("B"+szamlalo +":B"+(szamlalo+3)).unMerge();
-                                //System.out.println(sheet.getRange().get("B"+szamlalo).getText().toString());
-                                //System.out.println(sheet.getRange().get("B"+(szamlalo-2)).getText().toString());
+                            else {                                
                                 sheet2.getRange().get(1, oszlop).setText(sheet.getRange().get(3,honaptol).getText().toString());
-                                //System.out.println(sheet.getRange().get("B"+(szamlalo+2)).getText().toString());
                                 CellRange cell2 = sheet.getCellRange(szamlalo2, honaptol);
                                 cell2.convertToNumber();
-                                //System.out.println(cell2.getValue());
-                                //sheet2.getCellRange(2, oszlop).setValue(cell2.getValue());
                                 sheet2.getCellRange(2, oszlop).setNumberValue(sheet.getCellRange(szamlalo2, honaptol).getNumberValue());
-                                //sheet2.getCellRange(2, oszlop).setValue(datatable.getRows().get(szamlalo2).getString(honaptol));
                                 cell2 = sheet.getCellRange(szamlalo2+1, honaptol);
                                 cell2.convertToNumber();
-                                //System.out.println(cell2.getValue());
-                                //sheet2.getRange().get(3, oszlop).setValue(cell2.getValue());
                                 sheet2.getRange().get(3, oszlop).setNumberValue(sheet.getCellRange(szamlalo2+1, honaptol).getNumberValue());
-                                //sheet2.getRange().get(3, oszlop).setValue(datatable.getRows().get(szamlalo2+1).getString(honaptol));
-                                //System.out.println(cell.getFormulaValue().toString());
                                 if(cell.getFormulaValue() != null)
                                 {
                                     String[] ppm = cell.getFormulaValue().toString().split("\\.");
@@ -404,7 +352,6 @@ public class Kiszallitasi_minoseg extends JPanel {
                                 honaptol++;   
                             }                                      
                         }
-                        //System.out.println("Kilépett");
                         break;
                     }
                 }
@@ -413,7 +360,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                 Chart chart = sheet2.getCharts().add();
 
                 //Set region of chart data
-                chart.setDataRange(sheet2.getCellRange("A1:M4"));
+                chart.setDataRange(sheet2.getCellRange(1,1,4,sheet2.getLastColumn()));
                 chart.setSeriesDataFromRange(true);
 
                 //Set position of chart
@@ -479,8 +426,10 @@ public class Kiszallitasi_minoseg extends JPanel {
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }

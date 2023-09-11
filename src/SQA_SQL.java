@@ -42,8 +42,10 @@ public class SQA_SQL {
         { 
             System.out.println(e1);
             e1.printStackTrace();
-            String hibauzenet2 = e1.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
         return cikkbox;  
                            
@@ -72,8 +74,10 @@ public class SQA_SQL {
         { 
             System.out.println(e1);
             e1.printStackTrace();
-            String hibauzenet2 = e1.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }
         return cikkbox;  
                            
@@ -106,14 +110,18 @@ public class SQA_SQL {
         catch (SQLException e1) 
         {
             e1.printStackTrace();
-            String hibauzenet2 = e1.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
         } finally 
         {
            try 
@@ -130,8 +138,10 @@ public class SQA_SQL {
            catch (SQLException se) 
            {
                se.printStackTrace();
-               String hibauzenet2 = se.toString();
-               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
            }  
         }
         JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
@@ -208,10 +218,18 @@ public class SQA_SQL {
         catch (SQLException e1) 
         {
            e1.printStackTrace();
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally 
         {

@@ -114,8 +114,10 @@ public class Torlo extends JPanel
 			catch(Exception ex2)
 			 {
 				ex2.printStackTrace();
-				String hibauzenet2 = ex2.toString();
-				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+				String hibauzenet = ex2.toString();
+	            Email hibakuldes = new Email();
+	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 			 }
 			
 		 }
@@ -138,8 +140,10 @@ public class Torlo extends JPanel
 			catch(Exception ex2)
 			 {
 				ex2.printStackTrace();
-				String hibauzenet2 = ex2.toString();
-				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+				String hibauzenet = ex2.toString();
+	            Email hibakuldes = new Email();
+	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 			 }
 			
 		 }
@@ -157,8 +161,10 @@ public class Torlo extends JPanel
 			catch(Exception ex2)
 			 {
 				ex2.printStackTrace();
-				String hibauzenet2 = ex2.toString();
-				JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+				String hibauzenet = ex2.toString();
+	            Email hibakuldes = new Email();
+	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 			 }
 			
 		 }
@@ -279,8 +285,10 @@ public class Torlo extends JPanel
             catch(Exception ex2)
              {
                 ex2.printStackTrace();
-                String hibauzenet2 = ex2.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = ex2.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
              }
             
          }
@@ -359,14 +367,18 @@ public class Torlo extends JPanel
             catch (SQLException e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             } 
             catch (Exception e1) 
             {
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }
@@ -443,10 +455,11 @@ public class Torlo extends JPanel
                   }           
             catch(Exception e1)
             { 
-                System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -625,10 +638,11 @@ public class Torlo extends JPanel
             }           
             catch(Exception e1)
             { 
-                System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                           //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -665,10 +679,11 @@ public class Torlo extends JPanel
             }           
             catch(Exception e1)
             { 
-                System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                       //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -810,8 +825,10 @@ public class Torlo extends JPanel
             { 
                 System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -880,8 +897,10 @@ public class Torlo extends JPanel
             { 
                 System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -977,8 +996,10 @@ public class Torlo extends JPanel
             { 
                 System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                              //kiírja a hibaüzenetet
             }                                         
          }
     }
@@ -1072,8 +1093,10 @@ public class Torlo extends JPanel
             { 
                 System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet2 = e1.toString();
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
             }  
                                
          }

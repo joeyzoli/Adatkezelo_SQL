@@ -296,7 +296,8 @@ public class Retour extends JPanel
         ButtonGroup csoport = new ButtonGroup();
         csoport.add(vevoi_gomb);
         csoport.add(veas_gomb);
-                
+        
+        setBackground(Foablak.hatter_szine);
         kivalasztott = new ArrayList<String>();
 
     }
@@ -332,6 +333,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -389,6 +392,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -407,6 +412,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -429,6 +436,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          
@@ -471,6 +480,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          
@@ -518,6 +529,8 @@ public class Retour extends JPanel
             {              
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }

@@ -34,14 +34,18 @@ public class Db_torlo
 	    catch (SQLException e1) 
 	    {
 	       e1.printStackTrace();
-	       String hibauzenet2 = e1.toString();
-	       JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+	       String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 	    } 
 	    catch (Exception e) 
 	    {
 	       e.printStackTrace();
-	       String hibauzenet2 = e.toString();
-	       JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+	       String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+	       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 	    } 
 	    finally 
 	    {
@@ -59,8 +63,10 @@ public class Db_torlo
 	       catch (SQLException se) 
 	       {
 	          se.printStackTrace();
-	          String hibauzenet2 = se.toString();
-		      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+	          String hibauzenet = se.toString();
+	           Email hibakuldes = new Email();
+	           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+		      JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
 	       }  
 	    }
 	    JOptionPane.showMessageDialog(null, "Adatbázis törlése kész", "Info", 1);
@@ -97,10 +103,16 @@ public class Db_torlo
 	    catch (SQLException e1) 
 	    {
 	       e1.printStackTrace();
+	       String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
 	    } 
 	    catch (Exception e) 
 	    {
 	       e.printStackTrace();
+	       String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
 	    } finally 
 	    {
 	       try 
