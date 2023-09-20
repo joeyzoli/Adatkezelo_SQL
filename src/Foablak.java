@@ -76,6 +76,7 @@ public class Foablak extends JFrame
 	private Zarolasok_lekerdezes zarolas_kimutatas;
 	private Kiszallitasi_minoseg kiszallitasi;
 	private Retour_szeriaszamok returtortenet;
+	private Cmrt_adatok cmrt;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -321,6 +322,10 @@ public class Foablak extends JFrame
 		JMenuItem kiszallitasi_minoseg = new JMenuItem("Kiszállítási minőség");
 		kiszallitasi_minoseg.addActionListener(new Panelcsere_Kiszallitasi_minoseg());
 		egyeb.add(kiszallitasi_minoseg);
+		
+		JMenuItem Reach_adatok = new JMenuItem("CMRT adatok");
+		Reach_adatok.addActionListener(new Panelcsere_CMRT());
+		egyeb.add(Reach_adatok);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -792,6 +797,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_CMRT implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            cmrt = new Cmrt_adatok();
+            JScrollPane ablak = new JScrollPane(cmrt);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -937,7 +953,7 @@ public class Foablak extends JFrame
             {
                 JOptionPane.showMessageDialog(null, "A számítógép megsemmisíti Önmagát az OK gomb megnyomása után", "Info", 1);                               
             }*/
-            JOptionPane.showMessageDialog(null, "Üdvözöllek "+System.getProperty("user.name")+ "\n Legyen szép napod!", "Üdvözlő üzenet", 1);
+            //JOptionPane.showMessageDialog(null, "Üdvözöllek "+System.getProperty("user.name")+ "\n Legyen szép napod!", "Üdvözlő üzenet", 1);
             //System.out.println(ProcessHandle.current().info().user().get());            //VEAS\kovacs.zoltan
             /*if(System.getProperty("user.name").equals("reznyak.norbert"))          //reznyak.norbert
             {
