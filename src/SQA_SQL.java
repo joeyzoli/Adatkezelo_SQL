@@ -144,7 +144,7 @@ public class SQA_SQL {
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
            }  
         }
-        JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
     
     public void sqa_email()
@@ -168,7 +168,7 @@ public class SQA_SQL {
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select id, inditotta,Statusz, Statusz_ido, DATEDIFF(now(), Statusz_ido) as 'Kulonbseg'\r\n"
-                + "from qualitydb.SQA_reklamaciok\r\n"
+                + ", Ertesitve, Lezaras_ido from qualitydb.SQA_reklamaciok\r\n"
                 + "where 3 = 3";                                        
         stmt.execute(sql);      
         resultSet = stmt.getResultSet();
@@ -179,7 +179,13 @@ public class SQA_SQL {
             {
                 if(resultSet.getInt(5) >=7)
                 {
-                    cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                    if(resultSet.getString(6).equals("Nem"))
+                    {
+                        if(resultSet.getString(7) == null)
+                        {
+                            cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                        }
+                    }                   
                 }
             }
         }
@@ -205,6 +211,8 @@ public class SQA_SQL {
                 else
                 {
                     emailkuldes.sqa_emailkuldes(adatok[1],emailcim,emailcim,adatok[0],adatok[3],adatok[2]);
+                    String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
+                    stmt.executeUpdate(modosit);
                 }
             }
         }

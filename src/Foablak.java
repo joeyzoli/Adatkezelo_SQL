@@ -909,12 +909,15 @@ public class Foablak extends JFrame
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             if(nap == 2)
             {
-                //SQA_SQL sqa = new SQA_SQL();
-                //sqa.sqa_email();
+                SQA_SQL sqa = new SQA_SQL();
+                sqa.sqa_email();
                 System.out.println("Lefutott az SQA email");
             }
             else
             {
+                SQA_SQL sqa = new SQA_SQL();
+                String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Nem' where Lezaras_ido is null";
+                sqa.mindenes(modosit);
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }/*
@@ -935,7 +938,7 @@ public class Foablak extends JFrame
                 JOptionPane.showMessageDialog(null, "A számítógép megsemmisíti Önmagát az OK gomb megnyomása után", "Info", 1);                               
             }*/
             JOptionPane.showMessageDialog(null, "Üdvözöllek "+System.getProperty("user.name")+ "\n Legyen szép napod!", "Üdvözlő üzenet", 1);
-            System.out.println(ProcessHandle.current().info().user().get());
+            //System.out.println(ProcessHandle.current().info().user().get());            //VEAS\kovacs.zoltan
             /*if(System.getProperty("user.name").equals("reznyak.norbert"))          //reznyak.norbert
             {
                 int reply = JOptionPane.showConfirmDialog(null, "Rednszerleállás és önmegsemmisítés?", "Önmegsemmisítés", JOptionPane.YES_NO_OPTION);
