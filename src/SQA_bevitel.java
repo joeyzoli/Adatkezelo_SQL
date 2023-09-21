@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
+
 import javax.swing.JCheckBox;
 
 public class SQA_bevitel extends JPanel {
@@ -459,6 +460,15 @@ public class SQA_bevitel extends JPanel {
         gorgeto.setBounds(737, 49, 372, 68);
         add(gorgeto);
         setBackground(Foablak.hatter_szine);
+        
+        JLabel lblNewLabel_38 = new JLabel("Excel export");
+        lblNewLabel_38.setBounds(536, 790, 86, 14);
+        add(lblNewLabel_38);
+        
+        JButton excel_gomb = new JButton("Excel");
+        excel_gomb.addActionListener(new Excel());
+        excel_gomb.setBounds(640, 786, 89, 23);
+        add(excel_gomb);
 
     }
     
@@ -844,6 +854,15 @@ public class SQA_bevitel extends JPanel {
         hozzaad_gomb.setBounds(736, 128, 89, 23);
         add(hozzaad_gomb);
         
+        JLabel lblNewLabel_38 = new JLabel("Excel export");
+        lblNewLabel_38.setBounds(536, 790, 86, 14);
+        add(lblNewLabel_38);
+        
+        JButton excel_gomb = new JButton("Excel");
+        excel_gomb.addActionListener(new Excel());
+        excel_gomb.setBounds(640, 786, 89, 23);
+        add(excel_gomb);
+        
         visszatolt(id);
 
     }
@@ -902,7 +921,7 @@ public class SQA_bevitel extends JPanel {
                 sql = "select inventory_value from ifsapp.INVENTORY_PART_UNIT_COST_SUM\r\n"
                         + "where part_no =  '"+ cikk[0] +"'";
                 String[] egysegar = lekerdezes.beszallito(sql).split("\\.");
-                egysegar_mezo.setText(egysegar[0]);
+                egysegar_mezo.setText(egysegar_mezo.getText()+";"+ egysegar[0]);
                 String kontaktok = "";
                 gyarto_mezo.setForeground(Color.black);
                 beszallito_mezo.setForeground(Color.black);
@@ -1575,5 +1594,28 @@ public class SQA_bevitel extends JPanel {
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }    
-    }    
+    }
+    
+    class Excel implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                SQA_SQL lekerdez = new SQA_SQL();
+                String sql = "select * from qualitydb.SQA_reklamaciok where 3=3 and ID = '"+ id_mezo.getText() +"'";
+                lekerdez.minden_excel(sql);
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
 }

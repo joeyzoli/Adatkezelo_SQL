@@ -65,6 +65,15 @@ public class SQA_osszesito extends JPanel {
         ujreki_gomb.setBounds(643, 570, 89, 23);
         add(ujreki_gomb);
         setBackground(Foablak.hatter_szine);
+        
+        JButton excel_gomb = new JButton("excel");
+        excel_gomb.addActionListener(new Excel());
+        excel_gomb.setBounds(643, 618, 89, 23);
+        add(excel_gomb);
+        
+        JLabel lblNewLabel_3 = new JLabel("Excel export");
+        lblNewLabel_3.setBounds(431, 622, 79, 14);
+        add(lblNewLabel_3);
         adatok();
 
     }
@@ -189,6 +198,29 @@ public class SQA_osszesito extends JPanel {
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                              //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Excel implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                SQA_SQL lekerdez = new SQA_SQL();
+                String sql = "select * from qualitydb.SQA_reklamaciok where 3=3";
+                lekerdez.minden_excel(sql);
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }

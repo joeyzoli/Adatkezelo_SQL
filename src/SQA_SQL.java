@@ -1,13 +1,21 @@
 import java.awt.Cursor;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
@@ -240,6 +248,99 @@ public class SQA_SQL {
            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+    
+    public void minden_excel(String SQL)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        DataTable datatable = new DataTable();
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        String sajat = SQL;
+        stmt.execute(sajat);
+        ResultSet resultSet = stmt.getResultSet();
+        
+        Workbook workbook = new Workbook();
+        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+        jdbcAdapter.fillDataTable(datatable, resultSet);
+
+        //Get the first worksheet
+        Worksheet sheet = workbook.getWorksheets().get(0);
+        sheet.insertDataTable(datatable, true, 1, 1);
+        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+        sheet.getAllocatedRange().autoFitColumns();
+        sheet.getAllocatedRange().autoFitRows();
+        
+        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        
+        /*JFileChooser mentes_helye = new JFileChooser();
+        mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        mentes_helye.showOpenDialog(mentes_helye);*/
+        File fajl = new File(System.getProperty("user.home") + "\\Desktop\\SQA Reklamáció-k.xlsx");                                                        //mentes_helye.getSelectedFile();
+        //System.out.println(fajl.getAbsolutePath());
+        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        {
+            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+            {    
+                workbook2.removeSheetAt(i); 
+            }      
+            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+            workbook2.write(output);
+            output.close();
+        }
+        JOptionPane.showMessageDialog(null, "Mentve az asztalra SQA Reklamáció-k.xlsx néven", "Info", 1);
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+        } finally 
         {
            try 
            {

@@ -25,6 +25,7 @@ import javax.swing.JButton;
 
 public class Cmrt_adatok extends JPanel {
     private JTextField termek_mezo;
+    private JTextField projekt_mezo;
 
     /**
      * Create the panel.
@@ -37,7 +38,7 @@ public class Cmrt_adatok extends JPanel {
         lblNewLabel.setBounds(519, 22, 348, 14);
         add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("Késztermék");
+        JLabel lblNewLabel_1 = new JLabel("Cikkszám");
         lblNewLabel_1.setBounds(455, 106, 81, 14);
         add(lblNewLabel_1);
         
@@ -48,8 +49,17 @@ public class Cmrt_adatok extends JPanel {
         
         JButton bom_gomb = new JButton("BOM keresés");
         bom_gomb.addActionListener(new Lekerdezes());
-        bom_gomb.setBounds(530, 156, 139, 23);
+        bom_gomb.setBounds(528, 190, 139, 23);
         add(bom_gomb);
+        
+        projekt_mezo = new JTextField();
+        projekt_mezo.setBounds(546, 134, 86, 20);
+        add(projekt_mezo);
+        projekt_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_2 = new JLabel("Projekt");
+        lblNewLabel_2.setBounds(455, 137, 65, 14);
+        add(lblNewLabel_2);
 
     }
     
@@ -70,50 +80,104 @@ public class Cmrt_adatok extends JPanel {
                                       
                   Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                   Statement stmt = con.createStatement();
-                  ResultSet rs = stmt.executeQuery("select bom.*,\r\n"
-                          + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
-                          + "nyilatkozatok.CF$_reach as Reach,\r\n"
-                          + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
-                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
-                          + "(select b.* from\r\n"
-                          + "(select \r\n"
-                          + "lbom.part_no,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.part_no) Part_Description,\r\n"
-                          + "lbom.eng_chg_level Revision,\r\n"
-                          + "ifsapp.part_revision_api.Get_Revision_Text(lbom.contract,lbom.part_no, lbom.eng_chg_level) Revision_text,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.part_no) PartProdCode,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.part_no) PartAccGroup,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.part_no) PartSecComm,\r\n"
-                          + "lbom.component_part_no,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.component_part_no) Comp_Description,\r\n"
-                          + "lbom.qty_per_assembly,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Unit_Meas(lbom.contract, lbom.component_part_no)Unit_Meas,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.component_part_no) CompPartProdCode,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.component_part_no) CompPartAccGroup,\r\n"
-                          + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.component_part_no) ComPartSecComm,\r\n"
-                          + "pm.manufacturer_no,\r\n"
-                          + "pm.name,\r\n"
-                          + "pm.preferred_manufacturer_db preferred_manufacturer,\r\n"
-                          + "pmp.manu_part_no,\r\n"
-                          + "pmp.preferred_manu_part_db preferred_manu_part,\r\n"
-                          + "ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no) Primary_Supplier,\r\n"
-                          + "ifsapp.SUPPLIER_API.Get_Vendor_Name(ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no)) SUPPLIER_NAME, --HT230206:Kovács Zoltán kérésére\r\n"
-                          + "case when ifsapp.part_revision_api.Get_Revision_By_Date(lbom.contract, lbom.part_no, SYSDATE) <> lbom.eng_chg_level then 'FALSE'\r\n"
-                          + "  else 'TRUE' end ACTUAL_ENG_CHG,\r\n"
-                          + "lbom.contract\r\n"
-                          + "from \r\n"
-                          + "ifsapp.v_lmaa_bom lbom, ifsapp.PART_MANUFACTURER pm, ifsapp.PART_MANU_PART_NO pmp\r\n"
-                          + "where 1 = 1\r\n"
-                          + "and lbom.component_PART_NO = pm.part_no (+)\r\n"
-                          + "and pm.part_no = pmp.part_no (+)\r\n"
-                          + "and pm.manufacturer_no = pmp.manufacturer_no (+)\r\n"
-                          + "and pmp.approved_db  (+) in ('1','2')\r\n"
-                          + ")b\r\n"
-                          + "where 1 = 1   \r\n"
-                          + "and b.part_no = '"+ termek_mezo.getText() +"' \r\n"
-                          + "and b.ACTUAL_ENG_CHG =  'TRUE') bom\r\n"
-                          + "where 3 = 3 \r\n"
-                          + "and bom.component_part_no = nyilatkozatok.part_no and bom.manu_part_no = nyilatkozatok.manu_part_no");
+                  ResultSet rs = null;
+                  if(projekt_mezo.getText().equals(""))
+                  {
+                      rs = stmt.executeQuery("select bom.*,\r\n"
+                              + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
+                              + "nyilatkozatok.CF$_reach as Reach,\r\n"
+                              + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                              + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
+                              + "(select b.* from\r\n"
+                              + "(select \r\n"
+                              + "lbom.part_no,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.part_no) Part_Description,\r\n"
+                              + "lbom.eng_chg_level Revision,\r\n"
+                              + "ifsapp.part_revision_api.Get_Revision_Text(lbom.contract,lbom.part_no, lbom.eng_chg_level) Revision_text,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.part_no) PartProdCode,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.part_no) PartAccGroup,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.part_no) PartSecComm,\r\n"
+                              + "lbom.component_part_no,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.component_part_no) Comp_Description,\r\n"
+                              + "lbom.qty_per_assembly,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Unit_Meas(lbom.contract, lbom.component_part_no)Unit_Meas,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.component_part_no) CompPartProdCode,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.component_part_no) CompPartAccGroup,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.component_part_no) ComPartSecComm,\r\n"
+                              + "pm.manufacturer_no,\r\n"
+                              + "pm.name,\r\n"
+                              + "pm.preferred_manufacturer_db preferred_manufacturer,\r\n"
+                              + "pmp.manu_part_no,\r\n"
+                              + "pmp.preferred_manu_part_db preferred_manu_part,\r\n"
+                              + "ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no) Primary_Supplier,\r\n"
+                              + "ifsapp.SUPPLIER_API.Get_Vendor_Name(ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no)) SUPPLIER_NAME, --HT230206:Kovács Zoltán kérésére\r\n"
+                              + "case when ifsapp.part_revision_api.Get_Revision_By_Date(lbom.contract, lbom.part_no, SYSDATE) <> lbom.eng_chg_level then 'FALSE'\r\n"
+                              + "  else 'TRUE' end ACTUAL_ENG_CHG,\r\n"
+                              + "lbom.contract\r\n"
+                              + "from \r\n"
+                              + "ifsapp.v_lmaa_bom lbom, ifsapp.PART_MANUFACTURER pm, ifsapp.PART_MANU_PART_NO pmp\r\n"
+                              + "where 1 = 1\r\n"
+                              + "and lbom.component_PART_NO = pm.part_no (+)\r\n"
+                              + "and pm.part_no = pmp.part_no (+)\r\n"
+                              + "and pm.manufacturer_no = pmp.manufacturer_no (+)\r\n"
+                              + "and pmp.approved_db  (+) in ('1','2')\r\n"
+                              + ")b\r\n"
+                              + "where 1 = 1   \r\n"
+                              + "and b.part_no = '"+ termek_mezo.getText() +"' \r\n"
+                              + "and b.ACTUAL_ENG_CHG =  'TRUE') bom\r\n"
+                              + "where 3 = 3 \r\n"
+                              + "and bom.component_part_no = nyilatkozatok.part_no and bom.manu_part_no = nyilatkozatok.manu_part_no and bom.MANUFACTURER_NO = nyilatkozatok.MANUFACTURER_NO");
+                  }
+                  if(termek_mezo.getText().equals(""))
+                  {
+                      rs = stmt.executeQuery("select bom.*,\r\n"
+                              + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
+                              + "nyilatkozatok.CF$_reach as Reach,\r\n"
+                              + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                              + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
+                              + "(select b.* from\r\n"
+                              + "(select \r\n"
+                              + "lbom.part_no,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.part_no) Part_Description,\r\n"
+                              + "lbom.eng_chg_level Revision,\r\n"
+                              + "ifsapp.part_revision_api.Get_Revision_Text(lbom.contract,lbom.part_no, lbom.eng_chg_level) Revision_text,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.part_no) PartProdCode,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.part_no) PartAccGroup,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.part_no) PartSecComm,\r\n"
+                              + "lbom.component_part_no,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Description(lbom.contract, lbom.component_part_no) Comp_Description,\r\n"
+                              + "lbom.qty_per_assembly,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Unit_Meas(lbom.contract, lbom.component_part_no)Unit_Meas,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Part_Product_Code(lbom.contract, lbom.component_part_no) CompPartProdCode,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Accounting_Group(lbom.contract, lbom.component_part_no) CompPartAccGroup,\r\n"
+                              + "ifsapp.inventory_part_api.Get_Second_Commodity(lbom.contract, lbom.component_part_no) ComPartSecComm,\r\n"
+                              + "pm.manufacturer_no,\r\n"
+                              + "pm.name,\r\n"
+                              + "pm.preferred_manufacturer_db preferred_manufacturer,\r\n"
+                              + "pmp.manu_part_no,\r\n"
+                              + "pmp.preferred_manu_part_db preferred_manu_part,\r\n"
+                              + "ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no) Primary_Supplier,\r\n"
+                              + "ifsapp.SUPPLIER_API.Get_Vendor_Name(ifsapp.PURCHASE_PART_SUPPLIER_API.Get_Primary_Supplier_No(lbom.contract, lbom.component_part_no)) SUPPLIER_NAME, --HT230206:Kovács Zoltán kérésére\r\n"
+                              + "case when ifsapp.part_revision_api.Get_Revision_By_Date(lbom.contract, lbom.part_no, SYSDATE) <> lbom.eng_chg_level then 'FALSE'\r\n"
+                              + "  else 'TRUE' end ACTUAL_ENG_CHG,\r\n"
+                              + "lbom.contract\r\n"
+                              + "from \r\n"
+                              + "ifsapp.v_lmaa_bom lbom, ifsapp.PART_MANUFACTURER pm, ifsapp.PART_MANU_PART_NO pmp\r\n"
+                              + "where 1 = 1\r\n"
+                              + "and lbom.component_PART_NO = pm.part_no (+)\r\n"
+                              + "and pm.part_no = pmp.part_no (+)\r\n"
+                              + "and pm.manufacturer_no = pmp.manufacturer_no (+)\r\n"
+                              + "and pmp.approved_db  (+) in ('1','2')\r\n"
+                              + ")b\r\n"
+                              + "where 3 = 3   \r\n"
+                              + "-- and b.part_no = '40035333' \r\n"
+                              + "and b.ACTUAL_ENG_CHG =  'TRUE'\r\n"
+                              + "and  b.PartSecComm = '"+ projekt_mezo.getText() +"') bom\r\n"
+                              + "where 3 = 3 \r\n"
+                              + "and bom.component_part_no = nyilatkozatok.part_no\r\n"
+                              + "and bom.manu_part_no = nyilatkozatok.manu_part_no\r\n"
+                              + " and bom.MANUFACTURER_NO = nyilatkozatok.MANUFACTURER_NO");
+                  }
                   /*JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
                   sheet.insertDataTable(datatable, true, 1, 1);*/
@@ -181,7 +245,7 @@ public class Cmrt_adatok extends JPanel {
                   sheet.getAllocatedRange().autoFitColumns();
                   sheet.getAllocatedRange().autoFitRows();
                   sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                  String hova = System.getProperty("user.home") + "\\Desktop\\"+ termek_mezo.getText() +" BOM lista.xlsx";
+                  String hova = System.getProperty("user.home") + "\\Desktop\\"+ termek_mezo.getText() + projekt_mezo.getText() +" BOM lista.xlsx";
                   workbook.saveToFile(hova, ExcelVersion.Version2016);
                   FileInputStream fileStream = new FileInputStream(hova);
                   try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
@@ -194,7 +258,7 @@ public class Cmrt_adatok extends JPanel {
                       workbook3.write(output);
                       output.close();
                   }
-                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra "+ termek_mezo.getText() +" BOM lista.xlsx néven!", "Info", 1); 
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra "+ termek_mezo.getText() + projekt_mezo.getText() +" BOM lista.xlsx néven!", "Info", 1); 
                   con.close();  
                   Foablak.frame.setCursor(null);  
                   }           

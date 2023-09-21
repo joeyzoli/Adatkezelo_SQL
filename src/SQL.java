@@ -247,7 +247,7 @@ public class SQL
  
     }
 	
-	public void vevoi_napok(String querry, String datum, String cikkszam, String mikor, String mit)
+	public void vevoi_napok(String querry, String id)
     {
     
         String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
@@ -260,8 +260,7 @@ public class SQL
             Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
             Statement statement = connection.createStatement();
             CallableStatement cstmt = connection.prepareCall("{" + querry + "}");                                   //tárolt eljárást hívja meg
-            cstmt.setString(1, datum);
-            cstmt.setString(2, cikkszam);
+            cstmt.setString(1, id);
             cstmt.execute();
             //String sql = "select * from " + DB;
             ResultSet resultSet = cstmt.getResultSet();
@@ -277,7 +276,7 @@ public class SQL
       
             Db_iro visszair = new Db_iro();
             String sql = "update qualitydb.Vevoireklamacio_alapadat set  Nyitva = '"+ napok +"' where "
-                    + "Datum = '"+ mikor +"' and Tipus = '"+ mit +"'";
+                    + "ID = '"+ id +"'";
                     
             visszair.ujrair_vevoi(sql);
            
@@ -395,7 +394,6 @@ public class SQL
 	          se.printStackTrace();
 	       }  
 	    }
-	    JOptionPane.showMessageDialog(null, "Lekérdezés sikeres", "Info", 1);
 	}
 	
 	public void top_hiba(String tipus)

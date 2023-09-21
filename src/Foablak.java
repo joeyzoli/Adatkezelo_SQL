@@ -944,7 +944,7 @@ public class Foablak extends JFrame
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.exit(0);*/
+            System.exit(0);
             if(System.getProperty("user.name").equals("tatai.mihaly"))          //tatai.mihaly
             {
                 JOptionPane.showMessageDialog(null, "BUZI vagy Köcsög!!!!!!", "Info", 1);                               

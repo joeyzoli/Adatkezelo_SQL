@@ -77,7 +77,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Szeriaszam_gyarto());
+		feltolt.addActionListener(new Lekerdezes());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1011,7 +1011,7 @@ public class Torlo extends JPanel
             try
             {              
                 DataTable datatable = new DataTable();
-                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Szériaszámok dátummal.xlsx";
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Rendelések.xlsx";
 
                   DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
                   Class.forName("oracle.jdbc.OracleDriver");  //.driver
@@ -1041,7 +1041,7 @@ public class Torlo extends JPanel
                           + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam\n"
                           + "from ifsapp.PURCHASE_ORDER_LINE_ALL\n"
                           + "where\n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) and DATE_ENTERED > to_date( '20220801', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) and DATE_ENTERED > to_date( '20210101', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
                           + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\n"
                           + "DESCRIPTION, \n"
                           + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \n"
@@ -1054,7 +1054,7 @@ public class Torlo extends JPanel
                           + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\n"
                           + "and belso.Cikkszam = kulso.part_no) alap\n"
                           + "where raktar.part_no = alap.cikkszam) majdnem\n"
-                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no");
+                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");
                   
                   Workbook workbook = new Workbook();
                   JdbcAdapter jdbcAdapter = new JdbcAdapter();

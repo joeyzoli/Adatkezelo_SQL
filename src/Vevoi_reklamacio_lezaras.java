@@ -342,11 +342,11 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 SQL hanynapja = new SQL();
                 Db_iro visszair = new Db_iro();
                 String sql = "update qualitydb.Vevoireklamacio_alapadat set  Lezaras_ido = '"+ veglegido_mezo.getText() +"' where "
-                        + "Datum = '"+ table.getValueAt(0, 1).toString() +"' and Tipus = '"+ table.getValueAt(0, 2).toString() +"'";
+                        + "ID = '"+ id_mezo.getText() +"'";
                         
                 visszair.ujrair_vevoi(sql);
-                String query = "call qualitydb.vevoi_hanynapig(?,?)";        
-                hanynapja.vevoi_napok(query, table.getValueAt(0, 1).toString(), table.getValueAt(0, 2).toString(), table.getValueAt(0, 1).toString(), table.getValueAt(0, 2).toString());        
+                String query = "call qualitydb.vevoi_hanynapig(?)";        
+                hanynapja.vevoi_napok(query, id_mezo.getText());        
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, "Módosítás sikeres!", "Infó", 1);
             }
