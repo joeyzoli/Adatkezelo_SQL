@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -26,6 +28,7 @@ import javax.swing.JButton;
 public class Cmrt_adatok extends JPanel {
     private JTextField termek_mezo;
     private JTextField projekt_mezo;
+    private JTextField datum_mezo;
 
     /**
      * Create the panel.
@@ -60,10 +63,24 @@ public class Cmrt_adatok extends JPanel {
         JLabel lblNewLabel_2 = new JLabel("Projekt");
         lblNewLabel_2.setBounds(455, 137, 65, 14);
         add(lblNewLabel_2);
+        
+        JLabel lblNewLabel_3 = new JLabel("Rendelések lekérdezése ettől a tátumtól");
+        lblNewLabel_3.setBounds(303, 257, 233, 14);
+        add(lblNewLabel_3);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.setBounds(546, 254, 86, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
+        
+        JButton rendeles_gomb = new JButton("Keresés");
+        rendeles_gomb.addActionListener(new Redndelesek());
+        rendeles_gomb.setBounds(661, 253, 89, 23);
+        add(rendeles_gomb);
 
     }
     
-    class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
+    class Lekerdezes implements ActionListener                                                                                      
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -83,7 +100,10 @@ public class Cmrt_adatok extends JPanel {
                   ResultSet rs = null;
                   if(projekt_mezo.getText().equals(""))
                   {
-                      rs = stmt.executeQuery("select bom.*,\r\n"
+                      rs = stmt.executeQuery("select minden.*,\r\n"
+                              + "max(rendeles.DATE_ENTERED) as Utolso_rendeles\r\n"
+                              + "from ifsapp.PURCHASE_ORDER_LINE_ALL rendeles,\r\n"
+                              + "(select bom.*,\r\n"
                               + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
                               + "nyilatkozatok.CF$_reach as Reach,\r\n"
                               + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
@@ -122,15 +142,26 @@ public class Cmrt_adatok extends JPanel {
                               + "and pm.manufacturer_no = pmp.manufacturer_no (+)\r\n"
                               + "and pmp.approved_db  (+) in ('1','2')\r\n"
                               + ")b\r\n"
-                              + "where 1 = 1   \r\n"
-                              + "and b.part_no = '"+ termek_mezo.getText() +"' \r\n"
-                              + "and b.ACTUAL_ENG_CHG =  'TRUE') bom\r\n"
+                              + "where 3 = 3   \r\n"
+                              + " and b.part_no = '"+ termek_mezo.getText() +"' \r\n"
+                              + "and b.ACTUAL_ENG_CHG =  'TRUE'\r\n"
+                              + "/*and  b.PartSecComm like '%'*/) bom\r\n"
                               + "where 3 = 3 \r\n"
-                              + "and bom.component_part_no = nyilatkozatok.part_no and bom.manu_part_no = nyilatkozatok.manu_part_no and bom.MANUFACTURER_NO = nyilatkozatok.MANUFACTURER_NO");
+                              + "and bom.component_part_no = nyilatkozatok.part_no\r\n"
+                              + "and bom.manu_part_no = nyilatkozatok.manu_part_no) minden\r\n"
+                              + "where minden.component_part_no = rendeles.part_no\r\n"
+                              + "group by minden.Part_no,    minden.Part_Description ,minden.Revision    ,minden.REvision_text   ,minden.PartProdCode,   minden.PARTACCGROUP,    minden.PARTSECCOMM, minden.COMPONENT_PART_NO,   \r\n"
+                              + "minden.COMP_DESCRIPTION,    minden.QTY_PER_ASSEMBLY,    minden.UNIT_MEAS,   minden.COMPPARTPRODCODE,    minden.COMPPARTACCGROUP,    minden.COMPARTSECCOMM,  minden.MANUFACTURER_NO, minden.NAME,    \r\n"
+                              + "minden.PREFERRED_MANUFACTURER,  minden.MANU_PART_NO,    minden.PREFERRED_MANU_PART, minden.PRIMARY_SUPPLIER,    minden.SUPPLIER_NAME,   minden.ACTUAL_ENG_CHG,  \r\n"
+                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS -- , max(rendeles.DATE_ENTERED)\r\n"
+                              + "");
                   }
                   if(termek_mezo.getText().equals(""))
                   {
-                      rs = stmt.executeQuery("select bom.*,\r\n"
+                      rs = stmt.executeQuery("select minden.*,\r\n"
+                              + "max(rendeles.DATE_ENTERED) as Utolso_rendeles\r\n"
+                              + "from ifsapp.PURCHASE_ORDER_LINE_ALL rendeles,\r\n"
+                              + "(select bom.*,\r\n"
                               + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
                               + "nyilatkozatok.CF$_reach as Reach,\r\n"
                               + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
@@ -175,8 +206,12 @@ public class Cmrt_adatok extends JPanel {
                               + "and  b.PartSecComm = '"+ projekt_mezo.getText() +"') bom\r\n"
                               + "where 3 = 3 \r\n"
                               + "and bom.component_part_no = nyilatkozatok.part_no\r\n"
-                              + "and bom.manu_part_no = nyilatkozatok.manu_part_no\r\n"
-                              + " and bom.MANUFACTURER_NO = nyilatkozatok.MANUFACTURER_NO");
+                              + "and bom.manu_part_no = nyilatkozatok.manu_part_no) minden\r\n"
+                              + "where minden.component_part_no = rendeles.part_no\r\n"
+                              + "group by minden.Part_no,    minden.Part_Description ,minden.Revision    ,minden.REvision_text   ,minden.PartProdCode,   minden.PARTACCGROUP,    minden.PARTSECCOMM, minden.COMPONENT_PART_NO,   \r\n"
+                              + "minden.COMP_DESCRIPTION,    minden.QTY_PER_ASSEMBLY,    minden.UNIT_MEAS,   minden.COMPPARTPRODCODE,    minden.COMPPARTACCGROUP,    minden.COMPARTSECCOMM,  minden.MANUFACTURER_NO, minden.NAME,    \r\n"
+                              + "minden.PREFERRED_MANUFACTURER,  minden.MANU_PART_NO,    minden.PREFERRED_MANU_PART, minden.PRIMARY_SUPPLIER,    minden.SUPPLIER_NAME,   minden.ACTUAL_ENG_CHG,  \r\n"
+                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS -- , max(rendeles.DATE_ENTERED)");
                   }
                   /*JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
@@ -208,6 +243,7 @@ public class Cmrt_adatok extends JPanel {
                   sheet.getRange().get("X" + cellaszam).setText("CMRT");
                   sheet.getRange().get("Y" + cellaszam).setText("REACH");
                   sheet.getRange().get("Z" + cellaszam).setText("ROHS");
+                  sheet.getRange().get("AA" + cellaszam).setText("Utolsó rendelés dátuma");
                   
                   cellaszam++;
                   while(rs.next())
@@ -238,13 +274,14 @@ public class Cmrt_adatok extends JPanel {
                       sheet.getRange().get("X" + cellaszam).setText(rs.getString(24));
                       sheet.getRange().get("Y" + cellaszam).setText(rs.getString(25));
                       sheet.getRange().get("Z" + cellaszam).setText(rs.getString(26));
+                      sheet.getRange().get("AA" + cellaszam).setText(rs.getString(27));
                       cellaszam++;
                   }
                   
-                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:AA1"));
                   sheet.getAllocatedRange().autoFitColumns();
                   sheet.getAllocatedRange().autoFitRows();
-                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  sheet.getCellRange("A1:AA1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                   String hova = System.getProperty("user.home") + "\\Desktop\\"+ termek_mezo.getText() + projekt_mezo.getText() +" BOM lista.xlsx";
                   workbook.saveToFile(hova, ExcelVersion.Version2016);
                   FileInputStream fileStream = new FileInputStream(hova);
@@ -272,6 +309,109 @@ public class Cmrt_adatok extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                              //kiírja a hibaüzenetet
             }  
                                
+         }
+    }
+    
+    class Redndelesek implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                DataTable datatable = new DataTable();
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Rendelések.xlsx";
+
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                  
+                  String[] datum = datum_mezo.getText().split("\\.");
+                  ResultSet rs = stmt.executeQuery("select majdnem.*,\n"
+                          + "nyilatkozatok.CF$_cmrt as CMRT,\n"
+                          + "nyilatkozatok.CF$_reach as Reach,\n"
+                          + "nyilatkozatok.CF$_Rohs as Rohs\n"
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\n"
+                          + "(select alap.*,\n"
+                          + "raktar.SECOND_COMMODITY as Projekt\n"
+                          + "from ifsapp.INVENTORY_PART raktar,\n"
+                          + "(select belso.Cikkszam, \n"
+                          + "belso.Megnevezes,\n"
+                          + "belso.Szallito,\n"
+                          + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\n"
+                          + "belso.Gyartoi_cikkszam\n"
+                          + "from ifsapp.PART_MANUFACTURER kulso,\n"
+                          + "(select PART_NO as Cikkszam,\n"
+                          + "DESCRIPTION as Megnevezes, \n"
+                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam\n"
+                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\n"
+                          + "where\n"
+                          + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) and DATE_ENTERED > to_date( '"+ datum[0] + datum[1] + datum[2] +"', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
+                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\n"
+                          + "DESCRIPTION, \n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \n"
+                          + "PROJECT_ID, \n"
+                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)) belso\n"
+                          + "Where 3 = 3\n"
+                          + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\n"
+                          + "and belso.Cikkszam = kulso.part_no) alap\n"
+                          + "where raktar.part_no = alap.cikkszam) majdnem\n"
+                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\n"
+                          + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");
+                  
+                  Workbook workbook = new Workbook();
+                  JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                  jdbcAdapter.fillDataTable(datatable, rs);
+       
+                  //Get the first worksheet
+                  Worksheet sheet = workbook.getWorksheets().get(0);
+                  sheet.insertDataTable(datatable, true, 1, 1);
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet.getAllocatedRange().autoFitColumns();
+                  sheet.getAllocatedRange().autoFitRows();
+                  
+                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  rs.close();
+                  stmt.close();
+                  con.close();
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook2.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook2.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Rendelések.xlsx néven!", "Info", 1); 
+                  con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+            }  
+            Foablak.frame.setCursor(null);                   
          }
     }
 }
