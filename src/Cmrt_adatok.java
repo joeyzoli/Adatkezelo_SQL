@@ -17,8 +17,6 @@ import javax.swing.JTextField;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.spire.data.table.DataTable;
-import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -319,7 +317,6 @@ public class Cmrt_adatok extends JPanel {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                DataTable datatable = new DataTable();
                 String menteshelye = System.getProperty("user.home") + "\\Desktop\\Rendelések.xlsx";
 
                   DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -329,53 +326,82 @@ public class Cmrt_adatok extends JPanel {
                   Statement stmt = con.createStatement();                      
                   
                   String[] datum = datum_mezo.getText().split("\\.");
-                  ResultSet rs = stmt.executeQuery("select majdnem.*,\n"
-                          + "nyilatkozatok.CF$_cmrt as CMRT,\n"
-                          + "nyilatkozatok.CF$_reach as Reach,\n"
-                          + "nyilatkozatok.CF$_Rohs as Rohs\n"
-                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\n"
-                          + "(select alap.*,\n"
-                          + "raktar.SECOND_COMMODITY as Projekt\n"
-                          + "from ifsapp.INVENTORY_PART raktar,\n"
-                          + "(select belso.Cikkszam, \n"
-                          + "belso.Megnevezes,\n"
-                          + "belso.Szallito,\n"
-                          + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\n"
-                          + "belso.Gyartoi_cikkszam\n"
-                          + "from ifsapp.PART_MANUFACTURER kulso,\n"
-                          + "(select PART_NO as Cikkszam,\n"
-                          + "DESCRIPTION as Megnevezes, \n"
-                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam\n"
-                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\n"
-                          + "where\n"
-                          + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) and DATE_ENTERED > to_date( '"+ datum[0] + datum[1] + datum[2] +"', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
-                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\n"
-                          + "DESCRIPTION, \n"
-                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \n"
-                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \n"
-                          + "PROJECT_ID, \n"
-                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)) belso\n"
-                          + "Where 3 = 3\n"
-                          + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\n"
-                          + "and belso.Cikkszam = kulso.part_no) alap\n"
-                          + "where raktar.part_no = alap.cikkszam) majdnem\n"
-                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\n"
+                  ResultSet rs = stmt.executeQuery("select majdnem.*,\r\n"
+                          + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
+                          + "nyilatkozatok.CF$_reach as Reach,\r\n"
+                          + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
+                          + "(select alap.*,\r\n"
+                          + "raktar.SECOND_COMMODITY as Projekt\r\n"
+                          + "from ifsapp.INVENTORY_PART raktar,\r\n"
+                          + "(select belso.Cikkszam, \r\n"
+                          + "belso.Megnevezes,\r\n"
+                          + "belso.Szallito,\r\n"
+                          + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\r\n"
+                          + "belso.Gyartoi_cikkszam,\r\n"
+                          + "belso.Utolso_rendeles\r\n"
+                          + "from ifsapp.PART_MANUFACTURER kulso,\r\n"
+                          + "(select PART_NO as Cikkszam,\r\n"
+                          + "DESCRIPTION as Megnevezes, \r\n"
+                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam,\r\n"
+                          + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                          + "where\r\n"
+                          + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) and DATE_ENTERED > to_date( '+"+ datum[0]+datum[1]+ datum[2]+"', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\r\n"
+                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\r\n"
+                          + "DESCRIPTION, \r\n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \r\n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \r\n"
+                          + "PROJECT_ID, \r\n"
+                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)) belso\r\n"
+                          + "Where 3 = 3\r\n"
+                          + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\r\n"
+                          + "and belso.Cikkszam = kulso.part_no) alap\r\n"
+                          + "where raktar.part_no = alap.cikkszam) majdnem\r\n"
+                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\r\n"
                           + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");
                   
                   Workbook workbook = new Workbook();
-                  JdbcAdapter jdbcAdapter = new JdbcAdapter();
-                  jdbcAdapter.fillDataTable(datatable, rs);
-       
+                  //JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                  //jdbcAdapter.fillDataTable(datatable, rs);      
                   //Get the first worksheet
                   Worksheet sheet = workbook.getWorksheets().get(0);
-                  sheet.insertDataTable(datatable, true, 1, 1);
+                  //sheet.insertDataTable(datatable, true, 1, 1);
+                  int cellaszam = 1;
+                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
+                  sheet.getRange().get("C" + cellaszam).setText("Szállító");
+                  sheet.getRange().get("D" + cellaszam).setText("Gyártó");
+                  sheet.getRange().get("E" + cellaszam).setText("Gyártói Cikkszám");
+                  sheet.getRange().get("F" + cellaszam).setText("Utolsó rendelés");
+                  sheet.getRange().get("G" + cellaszam).setText("Projekt");
+                  sheet.getRange().get("H" + cellaszam).setText("CMRT");
+                  sheet.getRange().get("I" + cellaszam).setText("REACH");
+                  sheet.getRange().get("J" + cellaszam).setText("ROHS");
+                  
+                  cellaszam++;
+                  while(rs.next())
+                  {
+                      sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                      sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                      sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                      sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                      sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                      sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                      sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                      sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));                     
+                      cellaszam++;
+                  }
+                  
                   sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
                   sheet.getAllocatedRange().autoFitColumns();
                   sheet.getAllocatedRange().autoFitRows();

@@ -77,6 +77,7 @@ public class Foablak extends JFrame
 	private Kiszallitasi_minoseg kiszallitasi;
 	private Retour_szeriaszamok returtortenet;
 	private Cmrt_adatok cmrt;
+	private Fajl_atiras fajlok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
@@ -326,6 +327,10 @@ public class Foablak extends JFrame
 		JMenuItem Reach_adatok = new JMenuItem("CMRT adatok");
 		Reach_adatok.addActionListener(new Panelcsere_CMRT());
 		egyeb.add(Reach_adatok);
+		
+		JMenuItem fajl_atiras = new JMenuItem("Fájl átírás");
+		fajl_atiras.addActionListener(new Panelcsere_Fajlatiras());
+		egyeb.add(fajl_atiras);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -803,6 +808,17 @@ public class Foablak extends JFrame
          {
             cmrt = new Cmrt_adatok();
             JScrollPane ablak = new JScrollPane(cmrt);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Fajlatiras implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            fajlok = new Fajl_atiras();
+            JScrollPane ablak = new JScrollPane(fajlok);
             setContentPane(ablak);
             pack();
          }

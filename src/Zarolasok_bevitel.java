@@ -50,6 +50,7 @@ public class Zarolasok_bevitel extends JPanel {
     private JComboBox<String> felelosterulet_box;
     private SQA_SQL lekerdezes = new SQA_SQL();
     private JTextField meszam_mezo;
+    //private static final Object zar_1 = new Object();
 
     /**
      * Create the panel.
@@ -345,6 +346,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_3);
         
         tipus_box = new JComboBox<String>(cikkszamok());                      //cikkszamok()
+        
         tipus_box.setBounds(362, 84, 212, 22);
         add(tipus_box);
         
@@ -565,7 +567,7 @@ public class Zarolasok_bevitel extends JPanel {
         JLabel lblNewLabel_24 = new JLabel("Raklap ME szám");
         lblNewLabel_24.setBounds(943, 114, 102, 14);
         add(lblNewLabel_24);
-        
+
         visszatolt(id);
 
     }
@@ -583,7 +585,7 @@ public class Zarolasok_bevitel extends JPanel {
             Statement stmt = con.createStatement();              
             ResultSet rs = stmt.executeQuery("select part_no, REVISION_TEXT \r\n"
                     + "from ifsapp.PART_REVISION\r\n"
-                    + "where 3 = 3");
+                    + "where 3 = 3 order by part_no asc");
             ArrayList<String> cikkszamok = new ArrayList<String>();
             while(rs.next())
             {
@@ -609,6 +611,7 @@ public class Zarolasok_bevitel extends JPanel {
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
+        
         return cikkbox;  
                            
      }
@@ -872,9 +875,7 @@ public class Zarolasok_bevitel extends JPanel {
                     lezaras_mezo.setText(lezarva[0]);
                 }
                 meszam_mezo.setText(rs.getString(25));
-                
-               
-                  
+    
             }
             stmt.close();
             conn.close();
@@ -927,7 +928,6 @@ public class Zarolasok_bevitel extends JPanel {
     
     class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
-        @SuppressWarnings("resource")
         public void keyPressed (KeyEvent e) 
         {
             int key = e.getKeyCode();
@@ -948,4 +948,6 @@ public class Zarolasok_bevitel extends JPanel {
             // TODO Auto-generated method stub           
         }    
     }
+    
+    
 }
