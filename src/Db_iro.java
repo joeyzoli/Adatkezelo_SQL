@@ -206,7 +206,7 @@ public class Db_iro
         }
     }
 	
-	void iro_vevoi_intezkedes(String datum, String tipus, String intezkedes, String felelos, String hatarido)
+	void iro_vevoi_intezkedes(String datum, String tipus, String intezkedes, String felelos, String hatarido, String id)
     {   
         String[] koztes = tipus.split(",");                                          //bejövő Stringet darabolni kell
         Connection conn = null;
@@ -226,9 +226,23 @@ public class Db_iro
            
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
-        String query1 = "INSERT INTO qualitydb.Vevoireklamacio_detekt (Datum, Cikkszam, Intezkedes, Felelos, Hatarido)" + 
-                        "VALUES ('" + datum +"', '"+ koztes[0]+"', '"+intezkedes+"', '" + felelos + "', '" + hatarido +"')"; 
-        stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása
+        String sql = "select * from qualitydb.Vevoireklamacio_detekt where ID = '" + id +"' and Felelos = '" + felelos + "'";
+        stmt.execute(sql);
+        ResultSet rs = stmt.getResultSet();
+        if(rs.next())
+        {
+            System.out.println("Van ilyen");
+            String query1 = "Update qualitydb.Vevoireklamacio_detekt set  Intezkedes = '"+intezkedes+"', Hatarido = '" + hatarido +"' where "
+                    + "ID = '"+ rs.getString(1) +"' and  Felelos = '" + felelos + "' "; 
+            stmt.executeUpdate(query1);
+        }
+        else
+        {
+            System.out.println("nincs ilyen");
+            String query1 = "INSERT INTO qualitydb.Vevoireklamacio_detekt (Datum, Cikkszam, Intezkedes, Felelos, Hatarido)" + 
+                            "VALUES ('" + datum +"', '"+ koztes[0]+"', '"+intezkedes+"', '" + felelos + "', '" + hatarido +"')"; 
+            stmt.executeUpdate(query1);                                                                                                             //sql utasítás végrehajtása
+        }
         //+ szam +",
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik
@@ -477,7 +491,7 @@ public class Db_iro
         }
     }
 	
-	void ujrair_alapadat(int id, String datum, String cikkszam, int talalt, String gyokerok, String gyokerokozo, String gyokerok2, String gyokerokozo2, String zarolt, int rekdb, String hibaleiras)
+	void ujrair_alapadat(int id, String datum, String cikkszam, int talalt, String gyokerok, String gyokerokozo, String gyokerok2, String gyokerokozo2, String zarolt, int rekdb, String hibaleiras, int melyik)
     {         
         Connection conn = null;
         Statement stmt = null;
@@ -498,14 +512,23 @@ public class Db_iro
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
         stmt2 = (Statement) conn.createStatement();
-                                                                                                                    //sql utasítás végrehajtása
-        String query = "update qualitydb.Vevoireklamacio_felelosok set  Talalt_db = '"+ talalt +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "' and Zarolt = '" + zarolt + "'";
-        stmt.executeUpdate(query);
-        
-        String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo + 
-                "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"+ ", Rek_db = '"+ rekdb + "', Hibaleiras = '"+ hibaleiras +"'"
-                + " where ID = '" + id + "'";
-        stmt2.executeUpdate(query2);
+        if(melyik == 1)
+        {
+            String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo + 
+                    "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"+ ", Rek_db = '"+ rekdb + "', Hibaleiras = '"+ hibaleiras +"'"
+                    + " where ID = '" + id + "'";
+            stmt2.executeUpdate(query2);
+        }
+        else
+        {
+            String query = "update qualitydb.Vevoireklamacio_felelosok set  Talalt_db = '"+ talalt +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "' and Zarolt = '" + zarolt + "'";
+            stmt.executeUpdate(query);
+            
+            String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo + 
+                    "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"+ ", Rek_db = '"+ rekdb + "', Hibaleiras = '"+ hibaleiras +"'"
+                    + " where ID = '" + id + "'";
+            stmt2.executeUpdate(query2);
+        }
         
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

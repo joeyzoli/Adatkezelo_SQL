@@ -1419,6 +1419,7 @@ public class Torlo extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Workbook workbook = new Workbook();
             Worksheet sheet = workbook.getWorksheets().get(0);
             String menteshelye = System.getProperty("user.home") + "\\Desktop\\Javítás eredménye.xlsx";
@@ -1434,20 +1435,29 @@ public class Torlo extends JPanel
                   stmt = con.createStatement();                      
                   
                   
-                  rs = stmt.executeQuery("Select retest.*, eredmeny.*\n"
+                  rs = stmt.executeQuery("select retest.tracy_id, retest.javitas_datuma, retest.tracy_serial_no, eredmeny.Retest_ideje, eredmeny.Eredmeny\n"
                           + "from\n"
-                          + "(select utana.tracy_id, min(utana.MANUF_DATE) as Retest_ideje, utana.PASS as Eredmeny\n"
+                          + "(select utana.tracy_id, min(utana.MANUF_DATE) as Retest_ideje, utana.PASS as Eredmeny, utana.OPER_TRACY_ID as Oper_tracy\n"
                           + "from ifsapp.C_OPER_TRACY_OVW utana, ifsapp.C_TRACY_REP_EVENT_EXT jav\n"
                           + "where jav.tracy_id = utana.tracy_id\n"
                           + "and jav.DATE_CREATED < utana.MANUF_DATE\n"
-                          + "group by utana.tracy_id, utana.PASS) eredmeny,\n"
-                          + "(select belso.*, kulso.TRACY_SERIAL_NO\n"
-                          + "from ifsapp.C_OPER_TRACY_OVW kulso,\n"
+                          + "and utana.WORK_CENTER_NO not like 'JA%'   \n"
+                          + "group by utana.tracy_id, utana.PASS, utana.OPER_TRACY_ID) eredmeny,\n"
+                          + "(select belso.*, kulso.TRACY_SERIAL_NO, Folyamat.Oper_tracy\n"
+                          + "from ifsapp.C_OPER_TRACY_OVW kulso, (select min(utana.MANUF_DATE) as Retest_ideje, utana.OPER_TRACY_ID as Oper_tracy\n"
+                          + "                                            from ifsapp.C_OPER_TRACY_OVW utana, ifsapp.C_TRACY_REP_EVENT_EXT jav\n"
+                          + "                                        where jav.tracy_id = utana.tracy_id\n"
+                          + "                                        and jav.DATE_CREATED < utana.MANUF_DATE\n"
+                          + "                                        and utana.WORK_CENTER_NO not like 'JA%'   \n"
+                          + "                                        group by utana.OPER_TRACY_ID)  Folyamat,\n"
                           + "(select tracy_id, DATE_CREATED as Javitas_datuma\n"
                           + "from ifsapp.C_TRACY_REP_EVENT_EXT\n"
                           + "where 3=3) belso\n"
                           + "where kulso.tracy_id = belso.tracy_id) retest\n"
-                          + "where retest.tracy_id = Eredmeny.tracy_id");
+                          + "where retest.tracy_id = Eredmeny.tracy_id\n"
+                          + "and retest.javitas_datuma <  eredmeny.Retest_ideje\n"
+                          + "and retest.Oper_tracy =  eredmeny.Oper_tracy\n"
+                          + "group by retest.tracy_id, retest.javitas_datuma, retest.tracy_serial_no, eredmeny.Retest_ideje, eredmeny.Eredmeny\n");
                   
                   
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1456,9 +1466,8 @@ public class Torlo extends JPanel
                   sheet.getRange().get("A" + cellaszam).setText("Tracy_ID");
                   sheet.getRange().get("B" + cellaszam).setText("Javítás dátuma");
                   sheet.getRange().get("C" + cellaszam).setText("Tracy gyári szám");
-                  sheet.getRange().get("D" + cellaszam).setText("Tracy_ID");
-                  sheet.getRange().get("E" + cellaszam).setText("Retest ideje");
-                  sheet.getRange().get("F" + cellaszam).setText("Retest eredméyne");
+                  sheet.getRange().get("D" + cellaszam).setText("Retest ideje");
+                  sheet.getRange().get("E" + cellaszam).setText("Retest eredméyne");
       
                   cellaszam++;
                   while(rs.next())
@@ -1467,8 +1476,7 @@ public class Torlo extends JPanel
                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
                       sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
-                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
-                      sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));                                        
+                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));                                       
                       cellaszam++;
                   }
                   //Get the first worksheet
@@ -1494,13 +1502,13 @@ public class Torlo extends JPanel
                       workbook2.write(output);
                       output.close();
                   }                       
-                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
                   con.close();  
                   Foablak.frame.setCursor(null);  
                   }           
             catch(Exception e1)
             {
-                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                /*sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
                 sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
                 
@@ -1525,14 +1533,14 @@ public class Torlo extends JPanel
                     }
                 }
                 catch(Exception e2)
-                {
-                System.out.println(e2);
+                {*/
+                System.out.println(e1);
                 e1.printStackTrace();
-                String hibauzenet = e2.toString();
+                String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
-                }
+                //}
             }  
                                
          }

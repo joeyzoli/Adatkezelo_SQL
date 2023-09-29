@@ -313,7 +313,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                     for(int szamlalo = tablavege2; szamlalo < table_1.getRowCount(); szamlalo++)
                     {
                         visszair.iro_vevoi_intezkedes(table_1.getValueAt(szamlalo, 1).toString(), table_1.getValueAt(szamlalo, 2).toString(), table_1.getValueAt(szamlalo, 3).toString(),
-                                table_1.getValueAt(szamlalo, 4).toString(), table_1.getValueAt(szamlalo, 5).toString());
+                                table_1.getValueAt(szamlalo, 4).toString(), table_1.getValueAt(szamlalo, 5).toString(), table_1.getValueAt(szamlalo, 0).toString());
                     }
                     visszair.iro_vevoi_id(table_1.getValueAt(0, 1).toString(), table_1.getValueAt(0, 2).toString());
                 }
