@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Javitas_eredmenye());
+		feltolt.addActionListener(new Visszair());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1543,6 +1543,160 @@ public class Torlo extends JPanel
                 //}
             }  
                                
+         }
+    }
+	
+	class Visszair implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\alapadat.xlsx";                             
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(excelfile1);              
+                Worksheet sheet = workbook.getWorksheets().get(0);              
+                DataTable datatable = new DataTable();
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                
+                
+                Connection conn = null;
+                Statement stmt = null;        
+                try 
+                {
+                   Class.forName("com.mysql.cj.jdbc.Driver");
+                } 
+                catch (Exception e1) 
+                {
+                   System.out.println(e1);
+                   String hibauzenet2 = e1.toString();
+                   JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) conn.createStatement();
+                
+                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                {
+                    stmt.executeUpdate("update qualitydb.Vevoireklamacio_alapadat set Rek_db ='"+ datatable.getRows().get(szamlalo).getString(1) +"' where ID = '"+ datatable.getRows().get(szamlalo).getString(0) +"'");
+                    System.out.println(datatable.getRows().get(szamlalo).getString(0));
+                }
+                
+                
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
+                Foablak.frame.setCursor(null);  
+            }                        
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class Tracy_kereses implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection con = null;
+            Statement stmt = null;
+            try
+            {
+                ResultSet result;
+                JdbcAdapter jdbcAdapter;
+                DataTable datatable;
+                Workbook workbook;
+                //Registering the Driver
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
+                    
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
+                System.out.println("Connection established......");
+             
+                String sql = "select                   fkov.panel, tempTable.idopont -- *\n"
+                        + "from                     (select max(ido) as idopont, panel\n"
+                        + "                                               from videoton.fkov\n"
+                        + "                                               where 3=3\n"
+                        + "                                               and hely in (20,21,22,23) and ido > '2021.01.01 00:00:00' group by panel) as tempTable\n"
+                        + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
+                        + "where                  fkov.ok <> '-1';";
+                Statement cstmt = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                           
+                cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+                datatable = new DataTable();
+                
+                workbook = new Workbook();
+                workbook.setVersion(ExcelVersion.Version2016); 
+                jdbcAdapter = new JdbcAdapter();         
+                jdbcAdapter.fillDataTable(datatable, result);
+             
+                //Get the first worksheet
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                sheet.insertDataTable(datatable, true, 1, 1);
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                    
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
+                 
+                result.close();
+                cstmt.close();
+                con.close();
+                workbook.setActiveSheetIndex(0);
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File menteshelye = mentes_helye.getSelectedFile();
+                workbook.saveToFile(menteshelye.getAbsolutePath(), ExcelVersion.Version2016);
+                
+                FileInputStream fileStream = new FileInputStream(menteshelye.getAbsolutePath());
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(menteshelye.getAbsolutePath());
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+            finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+            {
+                try 
+                {
+                  if (stmt != null)
+                     con.close();
+                } 
+                catch (SQLException se) {}
+                try 
+                {
+                  if (con != null)
+                     con.close();
+                } 
+                catch (SQLException se) 
+                {
+                  se.printStackTrace();
+                }  
+            }
          }
     }
 }

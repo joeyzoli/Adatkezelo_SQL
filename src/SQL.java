@@ -326,42 +326,49 @@ public class SQL
 	    stmt.execute(sajat);
 	    ResultSet resultSet = stmt.getResultSet();
 	    
-        Workbook workbook = new Workbook();
-        JdbcAdapter jdbcAdapter = new JdbcAdapter();
-        jdbcAdapter.fillDataTable(datatable, resultSet);
-
-        //Get the first worksheet
-        Worksheet sheet = workbook.getWorksheets().get(0);
-        sheet.insertDataTable(datatable, true, 1, 1);
-        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
-        sheet.getAllocatedRange().autoFitColumns();
-        sheet.getAllocatedRange().autoFitRows();
-        
-        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-        
-        JFileChooser mentes_helye = new JFileChooser();
-        mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
-        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        mentes_helye.showOpenDialog(mentes_helye);
-        File fajl = mentes_helye.getSelectedFile();
-        //System.out.println(fajl.getAbsolutePath());
-        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-        resultSet.close();
-        stmt.close();
-        conn.close();
-        
-        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-        {
-            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-            {    
-                workbook2.removeSheetAt(i); 
-            }      
-            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-            workbook2.write(output);
-            output.close();
-        }
-        JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+	    if(resultSet != null)
+	    {
+            Workbook workbook = new Workbook();
+            JdbcAdapter jdbcAdapter = new JdbcAdapter();
+            jdbcAdapter.fillDataTable(datatable, resultSet);
+    
+            //Get the first worksheet
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            sheet.insertDataTable(datatable, true, 1, 1);
+            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+            sheet.getAllocatedRange().autoFitColumns();
+            sheet.getAllocatedRange().autoFitRows();
+            
+            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
+            JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+            mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            mentes_helye.showOpenDialog(mentes_helye);
+            File fajl = mentes_helye.getSelectedFile();
+            //System.out.println(fajl.getAbsolutePath());
+            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+            resultSet.close();
+            stmt.close();
+            conn.close();
+            
+            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }      
+                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                workbook2.write(output);
+                output.close();
+            }
+            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+	    }
+	    else
+	    {
+	        JOptionPane.showMessageDialog(null, "SQL lefutott", "Info", 1);
+	    }
 	    } 
 	    catch (SQLException e1) 
 	    {

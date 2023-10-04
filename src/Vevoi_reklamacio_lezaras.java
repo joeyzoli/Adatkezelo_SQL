@@ -415,16 +415,14 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 int szamlalo = table.getSelectedRow();
                 if(szamlalo > -1)
                 {
-                    String sql = "delete from qualitydb.Vevoireklamacio_felelosok where felelos = '"+ table.getValueAt(szamlalo, 8).toString() +"'"
-                            +" and id ='"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                    String sql = "delete from qualitydb.Vevoireklamacio_felelosok where sorszam = '"+ table.getValueAt(szamlalo, 13).toString() +"'";
                     visszair.ujrair_vevoi(sql);
                 }
                 szamlalo = table_1.getSelectedRow();
                 if(szamlalo > -1)
                 {
                     
-                    String sql = "delete from qualitydb.Vevoireklamacio_detekt where felelos = '"+ table.getValueAt(szamlalo, 4).toString() +"'"
-                            +" and id ='"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                    String sql = "delete from qualitydb.Vevoireklamacio_detekt where sorszam = '"+ table.getValueAt(szamlalo, 9).toString() +"'";
                     visszair.ujrair_vevoi(sql);
                 }
                 Foablak.frame.setCursor(null);
