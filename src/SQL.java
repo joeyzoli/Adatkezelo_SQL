@@ -1961,50 +1961,182 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("02"))
             {
                 sheet.getCellRange("R" + cella4).setText("Február");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.02.01' and Datum <= '2023.02.28'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
             {
                 sheet.getCellRange("R" + cella4).setText("Január");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.01.01' and Datum <= '2023.01.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }          
             if(datatable6.getRows().get(szamlalo).getString(0).contains("03"))
             {
                 sheet.getCellRange("R" + cella4).setText("Március");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.03.01' and Datum <= '2023.03.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("04"))
             {
                 sheet.getCellRange("R" + cella4).setText("Április");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.04.01' and Datum <= '2023.04.30'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("05"))
             {
                 sheet.getCellRange("R" + cella4).setText("Május");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.05.01' and Datum <= '2023.05.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("06"))
             {
                 sheet.getCellRange("R" + cella4).setText("Június");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.06.01' and Datum <= '2023.06.30'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("07"))
             {
                 sheet.getCellRange("R" + cella4).setText("Július");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.07.01' and Datum <= '2023.07.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("08"))
             {
                 sheet.getCellRange("R" + cella4).setText("Augusztus");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.08.01' and Datum <= '2023.08.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("09"))
             {
                 sheet.getCellRange("R" + cella4).setText("Szeptember");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.09.01' and Datum <= '2023.09.30'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("10"))
             {
                 sheet.getCellRange("R" + cella4).setText("Október");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.10.01' and Datum <= '2023.10.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("11"))
             {
                 sheet.getCellRange("R" + cella4).setText("November");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.11.01' and Datum <= '2023.03.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("12"))
             {
                 sheet.getCellRange("R" + cella4).setText("December");
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "where 3=3 and Datum >= '2022.12.01' and Datum <= '2023.12.31'";
+                stmt.execute(sql);
+                resultSet = stmt.getResultSet();
+                if(resultSet.next())
+                sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                {
+                    sheet.getCellRange("W" + cella4).setNumberValue(69);
+                }
             }
             //sheet.getCellRange("R" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(0)));
             cella4++;

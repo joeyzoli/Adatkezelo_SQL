@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -28,6 +29,9 @@ public class Retour_szeriaszamok extends JPanel {
     private JCheckBox meres_csekk1;private JCheckBox meres_csekk2;private JCheckBox meres_csekk3;private JCheckBox meres_csekk4;private JCheckBox meres_csekk5;private JCheckBox meres_csekk6;
     private JCheckBox rontgen_csekk1;private JCheckBox rontgen_csekk2;private JCheckBox rontgen_csekk3;private JCheckBox rontgen_csekk4;private JCheckBox rontgen_csekk5;private JCheckBox rontgen_csekk6;
     private JCheckBox egyeb_csekk1;private JCheckBox egyeb_csekk2;private JCheckBox egyeb_csekk3;private JCheckBox egyeb_csekk4;private JCheckBox egyeb_csekk5;private JCheckBox egyeb_csekk6;
+    private JCheckBox kiszallithato_igen;private JCheckBox kiszallithato_nem;
+    private JCheckBox beszallito;private JCheckBox veas;private JCheckBox vevo;
+    private JTextArea hiba_mezo;private JTextArea javitas_mezo;private JTextArea hibaoka_mezo;private JTextArea intezkedes_mezo;
 
     /**
      * Create the panel.
@@ -277,15 +281,15 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_18.setBounds(964, 202, 77, 14);
         add(lblNewLabel_18);
         
-        JCheckBox beszallito = new JCheckBox("Beszállító");
+        beszallito = new JCheckBox("Beszállító");
         beszallito.setBounds(899, 225, 83, 23);
         add(beszallito);
         
-        JCheckBox veas = new JCheckBox("VEAS");
+        veas = new JCheckBox("VEAS");
         veas.setBounds(980, 225, 67, 23);
         add(veas);
         
-        JCheckBox vevo = new JCheckBox("Vevő");
+        vevo = new JCheckBox("Vevő");
         vevo.setBounds(1049, 225, 67, 23);
         add(vevo);
         
@@ -293,7 +297,7 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_19.setBounds(767, 278, 77, 14);
         add(lblNewLabel_19);
         
-        JTextArea hiba_mezo = new JTextArea();
+        hiba_mezo = new JTextArea();
         hiba_mezo.setBounds(868, 273, 285, 81);
         add(hiba_mezo);
         
@@ -301,7 +305,7 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_20.setBounds(767, 386, 86, 14);
         add(lblNewLabel_20);
         
-        JTextArea javitas_mezo = new JTextArea();
+        javitas_mezo = new JTextArea();
         javitas_mezo.setBounds(868, 381, 285, 81);
         add(javitas_mezo);
         
@@ -317,11 +321,11 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_23.setBounds(78, 537, 270, 14);
         add(lblNewLabel_23);
         
-        JCheckBox kiszallithato_igen = new JCheckBox("Igen");
+        kiszallithato_igen = new JCheckBox("Igen");
         kiszallithato_igen.setBounds(101, 568, 53, 23);
         add(kiszallithato_igen);
         
-        JCheckBox kiszallithato_nem = new JCheckBox("Nem");
+        kiszallithato_nem = new JCheckBox("Nem");
         kiszallithato_nem.setBounds(177, 568, 53, 23);
         add(kiszallithato_nem);
         
@@ -329,7 +333,7 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_24.setBounds(380, 537, 60, 14);
         add(lblNewLabel_24);
         
-        JTextArea hibaoka_mezo = new JTextArea();
+        hibaoka_mezo = new JTextArea();
         hibaoka_mezo.setBounds(450, 532, 285, 81);
         add(hibaoka_mezo);
         
@@ -337,7 +341,7 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_25.setBounds(757, 537, 112, 14);
         add(lblNewLabel_25);
         
-        JTextArea intezkedes_mezo = new JTextArea();
+        intezkedes_mezo = new JTextArea();
         intezkedes_mezo.setBounds(868, 532, 285, 81);
         add(intezkedes_mezo);
         
@@ -375,9 +379,158 @@ public class Retour_szeriaszamok extends JPanel {
                     stmt = (Statement) conn.createStatement();
                     String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
                     stmt.execute(sql);
-                    //ResultSet rs = stmt.getResultSet();
+                    ResultSet rs = stmt.getResultSet();
+                    if(rs.next())
+                    if(rs.getString(5).equals("igen")) {
+                        vizualis_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(5).equals("nem")) {
+                        vizualis_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(6).equals("igen")) {
+                        vizualis_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(6).equals("nem")) {
+                        vizualis_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(7).equals("igen")) {
+                        vizualis_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(7).equals("nem")) {
+                        vizualis_csekk6.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(8).equals("igen")) {
+                        ict_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(8).equals("nem")) {
+                        ict_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(9).equals("igen")) {
+                        ict_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(9).equals("nem")) {
+                        ict_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(10).equals("igen")) {
+                        ict_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(10).equals("nem")) {
+                        ict_csekk6.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(11).equals("igen")) {
+                        fct_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(11).equals("nem")) {
+                        fct_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(12).equals("igen")) {
+                        fct_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(12).equals("nem")) {
+                        fct_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(13).equals("igen")) {
+                        fct_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(13).equals("nem")) {
+                        fct_csekk6.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(14).equals("igen")) {
+                        meres_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(14).equals("nem")) {
+                        meres_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(15).equals("igen")) {
+                        meres_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(15).equals("nem")) {
+                        meres_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(16).equals("igen")) {
+                        meres_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(16).equals("nem")) {
+                        meres_csekk6.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(17).equals("igen")) {
+                        rontgen_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(17).equals("nem")) {
+                        rontgen_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(18).equals("igen")) {
+                        rontgen_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(18).equals("nem")) {
+                        rontgen_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(19).equals("igen")) {
+                        rontgen_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(19).equals("nem")) {
+                        rontgen_csekk6.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(20).equals("igen")) {
+                        egyeb_csekk1.setSelected(true);
+                    }
+                    else if(rs.getString(20).equals("nem")) {
+                        egyeb_csekk2.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(21).equals("igen")) {
+                        egyeb_csekk3.setSelected(true);
+                    }
+                    else if(rs.getString(21).equals("nem")) {
+                        egyeb_csekk4.setSelected(true);
+                    }
+                    else {}
+                    if(rs.getString(22).equals("igen")) {
+                        egyeb_csekk5.setSelected(true);
+                    }
+                    else if(rs.getString(22).equals("nem")) {
+                        egyeb_csekk6.setSelected(true);
+                    }
+                    else {}
+                    hibakod_mezo.setText(rs.getString(23));
+                    if(rs.getString(24).equals("Beszállító")) {
+                        beszallito.setSelected(true);
+                    }
+                    else if(rs.getString(24).equals("VEAS")) {
+                        veas.setSelected(true);
+                    }
+                    else if(rs.getString(24).equals("Vevő")) {
+                        vevo.setSelected(true);
+                    }
+                    else {}
+                    hiba_mezo.setText(rs.getString(25));
+                    javitas_mezo.setText(rs.getString(26));
+                    hibaoka_mezo.setText(rs.getString(27));
+                    intezkedes_mezo.setText(rs.getString(28));
                     
-                    szeriaszam_mezo.setText("");
+                    if(rs.getString(29).equals("igen")) {
+                        kiszallithato_igen.setSelected(true);
+                    }
+                    else if(rs.getString(29).equals("nem")) {
+                        kiszallithato_nem.setSelected(true);
+                    }
+                    else {}
+                    
                     stmt.close();
                     conn.close();
                             
@@ -463,13 +616,318 @@ public class Retour_szeriaszamok extends JPanel {
             String rontgen1 = "";String rontgen2 = "";String rontgen3 = "";
             String egyeb1 = "";String egyeb2 = "";String egyeb3 = "";
             String hibaeredet = "";String kiszallithato = "";
-            if(vizualis_csekk1.isSelected()) {
+            if(retourid_mezo.getText().equals(""))
+            {
+                if(vizualis_csekk1.isSelected()) {
+                    vizualis1 = "igen";
+                }
+                else if(vizualis_csekk2.isSelected()) {
+                    vizualis1 = "nem";
+                }
+                else {}
+                if(vizualis_csekk3.isSelected()) {
+                    vizualis2 = "igen";
+                }
+                else if(vizualis_csekk4.isSelected()) {
+                    vizualis2 = "nem";
+                }
+                else {}
+                if(vizualis_csekk5.isSelected()) {
+                    vizualis3 = "igen";
+                }
+                else if(vizualis_csekk6.isSelected()) {
+                    vizualis3 = "nem";
+                }
+                else {}
+                if(ict_csekk1.isSelected()) {
+                    ict1 = "igen";
+                }
+                else if(ict_csekk2.isSelected()) {
+                    ict1 = "nem";
+                }
+                else {}
+                if(ict_csekk3.isSelected()) {
+                    ict2 = "igen";
+                }
+                else if(ict_csekk4.isSelected()) {
+                    ict2 = "nem";
+                }
+                else {}
+                if(ict_csekk5.isSelected()) {
+                    ict3 = "igen";
+                }
+                else if(ict_csekk6.isSelected()) {
+                    ict3 = "nem";
+                }
+                else {}
+                if(fct_csekk1.isSelected()) {
+                    fct1 = "igen";
+                }
+                else if(fct_csekk2.isSelected()) {
+                    fct1 = "nem";
+                }
+                else {}
+                if(fct_csekk3.isSelected()) {
+                    fct2 = "igen";
+                }
+                else if(fct_csekk4.isSelected()) {
+                    fct2 = "nem";
+                }
+                else {}
+                if(fct_csekk5.isSelected()) {
+                    fct3 = "igen";
+                }
+                else if(fct_csekk6.isSelected()) {
+                    fct3 = "nem";
+                }
+                else {}
+                if(meres_csekk1.isSelected()) {
+                    meres1 = "igen";
+                }
+                else if(meres_csekk2.isSelected()) {
+                    meres1 = "nem";
+                }
+                else {}
+                if(meres_csekk3.isSelected()) {
+                    meres2 = "igen";
+                }
+                else if(meres_csekk4.isSelected()) {
+                    meres2 = "nem";
+                }
+                else {}
+                if(meres_csekk5.isSelected()) {
+                    meres3 = "igen";
+                }
+                else if(meres_csekk6.isSelected()) {
+                    meres3 = "nem";
+                }
+                else {}
+                if(rontgen_csekk1.isSelected()) {
+                    rontgen1 = "igen";
+                }
+                else if(rontgen_csekk2.isSelected()) {
+                    rontgen1 = "nem";
+                }
+                else {}
+                if(rontgen_csekk3.isSelected()) {
+                    rontgen2 = "igen";
+                }
+                else if(rontgen_csekk4.isSelected()) {
+                    rontgen2 = "nem";
+                }
+                else {}
+                if(rontgen_csekk5.isSelected()) {
+                    rontgen3 = "igen";
+                }
+                else if(rontgen_csekk6.isSelected()) {
+                    rontgen3 = "nem";
+                }
+                else {}
+                if(egyeb_csekk1.isSelected()) {
+                    egyeb1 = "igen";
+                }
+                else if(egyeb_csekk2.isSelected()) {
+                    egyeb1 = "nem";
+                }
+                else {}
+                if(egyeb_csekk3.isSelected()) {
+                    egyeb2 = "igen";
+                }
+                else if(egyeb_csekk4.isSelected()) {
+                    egyeb2 = "nem";
+                }
+                else {}
+                if(egyeb_csekk5.isSelected()) {
+                    egyeb3 = "igen";
+                }
+                else if(egyeb_csekk6.isSelected()) {
+                    egyeb3 = "nem";
+                }
+                else {}
+                if(beszallito.isSelected()) {
+                    hibaeredet = "beszállító";
+                }
+                else if(veas.isSelected()) {
+                    hibaeredet = "VEAS";
+                }
+                else if(vevo.isSelected()) {
+                    hibaeredet = "Vevő";
+                }
+                else {}
+                if(kiszallithato_igen.isSelected()) {
+                    kiszallithato = "igen";
+                }
+                else if(kiszallithato_nem.isSelected()) {
+                    kiszallithato = "nem";
+                }
+                else {}
                 
+                
+                String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
+                        + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
+                        + "Meres_ell = '"+ meres1 +"', Meres_jav_elott ='"+ meres2 +"', Meres_jav_utan = '"+ meres3 +"',Rontgen_ell = '"+ rontgen1 +"', Rontgen_jav_elott ='"+ rontgen2 +"', Rontgen_jav_utan = '"+ rontgen3 +"',"
+                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ hibakod_mezo.getText() +"', Hiba_eredete ='"+ hibaeredet +"',"
+                        + " Hiba_leirasa = '"+ hiba_mezo.getText() +"',Javitas_leirasa = '"+ javitas_mezo.getText() +"',Hiba_ok = '"+ hibaoka_mezo.getText() +"',Intezkedes = '"+ intezkedes_mezo.getText() +"',"
+                                + "Kiszallithato = '"+ kiszallithato +"' "
+                        + "where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
+                stmt.executeUpdate(sql);
             }
-            
-            String sql = "update from qualitydb.Retour_szeriaszamok set where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
-            stmt.execute(sql);
-            //ResultSet rs = stmt.getResultSet();
+            else
+            {
+                if(vizualis_csekk1.isSelected()) {
+                    vizualis1 = "igen";
+                }
+                else if(vizualis_csekk2.isSelected()) {
+                    vizualis1 = "nem";
+                }
+                else {}
+                if(vizualis_csekk3.isSelected()) {
+                    vizualis2 = "igen";
+                }
+                else if(vizualis_csekk4.isSelected()) {
+                    vizualis2 = "nem";
+                }
+                else {}
+                if(vizualis_csekk5.isSelected()) {
+                    vizualis3 = "igen";
+                }
+                else if(vizualis_csekk6.isSelected()) {
+                    vizualis3 = "nem";
+                }
+                else {}
+                if(ict_csekk1.isSelected()) {
+                    ict1 = "igen";
+                }
+                else if(ict_csekk2.isSelected()) {
+                    ict1 = "nem";
+                }
+                else {}
+                if(ict_csekk3.isSelected()) {
+                    ict2 = "igen";
+                }
+                else if(ict_csekk4.isSelected()) {
+                    ict2 = "nem";
+                }
+                else {}
+                if(ict_csekk5.isSelected()) {
+                    ict3 = "igen";
+                }
+                else if(ict_csekk6.isSelected()) {
+                    ict3 = "nem";
+                }
+                else {}
+                if(fct_csekk1.isSelected()) {
+                    fct1 = "igen";
+                }
+                else if(fct_csekk2.isSelected()) {
+                    fct1 = "nem";
+                }
+                else {}
+                if(fct_csekk3.isSelected()) {
+                    fct2 = "igen";
+                }
+                else if(fct_csekk4.isSelected()) {
+                    fct2 = "nem";
+                }
+                else {}
+                if(fct_csekk5.isSelected()) {
+                    fct3 = "igen";
+                }
+                else if(fct_csekk6.isSelected()) {
+                    fct3 = "nem";
+                }
+                else {}
+                if(meres_csekk1.isSelected()) {
+                    meres1 = "igen";
+                }
+                else if(meres_csekk2.isSelected()) {
+                    meres1 = "nem";
+                }
+                else {}
+                if(meres_csekk3.isSelected()) {
+                    meres2 = "igen";
+                }
+                else if(meres_csekk4.isSelected()) {
+                    meres2 = "nem";
+                }
+                else {}
+                if(meres_csekk5.isSelected()) {
+                    meres3 = "igen";
+                }
+                else if(meres_csekk6.isSelected()) {
+                    meres3 = "nem";
+                }
+                else {}
+                if(rontgen_csekk1.isSelected()) {
+                    rontgen1 = "igen";
+                }
+                else if(rontgen_csekk2.isSelected()) {
+                    rontgen1 = "nem";
+                }
+                else {}
+                if(rontgen_csekk3.isSelected()) {
+                    rontgen2 = "igen";
+                }
+                else if(rontgen_csekk4.isSelected()) {
+                    rontgen2 = "nem";
+                }
+                else {}
+                if(rontgen_csekk5.isSelected()) {
+                    rontgen3 = "igen";
+                }
+                else if(rontgen_csekk6.isSelected()) {
+                    rontgen3 = "nem";
+                }
+                else {}
+                if(egyeb_csekk1.isSelected()) {
+                    egyeb1 = "igen";
+                }
+                else if(egyeb_csekk2.isSelected()) {
+                    egyeb1 = "nem";
+                }
+                else {}
+                if(egyeb_csekk3.isSelected()) {
+                    egyeb2 = "igen";
+                }
+                else if(egyeb_csekk4.isSelected()) {
+                    egyeb2 = "nem";
+                }
+                else {}
+                if(egyeb_csekk5.isSelected()) {
+                    egyeb3 = "igen";
+                }
+                else if(egyeb_csekk6.isSelected()) {
+                    egyeb3 = "nem";
+                }
+                else {}
+                if(beszallito.isSelected()) {
+                    hibaeredet = "beszállító";
+                }
+                else if(veas.isSelected()) {
+                    hibaeredet = "VEAS";
+                }
+                else if(vevo.isSelected()) {
+                    hibaeredet = "Vevő";
+                }
+                else {}
+                if(kiszallithato_igen.isSelected()) {
+                    kiszallithato = "igen";
+                }
+                else if(kiszallithato_nem.isSelected()) {
+                    kiszallithato = "nem";
+                }
+                else {}
+                
+                
+                String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
+                        + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
+                        + "Meres_ell = '"+ meres1 +"', Meres_jav_elott ='"+ meres2 +"', Meres_jav_utan = '"+ meres3 +"',Rontgen_ell = '"+ rontgen1 +"', Rontgen_jav_elott ='"+ rontgen2 +"', Rontgen_jav_utan = '"+ rontgen3 +"',"
+                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ hibakod_mezo.getText() +"', Hiba_eredete ='"+ hibaeredet +"',"
+                        + " Hiba_leirasa = '"+ hiba_mezo.getText() +"',Javitas_leirasa = '"+ javitas_mezo.getText() +"',Hiba_ok = '"+ hibaoka_mezo.getText() +"',Intezkedes = '"+ intezkedes_mezo.getText() +"',"
+                        + "Kiszallithato = '"+ kiszallithato +"' "
+                        + "where Retour_ID = '"+ retourid_mezo.getText() +"'";
+                stmt.executeUpdate(sql);
+            }
             
             szeriaszam_mezo.setText("");
             stmt.close();
