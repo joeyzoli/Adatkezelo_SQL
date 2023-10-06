@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Visszair());
+		feltolt.addActionListener(new Gazdasagi_totalkar());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1697,6 +1697,188 @@ public class Torlo extends JPanel
                   se.printStackTrace();
                 }  
             }
+         }
+    }
+	
+	class Gazdasagi_totalkar implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection con = null;
+            //Connection con2 = null;
+            Statement stmt = null;
+            int javitasokszama = 0;
+            String kizarando = "899";
+            String kizarando2 = "1299";
+            String kizarando3 = "A";
+            try
+            {
+                ResultSet result;
+                ResultSet result2;
+                JdbcAdapter jdbcAdapter;
+                JdbcAdapter jdbcAdapter2;
+                DataTable datatable;
+                DataTable datatable2;
+                //Registering the Driver
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa  
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
+                
+                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\panelek.xlsx";                             
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(excelfile1);
+                Workbook workbook2 = new Workbook();               
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);                
+                DataTable datatable3 = new DataTable();               
+                datatable3 = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
+                sheet2.getRange().get("B" + cellaszam).setText("Javítások száma");
+                sheet2.getRange().get("C" + cellaszam).setText("Hol van");
+                cellaszam++;
+                for(int szamlalo3 = 0; szamlalo3 < datatable3.getRows().size();szamlalo3++)
+                {
+                    javitasokszama = 0;
+                    String sql = "select fkovsor.nev, videoton.fkov.panel, "                   
+                            + "videoton.fkov.hibakod, videoton.fkov.poz \n"                   
+                            + "from videoton.fkov \n"
+                            + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                            + " where panel = '"+ datatable3.getRows().get(szamlalo3).getString(0) + "' and  fkovsor.nev like 'Javítás%'";           
+                    
+                    /*String sql = "select fkovsor.nev as 'Folyamat',\r\n"
+                            + " videoton.fkov.ido as 'Időpont',\r\n"
+                            + " videoton.fkov.panel as 'Panelszám',\r\n"
+                            + "    if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as 'eredmény',\r\n"
+                            + "    videoton.fkov.failtestnames as 'Hibakód'\r\n"
+                            + "from videoton.fkov\r\n"
+                            + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\r\n"
+                            + " where   videoton.fkov.panel = '"+ panelszam + "'\r\n"
+                            + " and fkovsor.nev = 'INSTAGRID FCT'"; */    
+                    String sql2 = "select fkovsor.nev, videoton.fkov.panel, videoton.fkov.error, videoton.fkov.ido \n"                                                      
+                            + "from videoton.fkov \n"
+                            + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                            + " where panel = '"+ datatable3.getRows().get(szamlalo3).getString(0) + "' order by videoton.fkov.ido desc limit 1";           
+                    
+                    //con2 = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                    //String sql3 = "select Panelszam from qualitydb.Beolvasott_panelek where 3 = 3";
+                    
+                    Statement cstmt = con.createStatement(
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_UPDATABLE);
+                    
+                    Statement cstmt2 = con.createStatement(
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_UPDATABLE);
+                    
+                    cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                    result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+                    datatable = new DataTable();
+                    jdbcAdapter = new JdbcAdapter();
+                    jdbcAdapter2 = new JdbcAdapter(); 
+                    jdbcAdapter.fillDataTable(datatable, result);
+                    //String alkatresz = "";
+                    //int bennevan = 0;
+                    //String szoveg ="Folyamat                    Időpont           Erdedmény         Hibakód  \n";
+                    /*for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                    {
+                        szoveg += datatable.getRows().get(szamlalo).getString(0)+"       "+datatable.getRows().get(szamlalo).getString(1)
+                                +"       "+datatable.getRows().get(szamlalo).getString(3)+"       "+datatable.getRows().get(szamlalo).getString(4) +"\n";
+                        /*if(panelszam.equals(datatable.getRows().get(szamlalo).getString(0)))                  
+                        {
+                             bennevan++;
+                        }
+                    }
+                    Ablak.eredmeny_mezo.setText(szoveg);
+                    */
+                    if(datatable.getRows().size() > 0)
+                    {
+                        /*if(bennevan > 0)
+                        {
+                            Ablak.eredmeny_mezo.setText("1x már beolvastad a panleszámot!");
+                            Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 255)); 
+                        }*/
+                        
+                        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+                        {
+                            char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
+                            String keresett = new String(data);
+                            if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                            {
+                                                       
+                            }
+                            else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                            {
+                                                       
+                            }
+                            else if(kizarando3.equals(keresett))
+                            {
+                                                       
+                            }
+                            else
+                            {
+                                javitasokszama++;
+                                //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                            }
+                        }
+                        
+                        cstmt2.execute(sql2); 
+                        result2 = cstmt2.getResultSet();
+                        datatable2 = new DataTable();
+                        jdbcAdapter2.fillDataTable(datatable2, result2);//az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                        sheet2.getRange().get("A" + cellaszam).setText(datatable3.getRows().get(szamlalo3).getString(0));
+                        sheet2.getRange().get("B" + cellaszam).setNumberValue(javitasokszama);
+                        sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                        cellaszam++;
+                    }
+                    
+                }
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Tényleges Javítások száma.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook5.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook5.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
+                Foablak.frame.setCursor(null);
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+            finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+            {
+                try 
+                {
+                  if (stmt != null)
+                     con.close();
+                } 
+                catch (SQLException se){}
+                try 
+                {
+                  if (con != null)
+                     con.close();
+                } 
+                catch (SQLException se) 
+                {
+                  se.printStackTrace();
+                }  
+            }   
          }
     }
 }

@@ -8,21 +8,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 
 public class Retour_szeriaszamok extends JPanel {
     private JTextField retourid_mezo;
     private JTextField szeriaszam_mezo;
-    private JTextField hibakod_mezo;
     private JCheckBox vizualis_csekk1;private JCheckBox vizualis_csekk2;private JCheckBox vizualis_csekk3;private JCheckBox vizualis_csekk4;private JCheckBox vizualis_csekk5;private JCheckBox vizualis_csekk6;
     private JCheckBox ict_csekk1;private JCheckBox ict_csekk2;private JCheckBox ict_csekk3;private JCheckBox ict_csekk4;private JCheckBox ict_csekk5;private JCheckBox ict_csekk6;
     private JCheckBox fct_csekk1;private JCheckBox fct_csekk2;private JCheckBox fct_csekk3;private JCheckBox fct_csekk4;private JCheckBox fct_csekk5;private JCheckBox fct_csekk6;
@@ -32,6 +39,10 @@ public class Retour_szeriaszamok extends JPanel {
     private JCheckBox kiszallithato_igen;private JCheckBox kiszallithato_nem;
     private JCheckBox beszallito;private JCheckBox veas;private JCheckBox vevo;
     private JTextArea hiba_mezo;private JTextArea javitas_mezo;private JTextArea hibaoka_mezo;private JTextArea intezkedes_mezo;
+    private JComboBox<String> hibakod_box;
+    private ComboBox combobox_tomb;
+    private ArrayList<String> kephelye = new ArrayList<String>();
+    private ArrayList<String> kepneve = new ArrayList<String>();
 
     /**
      * Create the panel.
@@ -269,13 +280,8 @@ public class Retour_szeriaszamok extends JPanel {
         add(lblNewLabel_16);
         
         JLabel lblNewLabel_17 = new JLabel("Hibakód");
-        lblNewLabel_17.setBounds(767, 229, 46, 14);
+        lblNewLabel_17.setBounds(776, 261, 46, 14);
         add(lblNewLabel_17);
-        
-        hibakod_mezo = new JTextField();
-        hibakod_mezo.setBounds(823, 226, 60, 20);
-        add(hibakod_mezo);
-        hibakod_mezo.setColumns(10);
         
         JLabel lblNewLabel_18 = new JLabel("Hiba eredete");
         lblNewLabel_18.setBounds(964, 202, 77, 14);
@@ -294,19 +300,19 @@ public class Retour_szeriaszamok extends JPanel {
         add(vevo);
         
         JLabel lblNewLabel_19 = new JLabel("Hiba leírása");
-        lblNewLabel_19.setBounds(767, 278, 77, 14);
+        lblNewLabel_19.setBounds(776, 319, 77, 14);
         add(lblNewLabel_19);
         
         hiba_mezo = new JTextArea();
-        hiba_mezo.setBounds(868, 273, 285, 81);
+        hiba_mezo.setBounds(868, 314, 285, 81);
         add(hiba_mezo);
         
         JLabel lblNewLabel_20 = new JLabel("Javítás leírása");
-        lblNewLabel_20.setBounds(767, 386, 86, 14);
+        lblNewLabel_20.setBounds(767, 420, 86, 14);
         add(lblNewLabel_20);
         
         javitas_mezo = new JTextArea();
-        javitas_mezo.setBounds(868, 381, 285, 81);
+        javitas_mezo.setBounds(868, 423, 285, 81);
         add(javitas_mezo);
         
         JLabel lblNewLabel_21 = new JLabel("OK");
@@ -347,8 +353,27 @@ public class Retour_szeriaszamok extends JPanel {
         
         JButton mentes_gomb = new JButton("Mentés");
         mentes_gomb.addActionListener(new Mentes());
-        mentes_gomb.setBounds(550, 655, 89, 23);
+        mentes_gomb.setBounds(549, 687, 89, 23);
         add(mentes_gomb);
+        
+        combobox_tomb = new ComboBox();
+        hibakod_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                      //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hibakod_box.setBounds(868, 257, 285, 22);
+        add(hibakod_box);
+        
+        JButton kepcsatol_gomb = new JButton("Kép csatolása");
+        kepcsatol_gomb.addActionListener(new Kephozzadasa());
+        kepcsatol_gomb.setBounds(535, 626, 123, 23);
+        add(kepcsatol_gomb);
+        
+        JButton kepmentes_gomb = new JButton("Asztalra");
+        kepmentes_gomb.addActionListener(new Kepmentes());
+        kepmentes_gomb.setBounds(1027, 654, 89, 23);
+        add(kepmentes_gomb);
+        
+        JLabel lblNewLabel_26 = new JLabel("Csatolt kép mentése az asztalra");
+        lblNewLabel_26.setBounds(829, 658, 188, 14);
+        add(lblNewLabel_26);
 
     }
     
@@ -377,7 +402,7 @@ public class Retour_szeriaszamok extends JPanel {
                     }
                     conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                     stmt = (Statement) conn.createStatement();
-                    String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
+                    String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"' order by id desc";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
                     if(rs.next())
@@ -507,7 +532,7 @@ public class Retour_szeriaszamok extends JPanel {
                         egyeb_csekk6.setSelected(true);
                     }
                     else {}
-                    hibakod_mezo.setText(rs.getString(23));
+                    hibakod_box.setSelectedItem(rs.getString(23));
                     if(rs.getString(24).equals("Beszállító")) {
                         beszallito.setSelected(true);
                     }
@@ -745,7 +770,7 @@ public class Retour_szeriaszamok extends JPanel {
                 }
                 else {}
                 if(beszallito.isSelected()) {
-                    hibaeredet = "beszállító";
+                    hibaeredet = "Beszállító";
                 }
                 else if(veas.isSelected()) {
                     hibaeredet = "VEAS";
@@ -766,7 +791,7 @@ public class Retour_szeriaszamok extends JPanel {
                 String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
                         + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
                         + "Meres_ell = '"+ meres1 +"', Meres_jav_elott ='"+ meres2 +"', Meres_jav_utan = '"+ meres3 +"',Rontgen_ell = '"+ rontgen1 +"', Rontgen_jav_elott ='"+ rontgen2 +"', Rontgen_jav_utan = '"+ rontgen3 +"',"
-                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ hibakod_mezo.getText() +"', Hiba_eredete ='"+ hibaeredet +"',"
+                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ String.valueOf(hibakod_box.getSelectedItem()) +"', Hiba_eredete ='"+ hibaeredet +"',"
                         + " Hiba_leirasa = '"+ hiba_mezo.getText() +"',Javitas_leirasa = '"+ javitas_mezo.getText() +"',Hiba_ok = '"+ hibaoka_mezo.getText() +"',Intezkedes = '"+ intezkedes_mezo.getText() +"',"
                                 + "Kiszallithato = '"+ kiszallithato +"' "
                         + "where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
@@ -917,22 +942,23 @@ public class Retour_szeriaszamok extends JPanel {
                     kiszallithato = "nem";
                 }
                 else {}
-                
-                
+             
                 String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
                         + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
                         + "Meres_ell = '"+ meres1 +"', Meres_jav_elott ='"+ meres2 +"', Meres_jav_utan = '"+ meres3 +"',Rontgen_ell = '"+ rontgen1 +"', Rontgen_jav_elott ='"+ rontgen2 +"', Rontgen_jav_utan = '"+ rontgen3 +"',"
-                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ hibakod_mezo.getText() +"', Hiba_eredete ='"+ hibaeredet +"',"
+                        + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ String.valueOf(hibakod_box.getSelectedItem()) +"', Hiba_eredete ='"+ hibaeredet +"',"
                         + " Hiba_leirasa = '"+ hiba_mezo.getText() +"',Javitas_leirasa = '"+ javitas_mezo.getText() +"',Hiba_ok = '"+ hibaoka_mezo.getText() +"',Intezkedes = '"+ intezkedes_mezo.getText() +"',"
                         + "Kiszallithato = '"+ kiszallithato +"' "
                         + "where Retour_ID = '"+ retourid_mezo.getText() +"'";
                 stmt.executeUpdate(sql);
             }
-            
+            for(int szamlalo = 0; szamlalo < kephelye.size(); szamlalo++)
+            {
+               iro_kep(szeriaszam_mezo.getText(), kephelye.get(szamlalo), kepneve.get(szamlalo));          
+            }
             szeriaszam_mezo.setText("");
             stmt.close();
-            conn.close();
-                    
+            conn.close();                  
             }                    
             catch (Exception e1) 
             {
@@ -944,5 +970,198 @@ public class Retour_szeriaszamok extends JPanel {
             }
             Foablak.frame.setCursor(null);
          }
+    }
+    
+    class Kephozzadasa implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                //mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setMultiSelectionEnabled(true);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File[] fajl = mentes_helye.getSelectedFiles();
+                for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
+                {
+                    kephelye.add(fajl[szamlalo].getAbsolutePath());
+                    kepneve.add(fajl[szamlalo].getName()); 
+                }
+                
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Kepmentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {               
+                vevoi_kepmentes(szeriaszam_mezo.getText());
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    void iro_kep(String szeriaszam, String kephelye, String kepneve)
+    {   
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+                                                                                                          //csatlakozás
+        
+        File image = new File(kephelye);
+        FileInputStream fis = new FileInputStream (image);
+        String sql = "INSERT INTO qualitydb.Retour_kepek(Szeriaszam, Kepneve,Kep) VALUES(?,?,?)";
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, szeriaszam);
+        stmt.setString(2, kepneve);
+        stmt.setBinaryStream (3, fis, (int) image.length());
+        stmt.executeUpdate();                                                                                                                 //sql utasítás végrehajtása
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+    
+    public void vevoi_kepmentes(String szeriaszam)
+    {   
+        Connection con = null;
+        PreparedStatement ps = null;
+        FileOutputStream fs=null;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+           
+        con = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+        ps= con.prepareStatement("SELECT Kep, Kepneve FROM qualitydb.Retour_kepek where Szeriaszam = '"+ szeriaszam_mezo.getText() +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+        ResultSet rset = ps.executeQuery();         
+        byte b[];
+        Blob blob;
+        int szam = 0;
+        while(rset.next())
+        {        
+            File f = new File(System.getProperty("user.home") + "\\Desktop\\"+ rset.getString(2));
+            fs = new FileOutputStream(f);
+            blob = rset.getBlob("Kep");
+            b = blob.getBytes(1, (int)blob.length());
+            fs.write(b);
+            fs.close();
+            szam++;
+        }
+        if(szam > 0)
+        {
+            JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Nincsen csatolt kép", "Info", 1);
+        }
+        } 
+        catch (SQLException e1)                                                     //kivétel esetén történik
+        {
+           e1.printStackTrace();
+           String hibauzenet2 = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet2 = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (ps != null)
+                 con.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (con != null)
+                 con.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
     }
 }

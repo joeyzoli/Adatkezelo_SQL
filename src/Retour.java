@@ -7,14 +7,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.spire.data.table.DataTable;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -49,6 +56,9 @@ public class Retour extends JPanel
     private JRadioButton veas_gomb;
     private JRadioButton vevoi_gomb;
     static DefaultTableModel modell;
+    private File fajl;
+    private Workbook workbook = new Workbook();
+    private Worksheet sheet;
 
     /**
      * Create the panel.
@@ -298,6 +308,11 @@ public class Retour extends JPanel
         csoport.add(veas_gomb);
         
         setBackground(Foablak.hatter_szine);
+        
+        JButton excel_gomb = new JButton("Excel");
+        excel_gomb.addActionListener(new Excel());
+        excel_gomb.setBounds(848, 395, 89, 23);
+        add(excel_gomb);
         kivalasztott = new ArrayList<String>();
 
     }
@@ -317,11 +332,21 @@ public class Retour extends JPanel
                         felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
                 Utolso_sor utolso = new Utolso_sor();
                 String id = utolso.utolso("qualitydb.Retour");
-                SQA_SQL iro = new SQA_SQL();               
+                SQA_SQL iro = new SQA_SQL();
+                DataTable datatable = new DataTable();
+                sheet = workbook.getWorksheets().get(0);
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                 for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                 {
-                    String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID) Values('"+ table.getValueAt(szamlalo, 0).toString() +"','"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"')";
-                    iro.mindenes(sql);
+                    for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size(); szamlalo2++)
+                    {
+                        if(table.getValueAt(szamlalo, 0).toString().equals(datatable.getRows().get(szamlalo2).getString(0)) || table.getValueAt(szamlalo, 1).toString().equals(datatable.getRows().get(szamlalo2).getString(0)))
+                        {
+                            String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
+                                    + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"')";
+                            iro.mindenes(sql);
+                        }
+                    }
                 }
                 int rowCount = modell.getRowCount();                               
                 for (int i = rowCount - 1; i > -1; i--) 
@@ -525,6 +550,29 @@ public class Retour extends JPanel
                 cikk_box.setModel(model);
                 kivalasztott.clear();
             } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Excel implements ActionListener                                                                                        //ID alapján visszatölti az adatokat
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop"));
+                mentes_helye.showOpenDialog(mentes_helye);
+                fajl = mentes_helye.getSelectedFile();
+                workbook.loadFromFile(fajl.getAbsolutePath());
+            }
             catch (Exception e1) 
             {              
                 e1.printStackTrace();
