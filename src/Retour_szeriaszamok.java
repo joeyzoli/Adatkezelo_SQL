@@ -405,156 +405,166 @@ public class Retour_szeriaszamok extends JPanel {
                     String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"' order by id desc";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
-                    if(rs.next())
-                    if(rs.getString(5).equals("igen")) {
-                        vizualis_csekk1.setSelected(true);
+                    if(rs.next()) {
+                        if(rs.getString(5) != null) {
+                            if(rs.getString(5).equals("igen")) {
+                                vizualis_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(5).equals("nem")) {
+                                vizualis_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(6).equals("igen")) {
+                                vizualis_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(6).equals("nem")) {
+                                vizualis_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(7).equals("igen")) {
+                                vizualis_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(7).equals("nem")) {
+                                vizualis_csekk6.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(8).equals("igen")) {
+                                ict_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(8).equals("nem")) {
+                                ict_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(9).equals("igen")) {
+                                ict_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(9).equals("nem")) {
+                                ict_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(10).equals("igen")) {
+                                ict_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(10).equals("nem")) {
+                                ict_csekk6.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(11).equals("igen")) {
+                                fct_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(11).equals("nem")) {
+                                fct_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(12).equals("igen")) {
+                                fct_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(12).equals("nem")) {
+                                fct_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(13).equals("igen")) {
+                                fct_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(13).equals("nem")) {
+                                fct_csekk6.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(14).equals("igen")) {
+                                meres_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(14).equals("nem")) {
+                                meres_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(15).equals("igen")) {
+                                meres_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(15).equals("nem")) {
+                                meres_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(16).equals("igen")) {
+                                meres_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(16).equals("nem")) {
+                                meres_csekk6.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(17).equals("igen")) {
+                                rontgen_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(17).equals("nem")) {
+                                rontgen_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(18).equals("igen")) {
+                                rontgen_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(18).equals("nem")) {
+                                rontgen_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(19).equals("igen")) {
+                                rontgen_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(19).equals("nem")) {
+                                rontgen_csekk6.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(20).equals("igen")) {
+                                egyeb_csekk1.setSelected(true);
+                            }
+                            else if(rs.getString(20).equals("nem")) {
+                                egyeb_csekk2.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(21).equals("igen")) {
+                                egyeb_csekk3.setSelected(true);
+                            }
+                            else if(rs.getString(21).equals("nem")) {
+                                egyeb_csekk4.setSelected(true);
+                            }
+                            else {}
+                            if(rs.getString(22).equals("igen")) {
+                                egyeb_csekk5.setSelected(true);
+                            }
+                            else if(rs.getString(22).equals("nem")) {
+                                egyeb_csekk6.setSelected(true);
+                            }
+                            else {}
+                            hibakod_box.setSelectedItem(rs.getString(23));
+                            if(rs.getString(24).equals("Beszállító")) {
+                                beszallito.setSelected(true);
+                            }
+                            else if(rs.getString(24).equals("VEAS")) {
+                                veas.setSelected(true);
+                            }
+                            else if(rs.getString(24).equals("Vevő")) {
+                                vevo.setSelected(true);
+                            }
+                            else {}
+                            hiba_mezo.setText(rs.getString(25));
+                            javitas_mezo.setText(rs.getString(26));
+                            hibaoka_mezo.setText(rs.getString(27));
+                            intezkedes_mezo.setText(rs.getString(28));
+                            
+                            if(rs.getString(29).equals("igen")) {
+                                kiszallithato_igen.setSelected(true);
+                            }
+                            else if(rs.getString(29).equals("nem")) {
+                                kiszallithato_nem.setSelected(true);
+                            }
+                            else {}
+                        }
+                        else{
+                            hiba_mezo.setText(rs.getString(25));
+                            javitas_mezo.setText(rs.getString(26));
+                            hibaoka_mezo.setText(rs.getString(27));
+                            intezkedes_mezo.setText(rs.getString(28));
+                        }
+                        
                     }
-                    else if(rs.getString(5).equals("nem")) {
-                        vizualis_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(6).equals("igen")) {
-                        vizualis_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(6).equals("nem")) {
-                        vizualis_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(7).equals("igen")) {
-                        vizualis_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(7).equals("nem")) {
-                        vizualis_csekk6.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(8).equals("igen")) {
-                        ict_csekk1.setSelected(true);
-                    }
-                    else if(rs.getString(8).equals("nem")) {
-                        ict_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(9).equals("igen")) {
-                        ict_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(9).equals("nem")) {
-                        ict_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(10).equals("igen")) {
-                        ict_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(10).equals("nem")) {
-                        ict_csekk6.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(11).equals("igen")) {
-                        fct_csekk1.setSelected(true);
-                    }
-                    else if(rs.getString(11).equals("nem")) {
-                        fct_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(12).equals("igen")) {
-                        fct_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(12).equals("nem")) {
-                        fct_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(13).equals("igen")) {
-                        fct_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(13).equals("nem")) {
-                        fct_csekk6.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(14).equals("igen")) {
-                        meres_csekk1.setSelected(true);
-                    }
-                    else if(rs.getString(14).equals("nem")) {
-                        meres_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(15).equals("igen")) {
-                        meres_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(15).equals("nem")) {
-                        meres_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(16).equals("igen")) {
-                        meres_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(16).equals("nem")) {
-                        meres_csekk6.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(17).equals("igen")) {
-                        rontgen_csekk1.setSelected(true);
-                    }
-                    else if(rs.getString(17).equals("nem")) {
-                        rontgen_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(18).equals("igen")) {
-                        rontgen_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(18).equals("nem")) {
-                        rontgen_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(19).equals("igen")) {
-                        rontgen_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(19).equals("nem")) {
-                        rontgen_csekk6.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(20).equals("igen")) {
-                        egyeb_csekk1.setSelected(true);
-                    }
-                    else if(rs.getString(20).equals("nem")) {
-                        egyeb_csekk2.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(21).equals("igen")) {
-                        egyeb_csekk3.setSelected(true);
-                    }
-                    else if(rs.getString(21).equals("nem")) {
-                        egyeb_csekk4.setSelected(true);
-                    }
-                    else {}
-                    if(rs.getString(22).equals("igen")) {
-                        egyeb_csekk5.setSelected(true);
-                    }
-                    else if(rs.getString(22).equals("nem")) {
-                        egyeb_csekk6.setSelected(true);
-                    }
-                    else {}
-                    hibakod_box.setSelectedItem(rs.getString(23));
-                    if(rs.getString(24).equals("Beszállító")) {
-                        beszallito.setSelected(true);
-                    }
-                    else if(rs.getString(24).equals("VEAS")) {
-                        veas.setSelected(true);
-                    }
-                    else if(rs.getString(24).equals("Vevő")) {
-                        vevo.setSelected(true);
-                    }
-                    else {}
-                    hiba_mezo.setText(rs.getString(25));
-                    javitas_mezo.setText(rs.getString(26));
-                    hibaoka_mezo.setText(rs.getString(27));
-                    intezkedes_mezo.setText(rs.getString(28));
-                    
-                    if(rs.getString(29).equals("igen")) {
-                        kiszallithato_igen.setSelected(true);
-                    }
-                    else if(rs.getString(29).equals("nem")) {
-                        kiszallithato_nem.setSelected(true);
-                    }
-                    else {}
                     
                     stmt.close();
                     conn.close();

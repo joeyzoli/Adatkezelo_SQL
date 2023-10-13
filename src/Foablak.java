@@ -246,7 +246,7 @@ public class Foablak extends JFrame
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
 		folyamatellenorok.addActionListener(new PanelCsere_ellenorok());
 		
-		JMenuItem telecom_utolso = new JMenuItem("Telecom utolsó folyamat");
+		JMenuItem telecom_utolso = new JMenuItem("Telecom folyamatok");
 		telecom_utolso.addActionListener(new PanelCsere_telecom_utolso());
 		
 		JMenuItem tracy_utolso = new JMenuItem("Tracy utosló folyamat");

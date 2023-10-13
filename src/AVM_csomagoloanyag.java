@@ -35,6 +35,7 @@ public class AVM_csomagoloanyag extends JPanel {
     private JTextField datumig_mezo;
     static int cellaszam = 1;
     private String hova = System.getProperty("user.home") + "\\Desktop\\AVM csomagolóanyag PPM.xlsx";
+    private String zarolt = System.getProperty("user.home") + "\\Desktop\\Zárolt készlet.xlsx";
     private JComboBox<String> beszallito_box;
     private DefaultComboBoxModel<String> model;
     private JRadioButton ppm_gomb;
@@ -95,6 +96,15 @@ public class AVM_csomagoloanyag extends JPanel {
         csoport.add(ppm_gomb);
         csoport.add(felhasznalas_gomb);
         setBackground(Foablak.hatter_szine);
+        
+        JLabel lblNewLabel_4 = new JLabel("Aktuális zárolt készlet lekérdezése");
+        lblNewLabel_4.setBounds(399, 398, 200, 14);
+        add(lblNewLabel_4);
+        
+        JButton lekerdez_gomb = new JButton("Lekérdez");
+        lekerdez_gomb.addActionListener(new Zarolt_keszlet());
+        lekerdez_gomb.setBounds(630, 394, 89, 23);
+        add(lekerdez_gomb);
         beolvasas();
 
     }
@@ -371,6 +381,80 @@ public class AVM_csomagoloanyag extends JPanel {
                 }
                         
               
+            }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+                Foablak.frame.setCursor(null);
+            }  
+        }    
+    }
+    
+    class Zarolt_keszlet implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Workbook workbook = new Workbook();
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            try
+            {                                           
+                DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                    
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("select belso.Cikkszam, belso.Megnevezes, ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO) as Beszallito, belso.Mennyiseg, belso.Ertek\r\n"
+                        + "from ifsapp.PURCHASE_PART_SUPPLIER besz,\r\n"
+                        + "        (select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
+                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek\r\n"
+                        + "        from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
+                        + "        where 3 = 3\r\n"
+                        + "        and QTY_ONHAND > 0 and (WAREHOUSE = '80' or WAREHOUSE = '91')\r\n"
+                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no)) belso\r\n"
+                        + "where besz.part_no = belso.Cikkszam");
+
+                sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                sheet.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
+                sheet.getRange().get("C" + cellaszam).setText("Beszállító");
+                sheet.getRange().get("D" + cellaszam).setText("Zárolt Mennyiség");
+                sheet.getRange().get("E" + cellaszam).setText("Zárolt érték");
+                cellaszam++;
+                
+                while(rs.next())
+                {
+                    sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                    sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                    sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                    sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                    sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));                   
+                    cellaszam++;
+                }
+                //sheet.getCellRange("E2:E" + sheet.getLastRow()).setNumberFormat("0");
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás                
+                
+                workbook.saveToFile(zarolt, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(zarolt);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(zarolt);
+                    workbook3.write(output);
+                    output.close();
+                }
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Zárolt készlet.xlsx néven!", "Info", 1);       
             }           
             catch(Exception e1)
             { 

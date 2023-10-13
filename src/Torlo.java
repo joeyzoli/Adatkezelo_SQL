@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Gazdasagi_totalkar());
+		feltolt.addActionListener(new Excel_szeriaszamgyart_loxone());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -103,15 +103,19 @@ public class Torlo extends JPanel
 		 {
 			try
 			 {
+			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			    Db_iro atiras = new Db_iro();
+			    atiras.atir("Tóth Zoltánoltán", "Tóth Zoltán");
+			    /*
 			    Workbook workbook = new Workbook();
 			    workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\Java projekt\\emerson felosztás.xlsx");
 	            Worksheet sheet = workbook.getWorksheets().get(0);
 	            DataTable dataTable = sheet.exportDataTable();
 	            for (int i = 0; i < dataTable.getRows().size(); i++) 
 	            {
-	                atiras.atir("Leroy Somer", "Leroy-Somer");
-	            }
+	                atiras.atir("Tóth Zoltánoltán", "Tóth Zoltán");
+	            }*/
+			    Foablak.frame.setCursor(null);
 	            JOptionPane.showMessageDialog(null, "Átírás kész", "Info", 1);
    
 			 }
@@ -356,17 +360,10 @@ public class Torlo extends JPanel
                 while(resultSet.next())
                 {
                     System.out.println(resultSet.getString(1));
-                }
-                
-               
-                
-                
-                   
-
+                }                          
                 resultSet.close();
                 stmt.close();
-                conn.close();
-                
+                conn.close();                
             } 
             catch (SQLException e1) 
             {
@@ -1879,6 +1876,157 @@ public class Torlo extends JPanel
                   se.printStackTrace();
                 }  
             }   
+         }
+    }
+	
+	class Excel_szeriaszamgyart_loxone implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Loxone.xlsx";                             
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+            Workbook workbook = new Workbook();
+            workbook.loadFromFile(excelfile1);
+            Workbook workbook2 = new Workbook();               
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            Worksheet sheet2 = workbook2.getWorksheets().get(0);                
+            DataTable datatable = new DataTable();
+            try
+            {                
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
+                int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Sort");
+                sheet2.getRange().get("B" + cellaszam).setText("Gyártói kód");
+                sheet2.getRange().get("C" + cellaszam).setText("Érték");
+                cellaszam++;              
+                
+                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                {
+                    long sorszam = Long.parseLong(datatable.getRows().get(szamlalo).getString(1));
+                    long kovetkezo;
+                    long kulonbseg = 0;
+                    if(datatable.getRows().size() > szamlalo+1)
+                    {
+                        kovetkezo = Long.parseLong(datatable.getRows().get(szamlalo+1).getString(1));
+                        kulonbseg = kovetkezo -sorszam;
+                    }
+                    if(kulonbseg < 2)
+                    {
+                        sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                        sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                        sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));                           
+                    }
+                    else
+                    {
+                        if(kulonbseg > 4) 
+                        {
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                            sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                            sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                        }
+                        else
+                        {
+                            if(kulonbseg == 4)
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+2));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+3));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                            }
+                            else if(kulonbseg == 3)
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+2));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                            }
+                            else
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                cellaszam++;
+                                sheet2.getRange().get("A" + cellaszam).setText(String.valueOf(sorszam+1));
+                                sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                String.valueOf(sorszam+1);
+                            }
+                        }                                                               
+                    }
+                    cellaszam++;
+                }
+                
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Szériaszámok.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook5.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook5.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
+                Foablak.frame.setCursor(null);  
+            }                        
+            catch(Exception e1)
+            {
+                try
+                { 
+                    sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                    sheet2.getAllocatedRange().autoFitColumns();
+                    sheet2.getAllocatedRange().autoFitRows();
+                    sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    String hova = System.getProperty("user.home") + "\\Desktop\\Szériaszámok.xlsx";
+                    workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(hova);
+                    try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                        {    
+                            workbook5.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(hova);
+                        workbook5.write(output);
+                        output.close();
+                    }
+                }
+                catch(Exception e2)
+                {
+                    
+                }
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
+            }                                         
          }
     }
 }

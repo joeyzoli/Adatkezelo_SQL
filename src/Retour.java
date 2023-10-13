@@ -57,8 +57,9 @@ public class Retour extends JPanel
     private JRadioButton vevoi_gomb;
     static DefaultTableModel modell;
     private File fajl;
-    private Workbook workbook = new Workbook();
+    private Workbook workbook;
     private Worksheet sheet;
+    private int excel = 0;
 
     /**
      * Create the panel.
@@ -76,8 +77,11 @@ public class Retour extends JPanel
         lblNewLabel_1.setBounds(29, 49, 46, 14);
         add(lblNewLabel_1);
         
+        Utolso_sor utolso = new Utolso_sor();
         id_mezo = new JTextField();
         id_mezo.setBounds(85, 46, 46, 20);
+        int uccso = Integer.parseInt(utolso.utolso("qualitydb.Retour")) + 1;
+        id_mezo.setText(String.valueOf(uccso));
         id_mezo.addKeyListener(new Enter());
         add(id_mezo);
         id_mezo.setColumns(10);
@@ -325,27 +329,36 @@ public class Retour extends JPanel
             {
                 Db_iro iras = new Db_iro();
                 iras.iro_retour(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(cikk_box.getSelectedItem()), String.valueOf(javagy_box.getSelectedItem()), Integer.parseInt(beerkezett_mezo.getText()),
-                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText(), hibaleiras_mezo.getText());
-                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText(), hibaleiras_mezo.getText());                
                 Urlap_torlo torles = new Urlap_torlo();
                 torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo, teszt_mezo, felelos2_mezo, veg_mezo,
                         felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
-                Utolso_sor utolso = new Utolso_sor();
-                String id = utolso.utolso("qualitydb.Retour");
+                String id = id_mezo.getText();
                 SQA_SQL iro = new SQA_SQL();
                 DataTable datatable = new DataTable();
+                workbook = new Workbook();
                 sheet = workbook.getWorksheets().get(0);
                 datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                 for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                 {
-                    for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size(); szamlalo2++)
+                    System.out.println(datatable.getRows().size());
+                    if(excel > 0)
                     {
-                        if(table.getValueAt(szamlalo, 0).toString().equals(datatable.getRows().get(szamlalo2).getString(0)) || table.getValueAt(szamlalo, 1).toString().equals(datatable.getRows().get(szamlalo2).getString(0)))
+                        for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size(); szamlalo2++)
                         {
-                            String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                    + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"')";
-                            iro.mindenes(sql);
+                            if(table.getValueAt(szamlalo, 0).toString().equals(datatable.getRows().get(szamlalo2).getString(0)) || table.getValueAt(szamlalo, 1).toString().equals(datatable.getRows().get(szamlalo2).getString(0)))
+                            {
+                                String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
+                                        + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"')";
+                                iro.mindenes(sql);
+                            }
                         }
+                    }
+                    else
+                    {
+                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
+                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"')";
+                        iro.mindenes(sql);
                     }
                 }
                 int rowCount = modell.getRowCount();                               
@@ -353,6 +366,7 @@ public class Retour extends JPanel
                 {
                   modell.removeRow(i);
                 }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
             }
             catch (Exception e1) 
             {              
@@ -455,6 +469,7 @@ public class Retour extends JPanel
                 {
                     SQL visszair = new SQL();
                     visszair.retour_vissza(id_mezo.getText());
+                    excel = 0;
                 }
             } 
             catch (Exception e1) 
@@ -571,7 +586,11 @@ public class Retour extends JPanel
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop"));
                 mentes_helye.showOpenDialog(mentes_helye);
                 fajl = mentes_helye.getSelectedFile();
-                workbook.loadFromFile(fajl.getAbsolutePath());
+                if(fajl.exists())
+                {
+                    excel = 1;
+                    workbook.loadFromFile(fajl.getAbsolutePath());
+                }
             }
             catch (Exception e1) 
             {              

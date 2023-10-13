@@ -34,6 +34,7 @@ import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
 import javax.swing.JCheckBox;
+import javax.swing.JTable;
 
 public class SQA_bevitel extends JPanel {
     private JTextField datum_mezo;
@@ -49,7 +50,6 @@ public class SQA_bevitel extends JPanel {
     private JTextField karterites_mezo;
     private JTextField belsokoltseg_mezo;
     private JTextField veszteseg_mezo;
-    private JComboBox<String> cikkszam_box;
     private SQA_SQL lekerdezes = new SQA_SQL();
     private JTextField projekt_mezo;
     private JTextField id_mezo;
@@ -73,7 +73,8 @@ public class SQA_bevitel extends JPanel {
     private JTextArea gyokerok_mezo;
     private JCheckBox d_csekk;
     private JCheckBox cn_csekk;
-    private JTextArea cikkszamok_mezo;
+    private JTextField cikkszam_mezo;
+    private JTable table;
      
 
     /**
@@ -107,11 +108,6 @@ public class SQA_bevitel extends JPanel {
         lblNewLabel_2.setBounds(251, 132, 66, 14);
         add(lblNewLabel_2);
         
-        cikkszam_box = new JComboBox<String>(lekerdezes.cikkszamok());                             //lekerdezes.cikkszamok()
-        cikkszam_box.addActionListener(new Elem_valaszto());
-        cikkszam_box.setBounds(343, 128, 383, 22);
-        add(cikkszam_box);
-        
         JLabel lblNewLabel_3 = new JLabel("Alapanyag fajta");
         lblNewLabel_3.setBounds(912, 132, 95, 14);
         add(lblNewLabel_3);
@@ -297,7 +293,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_22);
         
         String[] nevek = {"Schweighardt Róbert", "Tóth Zoltán","Horváth Balázs"};
-        indito_box = new JComboBox<String>(nevek);                             //nevek
+        indito_box = new JComboBox<String>(nevek);                                       //nevek
         indito_box.setBounds(127, 45, 218, 22);
         add(indito_box);
         
@@ -454,11 +450,6 @@ public class SQA_bevitel extends JPanel {
         hozzaad_gomb.addActionListener(new Hozzaad());
         hozzaad_gomb.setBounds(736, 128, 89, 23);
         add(hozzaad_gomb);
-        
-        cikkszamok_mezo = new JTextArea();
-        JScrollPane gorgeto = new JScrollPane(cikkszamok_mezo);
-        gorgeto.setBounds(737, 49, 372, 68);
-        add(gorgeto);
         setBackground(Foablak.hatter_szine);
         
         JLabel lblNewLabel_38 = new JLabel("Excel export");
@@ -469,6 +460,17 @@ public class SQA_bevitel extends JPanel {
         excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(640, 786, 89, 23);
         add(excel_gomb);
+        
+        cikkszam_mezo = new JTextField();
+        cikkszam_mezo.setBounds(327, 129, 347, 20);
+        add(cikkszam_mezo);
+        cikkszam_mezo.setColumns(10);
+        
+        
+        table = new JTable();
+        JScrollPane gorgeto = new JScrollPane(table);
+        gorgeto.setBounds(585, 36, 579, 83);
+        add(gorgeto);
 
     }
     
@@ -499,12 +501,7 @@ public class SQA_bevitel extends JPanel {
         
         JLabel lblNewLabel_2 = new JLabel("Cikkszám");
         lblNewLabel_2.setBounds(251, 132, 66, 14);
-        add(lblNewLabel_2);
-        
-        cikkszam_box = new JComboBox<String>(lekerdezes.cikkszamok());                             //lekerdezes.cikkszamok()
-        cikkszam_box.addActionListener(new Elem_valaszto());
-        cikkszam_box.setBounds(343, 128, 383, 22);
-        add(cikkszam_box);
+        add(lblNewLabel_2);                
         
         JLabel lblNewLabel_3 = new JLabel("Alapanyag fajta");
         lblNewLabel_3.setBounds(912, 132, 95, 14);
@@ -842,12 +839,7 @@ public class SQA_bevitel extends JPanel {
         JButton vissza_gomb = new JButton("Vissza");
         vissza_gomb.addActionListener(new Vissza());
         vissza_gomb.setBounds(1075, 11, 89, 23);
-        add(vissza_gomb);
-        
-        cikkszamok_mezo = new JTextArea();
-        JScrollPane gorgeto = new JScrollPane(cikkszamok_mezo);
-        gorgeto.setBounds(737, 49, 372, 68);
-        add(gorgeto);
+        add(vissza_gomb);             
         
         JButton hozzaad_gomb = new JButton("Hozzáad");
         hozzaad_gomb.addActionListener(new Hozzaad());
@@ -863,6 +855,11 @@ public class SQA_bevitel extends JPanel {
         excel_gomb.setBounds(640, 786, 89, 23);
         add(excel_gomb);
         
+        table = new JTable();
+        JScrollPane gorgeto = new JScrollPane(table);
+        gorgeto.setBounds(585, 36, 579, 83);
+        add(gorgeto);
+        
         visszatolt(id);
 
     }
@@ -874,12 +871,11 @@ public class SQA_bevitel extends JPanel {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                String valasztott = String.valueOf(cikkszam_box.getSelectedItem());                                                           //kiválasztott elem Stringé alakítása
-                String[] cikk = valasztott.split(" ");
+                String valasztott = cikkszam_mezo.getText();                                                           //kiválasztott elem Stringé alakítása
                 String sql = "select ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO)\r\n"
                         + "from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
                         + "where 3 = 3\r\n"
-                        + "and PART_NO = '"+ cikk[0] +"' and PRIMARY_VENDOR_DB = 'Y'";
+                        + "and PART_NO = '"+ valasztott +"' and PRIMARY_VENDOR_DB = 'Y'";
                 if(beszallito_mezo.getText().equals(""))
                 {
                     beszallito_mezo.setText(lekerdezes.beszallito(sql));
@@ -893,7 +889,7 @@ public class SQA_bevitel extends JPanel {
                 sql = "select ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO)\r\n"
                         + "from ifsapp.PART_MANUFACTURER\r\n"
                         + "where 3 = 3\r\n"
-                        + "and PART_NO = '"+ cikk[0] +"' and  PREFERRED_MANUFACTURER_DB = 'TRUE'";
+                        + "and PART_NO = '"+ valasztott +"' and  PREFERRED_MANUFACTURER_DB = 'TRUE'";
                 if(gyarto_mezo.getText().equals(""))
                 {
                     gyarto_mezo.setText(lekerdezes.beszallito(sql));
@@ -907,7 +903,7 @@ public class SQA_bevitel extends JPanel {
                 sql = "select second_commodity\r\n"
                         + "from ifsapp.INVENTORY_PART\r\n"
                         + "where 3 = 3 \r\n"
-                        + "and part_no = '"+ cikk[0] +"'";
+                        + "and part_no = '"+ valasztott +"'";
                 if(projekt_mezo.getText().equals(""))
                 {
                     projekt_mezo.setText(lekerdezes.beszallito(sql));
@@ -919,7 +915,7 @@ public class SQA_bevitel extends JPanel {
                     projekt_mezo.setText(osszefuzve);
                 }      
                 sql = "select inventory_value from ifsapp.INVENTORY_PART_UNIT_COST_SUM\r\n"
-                        + "where part_no =  '"+ cikk[0] +"'";
+                        + "where part_no =  '"+ valasztott +"'";
                 String[] egysegar = lekerdezes.beszallito(sql).split("\\.");
                 egysegar_mezo.setText(egysegar_mezo.getText()+";"+ egysegar[0]);
                 String kontaktok = "";
@@ -1545,7 +1541,10 @@ public class SQA_bevitel extends JPanel {
                     } 
                 }
                 link_mezo.setText(link2);
-                Desktop.getDesktop().open(new File(link2));                            //megnyitja az excelben szereplő helyen levő infó fájlt         
+                if(new File(link2).exists())
+                {
+                    Desktop.getDesktop().open(new File(link2));                            //megnyitja az excelben szereplő helyen levő infó fájlt      
+                }
             }
             stmt.close();
             conn.close();
