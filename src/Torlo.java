@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Excel_szeriaszamgyart_loxone());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1615,13 +1615,20 @@ public class Torlo extends JPanel
                 con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
                 System.out.println("Connection established......");
              
-                String sql = "select                   fkov.panel, tempTable.idopont -- *\n"
+                /*String sql = "select                   fkov.panel, tempTable.idopont -- *\n"
                         + "from                     (select max(ido) as idopont, panel\n"
                         + "                                               from videoton.fkov\n"
                         + "                                               where 3=3\n"
-                        + "                                               and hely in (20,21,22,23) and ido > '2021.01.01 00:00:00' group by panel) as tempTable\n"
+                        + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
-                        + "where                  fkov.ok <> '-1';";
+                        + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
+                String sql = "select                   fkov.panel\n"
+                        + "from                                        (select panel\n"
+                        + "                                               from videoton.fkov\n"
+                        + "                                               where 3=3\n"
+                        + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
+                        + "inner join            videoton.fkov on fkov.panel = tempTable.panel\n"
+                        + "where fkov.panel = tempTable.panel  and hely in (16,49);";
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);

@@ -46,9 +46,9 @@ public class Foablak extends JFrame
 	private PO_szam po;
 	private Hitlista hitlista;
 	private ProGlove proglove;
-	private Loxone loxon;
-	private Socomec socomec;
-	private Hager hager;
+	//private Loxone loxon;
+	//private Socomec socomec;
+	//private Hager hager;
 	private Hatter_beallitas hatterbeall;
 	private Vevoi_reklmacio_bevitel vevoi_rek;
 	private Vevoi_reklamacio_lezaras vevoi_lezar;
@@ -159,22 +159,13 @@ public class Foablak extends JFrame
 		
 		JMenuItem proglove = new JMenuItem("ProGlove");
 		proglove.addActionListener(new PanelCsere_proglove());
+		
+		JMenuItem ellenori_lapok = new JMenuItem("Ellenőri lapok");
+		menu.add(ellenori_lapok);
 		menu.add(proglove);
 		
 		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
 		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
-		
-		JMenuItem loxone = new JMenuItem("Loxone");
-		loxone.addActionListener(new PanelCsere_loxone());
-		menu.add(loxone);
-		
-		JMenuItem socomec = new JMenuItem("Socomec");
-		socomec.addActionListener(new PanelCsere_socomec());
-		menu.add(socomec);
-		
-		JMenuItem hager = new JMenuItem("Hager");
-		hager.addActionListener(new PanelCsere_hager());
-		menu.add(hager);
 		menu.add(vevoi_reklamaciok);
 		
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
@@ -474,39 +465,6 @@ public class Foablak extends JFrame
          {
             proglove = new ProGlove();
             JScrollPane ablak = new JScrollPane(proglove);
-            setContentPane(ablak);
-            pack();
-         }
-    }
-	
-	class PanelCsere_loxone implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
-    {
-        public void actionPerformed(ActionEvent e)
-         {
-            loxon = new Loxone();
-            JScrollPane ablak = new JScrollPane(loxon);
-            setContentPane(ablak);
-            pack();
-         }
-    }
-	
-	class PanelCsere_socomec implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
-    {
-        public void actionPerformed(ActionEvent e)
-         {
-            socomec = new Socomec();
-            JScrollPane ablak = new JScrollPane(socomec);
-            setContentPane(ablak);
-            pack();
-         }
-    }
-	
-	class PanelCsere_hager implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
-    {
-        public void actionPerformed(ActionEvent e)
-         {
-            hager = new Hager();
-            JScrollPane ablak = new JScrollPane(hager);
             setContentPane(ablak);
             pack();
          }

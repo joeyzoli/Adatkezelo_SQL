@@ -60,6 +60,7 @@ public class Retour extends JPanel
     private Workbook workbook;
     private Worksheet sheet;
     private int excel = 0;
+    private JLabel dbszam_szoveg;
 
     /**
      * Create the panel.
@@ -317,6 +318,14 @@ public class Retour extends JPanel
         excel_gomb.addActionListener(new Excel());
         excel_gomb.setBounds(848, 395, 89, 23);
         add(excel_gomb);
+        
+        JLabel lblNewLabel_22 = new JLabel("Beolvasott szériaszámok száma:");
+        lblNewLabel_22.setBounds(195, 358, 194, 14);
+        add(lblNewLabel_22);
+        
+        dbszam_szoveg = new JLabel("0");
+        dbszam_szoveg.setBounds(402, 358, 46, 14);
+        add(dbszam_szoveg);
         kivalasztott = new ArrayList<String>();
 
     }
@@ -366,6 +375,7 @@ public class Retour extends JPanel
                 {
                   modell.removeRow(i);
                 }
+                dbszam_szoveg.setText(String.valueOf("0"));
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
             }
             catch (Exception e1) 
@@ -514,6 +524,8 @@ public class Retour extends JPanel
                         table.setModel(modell);
                     }
                     szeriaszam_mezo.setText("");
+                    int sorokszama = table.getRowCount();
+                    dbszam_szoveg.setText(String.valueOf(sorokszama));
                 }
             } 
             catch (Exception e1) 
