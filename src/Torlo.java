@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Hanyszor_tesztelve());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -364,15 +364,7 @@ public class Torlo extends JPanel
                 resultSet.close();
                 stmt.close();
                 conn.close();                
-            } 
-            catch (SQLException e1) 
-            {
-                e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-            } 
+            }             
             catch (Exception e1) 
             {
                 e1.printStackTrace();
@@ -2026,6 +2018,172 @@ public class Torlo extends JPanel
                 catch(Exception e2)
                 {
                     
+                }
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
+            }                                         
+         }
+    }
+	
+	class Retour_frissit implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\hibalírás.xlsx";                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               Workbook workbook = new Workbook();
+               workbook.loadFromFile(excelfile1);
+               Worksheet sheet = workbook.getWorksheets().get(0);               
+               DataTable datatable = new DataTable();
+               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
+               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               {
+                   stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) +"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'"); 
+               }              
+                                        
+               stmt.close();
+               conn.close();                
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
+	class Hanyszor_tesztelve implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Eredmények_FD301.xlsx";                             
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+            Workbook workbook = new Workbook();
+            workbook.loadFromFile(excelfile1);
+            Workbook workbook2 = new Workbook();               
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+            Worksheet sheet3 = workbook.getWorksheets().get(1);
+            DataTable datatable = new DataTable();
+            DataTable datatable2 = new DataTable();
+            int szam = 0;
+            try
+            {                
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                datatable2 = sheet3.exportDataTable(sheet3.getAllocatedRange(), false, false );
+                int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
+                sheet2.getRange().get("B" + cellaszam).setText("TEsztek száma javítás elött");
+                cellaszam++;              
+                //int oszlop = 2;
+                //int sor = 2;
+                int ismetlesek = 0;
+                for(int szamlalo = 1; szamlalo < datatable2.getRows().size(); szamlalo++)          //datatable2.getRows().size()
+                {
+                    ismetlesek = 0;
+                    for(int szamlalo2 = 1; szamlalo2 < datatable.getRows().size(); szamlalo2++)               //datatable.getRows().size()
+                    {
+                        szam = szamlalo2;
+                        //System.out.println(datatable.getRows().get(szamlalo2).getString(4));
+                        if(sheet3.getRange().get(szamlalo, 1).getText().toString().equals(sheet.getRange().get(szamlalo2, 5).getText().toString()))            //datatable2.getRows().get(szamlalo).getString(0).equals(datatable.getRows().get(szamlalo2).getString(4))
+                        {
+                            if(sheet.getRange().get(szamlalo2, 3).getText().toString().contains("Javítás"))
+                            {
+                                if(ismetlesek > 0)
+                                {
+                                    sheet2.getRange().get("A" + cellaszam).setText(sheet.getRange().get(szamlalo2, 5).getText().toString());
+                                    sheet2.getRange().get("B" + cellaszam).setText(String.valueOf(ismetlesek));
+                                    cellaszam++;
+                                    ismetlesek = 0;
+                                }                                
+                            }                               
+                            else           //datatable2.getRows().get(szamlalo).getString(0).equals(datatable.getRows().get(szamlalo2).getString(4))
+                            {
+                                if(sheet.getRange().get(szamlalo2, 7).getText().toString().contains("Rendben"))
+                                {
+                                    ismetlesek = 0;
+                                }
+                                if(sheet.getRange().get(szamlalo2, 7).getText().toString().contains("Hiba"))
+                                {
+                                    ismetlesek++;                                  
+                                }                                
+                            }                                                        
+                        }
+                    }
+                    
+                }
+                
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Hányszor tesztelve.xlsx";
+                workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook5.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook5.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra!", "Info", 1); 
+                Foablak.frame.setCursor(null);  
+            }                        
+            catch(Exception e1)
+            {
+                try
+                {
+                    System.out.println(sheet.getRange().get(szam, 3).getText().toString() +" "+sheet.getRange().get(szam, 5).getText().toString() +" "+ sheet.getRange().get(szam, 7).getText().toString());
+                    sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
+                    sheet2.getAllocatedRange().autoFitColumns();
+                    sheet2.getAllocatedRange().autoFitRows();
+                    sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    String hova = System.getProperty("user.home") + "\\Desktop\\Hányszor_biztonsági.xlsx";
+                    workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(hova);
+                    try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                        {    
+                            workbook5.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(hova);
+                        workbook5.write(output);
+                        output.close();
+                    }
+                }
+                catch(Exception e2)
+                {
+                    System.out.println("Hiba történt!!");
                 }
                 System.out.println(e1);
                 e1.printStackTrace();

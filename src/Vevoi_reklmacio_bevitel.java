@@ -695,14 +695,24 @@ public class Vevoi_reklmacio_bevitel extends JPanel
             {
                 JFileChooser mentes_helye = new JFileChooser();
                 //mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                if(System.getProperty("user.name").equals("mile.jozsef"))
+                {
+                    mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\Vevői reklamációk\\"));
+                }
+                else
+                {
+                    mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                }
                 mentes_helye.setMultiSelectionEnabled(true);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File[] fajl = mentes_helye.getSelectedFiles();
-                for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
+                if(fajl != null)
                 {
-                    kephelye.add(fajl[szamlalo].getAbsolutePath());
-                    kepneve.add(fajl[szamlalo].getName()); 
+                    for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
+                    {
+                        kephelye.add(fajl[szamlalo].getAbsolutePath());
+                        kepneve.add(fajl[szamlalo].getName()); 
+                    }
                 }
                 
             } 
@@ -725,11 +735,21 @@ public class Vevoi_reklmacio_bevitel extends JPanel
             {
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                if(System.getProperty("user.name").equals("mile.jozsef"))
+                {
+                    mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\Vevői reklamációk\\"));
+                }
+                else
+                {
+                    mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                }
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                excelhelye.add(fajl.getAbsolutePath());
-                excelneve.add(fajl.getName());
+                if(fajl != null)
+                {
+                    excelhelye.add(fajl.getAbsolutePath());
+                    excelneve.add(fajl.getName());
+                }
             } 
             catch (Exception e1) 
             {              

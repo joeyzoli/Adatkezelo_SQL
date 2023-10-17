@@ -79,6 +79,7 @@ public class Foablak extends JFrame
 	private Cmrt_adatok cmrt;
 	private Fajl_atiras fajlok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
+	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
 	private static final String jelszavam = "polip13";
@@ -346,10 +347,30 @@ public class Foablak extends JFrame
 		getContentPane().add(gorgeto);
 		
 		JLabel hatter;
-		ImageIcon img = new ImageIcon(kep);
-		hatter = new JLabel("", img ,JLabel.CENTER);
-		contentPane.add(hatter);
-		
+		if(System.getProperty("user.name").equals("boncz.szilard"))
+		{
+		    ImageIcon img = new ImageIcon(kep2);
+	        hatter = new JLabel("", img ,JLabel.CENTER);
+	        contentPane.add(hatter);
+		}
+		if(System.getProperty("user.name").equals("farkas.zoltan"))
+        {
+            ImageIcon img = new ImageIcon(kep2);
+            hatter = new JLabel("", img ,JLabel.CENTER);
+            contentPane.add(hatter);
+        }
+		if(System.getProperty("user.name").equals("kovacs.sandor"))
+        {
+            ImageIcon img = new ImageIcon(kep2);
+            hatter = new JLabel("", img ,JLabel.CENTER);
+            contentPane.add(hatter);
+        }
+		else
+		{
+    		ImageIcon img = new ImageIcon(kep);
+    		hatter = new JLabel("", img ,JLabel.CENTER);
+    		contentPane.add(hatter);
+		}
 		contentPane.setBackground(hatter_szine);
 		
 		//setContentPane(gorgeto);
