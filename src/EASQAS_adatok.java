@@ -41,7 +41,7 @@ public class EASQAS_adatok extends JPanel
 	 */
 	public EASQAS_adatok() 
 	{
-		this.setPreferredSize(new Dimension(1100, 650));
+		this.setPreferredSize(new Dimension(1222, 650));
 		
 		JLabel lblNewLabel = new JLabel("EASQAS adatok lekérezése");
 		lblNewLabel.setBounds(497, 11, 184, 48);
@@ -54,7 +54,7 @@ public class EASQAS_adatok extends JPanel
 		combobox_tomb = new ComboBox();
 		
 		
-		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));                //combobox_tomb.getCombobox2(ComboBox.projekt)
+		projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));                //combobox_tomb.getCombobox(ComboBox.projekt)
 		projekt_box.setBounds(497, 74, 191, 22);
 		
 		JLabel lblNewLabel_2 = new JLabel("Időpont -tól");
@@ -74,7 +74,7 @@ public class EASQAS_adatok extends JPanel
 		JLabel lblNewLabel_4 = new JLabel("Hibagyűtés helye");
 		lblNewLabel_4.setBounds(263, 211, 104, 14);
 		
-		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));                //combobox_tomb.getCombobox2(ComboBox.hiba_helye)
+		hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));                //combobox_tomb.getCombobox(ComboBox.hiba_helye)
 		hiba_box.setBounds(497, 207, 191, 22);
 		
 		JLabel lblNewLabel_5 = new JLabel("Projekt");
@@ -135,7 +135,7 @@ public class EASQAS_adatok extends JPanel
 		
 		table = new JTable();
 		gorgeto = new JScrollPane(table);
-		gorgeto.setBounds(193, 379, 682, 224);
+		gorgeto.setBounds(10, 379, 1164, 224);
 		add(gorgeto);
 
 	}

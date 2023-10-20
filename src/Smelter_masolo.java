@@ -170,7 +170,7 @@ public class Smelter_masolo extends JPanel {
                         {    
                             workbook2.removeSheetAt(i); 
                         }      
-                        FileOutputStream output = new FileOutputStream("");               //menteshelye
+                        FileOutputStream output = new FileOutputStream(menteshelye);               //menteshelye
                         workbook2.write(output);
                         output.close();
                     }
@@ -187,6 +187,7 @@ public class Smelter_masolo extends JPanel {
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, excel.getName()+"  " +hibauzenet, "Hiba üzenet", 2);
+                Foablak.frame.setCursor(null); 
             }
          }
     }

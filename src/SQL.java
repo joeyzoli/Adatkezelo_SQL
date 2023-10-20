@@ -67,7 +67,15 @@ public class SQL
             sheet.getAllocatedRange().autoFitRows();
             
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            
+            if(System.getProperty("user.name").equals("csader.zsolt"))
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                menteshelye = fajl.getAbsolutePath();
+            }
             workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
             resultSet.close();
             statement.close();
@@ -162,7 +170,15 @@ public class SQL
             sheet.getAllocatedRange().autoFitRows();
             
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            
+            if(System.getProperty("user.name").equals("csader.zsolt"))
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                menteshelye = fajl.getAbsolutePath();
+            }
             workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
             resultSet.close();
             statement.close();
@@ -2622,6 +2638,10 @@ public class SQL
                 datum5[1] = "";
             }
             Retour.datum_mezo.setText(datum[0]);
+            Retour.projekt_box.setSelectedItem(resultSet.getString(3));
+            Retour.cikk_box.addItem(resultSet.getString(4));
+            Retour.cikk_box.setSelectedItem(resultSet.getString(4));            
+            Retour.javagy_box.setSelectedItem(resultSet.getString(5));
             Retour.beerkezett_mezo.setText(resultSet.getString(6));
             Retour.elteres_mezo.setText(resultSet.getString(7));
             Retour.rma_mezo.setText(resultSet.getString(8));
@@ -3093,7 +3113,7 @@ public class SQL
             FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
             try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
             {
-                for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                for(int i = workbook2.getNumberOfSheets()-1; i > 0 ;i--)
                 {    
                     workbook2.removeSheetAt(i); 
                 }

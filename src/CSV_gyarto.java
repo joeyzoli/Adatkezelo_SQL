@@ -24,18 +24,22 @@ public class CSV_gyarto
 	     csv.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
 	     csv.showOpenDialog(csv);																								//fc ablak megniytása
 	     File csv_fajl = csv.getSelectedFile();																					//kiválasztott fájl odaadása egy File osztálynak
-		 workbook.loadFromFile(csv_fajl.getAbsolutePath());																				//fájl odaadása az excel osztálynak
+	     if(csv_fajl != null)
+         {
+    		 workbook.loadFromFile(csv_fajl.getAbsolutePath());																				//fájl odaadása az excel osztálynak
+    		
+    		//Get the first sheet
+    		Worksheet sheet = workbook.getWorksheets().get(0);																		//excel tábla létrehozása
+    			 
+    		//Save the document to CSV
+    		mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    		mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
+            mentes_helye.showOpenDialog(mentes_helye);
+            File fajl = mentes_helye.getSelectedFile();
+    		sheet.saveToFile(fajl.getAbsolutePath(), ",", Charset.forName("UTF-8"));												//mentés a kiválasztott helyre
+    		JOptionPane.showMessageDialog(null, "CSV kész", "Info", 1);
+        }
 		
-		//Get the first sheet
-		Worksheet sheet = workbook.getWorksheets().get(0);																		//excel tábla létrehozása
-			 
-		//Save the document to CSV
-		mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
-        mentes_helye.showOpenDialog(mentes_helye);
-        File fajl = mentes_helye.getSelectedFile();
-		sheet.saveToFile(fajl.getAbsolutePath(), ",", Charset.forName("UTF-8"));												//mentés a kiválasztott helyre
-		JOptionPane.showMessageDialog(null, "CSV kész", "Hiba üzenet", 2);
 	}
 
 }

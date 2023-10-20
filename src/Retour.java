@@ -32,9 +32,9 @@ public class Retour extends JPanel
     static JTextField datum_mezo;
     static JTextField beerkezett_mezo;
     static JTextField elteres_mezo;
-    private JComboBox<String> projekt_box;
-    private JComboBox<String> cikk_box;
-    private JComboBox<String> javagy_box;
+    static JComboBox<String> projekt_box;
+    static JComboBox<String> cikk_box;
+    static JComboBox<String> javagy_box;
     static JTextField rma_mezo;
     static JTextField megjegyzes_mezo;
     static JTextField hova_mezo;
@@ -147,7 +147,7 @@ public class Retour extends JPanel
         add(lblNewLabel_7);
         
         rma_mezo = new JTextField();
-        rma_mezo.setBounds(108, 182, 86, 20);
+        rma_mezo.setBounds(96, 182, 86, 20);
         add(rma_mezo);
         rma_mezo.setColumns(10);
         
@@ -263,11 +263,11 @@ public class Retour extends JPanel
         setBackground(Foablak.hatter_szine);
         
         JLabel lblNewLabel_19 = new JLabel("RMA Vevői");
-        lblNewLabel_19.setBounds(222, 185, 84, 14);
+        lblNewLabel_19.setBounds(204, 185, 84, 14);
         add(lblNewLabel_19);
         
         vevoirma_mezo = new JTextField();
-        vevoirma_mezo.setBounds(288, 182, 86, 20);
+        vevoirma_mezo.setBounds(271, 182, 145, 20);
         add(vevoirma_mezo);
         vevoirma_mezo.setColumns(10);
         

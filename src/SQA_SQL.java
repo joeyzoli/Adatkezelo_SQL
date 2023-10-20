@@ -267,7 +267,7 @@ public class SQA_SQL {
         }
     }
     
-    public void minden_excel(String SQL)
+    public void minden_excel(String SQL, String fajlneve)
     {
         Connection conn = null;
         Statement stmt = null;
@@ -297,17 +297,17 @@ public class SQA_SQL {
         //Get the first worksheet
         Worksheet sheet = workbook.getWorksheets().get(0);
         sheet.insertDataTable(datatable, true, 1, 1);
-        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:AC1"));
         sheet.getAllocatedRange().autoFitColumns();
         sheet.getAllocatedRange().autoFitRows();
         
-        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+        sheet.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
         /*JFileChooser mentes_helye = new JFileChooser();
         mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
         mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         mentes_helye.showOpenDialog(mentes_helye);*/
-        File fajl = new File(System.getProperty("user.home") + "\\Desktop\\SQA Reklamáció-k.xlsx");                                                        //mentes_helye.getSelectedFile();
+        File fajl = new File(System.getProperty("user.home") + "\\Desktop\\"+ fajlneve);                                                        //mentes_helye.getSelectedFile();
         //System.out.println(fajl.getAbsolutePath());
         workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
         resultSet.close();
@@ -325,7 +325,7 @@ public class SQA_SQL {
             workbook2.write(output);
             output.close();
         }
-        JOptionPane.showMessageDialog(null, "Mentve az asztalra SQA Reklamáció-k.xlsx néven", "Info", 1);
+        JOptionPane.showMessageDialog(null, "Mentve az asztalra "+ fajlneve +" néven", "Info", 1);
         } 
         catch (SQLException e1) 
         {

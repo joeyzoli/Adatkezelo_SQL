@@ -19,18 +19,20 @@ public class Adat_torles extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField datum;
+	private JTextField datumtol_mezo;
 	static JTable table;
 	private JScrollPane scrollPane;
 	private JTextField nev_mezo;
 	private JTextField projekt_mezo;
 	private JTextField cikkszam_mezo;
+	private JTextField datumig_mezo;
+	private JTextField hibahelye_mezo;
 	/**
 	 * Create the panel.
 	 */
 	public Adat_torles() 
 	{
-		this.setPreferredSize(new Dimension(1549, 713));
+		this.setPreferredSize(new Dimension(1820, 850));
 		
 		new ComboBox();
 		
@@ -39,65 +41,83 @@ public class Adat_torles extends JPanel
 		lblNewLabel.setForeground(Color.RED);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JLabel lblNewLabel_3 = new JLabel("Dátum");
-		lblNewLabel_3.setBounds(399, 71, 86, 14);
+		JLabel lblNewLabel_3 = new JLabel("Dátum -tól");
+		lblNewLabel_3.setBounds(399, 53, 86, 14);
 		
-		datum = new JTextField();
-		datum.setBounds(495, 68, 193, 20);
-		datum.setColumns(10);
+		datumtol_mezo = new JTextField();
+		datumtol_mezo.setBounds(495, 50, 193, 20);
+		datumtol_mezo.setColumns(10);
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
 		add(lblNewLabel_3);
-		add(datum);
+		add(datumtol_mezo);
 		
 		JButton leker_gomb = new JButton("Lekérdés");
-		leker_gomb.setBounds(495, 211, 89, 23);
+		leker_gomb.setBounds(495, 273, 89, 23);
 		leker_gomb.addActionListener(new Lekerdezo());
 		add(leker_gomb);
 		
 		table = new JTable();
 		scrollPane = new JScrollPane(table);
 		//table.setBounds(63, 410, 948, -51);
-		scrollPane.setBounds(61, 264, 1458, 352);
+		scrollPane.setBounds(58, 307, 1812, 464);
 		add(scrollPane);
 		
 		JButton ujra = new JButton("Újraír");
 		ujra.addActionListener(new Visszair());
-		ujra.setBounds(495, 627, 89, 23);
+		ujra.setBounds(495, 782, 89, 23);
 		add(ujra);
 		
 		JButton sortorles_gomb = new JButton("Sor törlése");
 		sortorles_gomb.addActionListener(new Sortorles());
-		sortorles_gomb.setBounds(474, 661, 121, 23);
+		sortorles_gomb.setBounds(472, 816, 121, 23);
 		add(sortorles_gomb);
 		
 		JLabel lblNewLabel_1 = new JLabel("Név");
-		lblNewLabel_1.setBounds(399, 102, 46, 14);
+		lblNewLabel_1.setBounds(399, 115, 46, 14);
 		add(lblNewLabel_1);
 		
 		nev_mezo = new JTextField();
-		nev_mezo.setBounds(495, 99, 193, 20);
+		nev_mezo.setBounds(495, 112, 193, 20);
 		add(nev_mezo);
 		nev_mezo.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Projekt");
-		lblNewLabel_2.setBounds(399, 133, 46, 14);
+		lblNewLabel_2.setBounds(399, 146, 46, 14);
 		add(lblNewLabel_2);
 		
 		projekt_mezo = new JTextField();
-		projekt_mezo.setBounds(495, 130, 193, 20);
+		projekt_mezo.setBounds(495, 143, 193, 20);
 		add(projekt_mezo);
 		projekt_mezo.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Cikkszám");
-		lblNewLabel_4.setBounds(399, 173, 65, 14);
+		lblNewLabel_4.setBounds(399, 187, 65, 14);
 		add(lblNewLabel_4);
 		
 		cikkszam_mezo = new JTextField();
-		cikkszam_mezo.setBounds(495, 170, 193, 20);
+		cikkszam_mezo.setBounds(495, 184, 193, 20);
 		add(cikkszam_mezo);
 		cikkszam_mezo.setColumns(10);
+		
+		datumig_mezo = new JTextField();
+		datumig_mezo.setBounds(495, 81, 193, 20);
+		add(datumig_mezo);
+		datumig_mezo.setColumns(10);
+		
+		JLabel lblNewLabel_5 = new JLabel("Dátum -ig");
+		lblNewLabel_5.setBounds(399, 84, 65, 14);
+		add(lblNewLabel_5);
+		
+		JLabel lblNewLabel_6 = new JLabel("Hibagyűjtés helye");
+		lblNewLabel_6.setBounds(399, 224, 86, 14);
+		add(lblNewLabel_6);
+		
+		hibahelye_mezo = new JTextField();
+		hibahelye_mezo.setBounds(495, 221, 193, 20);
+		add(hibahelye_mezo);
+		hibahelye_mezo.setColumns(10);
 
 	}
 	
@@ -107,7 +127,7 @@ public class Adat_torles extends JPanel
          {
             try
             {
-                String nev;String projekt;String cikk;
+                String nev;String projekt;String cikk;String hibahelye;
                 if(nev_mezo.getText().equals(""))
                 {
                     nev = "%";                   
@@ -132,7 +152,16 @@ public class Adat_torles extends JPanel
                 {
                     cikk = cikkszam_mezo.getText() +"%";
                 }
-                String sql = "SELECT * FROM  qualitydb.Gyartasi_adatok where Datum = '"+ datum.getText() +"' and Ellenor_neve like '"+ nev +"' and Vevo like '"+ projekt +"' and VT_azon like '"+ cikk +"'";
+                if(hibahelye_mezo.getText().equals(""))
+                {
+                    hibahelye = "%";                   
+                }
+                else
+                {
+                    hibahelye = hibahelye_mezo.getText() +"%";
+                }
+                String sql = "SELECT * FROM  qualitydb.Gyartasi_adatok where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' "
+                        + "and Ellenor_neve like '"+ nev +"' and Vevo like '"+ projekt +"' and VT_azon like '"+ cikk +"' and Hibagyujtes_helye like '"+ hibahelye +"'";
                 SQL lekerdez = new SQL();
                 lekerdez.adat_modositashoz(sql);
                 //resizeColumnWidth(table);

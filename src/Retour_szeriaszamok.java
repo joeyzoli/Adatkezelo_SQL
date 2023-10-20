@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -49,7 +50,7 @@ public class Retour_szeriaszamok extends JPanel {
      */
     public Retour_szeriaszamok() {
         setLayout(null);
-        
+        Foablak.meretek.setSize(1350, 850);
         JLabel lblNewLabel = new JLabel("Retour szériaszámok nyomonkövetése");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel.setBounds(535, 44, 278, 14);
@@ -280,7 +281,7 @@ public class Retour_szeriaszamok extends JPanel {
         add(lblNewLabel_16);
         
         JLabel lblNewLabel_17 = new JLabel("Hibakód");
-        lblNewLabel_17.setBounds(776, 261, 46, 14);
+        lblNewLabel_17.setBounds(738, 261, 46, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Hiba eredete");
@@ -303,17 +304,23 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_19.setBounds(776, 319, 77, 14);
         add(lblNewLabel_19);
         
-        hiba_mezo = new JTextArea();
-        hiba_mezo.setBounds(868, 314, 285, 81);
-        add(hiba_mezo);
+        hiba_mezo = new JTextArea();               
+        hiba_mezo.setLineWrap(true);
+        hiba_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto1 = new JScrollPane(hiba_mezo);
+        gorgeto1.setBounds(868, 314, 285, 81);
+        add(gorgeto1);
         
         JLabel lblNewLabel_20 = new JLabel("Javítás leírása");
         lblNewLabel_20.setBounds(767, 420, 86, 14);
         add(lblNewLabel_20);
         
-        javitas_mezo = new JTextArea();
-        javitas_mezo.setBounds(868, 423, 285, 81);
-        add(javitas_mezo);
+        javitas_mezo = new JTextArea();        
+        javitas_mezo.setLineWrap(true);
+        javitas_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto2 = new JScrollPane(javitas_mezo);
+        gorgeto2.setBounds(868, 423, 285, 81);
+        add(gorgeto2);
         
         JLabel lblNewLabel_21 = new JLabel("OK");
         lblNewLabel_21.setBounds(628, 202, 28, 14);
@@ -339,17 +346,23 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_24.setBounds(380, 537, 60, 14);
         add(lblNewLabel_24);
         
-        hibaoka_mezo = new JTextArea();
-        hibaoka_mezo.setBounds(450, 532, 285, 81);
-        add(hibaoka_mezo);
+        hibaoka_mezo = new JTextArea();        
+        hibaoka_mezo.setLineWrap(true);
+        hibaoka_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto3 = new JScrollPane(hibaoka_mezo);
+        gorgeto3.setBounds(450, 532, 285, 81);
+        add(gorgeto3);
         
         JLabel lblNewLabel_25 = new JLabel("Intézkedés leírása");
         lblNewLabel_25.setBounds(757, 537, 112, 14);
         add(lblNewLabel_25);
         
-        intezkedes_mezo = new JTextArea();
-        intezkedes_mezo.setBounds(868, 532, 285, 81);
-        add(intezkedes_mezo);
+        intezkedes_mezo = new JTextArea();        
+        intezkedes_mezo.setLineWrap(true);
+        intezkedes_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto4 = new JScrollPane(intezkedes_mezo);
+        gorgeto4.setBounds(868, 532, 285, 81);
+        add(gorgeto4);
         
         JButton mentes_gomb = new JButton("Mentés");
         mentes_gomb.addActionListener(new Mentes());
@@ -358,7 +371,7 @@ public class Retour_szeriaszamok extends JPanel {
         
         combobox_tomb = new ComboBox();
         hibakod_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                      //combobox_tomb.getCombobox(ComboBox.hibakodok)
-        hibakod_box.setBounds(868, 257, 285, 22);
+        hibakod_box.setBounds(794, 257, 506, 22);
         add(hibakod_box);
         
         JButton kepcsatol_gomb = new JButton("Kép csatolása");
@@ -374,6 +387,8 @@ public class Retour_szeriaszamok extends JPanel {
         JLabel lblNewLabel_26 = new JLabel("Csatolt kép mentése az asztalra");
         lblNewLabel_26.setBounds(829, 658, 188, 14);
         add(lblNewLabel_26);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
@@ -405,6 +420,50 @@ public class Retour_szeriaszamok extends JPanel {
                     String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"' order by id desc";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
+                    vizualis_csekk1.setSelected(false);
+                    vizualis_csekk2.setSelected(false);        
+                    vizualis_csekk3.setSelected(false);        
+                    vizualis_csekk4.setSelected(false);        
+                    vizualis_csekk5.setSelected(false);        
+                    vizualis_csekk6.setSelected(false);       
+                    ict_csekk1.setSelected(false);       
+                    ict_csekk2.setSelected(false);        
+                    ict_csekk3.setSelected(false);        
+                    ict_csekk4.setSelected(false);        
+                    ict_csekk5.setSelected(false);       
+                    ict_csekk6.setSelected(false);       
+                    fct_csekk1.setSelected(false);       
+                    fct_csekk2.setSelected(false);       
+                    fct_csekk3.setSelected(false);      
+                    fct_csekk4.setSelected(false);        
+                    fct_csekk5.setSelected(false);      
+                    fct_csekk6.setSelected(false);       
+                    meres_csekk1.setSelected(false);       
+                    meres_csekk2.setSelected(false);       
+                    meres_csekk3.setSelected(false);        
+                    meres_csekk4.setSelected(false);       
+                    meres_csekk5.setSelected(false);        
+                    meres_csekk6.setSelected(false);       
+                    rontgen_csekk1.setSelected(false);        
+                    rontgen_csekk2.setSelected(false);        
+                    rontgen_csekk3.setSelected(false);        
+                    rontgen_csekk4.setSelected(false);       
+                    rontgen_csekk5.setSelected(false);      
+                    rontgen_csekk6.setSelected(false);       
+                    egyeb_csekk1.setSelected(false);       
+                    egyeb_csekk2.setSelected(false);        
+                    egyeb_csekk3.setSelected(false);        
+                    egyeb_csekk4.setSelected(false);        
+                    egyeb_csekk5.setSelected(false);        
+                    egyeb_csekk6.setSelected(false);       
+                    hibakod_box.setSelectedIndex(1);        
+                    beszallito.setSelected(false);        
+                    veas.setSelected(false);        
+                    vevo.setSelected(false);
+                    hiba_mezo.setText("");
+                    javitas_mezo.setText("");
+                    hibaoka_mezo.setText("");
+                    intezkedes_mezo.setText("");
                     if(rs.next()) {
                         if(rs.getString(5) != null) {
                             if(rs.getString(5).equals("igen")) {
@@ -966,7 +1025,52 @@ public class Retour_szeriaszamok extends JPanel {
             {
                iro_kep(szeriaszam_mezo.getText(), kephelye.get(szamlalo), kepneve.get(szamlalo));          
             }
+            
+            vizualis_csekk1.setSelected(false);
+            vizualis_csekk2.setSelected(false);        
+            vizualis_csekk3.setSelected(false);        
+            vizualis_csekk4.setSelected(false);        
+            vizualis_csekk5.setSelected(false);        
+            vizualis_csekk6.setSelected(false);       
+            ict_csekk1.setSelected(false);       
+            ict_csekk2.setSelected(false);        
+            ict_csekk3.setSelected(false);        
+            ict_csekk4.setSelected(false);        
+            ict_csekk5.setSelected(false);       
+            ict_csekk6.setSelected(false);       
+            fct_csekk1.setSelected(false);       
+            fct_csekk2.setSelected(false);       
+            fct_csekk3.setSelected(false);      
+            fct_csekk4.setSelected(false);        
+            fct_csekk5.setSelected(false);      
+            fct_csekk6.setSelected(false);       
+            meres_csekk1.setSelected(false);       
+            meres_csekk2.setSelected(false);       
+            meres_csekk3.setSelected(false);        
+            meres_csekk4.setSelected(false);       
+            meres_csekk5.setSelected(false);        
+            meres_csekk6.setSelected(false);       
+            rontgen_csekk1.setSelected(false);        
+            rontgen_csekk2.setSelected(false);        
+            rontgen_csekk3.setSelected(false);        
+            rontgen_csekk4.setSelected(false);       
+            rontgen_csekk5.setSelected(false);      
+            rontgen_csekk6.setSelected(false);       
+            egyeb_csekk1.setSelected(false);       
+            egyeb_csekk2.setSelected(false);        
+            egyeb_csekk3.setSelected(false);        
+            egyeb_csekk4.setSelected(false);        
+            egyeb_csekk5.setSelected(false);        
+            egyeb_csekk6.setSelected(false);       
+            hibakod_box.setSelectedIndex(1);        
+            beszallito.setSelected(false);        
+            veas.setSelected(false);        
+            vevo.setSelected(false);                            
             szeriaszam_mezo.setText("");
+            hiba_mezo.setText("");
+            javitas_mezo.setText("");
+            hibaoka_mezo.setText("");
+            intezkedes_mezo.setText("");
             stmt.close();
             conn.close();                  
             }                    
@@ -1035,6 +1139,7 @@ public class Retour_szeriaszamok extends JPanel {
     {   
         Connection conn = null;
         PreparedStatement stmt = null;
+        Statement stmt2 = null;
         try 
         {
            try 
@@ -1049,15 +1154,24 @@ public class Retour_szeriaszamok extends JPanel {
            }
            
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
-                                                                                                          //csatlakozás
+        stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);                                                                                                  //csatlakozás
+        String sql = "Select Retour_ID from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam +"' or Vevoi_ID = '"+ szeriaszam +"'" ;
+        stmt2.execute(sql);
+        ResultSet rs = stmt2.getResultSet();
+        String id = "";
+        if(rs.next())
+        {
+            id = rs.getString(1);
+        }
         
         File image = new File(kephelye);
         FileInputStream fis = new FileInputStream (image);
-        String sql = "INSERT INTO qualitydb.Retour_kepek(Szeriaszam, Kepneve,Kep) VALUES(?,?,?)";
+        sql = "INSERT INTO qualitydb.Retour_kepek(Szeriaszam, Kepneve,Kep, Retour_ID) VALUES(?,?,?,?)";
         stmt = conn.prepareStatement(sql);
         stmt.setString(1, szeriaszam);
         stmt.setString(2, kepneve);
         stmt.setBinaryStream (3, fis, (int) image.length());
+        stmt.setString(4, id);
         stmt.executeUpdate();                                                                                                                 //sql utasítás végrehajtása
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

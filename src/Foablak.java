@@ -11,7 +11,11 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -78,8 +82,11 @@ public class Foablak extends JFrame
 	private Retour_szeriaszamok returtortenet;
 	private Cmrt_adatok cmrt;
 	private Fajl_atiras fajlok;
+	private Ellenori_lapok lapok;
+	private CSV csv;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
+	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
 	private static final String jelszavam = "polip13";
@@ -162,6 +169,7 @@ public class Foablak extends JFrame
 		proglove.addActionListener(new PanelCsere_proglove());
 		
 		JMenuItem ellenori_lapok = new JMenuItem("Ellenőri lapok");
+		ellenori_lapok.addActionListener(new Panelcsere_Ellenorilapok());
 		menu.add(ellenori_lapok);
 		menu.add(proglove);
 		
@@ -323,6 +331,10 @@ public class Foablak extends JFrame
 		JMenuItem fajl_atiras = new JMenuItem("Fájl átírás");
 		fajl_atiras.addActionListener(new Panelcsere_Fajlatiras());
 		egyeb.add(fajl_atiras);
+		
+		JMenuItem csv_gyart = new JMenuItem("CSV készítő");
+		csv_gyart.addActionListener(new Panelcsere_CSV());
+		egyeb.add(csv_gyart);
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -346,24 +358,79 @@ public class Foablak extends JFrame
 		JScrollPane gorgeto = new JScrollPane(contentPane);
 		getContentPane().add(gorgeto);
 		
-		JLabel hatter;
-		if(System.getProperty("user.name").equals("boncz.szilard"))
-		{
-		    ImageIcon img = new ImageIcon(kep2);
-	        hatter = new JLabel("", img ,JLabel.CENTER);
-	        contentPane.add(hatter);
-		}
-		if(System.getProperty("user.name").equals("farkas.zoltan"))
-        {
-            ImageIcon img = new ImageIcon(kep2);
-            hatter = new JLabel("", img ,JLabel.CENTER);
-            contentPane.add(hatter);
+		SimpleDateFormat rovid = new SimpleDateFormat("dd-MMM-yyyy");
+		SimpleDateFormat hosszu = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+		Date mai = new Date();
+		String maiido = rovid.format(mai);
+		Date reggelvege = null;
+		Date d3 = new Date();
+        try {
+            reggelvege = hosszu.parse(maiido+" 11:00:00");
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-		if(System.getProperty("user.name").equals("kovacs.sandor"))
+		JLabel hatter;
+		if(System.getProperty("user.name").equals("Boncz Szilárd"))
+		{
+		    if(reggelvege.compareTo(d3) > 0) 
+	        {
+		        ImageIcon img = new ImageIcon(kep2);
+	            hatter = new JLabel("", img ,JLabel.CENTER);
+	            contentPane.add(hatter);
+	        }
+		    else
+		    {
+		        ImageIcon img = new ImageIcon(kep3);
+                hatter = new JLabel("", img ,JLabel.CENTER);
+                contentPane.add(hatter);
+		    }		    
+		}
+		else if(System.getProperty("user.name").equals("boncz.szilard"))
         {
-            ImageIcon img = new ImageIcon(kep2);
-            hatter = new JLabel("", img ,JLabel.CENTER);
-            contentPane.add(hatter);
+            if(reggelvege.compareTo(d3) > 0) 
+            {
+                ImageIcon img = new ImageIcon(kep2);
+                hatter = new JLabel("", img ,JLabel.CENTER);
+                contentPane.add(hatter);
+            }
+            else
+            {
+                ImageIcon img = new ImageIcon(kep3);
+                hatter = new JLabel("", img ,JLabel.CENTER);
+                contentPane.add(hatter);
+            }           
+        }
+		else if(System.getProperty("user.name").equals("farkas.zoltan"))
+        {
+		    if(reggelvege.compareTo(d3) > 0) 
+            {
+                ImageIcon img = new ImageIcon(kep2);
+                hatter = new JLabel("", img ,JLabel.CENTER);
+                contentPane.add(hatter);
+            }
+            else
+            {
+                ImageIcon img = new ImageIcon(kep3);
+                hatter = new JLabel("", img ,JLabel.CENTER);
+                contentPane.add(hatter);
+            }
+        }
+		else if(System.getProperty("user.name").equals("kovacs.sandor"))
+        {
+		    if(reggelvege.compareTo(d3) > 0) 
+            {
+		        ImageIcon img = new ImageIcon(kep2);
+	            hatter = new JLabel("", img ,JLabel.CENTER);
+	            contentPane.add(hatter);
+            }
+		    else
+		    {
+		        ImageIcon img = new ImageIcon(kep3);
+	            hatter = new JLabel("", img ,JLabel.CENTER);
+	            contentPane.add(hatter);
+		    }
+            
         }
 		else
 		{
@@ -803,6 +870,28 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Ellenorilapok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            lapok = new Ellenori_lapok();
+            JScrollPane ablak = new JScrollPane(lapok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_CSV implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            csv = new CSV();
+            JScrollPane ablak = new JScrollPane(csv);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -931,7 +1020,9 @@ public class Foablak extends JFrame
                 sqa.mindenes(modosit);
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
-            }/*
+            }
+            //System.out.println(System.getProperty("user.name"));
+            /*
             Runtime runtime = Runtime.getRuntime();
             try {
                 Process proc = runtime.exec("shutdown -s -t 0");

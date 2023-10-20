@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -402,6 +403,9 @@ public class AVM_csomagoloanyag extends JPanel {
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Workbook workbook = new Workbook();
             Worksheet sheet = workbook.getWorksheets().get(0);
+            Worksheet sheet2 = workbook.getWorksheets().get(1);
+            sheet.setName("80");
+            sheet2.setName("91");
             try
             {                                           
                 DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -415,7 +419,7 @@ public class AVM_csomagoloanyag extends JPanel {
                         + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek\r\n"
                         + "        from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
                         + "        where 3 = 3\r\n"
-                        + "        and QTY_ONHAND > 0 and (WAREHOUSE = '80' or WAREHOUSE = '91')\r\n"
+                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '80' \r\n"
                         + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no)) belso\r\n"
                         + "where besz.part_no = belso.Cikkszam");
 
@@ -424,6 +428,11 @@ public class AVM_csomagoloanyag extends JPanel {
                 sheet.getRange().get("C" + cellaszam).setText("Beszállító");
                 sheet.getRange().get("D" + cellaszam).setText("Zárolt Mennyiség");
                 sheet.getRange().get("E" + cellaszam).setText("Zárolt érték");
+                sheet2.getRange().get("A" + cellaszam).setText("Cikkszám");
+                sheet2.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
+                sheet2.getRange().get("C" + cellaszam).setText("Beszállító");
+                sheet2.getRange().get("D" + cellaszam).setText("Zárolt Mennyiség");
+                sheet2.getRange().get("E" + cellaszam).setText("Zárolt érték");
                 cellaszam++;
                 
                 while(rs.next())
@@ -435,23 +444,71 @@ public class AVM_csomagoloanyag extends JPanel {
                     sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));                   
                     cellaszam++;
                 }
+                
+                rs = stmt.executeQuery("select belso.Cikkszam, belso.Megnevezes, ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO) as Beszallito, belso.Mennyiseg, belso.Ertek\r\n"
+                        + "from ifsapp.PURCHASE_PART_SUPPLIER besz,\r\n"
+                        + "        (select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
+                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek\r\n"
+                        + "        from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
+                        + "        where 3 = 3\r\n"
+                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '91' \r\n"
+                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no)) belso\r\n"
+                        + "where besz.part_no = belso.Cikkszam");
+                cellaszam = 2;
+                while(rs.next())
+                {
+                    sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                    sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                    sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                    sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                    sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));                   
+                    cellaszam++;
+                }
                 //sheet.getCellRange("E2:E" + sheet.getLastRow()).setNumberFormat("0");
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
-                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás                
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás   
                 
-                workbook.saveToFile(zarolt, ExcelVersion.Version2016);
-                FileInputStream fileStream = new FileInputStream(zarolt);
-                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás 
+                
+                File f = new File(zarolt);
+                if (f.isFile() && f.canRead()) 
                 {
-                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
-                    {    
-                        workbook3.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(zarolt);
-                    workbook3.write(output);
-                    output.close();
+                    workbook.saveToFile(zarolt, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(zarolt);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(zarolt);
+                        workbook3.write(output);
+                        output.close();
+                    }
+                }
+                else if (f.isFile() && !f.canRead())
+                {
+                    JOptionPane.showMessageDialog(null, "A fájl meg van nyitva, nem lehet menteni!!", "Hiba üzenet", 2);
+                }
+                else
+                {
+                    workbook.saveToFile(zarolt, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(zarolt);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(zarolt);
+                        workbook3.write(output);
+                        output.close();
+                    }
                 }
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Zárolt készlet.xlsx néven!", "Info", 1);       

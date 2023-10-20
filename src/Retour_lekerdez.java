@@ -1,9 +1,14 @@
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
 
 public class Retour_lekerdez extends JPanel 
 {
@@ -23,12 +29,14 @@ public class Retour_lekerdez extends JPanel
     static JTable table;
     private SQL lekerdezes = new SQL();
     private JTextField id_mezo;
+    private ComboBox combobox_tomb;
+    private JComboBox<String> vevo_box;
     /**
      * Create the panel.
      */
     public Retour_lekerdez() 
     {
-        this.setPreferredSize(new Dimension(1906, 700));
+        this.setPreferredSize(new Dimension(1906, 748));
         setLayout(null);
         
         new ComboBox();
@@ -59,7 +67,7 @@ public class Retour_lekerdez extends JPanel
         datumig.setColumns(10);
         
         JButton keres_gomb = new JButton("Keresés");
-        keres_gomb.setBounds(517, 204, 89, 23);
+        keres_gomb.setBounds(520, 232, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
@@ -81,8 +89,8 @@ public class Retour_lekerdez extends JPanel
         lblNewLabel_4.setBounds(464, 155, 46, 14);
         add(lblNewLabel_4);
         
-        JLabel lblNewLabel_8 = new JLabel("Excel");
-        lblNewLabel_8.setBounds(443, 565, 46, 14);
+        JLabel lblNewLabel_8 = new JLabel("Excel grafikonnal");
+        lblNewLabel_8.setBounds(387, 565, 102, 14);
         add(lblNewLabel_8);
         
         JButton excelmentes = new JButton("Mentés");
@@ -92,6 +100,38 @@ public class Retour_lekerdez extends JPanel
         ido();
         
         setBackground(Foablak.hatter_szine);
+        
+        JLabel lblNewLabel_1 = new JLabel("Retour szériaszámok");
+        lblNewLabel_1.setBounds(387, 672, 125, 14);
+        add(lblNewLabel_1);
+        
+        JButton szeriaszam_mentes = new JButton("Mentés");
+        szeriaszam_mentes.addActionListener(new Szeriaszammentes());
+        szeriaszam_mentes.setBounds(520, 668, 89, 23);
+        add(szeriaszam_mentes);
+        
+        JLabel lblNewLabel_5 = new JLabel("Vevő");
+        lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_5.setBounds(464, 195, 46, 14);
+        add(lblNewLabel_5);
+        
+        combobox_tomb = new ComboBox();
+        vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));               //combobox_tomb.getCombobox(ComboBox.projekt)
+        vevo_box.setBounds(520, 191, 225, 22);
+        add(vevo_box);
+        
+        JButton mindenadat_gomb = new JButton("Mentés");
+        mindenadat_gomb.addActionListener(new Retour_minden());
+        mindenadat_gomb.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        mindenadat_gomb.setBounds(520, 614, 89, 23);
+        add(mindenadat_gomb);
+        
+        JLabel lblNewLabel_6 = new JLabel("Excel minden adat");
+        lblNewLabel_6.setBounds(387, 618, 123, 14);
+        add(lblNewLabel_6);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -155,11 +195,107 @@ public class Retour_lekerdez extends JPanel
          }
     }
     
+    class Retour_minden implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                SQA_SQL excel = new SQA_SQL();
+                if(vevo_box.getSelectedItem().equals("-"))
+                {
+                    String sql = "select * from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                    excel.minden_excel(sql, "Retourok minden adat.xlsx");
+                }
+                else
+                {
+                    String sql = "select * from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
+                    excel.minden_excel(sql, "Retourok minden adat.xlsx");
+                }
+                Foablak.frame.setCursor(null);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Szeriaszammentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                SQA_SQL excel = new SQA_SQL();
+                if(id_mezo.getText().equals(""))
+                {
+                    Connection conn = null;
+                    Statement stmt = null;        
+                    try 
+                    {
+                       Class.forName("com.mysql.cj.jdbc.Driver");
+                    } 
+                    catch (Exception e1) 
+                    {
+                       System.out.println(e1);
+                       String hibauzenet2 = e1.toString();
+                       JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                    }
+                       
+                    
+                    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                    stmt = (Statement) conn.createStatement();
+                    String sql = "";
+                    if(vevo_box.getSelectedItem().equals("-"))
+                    {
+                        sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                    }
+                    else
+                    {
+                        sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
+                    }
+                    
+                    stmt.execute(sql);
+                    ResultSet rs = stmt.getResultSet();
+                    String idk = "";
+                    while(rs.next())
+                    {
+                        idk += rs.getString(1) +",";
+                    }
+                    idk = idk.substring(0, idk.length() - 1);
+                    stmt.close();
+                    conn.close();
+                    
+                    sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID in ("+ idk +")";
+                    excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                }
+                else
+                {
+                    String sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID = '"+ id_mezo.getText() +"'";
+                    excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
     public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
     {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         Date date = new Date();
         datumig.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
     }
-
 }
