@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -36,7 +39,7 @@ public class Retour_lekerdez extends JPanel
      */
     public Retour_lekerdez() 
     {
-        this.setPreferredSize(new Dimension(1906, 748));
+        this.setPreferredSize(new Dimension(1906, 837));
         setLayout(null);
         
         new ComboBox();
@@ -132,6 +135,15 @@ public class Retour_lekerdez extends JPanel
         JLabel lblNewLabel_6 = new JLabel("Excel minden adat");
         lblNewLabel_6.setBounds(387, 618, 123, 14);
         add(lblNewLabel_6);
+        
+        JButton kepmentes_gomb = new JButton("Mentés");
+        kepmentes_gomb.addActionListener(new Szeriaszammentes_kepek());
+        kepmentes_gomb.setBounds(520, 720, 89, 23);
+        add(kepmentes_gomb);
+        
+        JLabel lblNewLabel_7 = new JLabel("Szériaszámokhoz tartozó képek mentése");
+        lblNewLabel_7.setBounds(266, 724, 244, 14);
+        add(lblNewLabel_7);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -232,6 +244,7 @@ public class Retour_lekerdez extends JPanel
          {
             try 
             {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 SQA_SQL excel = new SQA_SQL();
                 if(id_mezo.getText().equals(""))
                 {
@@ -252,6 +265,86 @@ public class Retour_lekerdez extends JPanel
                     conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                     stmt = (Statement) conn.createStatement();
                     String sql = "";
+                    if(id_mezo.getText().equals(""))
+                    {
+                        sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                    
+                    
+                        if(vevo_box.getSelectedItem().equals("-"))
+                        {
+                            sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                        }
+                        else
+                        {
+                            sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
+                        }
+                    
+                        stmt.execute(sql);
+                        ResultSet rs = stmt.getResultSet();
+                        String idk = "";
+                        while(rs.next())
+                        {
+                            idk += rs.getString(1) +",";
+                        }
+                        idk = idk.substring(0, idk.length() - 1);
+                        stmt.close();
+                        conn.close();
+                        
+                        sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID in ("+ idk +")";
+                        excel.minden_excel(sql, "Retour szériaszámok.xlsx");                      
+                    }
+                    else
+                    {
+                        sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID = '"+ id_mezo.getText() +"'";
+                        excel.minden_excel(sql, "Retour szériaszámok.xlsx"); 
+                    }
+                }
+                else
+                {
+                    String sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID = '"+ id_mezo.getText() +"'";
+                    excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                }
+                Foablak.frame.setCursor(null);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Szeriaszammentes_kepek implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Connection conn = null;
+                Statement stmt = null;
+                FileOutputStream fs=null;
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) conn.createStatement();
+                if(id_mezo.getText().equals(""))
+                {                    
+                    try 
+                    {
+                       Class.forName("com.mysql.cj.jdbc.Driver");
+                    } 
+                    catch (Exception e1) 
+                    {
+                       System.out.println(e1);
+                       String hibauzenet2 = e1.toString();
+                       JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                    }                          
+                    String sql = "";
+                    sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                    
+                    
                     if(vevo_box.getSelectedItem().equals("-"))
                     {
                         sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
@@ -260,7 +353,7 @@ public class Retour_lekerdez extends JPanel
                     {
                         sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
                     }
-                    
+                
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
                     String idk = "";
@@ -268,18 +361,71 @@ public class Retour_lekerdez extends JPanel
                     {
                         idk += rs.getString(1) +",";
                     }
-                    idk = idk.substring(0, idk.length() - 1);
-                    stmt.close();
-                    conn.close();
+                    idk = idk.substring(0, idk.length() - 1);                   
                     
-                    sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID in ("+ idk +")";
-                    excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                    sql = "select * from qualitydb.Retour_kepek where Retour_ID in ("+ idk +")";
+                    stmt.execute(sql);
+                    rs = stmt.getResultSet();         
+                    byte b[];
+                    Blob blob;
+                    int szam = 0;
+                    while(rs.next())
+                    {        
+                        File f = new File(System.getProperty("user.home") + "\\Desktop\\Retour "+ id_mezo.getText() +" képek\\"+ rs.getString(5) +"_"+ rs.getString(2) +"_"+ rs.getString(3));
+                        f.getParentFile().mkdirs(); 
+                        f.createNewFile();
+                        fs = new FileOutputStream(f);
+                        blob = rs.getBlob("Kep");
+                        b = blob.getBytes(1, (int)blob.length());
+                        fs.write(b);
+                        fs.close();
+                        szam++;
+                    }
+                    if(szam > 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Nincsen csatolt kép", "Info", 1);
+                    }         
+                         
+                    
+                    
                 }
                 else
                 {
-                    String sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID = '"+ id_mezo.getText() +"'";
-                    excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                    String sql = "select kep, szeriaszam, kepneve, retour_id from qualitydb.Retour_kepek where Retour_ID = '"+ id_mezo.getText() +"'";
+ 
+                    stmt.execute(sql);
+                    ResultSet rs = stmt.getResultSet();         
+                    byte b[];
+                    Blob blob;
+                    int szam = 0;
+                    while(rs.next())
+                    {        
+                        File f = new File(System.getProperty("user.home") + "\\Desktop\\Retour "+ id_mezo.getText() +" képek\\"+ rs.getString(4) +"_"+ rs.getString(2) +"_"+ rs.getString(3));
+                        f.getParentFile().mkdirs(); 
+                        f.createNewFile();
+                        fs = new FileOutputStream(f);
+                        blob = rs.getBlob("Kep");
+                        b = blob.getBytes(1, (int)blob.length());
+                        fs.write(b);
+                        fs.close();
+                        szam++;
+                    }
+                    if(szam > 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Kép/ek mentve az asztalra", "Info", 1);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Nincsen csatolt kép", "Info", 1);
+                    }
                 }
+                stmt.close();
+                conn.close();
+                Foablak.frame.setCursor(null);
             } 
             catch (Exception e1) 
             {              

@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Hanyszor_tesztelve());
+		feltolt.addActionListener(new Retour_szeriaszam_hozzaad());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2192,6 +2192,60 @@ public class Torlo extends JPanel
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
             }                                         
+         }
+    }
+	
+	class Retour_szeriaszam_hozzaad implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               stmt.execute("select veas_id, retour_id from  qualitydb.Retour_szeriaszamok where 3 = 3 and Retour_id > 791");
+               ResultSet rs = stmt.getResultSet();
+               ArrayList<String> tomb = new ArrayList<String>();
+               
+               while(rs.next())
+               {
+                   tomb.add(rs.getString(1)+":"+ rs.getString(2));
+                   System.out.println(rs.getString(1)+":"+ rs.getString(2));
+               }
+               
+               for(int szamlalo = 0; szamlalo < tomb.size(); szamlalo++)
+               {
+                   String[] darabolt = tomb.get(szamlalo).split(":");
+                   stmt.executeUpdate("update qualitydb.Retour_kepek set Retour_ID = '"+ darabolt[1] +"' where Szeriaszam = '"+ darabolt[0] + "'");
+                   System.out.println("update qualitydb.Retour_kepek set Retour_ID = '"+ darabolt[1] +"' where Szeriaszam = '"+ darabolt[0] + "'");
+               }              
+                                        
+               stmt.close();
+               conn.close(); 
+               Foablak.frame.setCursor(null);     
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
          }
     }
 }
