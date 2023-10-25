@@ -22,6 +22,7 @@ import com.spire.xls.Worksheet;
 public class SQA_SQL {
     
     private final String emaillista = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\SQA\\SQA email lista.xlsx";
+    private final String emaillista_retour = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
     
     public String[] cikkszamok()
     {
@@ -220,6 +221,112 @@ public class SQA_SQL {
                 {
                     emailkuldes.sqa_emailkuldes(adatok[1],emailcim,emailcim,adatok[0],adatok[3],adatok[2]);
                     String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
+                    stmt.executeUpdate(modosit);
+                }
+            }
+        }
+        
+        System.out.println("Lefutott az SQA Email rész");
+        resultSet.close();
+        stmt.close();
+        conn.close();
+        
+        } 
+        catch (SQLException e1) 
+        {
+           e1.printStackTrace();
+           String hibauzenet = e1.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        } 
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+    
+    public void retour_email()
+    {
+        Connection conn = null;
+        Statement stmt = null;        
+        DataTable datatable = new DataTable();        
+        ResultSet resultSet;       
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+           }
+        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
+        String sql = "select id, Vevo, Tipus, DATEDIFF(now(), Modositas_datuma) as 'Kulonbseg', Ertesitve \r\n"
+                + "from qualitydb.Retour\r\n"
+                + "where 3 = 3 and modositas_datuma is not null";                                        
+        stmt.execute(sql);      
+        resultSet = stmt.getResultSet();
+        ArrayList<String> cimzettek = new ArrayList<String>();
+        while(resultSet.next())
+        {
+            if(resultSet.getInt(4) >=14)
+            {                
+                if(resultSet.getString(5).equals("Nem"))
+                {                    
+                    cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+";"+resultSet.getString(3)+";"+resultSet.getString(4));                    
+                }                   
+            }
+        }
+        if(cimzettek.size() >= 1 )
+        {
+            for(int szamlalo = 0; szamlalo < cimzettek.size();szamlalo++)
+            {
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(emaillista_retour);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                Email emailkuldes = new Email();
+                String[] adatok = cimzettek.get(szamlalo).split(";");
+                String emailcim = "";
+                for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                {
+                    if(datatable.getRows().get(szamlalo2).getString(0).toLowerCase().contains(adatok[1].toLowerCase()) )
+                    {
+                        emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu";
+                    }
+                }
+                if(emailcim.equals("")) {System.out.println("Nincs találat");}
+                else
+                {
+                    emailkuldes.retour_emailkuldes("automataemail@veas.videoton.hu",emailcim,adatok[0],adatok[1],adatok[2],adatok[3]);
+                    String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
                     stmt.executeUpdate(modosit);
                 }
             }

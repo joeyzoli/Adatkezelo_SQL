@@ -153,6 +153,46 @@ public class Email
         }        
     }
     
+    public void retour_emailkuldes(String feladoemail, String cimzett, String id, String vevo, String cikkszam, String nap)
+    {
+        Properties props = new Properties(); //new Properties();     System.getProperties();
+        
+        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+        try 
+        {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(cimzett));                           //címzett beállítása
+            message.setSubject("Beragadt retour");                                            //tárgy beállítása
+           
+            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+           
+            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            
+            textPart.setText("Sziasztok! \n  \n"
+                    + "A "+ id +" ID-val rendelkező "+ vevo +" "+ cikkszam +" retourral nem történt semmi "+ nap +" napja!");                                          //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                   
+            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            
+            Transport.send(message);                                                        //levél küldése
+
+            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+        
+        }
+        catch (Exception e1) 
+        {
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }        
+    }
+    
     public void hibauzenet(String feladoemail, String hibauzenet)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
@@ -194,7 +234,7 @@ public class Email
             
     }
     
-    public void ellenori_email(String feladoemail, String cimzett, String dolgozo, String terület, String datum, String muszak)
+    public void ellenori_email(String feladoemail, String cimzett1, String cimzett2, String cc1, String cc2, String dolgozo, String terület, String datum, String muszak)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -205,9 +245,11 @@ public class Email
         try 
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
-            message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzett));                           //címzett beállítása
+            message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
+            message.addRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(cimzett1+","+cimzett2));                                       //címzett beállítása
+            message.addRecipients(Message.RecipientType.CC,
+                    InternetAddress.parse(cc1+","+cc2));                                       //címzett beállítása
             message.setSubject("Nem töltött ellenőri papírt");                                            //tárgy beállítása
            
             Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása

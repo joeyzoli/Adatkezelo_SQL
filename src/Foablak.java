@@ -1010,12 +1010,14 @@ public class Foablak extends JFrame
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();
-                sqa.sqa_email();
+                //sqa.sqa_email();
+                sqa.retour_email();
                 System.out.println("Lefutott az SQA email");
             }
             else
             {
                 SQA_SQL sqa = new SQA_SQL();
+                sqa.retour_email();
                 String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Nem' where Lezaras_ido is null";
                 sqa.mindenes(modosit);
                 System.out.println("Ma nem fut le az SQA email rész");

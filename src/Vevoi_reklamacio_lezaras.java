@@ -404,7 +404,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
          }
     }
     
-    class Felelos_torles implements ActionListener                                                                                      //törlés gomb megnyomáskor hívodik meg
+    class Felelos_torles implements ActionListener                                                                                      
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -422,7 +422,7 @@ public class Vevoi_reklamacio_lezaras extends JPanel
                 if(szamlalo > -1)
                 {
                     
-                    String sql = "delete from qualitydb.Vevoireklamacio_detekt where sorszam = '"+ table.getValueAt(szamlalo, 9).toString() +"'";
+                    String sql = "delete from qualitydb.Vevoireklamacio_detekt where sorszam = '"+ table_1.getValueAt(szamlalo, 9).toString() +"'";
                     visszair.ujrair_vevoi(sql);
                 }
                 Foablak.frame.setCursor(null);

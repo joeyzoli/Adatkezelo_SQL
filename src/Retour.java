@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -338,7 +340,11 @@ public class Retour extends JPanel
             {
                 Db_iro iras = new Db_iro();
                 iras.iro_retour(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(cikk_box.getSelectedItem()), String.valueOf(javagy_box.getSelectedItem()), Integer.parseInt(beerkezett_mezo.getText()),
-                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText(), hibaleiras_mezo.getText());                
+                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText(), hibaleiras_mezo.getText());
+                SQA_SQL modositas = new SQA_SQL();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+                Date date = new Date();
+                modositas.mindenes("update qualitydb.Retour set Modositas_Datuma = '"+ formatter.format(date) +"' where id = '"+ id_mezo.getText() +"'");
                 Urlap_torlo torles = new Urlap_torlo();
                 torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo, teszt_mezo, felelos2_mezo, veg_mezo,
                         felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
@@ -433,6 +439,10 @@ public class Retour extends JPanel
                         iras.iro_retour_ido(sql2);
                     }
                 }
+                SQA_SQL modositas = new SQA_SQL();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+                Date date = new Date();
+                modositas.mindenes("update qualitydb.Retour set Modositas_Datuma = '"+ formatter.format(date) +"' where id = '"+ id_mezo.getText() +"'");
                 Urlap_torlo torles = new Urlap_torlo();
                 torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo,
                         teszt_mezo, felelos2_mezo, veg_mezo, felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
