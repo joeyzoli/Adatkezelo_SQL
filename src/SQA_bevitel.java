@@ -22,12 +22,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JTextField;
-
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.spire.data.table.DataTable;
@@ -73,6 +74,21 @@ public class SQA_bevitel extends JPanel {
     private JTable table;
     private DefaultTableModel modell;
     private File link;
+    private int valasztott;
+    private int tombmeret;
+    private String[] hibaleiras;
+    private String[] belsointezkedes;
+    private String[] valasz;
+    private String[] gyokerok;
+    private String[] hibasdb;
+    private String[] megjelenes;
+    private String[] rekkezdet;
+    private String[] osszertek;
+    private String[] karterites;
+    private String[] belsokoltseg;
+    private String[] veszteseg;
+    
+    
      
 
     /**
@@ -141,6 +157,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_9);
         
         hibasdb_mezo = new JTextField();
+        hibasdb_mezo.addKeyListener(new Szamol());
         hibasdb_mezo.setText("0");
         hibasdb_mezo.setBounds(811, 233, 51, 20);
         add(hibasdb_mezo);
@@ -415,9 +432,10 @@ public class SQA_bevitel extends JPanel {
         cikkszam_mezo.setColumns(10);
         
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Gyártó", "Beszállító", "Projekt", "Egységár","Kontakt"});
+        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Gyártó", "Beszállító", "Projekt", "Kontakt","Egységár"});
         table = new JTable();
         table.setModel(modell);
+        table.getSelectionModel().addListSelectionListener(new Sorvalaszto());
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(343, 132, 821, 93);
         add(gorgeto);
@@ -492,6 +510,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_9);
         
         hibasdb_mezo = new JTextField();
+        hibasdb_mezo.addKeyListener(new Szamol());
         hibasdb_mezo.setText("0");
         hibasdb_mezo.setBounds(811, 233, 51, 20);
         add(hibasdb_mezo);
@@ -766,9 +785,10 @@ public class SQA_bevitel extends JPanel {
         cikkszam_mezo.setColumns(10);
         
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Gyártó", "Beszállító", "Projekt", "Egységár","Kontakt"});
+        modell.setColumnIdentifiers(new Object[]{"Cikkszám", "Gyártó", "Beszállító", "Projekt", "Kontakt","Egységár"});
         table = new JTable();
         table.setModel(modell);
+        table.getSelectionModel().addListSelectionListener(new Sorvalaszto());
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(343, 132, 821, 93);
         add(gorgeto);
@@ -833,9 +853,67 @@ public class SQA_bevitel extends JPanel {
                         }
                     }
                     
-                    modell.addRow(new Object[]{valasztott,gyarto,beszallito,projekt,egysegar,kontaktok});
+                    modell.addRow(new Object[]{valasztott,gyarto,beszallito,projekt,kontaktok,egysegar});
                     table.setModel(modell);
                     cikkszam_mezo.setText("");
+                    
+                    tombmeret = table.getRowCount();
+                    hibaleiras = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < hibaleiras.length; szamlalo++)
+                    {
+                        hibaleiras[szamlalo] = "";
+                    }
+                    belsointezkedes = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < belsointezkedes.length; szamlalo++)
+                    {
+                        belsointezkedes[szamlalo] = "";
+                    }
+                    valasz = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < valasz.length; szamlalo++)
+                    {
+                        valasz[szamlalo] = "";
+                    }
+                    gyokerok = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < gyokerok.length; szamlalo++)
+                    {
+                        gyokerok[szamlalo] = "";
+                    }
+                    
+                    hibasdb = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < hibasdb.length; szamlalo++)
+                    {
+                        hibasdb[szamlalo] = "";
+                    }
+                    megjelenes = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < megjelenes.length; szamlalo++)
+                    {
+                        megjelenes[szamlalo] = "";
+                    }
+                    rekkezdet = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < rekkezdet.length; szamlalo++)
+                    {
+                        rekkezdet[szamlalo] = "";
+                    }
+                    osszertek = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < osszertek.length; szamlalo++)
+                    {
+                        osszertek[szamlalo] = "";
+                    }
+                    karterites = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < karterites.length; szamlalo++)
+                    {
+                        karterites[szamlalo] = "";
+                    }
+                    belsokoltseg = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < belsokoltseg.length; szamlalo++)
+                    {
+                        belsokoltseg[szamlalo] = "";
+                    }
+                    veszteseg = new String[tombmeret];
+                    for(int szamlalo = 0; szamlalo < veszteseg.length; szamlalo++)
+                    {
+                        veszteseg[szamlalo] = "";
+                    }                    
                     
                 }
                 
@@ -946,11 +1024,50 @@ public class SQA_bevitel extends JPanel {
                             {
                                 link2 += link[szamlalo] +"\\\\\\\\";
                             }
-                            sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleiras_mezo.getText() +"', Belso_intezkedes = '"+intezkedes_mezo.getText()+"', Inditotta = '"+String.valueOf(indito_box.getSelectedItem())+"',"
-                                    + "Hibasdb = '"+Integer.parseInt(hibasdb_mezo.getText())+"', Megjelenesido = '"+megjelenes_ido.getText()+"', Reklamacioido = '"+reklamacio_ido.getText()+"', Deviza = '"
-                                    + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Osszertek = '"+osszertek_mezo.getText()+"', Beszallitoi_valasz ='"
-                                    + valasz_mezo.getText()+"',Gyokerok = '"+gyokerok_mezo.getText()+"',Beszallitoi_karterites ='"+karterites_mezo.getText()+"',Belso_koltseg ='"+belsokoltseg_mezo.getText()
-                                    +"',Veszteseg = '"+veszteseg_mezo.getText()+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
+                            /*String cikkszam = "";
+                            String gyarto = "";
+                            String beszallito = "";
+                            String projekt = "";
+                            String kontakt = "";
+                            String egysegar = "";*/
+                            String hibaleir = "";
+                            String intezked = "";
+                            String besz_valasz = "";
+                            String gyoker = "";
+                            String hibas = "";
+                            String megjelen = "";
+                            String kezdet = "";
+                            String ertek = "";
+                            String terit = "";
+                            String koltseg = "";
+                            String veszt = "";
+                            
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                /*cikkszam += table.getValueAt(szamlalo, 0).toString() +"\n";
+                                gyarto += table.getValueAt(szamlalo, 1).toString() +"\n";
+                                beszallito += table.getValueAt(szamlalo, 2).toString() +"\n";
+                                projekt += table.getValueAt(szamlalo, 3).toString() +"\n";
+                                kontakt += table.getValueAt(szamlalo, 4).toString() +"\n";
+                                egysegar += table.getValueAt(szamlalo, 5).toString() +"\n";*/
+                                hibaleir += hibaleiras[szamlalo]+"\n";
+                                intezked += belsointezkedes[szamlalo]+"\n";
+                                besz_valasz += valasz[szamlalo]+"\n";
+                                gyoker += gyokerok[szamlalo]+"\n";
+                                
+                                hibas += hibasdb[szamlalo];                
+                                megjelen += megjelenes[szamlalo];                
+                                kezdet += rekkezdet[szamlalo];                
+                                ertek += osszertek[szamlalo];               
+                                terit += karterites[szamlalo];               
+                                koltseg += belsokoltseg[szamlalo];              
+                                veszt += veszteseg[szamlalo];
+                            }
+                            sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleir +"', Belso_intezkedes = '"+intezked+"', Inditotta = '"+String.valueOf(indito_box.getSelectedItem())+"',"
+                                    + "Hibasdb = '"+hibas+"', Megjelenesido = '"+megjelen+"', Reklamacioido = '"+kezdet+"', Deviza = '"
+                                    + deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"', Osszertek = '"+ertek+"', Beszallitoi_valasz ='"
+                                    + besz_valasz+"',Gyokerok = '"+gyoker+"',Beszallitoi_karterites ='"+terit+"',Belso_koltseg ='"+koltseg
+                                    +"',Veszteseg = '"+veszt+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"' where id ='" + id_mezo.getText() + "'";
                         }
                         else
                         {
@@ -984,6 +1101,18 @@ public class SQA_bevitel extends JPanel {
                             String projekt = "";
                             String kontakt = "";
                             String egysegar = "";
+                            String hibaleir = "";
+                            String intezked = "";
+                            String besz_valasz = "";
+                            String gyoker = "";
+                            String hibas = "";
+                            String megjelen = "";
+                            String kezdet = "";
+                            String ertek = "";
+                            String terit = "";
+                            String koltseg = "";
+                            String veszt = "";
+                            
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 cikkszam += table.getValueAt(szamlalo, 0).toString() +"\n";
@@ -992,16 +1121,28 @@ public class SQA_bevitel extends JPanel {
                                 projekt += table.getValueAt(szamlalo, 3).toString() +"\n";
                                 kontakt += table.getValueAt(szamlalo, 4).toString() +"\n";
                                 egysegar += table.getValueAt(szamlalo, 5).toString() +"\n";
+                                hibaleir += hibaleiras[szamlalo]+"\n";
+                                intezked += belsointezkedes[szamlalo]+"\n";
+                                besz_valasz += valasz[szamlalo]+"\n";
+                                gyoker += gyokerok[szamlalo]+"\n";
+                                
+                                hibas += hibasdb[szamlalo];                
+                                megjelen += megjelenes[szamlalo];                
+                                kezdet += rekkezdet[szamlalo];                
+                                ertek += osszertek[szamlalo];               
+                                terit += karterites[szamlalo];               
+                                koltseg += belsokoltseg[szamlalo];              
+                                veszt += veszteseg[szamlalo];
                             }
                             sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
                                     + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
                                     + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note) "
                                     + "Value('"+ id_mezo.getText()+"','"+futoid_mezo.getText()+"','"+datum_mezo.getText()+"','"+ String.valueOf(indito_box.getSelectedItem())
                                     +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ cikkszam+"','"+ String.valueOf(fajta_box.getSelectedItem())
-                                    +"','"+gyarto+"','"+beszallito+"','"+projekt+"','"+kontakt+"','"+hibaleiras_mezo.getText()
-                                    +"','"+intezkedes_mezo.getText()+"','"+Integer.parseInt(hibasdb_mezo.getText())+"','"+megjelenes_ido.getText()+"','"+reklamacio_ido.getText()
-                                    +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar+"','"+osszertek_mezo.getText()
-                                    +"','"+valasz_mezo.getText()+"','"+gyokerok_mezo.getText()+"','"+karterites_mezo.getText()+"','"+belsokoltseg_mezo.getText()+"','"+veszteseg_mezo.getText()
+                                    +"','"+gyarto+"','"+beszallito+"','"+projekt+"','"+kontakt+"','"+hibaleir
+                                    +"','"+intezked+"','"+hibas+"','"+megjelen+"','"+kezdet
+                                    +"','"+deviza_mezo.getText()+" "+String.valueOf(deviza_box.getSelectedItem())+"','"+egysegar+"','"+ertek
+                                    +"','"+besz_valasz+"','"+gyoker+"','"+terit+"','"+koltseg+"','"+veszt
                                     +"','"+link2+"','"+ d +"','"+ cn +"')";
                         }
                         lekerdezes.mindenes(sql);
@@ -1161,15 +1302,7 @@ public class SQA_bevitel extends JPanel {
                     stmt.close();
                     conn.close();
                             
-                    } 
-                    catch (SQLException e1) 
-                    {
-                       e1.printStackTrace();
-                       String hibauzenet = e1.toString();
-                       Email hibakuldes = new Email();
-                       hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-                    } 
+                    }                     
                     catch (Exception e1) 
                     {
                        e1.printStackTrace();
@@ -1346,30 +1479,40 @@ public class SQA_bevitel extends JPanel {
                 String ido2 = ido[0];
                 datum_mezo.setText(ido[0]);
                 indito_box.setSelectedItem(rs.getString(4));
-                intezkedes_box.setSelectedItem(rs.getString(5));
-                //cikkszam_box.setSelectedItem(rs.getString(6));
-                //cikkszamok_mezo.setText(rs.getString(6));
-                //cikkszam_box.setSelectedItem(rs.getString(6));                
-                fajta_box.setSelectedItem(rs.getString(7));
-                //gyarto_mezo.setText(rs.getString(8));
-                //beszallito_mezo.setText(rs.getString(9));
-                //projekt_mezo.setText(rs.getString(10));
-                //kontakt_mezo.setText(rs.getString(11));
-                hibaleiras_mezo.setText(rs.getString(12));
-                intezkedes_mezo.setText(rs.getString(13));
-                hibasdb_mezo.setText(rs.getString(14));
-                ido = rs.getString(15).split(" ");
-                megjelenes_ido.setText(ido[0]);
-                ido = rs.getString(16).split(" ");
-                reklamacio_ido.setText(ido[0]);
+                intezkedes_box.setSelectedItem(rs.getString(5));                           
+                fajta_box.setSelectedItem(rs.getString(7));               
+                
+                hibaleiras = rs.getString(12).split("\n");                
+                belsointezkedes =  rs.getString(13).split("\n");                
+                valasz = rs.getString(20).split("\n");                 
+                gyokerok = rs.getString(21).split("\n");
+                hibaleiras_mezo.setText(hibaleiras[0]);
+                intezkedes_mezo.setText(belsointezkedes[0]);
+                valasz_mezo.setText(valasz[0]);
+                gyokerok_mezo.setText(gyokerok[0]);
+                
+                hibasdb = rs.getString(14).split("\n");                
+                megjelenes = rs.getString(15).split("\n");               
+                rekkezdet = rs.getString(16).split("\n");                
+                osszertek = rs.getString(19).split("\n");               
+                karterites = rs.getString(22).split("\n");               
+                belsokoltseg= rs.getString(23).split("\n");              
+                veszteseg = rs.getString(24).split("\n");
+                
+                
+                hibasdb_mezo.setText(hibasdb[0]);
+                //ido = rs.getString(15).split(" ");
+                megjelenes_ido.setText(megjelenes[0]);
+                //ido = rs.getString(16).split(" ");
+                reklamacio_ido.setText(rekkezdet[0]);
                 deviza_mezo.setText(rs.getString(17));
                 //egysegar_mezo.setText(rs.getString(18));
-                osszertek_mezo.setText(rs.getString(19));
-                valasz_mezo.setText(rs.getString(20));
-                gyokerok_mezo.setText(rs.getString(21));
-                karterites_mezo.setText(rs.getString(22));
-                belsokoltseg_mezo.setText(rs.getString(23));
-                veszteseg_mezo.setText(rs.getString(24));
+                osszertek_mezo.setText(osszertek[0]);
+                
+                karterites_mezo.setText(karterites[0]);
+                belsokoltseg_mezo.setText(belsokoltseg[0]);
+                veszteseg_mezo.setText(veszteseg[0]);
+                
                 String[] cikkszam = rs.getString(6).split("\n");
                 String[] gyarto = rs.getString(8).split("\n");
                 String[] beszallito = rs.getString(9).split("\n");
@@ -1378,9 +1521,10 @@ public class SQA_bevitel extends JPanel {
                 String[] egysegar = rs.getString(18).split("\n");
                 for(int szamlalo = 0;szamlalo < cikkszam.length;szamlalo++)
                 {
-                    modell.addRow(new Object[]{cikkszam[szamlalo],gyarto[szamlalo],beszallito[szamlalo],projekt[szamlalo],egysegar[szamlalo],kontakt[szamlalo]});                            
+                    modell.addRow(new Object[]{cikkszam[szamlalo],gyarto[szamlalo],beszallito[szamlalo],projekt[szamlalo],kontakt[szamlalo],egysegar[szamlalo]});                            
                 }
                 table.setModel(modell);
+                table.setRowSelectionInterval(0, 0);
                 String[] link3 = rs.getString(25).split("\\\\");                    
                 String link2 = "\\\\\\";
                 for(int szamlalo = 1;szamlalo < link3.length;szamlalo++)
@@ -1519,4 +1663,91 @@ public class SQA_bevitel extends JPanel {
             }
          }
     }
+    
+    private class Sorvalaszto implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // TODO Auto-generated method stub            
+            int row = table.getSelectedRow();
+            int col = table.getSelectedColumn();
+            
+            if(e.getValueIsAdjusting())
+            {
+                System.out.println(table.getValueAt(row, col));
+                
+                System.out.println(valasztott);
+                hibaleiras[valasztott] = hibaleiras_mezo.getText();
+                belsointezkedes[valasztott] = intezkedes_mezo.getText();
+                valasz[valasztott] = valasz_mezo.getText();
+                gyokerok[valasztott] = gyokerok_mezo.getText();
+                
+                hibasdb[valasztott] = hibasdb_mezo.getText();                
+                megjelenes[valasztott] = megjelenes_ido.getText();                
+                rekkezdet[valasztott] = megjelenes_ido.getText();                
+                osszertek[valasztott] = osszertek_mezo.getText();               
+                karterites[valasztott] = karterites_mezo.getText();               
+                belsokoltseg[valasztott] = belsokoltseg_mezo.getText();              
+                veszteseg[valasztott] = veszteseg_mezo.getText();
+                
+                valasztott = table.getSelectedRow();
+                hibaleiras_mezo.setText(hibaleiras[valasztott]);              
+                intezkedes_mezo.setText(belsointezkedes[valasztott]);              
+                valasz_mezo.setText(valasz[valasztott]);
+                gyokerok_mezo.setText(gyokerok[valasztott]);
+                
+                hibasdb_mezo.setText(hibasdb[valasztott]);                
+                megjelenes_ido.setText(megjelenes[valasztott]);                
+                megjelenes_ido.setText(rekkezdet[valasztott]);                
+                osszertek_mezo.setText(osszertek[valasztott]);               
+                karterites_mezo.setText(karterites[valasztott]);               
+                belsokoltseg_mezo.setText(belsokoltseg[valasztott]);              
+                veszteseg_mezo.setText(veszteseg[valasztott]);
+                         
+             
+            }
+            
+        }
+    }
+    
+    class Szamol implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        @SuppressWarnings("resource")
+        public void keyPressed (KeyEvent e) 
+        {
+            try
+            {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                    int sor = table.getSelectedRow();
+                    osszertek_mezo.setText(String.valueOf(Integer.parseInt(hibasdb_mezo.getText()) * Integer.parseInt(table.getValueAt(sor, 5).toString())));
+                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+    }
+    
+    
 }

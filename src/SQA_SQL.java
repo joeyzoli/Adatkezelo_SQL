@@ -290,7 +290,7 @@ public class SQA_SQL {
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select id, Vevo, Tipus, DATEDIFF(now(), Modositas_datuma) as 'Kulonbseg', Ertesitve \r\n"
                 + "from qualitydb.Retour\r\n"
-                + "where 3 = 3 and modositas_datuma is not null";                                        
+                + "where 3 = 3 and modositas_datuma is not null and Raktar_datum is null";                                        
         stmt.execute(sql);      
         resultSet = stmt.getResultSet();
         ArrayList<String> cimzettek = new ArrayList<String>();
@@ -325,7 +325,31 @@ public class SQA_SQL {
                 if(emailcim.equals("")) {System.out.println("Nincs találat");}
                 else
                 {
-                    emailkuldes.retour_emailkuldes("automataemail@veas.videoton.hu",emailcim,adatok[0],adatok[1],adatok[2],adatok[3]);
+                    String hol = "";
+                    sql = "select hova_datum, Teszt_datum, Vegell_datum \r\n"
+                            + "from qualitydb.Retour\r\n"
+                            + "where 3 = 3 and modositas_datuma is not null and Raktar_datum is null";
+                    stmt.execute(sql);      
+                    resultSet = stmt.getResultSet();
+                    if(resultSet.next())
+                    {
+                        if(resultSet.getString(1) == null)
+                        {
+                            hol = "Nincs még kiadva sehova";
+                            emailkuldes.retour_emailkuldes("automataemail@veas.videoton.hu",emailcim,adatok[0],adatok[1],adatok[2],adatok[3], hol);
+                        }
+                        else if(resultSet.getString(2) == null)
+                        {
+                            hol = "Nem lett kiadva tesztelésre";
+                            emailkuldes.retour_emailkuldes("automataemail@veas.videoton.hu",emailcim,adatok[0],adatok[1],adatok[2],adatok[3], hol);
+                        }
+                        else
+                        {
+                            hol = "Nincs továbbadva végellenőrzésre";
+                            emailkuldes.retour_emailkuldes("automataemail@veas.videoton.hu",emailcim,adatok[0],adatok[1],adatok[2],adatok[3], hol);
+                        }
+                    }
+                    
                     String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
                     stmt.executeUpdate(modosit);
                 }

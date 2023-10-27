@@ -1017,8 +1017,10 @@ public class Foablak extends JFrame
             else
             {
                 SQA_SQL sqa = new SQA_SQL();
-                sqa.retour_email();
+                //sqa.retour_email();
                 String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Nem' where Lezaras_ido is null";
+                sqa.mindenes(modosit);
+                modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
                 sqa.mindenes(modosit);
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);

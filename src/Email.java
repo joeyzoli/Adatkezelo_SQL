@@ -153,7 +153,7 @@ public class Email
         }        
     }
     
-    public void retour_emailkuldes(String feladoemail, String cimzett, String id, String vevo, String cikkszam, String nap)
+    public void retour_emailkuldes(String feladoemail, String cimzett, String id, String vevo, String cikkszam, String nap, String hol)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -163,17 +163,18 @@ public class Email
         try 
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setFrom(new InternetAddress(feladoemail));                                  //feladó beállítása
             message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzett));                           //címzett beállítása
-            message.setSubject("Beragadt retour");                                            //tárgy beállítása
+                InternetAddress.parse(cimzett));                                                //címzett beállítása
+            message.setSubject("Beragadt retour");                                              //tárgy beállítása
            
-            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
            
-            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
             
             textPart.setText("Sziasztok! \n  \n"
-                    + "A "+ id +" ID-val rendelkező "+ vevo +" "+ cikkszam +" retourral nem történt semmi "+ nap +" napja!");                                          //levél tartalmának csatolása
+                    + "A "+ id +" ID-val rendelkező "+ vevo +" "+ cikkszam +" retourral nem történt semmi "+ nap +" napja!  \n"
+                            + "Utolsó bejegyzés: "+ hol);                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                    
             message.setContent(multipart);                                                  //message üzenethez mindent hozzáad

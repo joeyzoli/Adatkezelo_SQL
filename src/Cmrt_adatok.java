@@ -337,6 +337,7 @@ public class Cmrt_adatok extends JPanel {
                           + "(select belso.Cikkszam, \r\n"
                           + "belso.Megnevezes,\r\n"
                           + "belso.Szallito,\r\n"
+                          + "belso.Gyarto_szama,\r\n"
                           + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\r\n"
                           + "belso.Gyartoi_cikkszam,\r\n"
                           + "belso.Utolso_rendeles\r\n"
@@ -378,13 +379,14 @@ public class Cmrt_adatok extends JPanel {
                   sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
                   sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
                   sheet.getRange().get("C" + cellaszam).setText("Szállító");
-                  sheet.getRange().get("D" + cellaszam).setText("Gyártó");
-                  sheet.getRange().get("E" + cellaszam).setText("Gyártói Cikkszám");
-                  sheet.getRange().get("F" + cellaszam).setText("Utolsó rendelés");
-                  sheet.getRange().get("G" + cellaszam).setText("Projekt");
-                  sheet.getRange().get("H" + cellaszam).setText("CMRT");
-                  sheet.getRange().get("I" + cellaszam).setText("REACH");
-                  sheet.getRange().get("J" + cellaszam).setText("ROHS");
+                  sheet.getRange().get("D" + cellaszam).setText("Gyártó száma");
+                  sheet.getRange().get("E" + cellaszam).setText("Gyártó");
+                  sheet.getRange().get("F" + cellaszam).setText("Gyártói Cikkszám");
+                  sheet.getRange().get("G" + cellaszam).setText("Utolsó rendelés");
+                  sheet.getRange().get("H" + cellaszam).setText("Projekt");
+                  sheet.getRange().get("I" + cellaszam).setText("CMRT");
+                  sheet.getRange().get("J" + cellaszam).setText("REACH");
+                  sheet.getRange().get("K" + cellaszam).setText("ROHS");
                   
                   cellaszam++;
                   while(rs.next())
@@ -398,7 +400,8 @@ public class Cmrt_adatok extends JPanel {
                       sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
                       sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
                       sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
-                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));                     
+                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                      sheet.getRange().get("K" + cellaszam).setText(rs.getString(11));
                       cellaszam++;
                   }
                   

@@ -638,432 +638,399 @@ public class Ellenori_lapok extends JPanel {
               System.out.println(e);
               String hibauzenet2 = e.toString();
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        stmt = (Statement) conn.createStatement();
-        Utolso_sor id = new Utolso_sor();
-        String sorszam = id.utolso("qualitydb.Ellenori_lapok"); 
-        String sql = "select *, yearweek(Datum) from qualitydb.Ellenori_lapok where id = '"+ sorszam + "'";
-        stmt.execute(sql);
-        ResultSet rs = stmt.getResultSet();
-        if(rs.next())
-        {
-            String[] datum = rs.getString(2).split(" "); 
-            String[] avmkezi = rs.getString(3).split(";"); String[] avmvegszereles =rs.getString(4).split(";");String[] telecom  = rs.getString(5).split(";");String[] osram  = rs.getString(6).split(";");
-            String[] socomec  = rs.getString(7).split(";");String[] loxonefolyamat = rs.getString(8).split(";");String[] loxonewallbox  = rs.getString(9).split(";");
-            String[] techem  = rs.getString(10).split(";");String[] proglove  = rs.getString(11).split(";");String[] hc  = rs.getString(12).split(";");String[] chamber  = rs.getString(13).split(";");
-            String evhet = rs.getString(14);
-            String[] het = evhet.split("2023");
-            stmt.close();
-            conn.close();
-            
-            for (Object sheet2: excel.getWorksheets()) {
-                String sheetName = ((Worksheet) sheet2).getName();                            
-                if(sheetName.contains(het[1]))
-                {
-                    sheet = excel.getWorksheets().get(sheetName);
-                }
-            }
-            //sheet = excel.getWorksheets().get("WK41 új");
-            int oszlopszam = 0;
-            for(int szamlalo = 9; szamlalo < 14; szamlalo++)
+           }
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = (Statement) conn.createStatement();
+            Utolso_sor id = new Utolso_sor();
+            String sorszam = id.utolso("qualitydb.Ellenori_lapok"); 
+            String sql = "select *, yearweek(Datum) from qualitydb.Ellenori_lapok where id = '"+ sorszam + "'";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+            if(rs.next())
             {
-                CellRange cell2 = sheet.getCellRange(1, szamlalo);
-                SimpleDateFormat rovid = new SimpleDateFormat("yyyy.mm.dd");
-                String[] koztes = cell2.getValue().toString().split(" ");
-                Date excel = rovid.parse(koztes[0]+koztes[1]+koztes[2]);
-                String[] koztes2 = datum[0].split("-");
-                Date result = rovid.parse(koztes2[0]+"."+koztes2[1]+"."+koztes2[2]);
-                if(excel.compareTo(result) == 0) 
-                {
-                    System.out.println("egyezik");
-                    oszlopszam = szamlalo;
-                }               
-            }
-            Email email = new Email();
-            for(int szamlalo = 4; szamlalo < sheet.getLastRow(); szamlalo++)
-            {
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("AVM kézi terület folyamatellenőrzés"))
-                {
-                    if(avmkezi[0].equals("nem"))
+                String[] datum = rs.getString(2).split(" "); 
+                String[] avmkezi = rs.getString(3).split(";"); String[] avmvegszereles =rs.getString(4).split(";");String[] telecom  = rs.getString(5).split(";");String[] osram  = rs.getString(6).split(";");
+                String[] socomec  = rs.getString(7).split(";");String[] loxonefolyamat = rs.getString(8).split(";");String[] loxonewallbox  = rs.getString(9).split(";");
+                String[] techem  = rs.getString(10).split(";");String[] proglove  = rs.getString(11).split(";");String[] hc  = rs.getString(12).split(";");String[] chamber  = rs.getString(13).split(";");
+                String evhet = rs.getString(14);
+                String[] het = evhet.split("2023");
+                stmt.close();
+                conn.close();
+                
+                for (Object sheet2: excel.getWorksheets()) {
+                    String sheetName = ((Worksheet) sheet2).getName();                            
+                    if(sheetName.contains(het[1]))
                     {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(avmkezi[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(avmkezi[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
+                        sheet = excel.getWorksheets().get(sheetName);
                     }
                 }
-                ///////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("AVM végszerelés folyamatellenőrzés"))
+                //sheet = excel.getWorksheets().get("WK41 új");
+                int oszlopszam = 0;
+                for(int szamlalo = 9; szamlalo < 15; szamlalo++)
                 {
-                    if(avmvegszereles[0].equals("nem"))
+                    CellRange cell2 = sheet.getCellRange(1, szamlalo);
+                    SimpleDateFormat rovid = new SimpleDateFormat("yyyy.mm.dd");
+                    String[] koztes = cell2.getValue().toString().split(" ");
+                    Date excel = rovid.parse(koztes[0]+koztes[1]+koztes[2]);
+                    String[] koztes2 = datum[0].split("-");
+                    Date result = rovid.parse(koztes2[0]+"."+koztes2[1]+"."+koztes2[2]);
+                    if(excel.compareTo(result) == 0) 
                     {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(avmvegszereles[1].equals("nem"))
+                        System.out.println("egyezik");
+                        oszlopszam = szamlalo;
+                    }               
+                }                                               //"juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu"
+                Email email = new Email();
+                for(int szamlalo2 = 3; szamlalo2 < 8; szamlalo2++)
+                {
+                    for(int szamlalo = 4; szamlalo < sheet.getLastRow(); szamlalo++)
                     {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("AVM kézi terület folyamatellenőrzés"))
                         {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                            if(avmkezi[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(avmkezi[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(avmkezi[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
                         }
-                    }
-                    if(avmvegszereles[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                        ///////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("AVM végszerelés folyamatellenőrzés"))
                         {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                            if(avmvegszereles[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(avmvegszereles[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(avmvegszereles[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
                         }
-                    }
+                        ////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Telecom Design folyamatellenőrzés"))
+                        {
+                            if(telecom[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(telecom[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(telecom[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Osram folyamat-, gyártásközi- és végellenőrzés"))
+                        {
+                            if(osram[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(osram[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(osram[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Socomec, Memminger, Pactrol, Brooks, Leroy, Instagrid, OMT, Mars Drinks - Lavazza, Formlabs folyamatellenőrzés"))
+                        {
+                            if(socomec[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(socomec[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(socomec[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Loxone folyamat-, gyártásközi- és végellenőrzés"))
+                        {
+                            if(loxonefolyamat[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(loxonefolyamat[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(loxonefolyamat[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                                
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Loxone Wallbox folyamatellenőrzés"))
+                        {
+                            if(loxonewallbox[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(loxonewallbox[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(loxonewallbox[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Techem folyamatellenőrzés"))
+                        {
+                            if(techem[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(techem[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(techem[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("ProGlove folyamat-, gyk- és végellenőrzés"))
+                        {
+                            if(proglove[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(proglove[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(proglove[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        /////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("HC folyamatellenőrzés"))
+                        {
+                            if(hc[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(hc[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(hc[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                        }
+                        ///////////////////////////////////////////////////////////////
+                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Chamber folyamat-, gyk- és végellenőrzés"))
+                        {
+                            if(chamber[0].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(chamber[1].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
+                                }
+                            }
+                            if(chamber[2].equals("nem"))
+                            {
+                                if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
+                                {
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                            sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
+                                            datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());                        
+                                }
+                            }
+                        }
+                       
+                    }// for vége
                 }
-                ////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Telecom Design folyamatellenőrzés"))
-                {
-                    if(telecom[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(telecom[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(telecom[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Osram folyamat-, gyártásközi- és végellenőrzés"))
-                {
-                    if(osram[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(osram[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(osram[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Socomec, Memminger, Pactrol, Brooks, Leroy, Instagrid, OMT, Mars Drinks - Lavazza, Formlabs folyamatellenőrzés"))
-                {
-                    if(socomec[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(socomec[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(socomec[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Loxone folyamat-, gyártásközi- és végellenőrzés"))
-                {
-                    if(loxonefolyamat[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(loxonefolyamat[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(loxonefolyamat[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
                         
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Loxone Wallbox folyamatellenőrzés"))
-                {
-                    if(loxonewallbox[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(loxonewallbox[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(loxonewallbox[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("Techem folyamatellenőrzés"))
-                {
-                    if(techem[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(techem[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(techem[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                }
-                /////////////////////////////////////////
-                if(sheet.getRange().get("B" + szamlalo).getText().contains("ProGlove folyamat-, gyk- és végellenőrzés"))
-                {
-                    if(proglove[0].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                        {
-                            System.out.println("nincs papír de");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(proglove[1].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                        {
-                            System.out.println("nincs papír du");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-                    if(proglove[2].equals("nem"))
-                    {
-                        if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                        {
-                            System.out.println("nincs papír éj");
-                            email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                    sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                    datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                        }
-                    }
-             }
-            /////////////////////////////////////////
-            if(sheet.getRange().get("B" + szamlalo).getText().contains("HC folyamatellenőrzés"))
-            {
-                if(hc[0].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                    {
-                        System.out.println("nincs papír de");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                    }
-                }
-                if(hc[1].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                    {
-                        System.out.println("nincs papír du");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                    }
-                }
-                if(hc[2].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                    {
-                        System.out.println("nincs papír éj");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                    }
-                }
             }
-            ///////////////////////////////////////////////////////////////
-            if(sheet.getRange().get("B" + szamlalo).getText().contains("Chamber folyamat-, gyk- és végellenőrzés"))
-            {
-                if(chamber[0].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
-                    {
-                        System.out.println("nincs papír de");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                    }
-                }
-                if(chamber[1].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("du"))
-                    {
-                        System.out.println("nincs papír du");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
-                    }
-                }
-                if(chamber[2].equals("nem"))
-                {
-                    if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("éj"))
-                    {
-                        System.out.println("nincs papír éj");
-                        email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
-                                sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get("B" + szamlalo).getText(),
-                                datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());                        
-                    }
-                }
-            }
-            
-                
-
-                
-        }
-                    
-        }
         }
         catch (Exception e) 
         {
