@@ -789,6 +789,19 @@ public class Zarolasok_bevitel extends JPanel {
                     if(technikus_csekk.isSelected())
                     {
                         technikus = "Igen";
+                        if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                        {
+                            
+                        }
+                        else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                        {
+                            
+                        }
+                        else
+                        {
+                            
+                        }
+                        
                         
                     }
                     sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"

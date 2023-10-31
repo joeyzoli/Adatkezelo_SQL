@@ -66,7 +66,7 @@ public class SQL
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
-            sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
             if(System.getProperty("user.name").equals("csader.zsolt"))
             {
                 JFileChooser mentes_helye = new JFileChooser();

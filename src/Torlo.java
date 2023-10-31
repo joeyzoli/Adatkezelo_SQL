@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_szeriaszam_hozzaad());
+		feltolt.addActionListener(new Osszehasonlito());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1221,58 +1221,61 @@ public class Torlo extends JPanel
                     {
                         if(datatable.getRows().get(szamlalo).getString(0).equals(datatable2.getRows().get(szamlalo2).getString(0)) && datatable.getRows().get(szamlalo).getString(1).equals(datatable2.getRows().get(szamlalo2).getString(1)))
                         {
-                            int szam = 0;
-                            if(datatable.getRows().get(szamlalo).getString(7).equals(datatable2.getRows().get(szamlalo2).getString(7))) {}
-                            else
+                            if(datatable.getRows().get(szamlalo).getString(3).equals(datatable2.getRows().get(szamlalo2).getString(3))) 
                             {
-                                sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
-                                sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
-                                sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
-                                sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
-                                sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
-                                sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
-                                sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
-                                sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
-                                sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
-                                sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
-                                szam++;
-                                System.out.println("Találat");
-                            }
-                            if(datatable.getRows().get(szamlalo).getString(8).equals(datatable2.getRows().get(szamlalo2).getString(8))) {}
-                            else 
-                            {
-                                sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
-                                sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
-                                sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
-                                sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
-                                sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
-                                sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
-                                sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
-                                sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
-                                sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
-                                sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
-                                szam++;
-                                System.out.println("Találat");
-                            }
-                            if(datatable.getRows().get(szamlalo).getString(9).equals(datatable2.getRows().get(szamlalo2).getString(9))) {}
-                            else 
-                            {
-                                sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
-                                sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
-                                sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
-                                sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
-                                sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
-                                sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
-                                sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
-                                sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
-                                sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
-                                sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
-                                szam++;
-                                System.out.println("Találat");
-                            }
-                            if(szam > 0)
-                            {
-                                cellaszam++;
+                                int szam = 0;
+                                if(datatable.getRows().get(szamlalo).getString(7).equals(datatable2.getRows().get(szamlalo2).getString(7))) {}
+                                else
+                                {
+                                    sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));
+                                    sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                    sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(2));
+                                    sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                    sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                    sheet2.getRange().get("F" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(5));
+                                    sheet2.getRange().get("G" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(6));
+                                    sheet2.getRange().get("H" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
+                                    sheet2.getRange().get("I" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(8));
+                                    sheet2.getRange().get("J" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
+                                    szam++;
+                                    System.out.println("Találat");
+                                }
+                                if(datatable.getRows().get(szamlalo).getString(8).equals(datatable2.getRows().get(szamlalo2).getString(8))) {}
+                                else 
+                                {
+                                    sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));
+                                    sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                    sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(2));
+                                    sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                    sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                    sheet2.getRange().get("F" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(5));
+                                    sheet2.getRange().get("G" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(6));
+                                    sheet2.getRange().get("H" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
+                                    sheet2.getRange().get("I" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(8));
+                                    sheet2.getRange().get("J" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
+                                    szam++;
+                                    System.out.println("Találat");
+                                }
+                                if(datatable.getRows().get(szamlalo).getString(9).equals(datatable2.getRows().get(szamlalo2).getString(9))) {}
+                                else 
+                                {
+                                    sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));
+                                    sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                                    sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(2));
+                                    sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                                    sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                                    sheet2.getRange().get("F" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(5));
+                                    sheet2.getRange().get("G" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(6));
+                                    sheet2.getRange().get("H" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
+                                    sheet2.getRange().get("I" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(8));
+                                    sheet2.getRange().get("J" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
+                                    szam++;
+                                    System.out.println("Találat");
+                                }
+                                if(szam > 0)
+                                {
+                                    cellaszam++;
+                                }
                             }
                         }
                         /*else

@@ -1011,7 +1011,7 @@ public class Foablak extends JFrame
             {
                 SQA_SQL sqa = new SQA_SQL();
                 //sqa.sqa_email();
-                sqa.retour_email();
+                sqa.retour_email();                
                 System.out.println("Lefutott az SQA email");
             }
             else

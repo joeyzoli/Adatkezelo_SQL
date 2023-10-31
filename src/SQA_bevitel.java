@@ -813,11 +813,12 @@ public class SQA_bevitel extends JPanel {
                 String sql = "select ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO)\r\n"
                         + "from ifsapp.PURCHASE_PART_SUPPLIER\r\n"
                         + "where 3 = 3\r\n"
-                        + "and PART_NO = '"+ valasztott +"' and PRIMARY_VENDOR_DB = 'Y'";
+                        + "and PART_NO = '"+ valasztott +"' -- and PRIMARY_VENDOR_DB = 'Y'";
                 
                 if(lekerdezes.beszallito(sql) == null)
                 {
                     JOptionPane.showMessageDialog(null, "Nem létezik ilyen cikkszám", "Hiba üzenet", 2);
+                    System.out.println(lekerdezes.beszallito(sql));
                 }
                 else
                 {
@@ -1055,13 +1056,13 @@ public class SQA_bevitel extends JPanel {
                                 besz_valasz += valasz[szamlalo]+"\n";
                                 gyoker += gyokerok[szamlalo]+"\n";
                                 
-                                hibas += hibasdb[szamlalo];                
-                                megjelen += megjelenes[szamlalo];                
-                                kezdet += rekkezdet[szamlalo];                
-                                ertek += osszertek[szamlalo];               
-                                terit += karterites[szamlalo];               
-                                koltseg += belsokoltseg[szamlalo];              
-                                veszt += veszteseg[szamlalo];
+                                hibas += hibasdb[szamlalo]+"\n";                
+                                megjelen += megjelenes[szamlalo]+"\n";                
+                                kezdet += rekkezdet[szamlalo]+"\n";                
+                                ertek += osszertek[szamlalo]+"\n";               
+                                terit += karterites[szamlalo]+"\n";               
+                                koltseg += belsokoltseg[szamlalo]+"\n";              
+                                veszt += veszteseg[szamlalo]+"\n";
                             }
                             sql = "update qualitydb.SQA_reklamaciok set  Hibaleiras = '"+ hibaleir +"', Belso_intezkedes = '"+intezked+"', Inditotta = '"+String.valueOf(indito_box.getSelectedItem())+"',"
                                     + "Hibasdb = '"+hibas+"', Megjelenesido = '"+megjelen+"', Reklamacioido = '"+kezdet+"', Deviza = '"
@@ -1116,8 +1117,23 @@ public class SQA_bevitel extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 cikkszam += table.getValueAt(szamlalo, 0).toString() +"\n";
-                                gyarto += table.getValueAt(szamlalo, 1).toString() +"\n";
-                                beszallito += table.getValueAt(szamlalo, 2).toString() +"\n";
+                                if(table.getValueAt(szamlalo, 1) == null)
+                                {
+                                    gyarto += "" +"\n";
+                                }
+                                else
+                                {
+                                    gyarto += table.getValueAt(szamlalo, 1).toString() +"\n";
+                                }                               
+                                if(table.getValueAt(szamlalo, 1) == null)
+                                {
+                                    beszallito += "" +"\n";
+                                }
+                                else
+                                {
+                                    beszallito += table.getValueAt(szamlalo, 2).toString() +"\n";
+                                }
+                                
                                 projekt += table.getValueAt(szamlalo, 3).toString() +"\n";
                                 kontakt += table.getValueAt(szamlalo, 4).toString() +"\n";
                                 egysegar += table.getValueAt(szamlalo, 5).toString() +"\n";
@@ -1126,13 +1142,13 @@ public class SQA_bevitel extends JPanel {
                                 besz_valasz += valasz[szamlalo]+"\n";
                                 gyoker += gyokerok[szamlalo]+"\n";
                                 
-                                hibas += hibasdb[szamlalo];                
-                                megjelen += megjelenes[szamlalo];                
-                                kezdet += rekkezdet[szamlalo];                
-                                ertek += osszertek[szamlalo];               
-                                terit += karterites[szamlalo];               
-                                koltseg += belsokoltseg[szamlalo];              
-                                veszt += veszteseg[szamlalo];
+                                hibas += hibasdb[szamlalo]+"\n";                
+                                megjelen += megjelenes[szamlalo]+"\n";                
+                                kezdet += rekkezdet[szamlalo]+"\n";                
+                                ertek += osszertek[szamlalo]+"\n";               
+                                terit += karterites[szamlalo]+"\n";               
+                                koltseg += belsokoltseg[szamlalo]+"\n";              
+                                veszt += veszteseg[szamlalo]+"\n";
                             }
                             sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
                                     + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
@@ -1669,14 +1685,14 @@ public class SQA_bevitel extends JPanel {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             // TODO Auto-generated method stub            
-            int row = table.getSelectedRow();
-            int col = table.getSelectedColumn();
+            //int row = table.getSelectedRow();
+            //int col = table.getSelectedColumn();
             
             if(e.getValueIsAdjusting())
             {
-                System.out.println(table.getValueAt(row, col));
+                //System.out.println(table.getValueAt(row, col));
                 
-                System.out.println(valasztott);
+                //System.out.println(valasztott);
                 hibaleiras[valasztott] = hibaleiras_mezo.getText();
                 belsointezkedes[valasztott] = intezkedes_mezo.getText();
                 valasz[valasztott] = valasz_mezo.getText();
@@ -1684,7 +1700,7 @@ public class SQA_bevitel extends JPanel {
                 
                 hibasdb[valasztott] = hibasdb_mezo.getText();                
                 megjelenes[valasztott] = megjelenes_ido.getText();                
-                rekkezdet[valasztott] = megjelenes_ido.getText();                
+                rekkezdet[valasztott] = reklamacio_ido.getText();                
                 osszertek[valasztott] = osszertek_mezo.getText();               
                 karterites[valasztott] = karterites_mezo.getText();               
                 belsokoltseg[valasztott] = belsokoltseg_mezo.getText();              
@@ -1698,7 +1714,7 @@ public class SQA_bevitel extends JPanel {
                 
                 hibasdb_mezo.setText(hibasdb[valasztott]);                
                 megjelenes_ido.setText(megjelenes[valasztott]);                
-                megjelenes_ido.setText(rekkezdet[valasztott]);                
+                reklamacio_ido.setText(rekkezdet[valasztott]);                
                 osszertek_mezo.setText(osszertek[valasztott]);               
                 karterites_mezo.setText(karterites[valasztott]);               
                 belsokoltseg_mezo.setText(belsokoltseg[valasztott]);              

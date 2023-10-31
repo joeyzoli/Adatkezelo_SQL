@@ -651,7 +651,7 @@ public class Ellenori_lapok extends JPanel {
                 String[] datum = rs.getString(2).split(" "); 
                 String[] avmkezi = rs.getString(3).split(";"); String[] avmvegszereles =rs.getString(4).split(";");String[] telecom  = rs.getString(5).split(";");String[] osram  = rs.getString(6).split(";");
                 String[] socomec  = rs.getString(7).split(";");String[] loxonefolyamat = rs.getString(8).split(";");String[] loxonewallbox  = rs.getString(9).split(";");
-                String[] techem  = rs.getString(10).split(";");String[] proglove  = rs.getString(11).split(";");String[] hc  = rs.getString(12).split(";");String[] chamber  = rs.getString(13).split(";");
+                String[] techem  = rs.getString(10).split(";");String[] proglove  = rs.getString(11).split(";");String[] hc  = rs.getString(12).split(";");//String[] chamber  = rs.getString(13).split(";");
                 String evhet = rs.getString(14);
                 String[] het = evhet.split("2023");
                 stmt.close();
@@ -996,7 +996,7 @@ public class Ellenori_lapok extends JPanel {
                             }
                         }
                         ///////////////////////////////////////////////////////////////
-                        if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Chamber folyamat-, gyk- és végellenőrzés"))
+                        /*if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Chamber folyamat-, gyk- és végellenőrzés"))
                         {
                             if(chamber[0].equals("nem"))
                             {
@@ -1025,7 +1025,7 @@ public class Ellenori_lapok extends JPanel {
                                             datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());                        
                                 }
                             }
-                        }
+                        }*/
                        
                     }// for vége
                 }
