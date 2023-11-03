@@ -1964,6 +1964,9 @@ public class SQL
         }
         int cella4 = 2;
         int sum = 0;
+        String[] evszam = datumig.split("\\.");
+        int ig = Integer.valueOf(evszam[0]);
+        int tol = ig-1;
         for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
         {
             if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
@@ -1979,7 +1982,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Február");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.02.01' and Datum <= '2023.02.28'";
+                        + "where 3=3 and Datum >= '"+ tol +".02.01' and Datum <= '"+ ig +".02.28'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -1990,11 +1993,11 @@ public class SQL
                 }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
-            {
+            {                
                 sheet.getCellRange("R" + cella4).setText("Január");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.01.01' and Datum <= '2023.01.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".01.01' and Datum <= '"+ ig +".01.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2009,7 +2012,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Március");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.03.01' and Datum <= '2023.03.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".03.01' and Datum <= '"+ ig +".03.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2024,7 +2027,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Április");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.04.01' and Datum <= '2023.04.30'";
+                        + "where 3=3 and Datum >= '"+ tol +".04.01' and Datum <= '"+ ig +".04.30'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2039,7 +2042,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Május");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.05.01' and Datum <= '2023.05.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".05.01' and Datum <= '"+ ig +".05.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2054,7 +2057,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Június");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.06.01' and Datum <= '2023.06.30'";
+                        + "where 3=3 and Datum >= '"+ tol +".06.01' and Datum <= '"+ ig +".06.30'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2069,7 +2072,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Július");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.07.01' and Datum <= '2023.07.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".07.01' and Datum <= '"+ ig +".07.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2084,7 +2087,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Augusztus");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.08.01' and Datum <= '2023.08.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".08.01' and Datum <= '"+ ig +".08.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2099,7 +2102,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Szeptember");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.09.01' and Datum <= '2023.09.30'";
+                        + "where 3=3 and Datum >= '"+ tol +".09.01' and Datum <= '"+ ig +".09.30'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2114,7 +2117,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("Október");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.10.01' and Datum <= '2023.10.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".10.01' and Datum <= '"+ ig +".10.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2129,7 +2132,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("November");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.11.01' and Datum <= '2023.03.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".11.01' and Datum <= '"+ ig +".03.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2144,7 +2147,7 @@ public class SQL
                 sheet.getCellRange("R" + cella4).setText("December");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '2022.12.01' and Datum <= '2023.12.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".12.01' and Datum <= '"+ ig +".12.31'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2612,7 +2615,7 @@ public class SQL
             }
             if(resultSet.getString(13) != null)
             {
-                datum3 =resultSet.getString(11).split(" ");
+                datum3 =resultSet.getString(13).split(" ");
             }
             else
             {
@@ -2621,7 +2624,7 @@ public class SQL
             }
             if(resultSet.getString(15) != null)
             {
-                datum4 =resultSet.getString(11).split(" ");
+                datum4 =resultSet.getString(15).split(" ");
             }
             else
             {
@@ -2630,7 +2633,7 @@ public class SQL
             }
             if(resultSet.getString(17) != null)
             {
-                datum5 =resultSet.getString(11).split(" ");
+                datum5 =resultSet.getString(17).split(" ");
             }
             else
             {

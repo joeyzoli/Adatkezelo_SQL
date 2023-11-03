@@ -277,5 +277,52 @@ public class Email
             e1.printStackTrace();
         }        
     }
+    
+    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki)
+    {
+        Properties props = new Properties(); //new Properties();     System.getProperties();
+        
+        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+        
+        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+        try 
+        {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
+            message.addRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(cimzettek));                                       //címzett beállítása
+            message.setSubject("Nem töltött ellenőri papírt");                                            //tárgy beállítása
+           
+            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+           
+            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            
+            textPart.setText("Sziasztok! \n \n"
+                    + "Zárolva lett az alábbi tétel: \n"
+                    + "Projekt: "+ projekt+ "\n"
+                    + "Cikkszám: "+ cikk + "\n"
+                    + "Zárolt db: "+ db +"\n"
+                    + "Zárolás oka: "+ ok +"\n"
+                    + "Zárolta: "+ ki +"\n"
+                    + "A zárolás technikusi beavatkozást igényel!");                                          //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                   
+            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            
+            Transport.send(message);                                                        //levél küldése
+
+            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+        
+        }
+        catch (Exception e1) 
+        {
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }        
+    }
 
 }

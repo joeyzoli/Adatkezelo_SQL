@@ -406,6 +406,7 @@ public class AVM_csomagoloanyag extends JPanel {
             Worksheet sheet2 = workbook.getWorksheets().get(1);
             sheet.setName("80");
             sheet2.setName("91");
+            SQA_SQL beszall = new SQA_SQL();
             try
             {                                           
                 DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -413,16 +414,13 @@ public class AVM_csomagoloanyag extends JPanel {
                                     
                 Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("select belso.Cikkszam, belso.Megnevezes, ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO) as Beszallito, belso.Mennyiseg, belso.Ertek\r\n"
-                        + "from ifsapp.PURCHASE_PART_SUPPLIER besz,\r\n"
-                        + "        (select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
-                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek\r\n"
+                ResultSet rs = stmt.executeQuery("select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
+                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek,  LOT_BATCH_NO as Sarzs\r\n"
                         + "        from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
                         + "        where 3 = 3\r\n"
-                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '80' \r\n"
-                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no)) belso\r\n"
-                        + "where besz.part_no = belso.Cikkszam");
-
+                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '80'\r\n"
+                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no), LOT_BATCH_NO");
+                
                 sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
                 sheet.getRange().get("B" + cellaszam).setText("Cikk megnevezés");
                 sheet.getRange().get("C" + cellaszam).setText("Beszállító");
@@ -436,32 +434,35 @@ public class AVM_csomagoloanyag extends JPanel {
                 cellaszam++;
                 
                 while(rs.next())
-                {
+                {                   
                     sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                    sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                    sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                    sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
-                    sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));                   
+                    sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));                    
+                    sheet.getRange().get("D" + cellaszam).setText(rs.getString(3));
+                    sheet.getRange().get("E" + cellaszam).setText(rs.getString(4));
+                    String[] sarzs = rs.getString(5).split("-");                    
+                    sheet.getRange().get("C" + cellaszam).setText(beszall.beszallito("Select ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                            + "where order_no = '"+ sarzs[0] +"'"));
                     cellaszam++;
                 }
                 
-                rs = stmt.executeQuery("select belso.Cikkszam, belso.Megnevezes, ifsapp.SUPPLIER_API.Get_Vendor_Name(VENDOR_NO) as Beszallito, belso.Mennyiseg, belso.Ertek\r\n"
-                        + "from ifsapp.PURCHASE_PART_SUPPLIER besz,\r\n"
-                        + "        (select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
-                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek\r\n"
+                rs = stmt.executeQuery("select PART_NO as Cikkszam ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes,\r\n"
+                        + "                sum(QTY_ONHAND) as Mennyiseg, trunc(sum(UNIT_COST * QTY_ONHAND),0) as Ertek,  LOT_BATCH_NO as Sarzs\r\n"
                         + "        from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
                         + "        where 3 = 3\r\n"
-                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '91' \r\n"
-                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no)) belso\r\n"
-                        + "where besz.part_no = belso.Cikkszam");
+                        + "        and QTY_ONHAND > 0 and WAREHOUSE = '91'\r\n"
+                        + "        group by PART_NO ,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no), LOT_BATCH_NO");
                 cellaszam = 2;
                 while(rs.next())
                 {
+                    
                     sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
                     sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                    sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                    sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
-                    sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));                   
+                    
+                    sheet2.getRange().get("D" + cellaszam).setText(rs.getString(3));
+                    sheet2.getRange().get("E" + cellaszam).setText(rs.getString(4));
+                    String[] sarzs = rs.getString(5).split("-");                    
+                    sheet2.getRange().get("C" + cellaszam).setText(beszall.beszallito("Select ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                            + "where order_no = '"+ sarzs[0] +"'"));
                     cellaszam++;
                 }
                 //sheet.getCellRange("E2:E" + sheet.getLastRow()).setNumberFormat("0");

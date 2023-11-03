@@ -789,9 +789,10 @@ public class Zarolasok_bevitel extends JPanel {
                     if(technikus_csekk.isSelected())
                     {
                         technikus = "Igen";
+                        Email uzenet = new Email();
                         if(felelosterulet_box.getSelectedItem().equals("Gépes"))
                         {
-                            
+                            uzenet.zarolas_email(technikus, technikus, technikus, technikus, SQL, sql, technikus);
                         }
                         else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                         {
