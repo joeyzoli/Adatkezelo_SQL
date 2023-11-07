@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JRadioButton;
 
 public class Retour_szeriaszamok extends JPanel {
     private JTextField retourid_mezo;
@@ -37,20 +38,23 @@ public class Retour_szeriaszamok extends JPanel {
     private JCheckBox meres_csekk1;private JCheckBox meres_csekk2;private JCheckBox meres_csekk3;private JCheckBox meres_csekk4;private JCheckBox meres_csekk5;private JCheckBox meres_csekk6;
     private JCheckBox rontgen_csekk1;private JCheckBox rontgen_csekk2;private JCheckBox rontgen_csekk3;private JCheckBox rontgen_csekk4;private JCheckBox rontgen_csekk5;private JCheckBox rontgen_csekk6;
     private JCheckBox egyeb_csekk1;private JCheckBox egyeb_csekk2;private JCheckBox egyeb_csekk3;private JCheckBox egyeb_csekk4;private JCheckBox egyeb_csekk5;private JCheckBox egyeb_csekk6;
-    private JCheckBox kiszallithato_igen;private JCheckBox kiszallithato_nem;
+    private JCheckBox kiszallithato_OK;private JCheckBox kiszallithato_NOK;
     private JCheckBox beszallito;private JCheckBox veas;private JCheckBox vevo;
     private JTextArea hiba_mezo;private JTextArea javitas_mezo;private JTextArea hibaoka_mezo;private JTextArea intezkedes_mezo;
     private JComboBox<String> hibakod_box;
     private ComboBox combobox_tomb;
     private ArrayList<String> kephelye = new ArrayList<String>();
     private ArrayList<String> kepneve = new ArrayList<String>();
+    private JRadioButton csekk1;private JRadioButton csekk2;private JRadioButton csekk3;private JRadioButton csekk4;private JRadioButton csekk5;private JRadioButton csekk6;private JRadioButton csekk7;
+    private JRadioButton csekk8;private JRadioButton csekk9;private JRadioButton csekk10;private JRadioButton csekk11;private JRadioButton csekk12;private JRadioButton csekk13;private JRadioButton csekk14;
+    private JRadioButton csekk15;private JRadioButton csekk16;private JRadioButton csekk17;private JRadioButton csekk18;
 
     /**
      * Create the panel.
      */
     public Retour_szeriaszamok() {
         setLayout(null);
-        Foablak.meretek.setSize(1350, 850);
+        Foablak.meretek.setSize(1380, 850);
         JLabel lblNewLabel = new JLabel("Retour szériaszámok nyomonkövetése");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel.setBounds(535, 44, 278, 14);
@@ -108,11 +112,11 @@ public class Retour_szeriaszamok extends JPanel {
         vizualis_csekk2.setBounds(271, 225, 37, 23);
         add(vizualis_csekk2);
         
-        JLabel lblNewLabel_9 = new JLabel("Igen");
+        JLabel lblNewLabel_9 = new JLabel("Ok");
         lblNewLabel_9.setBounds(219, 202, 46, 14);
         add(lblNewLabel_9);
         
-        JLabel lblNewLabel_10 = new JLabel("Nem");
+        JLabel lblNewLabel_10 = new JLabel("NOK");
         lblNewLabel_10.setBounds(271, 202, 46, 14);
         add(lblNewLabel_10);
         
@@ -281,7 +285,7 @@ public class Retour_szeriaszamok extends JPanel {
         add(lblNewLabel_16);
         
         JLabel lblNewLabel_17 = new JLabel("Hibakód");
-        lblNewLabel_17.setBounds(738, 261, 46, 14);
+        lblNewLabel_17.setBounds(776, 261, 46, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Hiba eredete");
@@ -297,7 +301,7 @@ public class Retour_szeriaszamok extends JPanel {
         add(veas);
         
         vevo = new JCheckBox("Vevő");
-        vevo.setBounds(1049, 225, 67, 23);
+        vevo.setBounds(1046, 225, 67, 23);
         add(vevo);
         
         JLabel lblNewLabel_19 = new JLabel("Hiba leírása");
@@ -334,13 +338,13 @@ public class Retour_szeriaszamok extends JPanel {
         lblNewLabel_23.setBounds(78, 537, 270, 14);
         add(lblNewLabel_23);
         
-        kiszallithato_igen = new JCheckBox("Igen");
-        kiszallithato_igen.setBounds(101, 568, 53, 23);
-        add(kiszallithato_igen);
+        kiszallithato_OK = new JCheckBox("Igen");
+        kiszallithato_OK.setBounds(101, 568, 53, 23);
+        add(kiszallithato_OK);
         
-        kiszallithato_nem = new JCheckBox("Nem");
-        kiszallithato_nem.setBounds(177, 568, 53, 23);
-        add(kiszallithato_nem);
+        kiszallithato_NOK = new JCheckBox("Nem");
+        kiszallithato_NOK.setBounds(177, 568, 53, 23);
+        add(kiszallithato_NOK);
         
         JLabel lblNewLabel_24 = new JLabel("Hiba oka");
         lblNewLabel_24.setBounds(380, 537, 60, 14);
@@ -371,7 +375,7 @@ public class Retour_szeriaszamok extends JPanel {
         
         combobox_tomb = new ComboBox();
         hibakod_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                      //combobox_tomb.getCombobox(ComboBox.hibakodok)
-        hibakod_box.setBounds(794, 257, 506, 22);
+        hibakod_box.setBounds(836, 257, 504, 22);
         add(hibakod_box);
         
         JButton kepcsatol_gomb = new JButton("Kép csatolása");
@@ -389,6 +393,90 @@ public class Retour_szeriaszamok extends JPanel {
         add(lblNewLabel_26);
         
         setBackground(Foablak.hatter_szine);
+        
+        csekk1 = new JRadioButton("");
+        csekk1.setBounds(310, 225, 28, 23);
+        add(csekk1);
+        
+        JLabel lblNewLabel_27 = new JLabel("Nem alkalmazott");
+        lblNewLabel_27.setBounds(316, 202, 104, 14);
+        add(lblNewLabel_27);
+        
+        csekk4 = new JRadioButton("");
+        csekk4.setBounds(310, 269, 28, 23);
+        add(csekk4);
+        
+        csekk7 = new JRadioButton("");
+        csekk7.setBounds(310, 315, 28, 23);
+        add(csekk7);
+        
+        csekk10 = new JRadioButton("");
+        csekk10.setBounds(310, 362, 28, 23);
+        add(csekk10);
+        
+        csekk13 = new JRadioButton("");
+        csekk13.setBounds(310, 411, 28, 23);
+        add(csekk13);
+        
+        csekk16 = new JRadioButton("");
+        csekk16.setBounds(310, 461, 28, 23);
+        add(csekk16);
+        
+        csekk2 = new JRadioButton("");
+        csekk2.setBounds(512, 225, 28, 23);
+        add(csekk2);
+        
+        csekk5 = new JRadioButton("");
+        csekk5.setBounds(511, 269, 28, 23);
+        add(csekk5);
+        
+        csekk8 = new JRadioButton("");
+        csekk8.setBounds(511, 315, 28, 23);
+        add(csekk8);
+        
+        csekk11 = new JRadioButton("");
+        csekk11.setBounds(511, 362, 28, 23);
+        add(csekk11);
+        
+        csekk14 = new JRadioButton("");
+        csekk14.setBounds(511, 411, 28, 23);
+        add(csekk14);
+        
+        csekk17 = new JRadioButton("");
+        csekk17.setBounds(512, 461, 28, 23);
+        add(csekk17);
+        
+        csekk3 = new JRadioButton("");
+        csekk3.setBounds(698, 225, 28, 23);
+        add(csekk3);
+        
+        csekk6 = new JRadioButton("");
+        csekk6.setBounds(698, 269, 28, 23);
+        add(csekk6);
+        
+        csekk9 = new JRadioButton("");
+        csekk9.setBounds(698, 315, 28, 23);
+        add(csekk9);
+        
+        csekk12 = new JRadioButton("");
+        csekk12.setBounds(698, 362, 28, 23);
+        add(csekk12);
+        
+        csekk15 = new JRadioButton("");
+        csekk15.setBounds(698, 411, 28, 23);
+        add(csekk15);
+        
+        csekk18 = new JRadioButton("");
+        csekk18.setBounds(698, 461, 28, 23);
+        add(csekk18);
+        
+        JLabel lblNewLabel_28 = new JLabel("Nem alkalazott");
+        lblNewLabel_28.setBounds(516, 202, 102, 14);
+        add(lblNewLabel_28);
+        
+        JLabel lblNewLabel_29 = new JLabel("Nem alkalmazott");
+        lblNewLabel_29.setBounds(703, 202, 100, 14);
+        add(lblNewLabel_29);
 
     }
     
@@ -455,7 +543,25 @@ public class Retour_szeriaszamok extends JPanel {
                     egyeb_csekk3.setSelected(false);        
                     egyeb_csekk4.setSelected(false);        
                     egyeb_csekk5.setSelected(false);        
-                    egyeb_csekk6.setSelected(false);       
+                    egyeb_csekk6.setSelected(false);
+                    csekk1.setSelected(false);
+                    csekk2.setSelected(false); 
+                    csekk3.setSelected(false); 
+                    csekk4.setSelected(false); 
+                    csekk5.setSelected(false); 
+                    csekk6.setSelected(false); 
+                    csekk7.setSelected(false); 
+                    csekk8.setSelected(false); 
+                    csekk9.setSelected(false); 
+                    csekk10.setSelected(false); 
+                    csekk11.setSelected(false); 
+                    csekk12.setSelected(false); 
+                    csekk13.setSelected(false); 
+                    csekk14.setSelected(false); 
+                    csekk15.setSelected(false); 
+                    csekk16.setSelected(false); 
+                    csekk17.setSelected(false); 
+                    csekk18.setSelected(false); 
                     hibakod_box.setSelectedIndex(1);        
                     beszallito.setSelected(false);        
                     veas.setSelected(false);        
@@ -466,130 +572,184 @@ public class Retour_szeriaszamok extends JPanel {
                     intezkedes_mezo.setText("");
                     if(rs.next()) {
                         if(rs.getString(5) != null) {
-                            if(rs.getString(5).equals("igen")) {
+                            if(rs.getString(5).equals("OK")) {
                                 vizualis_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(5).equals("nem")) {
+                            else if(rs.getString(5).equals("NOK")) {
                                 vizualis_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(5).equals("N/A")) {
+                                csekk1.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(6).equals("igen")) {
+                            if(rs.getString(6).equals("OK")) {
                                 vizualis_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(6).equals("nem")) {
+                            else if(rs.getString(6).equals("NOK")) {
                                 vizualis_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(6).equals("N/A")) {
+                                csekk2.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(7).equals("igen")) {
+                            if(rs.getString(7).equals("OK")) {
                                 vizualis_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(7).equals("nem")) {
+                            else if(rs.getString(7).equals("NOK")) {
                                 vizualis_csekk6.setSelected(true);
                             }
+                            else if(rs.getString(7).equals("N/A")) {
+                                csekk3.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(8).equals("igen")) {
+                            if(rs.getString(8).equals("OK")) {
                                 ict_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(8).equals("nem")) {
+                            else if(rs.getString(8).equals("NOK")) {
                                 ict_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(8).equals("N/A")) {
+                                csekk4.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(9).equals("igen")) {
+                            if(rs.getString(9).equals("OK")) {
                                 ict_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(9).equals("nem")) {
+                            else if(rs.getString(9).equals("NOK")) {
                                 ict_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(9).equals("N/A")) {
+                                csekk5.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(10).equals("igen")) {
+                            if(rs.getString(10).equals("OK")) {
                                 ict_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(10).equals("nem")) {
+                            else if(rs.getString(10).equals("NOK")) {
                                 ict_csekk6.setSelected(true);
                             }
+                            else if(rs.getString(10).equals("N/A")) {
+                                csekk6.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(11).equals("igen")) {
+                            if(rs.getString(11).equals("OK")) {
                                 fct_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(11).equals("nem")) {
+                            else if(rs.getString(11).equals("NOK")) {
                                 fct_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(11).equals("N/A")) {
+                                csekk7.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(12).equals("igen")) {
+                            if(rs.getString(12).equals("OK")) {
                                 fct_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(12).equals("nem")) {
+                            else if(rs.getString(12).equals("NOK")) {
                                 fct_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(12).equals("N/A")) {
+                                csekk8.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(13).equals("igen")) {
+                            if(rs.getString(13).equals("OK")) {
                                 fct_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(13).equals("nem")) {
+                            else if(rs.getString(13).equals("NOK")) {
                                 fct_csekk6.setSelected(true);
                             }
+                            else if(rs.getString(13).equals("N/A")) {
+                                csekk9.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(14).equals("igen")) {
+                            if(rs.getString(14).equals("OK")) {
                                 meres_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(14).equals("nem")) {
+                            else if(rs.getString(14).equals("NOK")) {
                                 meres_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(14).equals("N/A")) {
+                                csekk10.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(15).equals("igen")) {
+                            if(rs.getString(15).equals("OK")) {
                                 meres_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(15).equals("nem")) {
+                            else if(rs.getString(15).equals("NOK")) {
                                 meres_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(15).equals("N/A")) {
+                                csekk11.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(16).equals("igen")) {
+                            if(rs.getString(16).equals("OK")) {
                                 meres_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(16).equals("nem")) {
+                            else if(rs.getString(16).equals("NOK")) {
                                 meres_csekk6.setSelected(true);
                             }
+                            else if(rs.getString(16).equals("N/A")) {
+                                csekk12.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(17).equals("igen")) {
+                            if(rs.getString(17).equals("OK")) {
                                 rontgen_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(17).equals("nem")) {
+                            else if(rs.getString(17).equals("NOK")) {
                                 rontgen_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(17).equals("N/A")) {
+                                csekk13.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(18).equals("igen")) {
+                            if(rs.getString(18).equals("OK")) {
                                 rontgen_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(18).equals("nem")) {
+                            else if(rs.getString(18).equals("NOK")) {
                                 rontgen_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(18).equals("N/A")) {
+                                csekk14.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(19).equals("igen")) {
+                            if(rs.getString(19).equals("OK")) {
                                 rontgen_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(19).equals("nem")) {
+                            else if(rs.getString(19).equals("NOK")) {
                                 rontgen_csekk6.setSelected(true);
                             }
+                            else if(rs.getString(19).equals("N/A")) {
+                                csekk15.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(20).equals("igen")) {
+                            if(rs.getString(20).equals("OK")) {
                                 egyeb_csekk1.setSelected(true);
                             }
-                            else if(rs.getString(20).equals("nem")) {
+                            else if(rs.getString(20).equals("NOK")) {
                                 egyeb_csekk2.setSelected(true);
                             }
+                            else if(rs.getString(20).equals("N/A")) {
+                                csekk16.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(21).equals("igen")) {
+                            if(rs.getString(21).equals("OK")) {
                                 egyeb_csekk3.setSelected(true);
                             }
-                            else if(rs.getString(21).equals("nem")) {
+                            else if(rs.getString(21).equals("NOK")) {
                                 egyeb_csekk4.setSelected(true);
                             }
+                            else if(rs.getString(21).equals("N/A")) {
+                                csekk17.setSelected(true);
+                            }
                             else {}
-                            if(rs.getString(22).equals("igen")) {
+                            if(rs.getString(22).equals("OK")) {
                                 egyeb_csekk5.setSelected(true);
                             }
-                            else if(rs.getString(22).equals("nem")) {
+                            else if(rs.getString(22).equals("NOK")) {
                                 egyeb_csekk6.setSelected(true);
+                            }
+                            else if(rs.getString(22).equals("N/A")) {
+                                csekk18.setSelected(true);
                             }
                             else {}
                             hibakod_box.setSelectedItem(rs.getString(23));
@@ -608,11 +768,11 @@ public class Retour_szeriaszamok extends JPanel {
                             hibaoka_mezo.setText(rs.getString(27));
                             intezkedes_mezo.setText(rs.getString(28));
                             
-                            if(rs.getString(29).equals("igen")) {
-                                kiszallithato_igen.setSelected(true);
+                            if(rs.getString(29).equals("OK")) {
+                                kiszallithato_OK.setSelected(true);
                             }
-                            else if(rs.getString(29).equals("nem")) {
-                                kiszallithato_nem.setSelected(true);
+                            else if(rs.getString(29).equals("NOK")) {
+                                kiszallithato_NOK.setSelected(true);
                             }
                             else {}
                         }
@@ -671,12 +831,12 @@ public class Retour_szeriaszamok extends JPanel {
          
         }
         @Override
-        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt NOK akarom figyelni, így üresen hagyom 
         {
             // TODO Auto-generated method stub           
         }
         @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt NOK akarom figyelni, így üresen hagyom 
         {
             // TODO Auto-generated method stub           
         }    
@@ -713,131 +873,149 @@ public class Retour_szeriaszamok extends JPanel {
             if(retourid_mezo.getText().equals(""))
             {
                 if(vizualis_csekk1.isSelected()) {
-                    vizualis1 = "igen";
+                    vizualis1 = "OK";
                 }
                 else if(vizualis_csekk2.isSelected()) {
-                    vizualis1 = "nem";
+                    vizualis1 = "NOK";
                 }
-                else {}
+                else {if(csekk1.isSelected()) {vizualis1 = "N/A";}}
+                
                 if(vizualis_csekk3.isSelected()) {
-                    vizualis2 = "igen";
+                    vizualis2 = "OK";
                 }
                 else if(vizualis_csekk4.isSelected()) {
-                    vizualis2 = "nem";
+                    vizualis2 = "NOK";
                 }
-                else {}
+                else {if(csekk2.isSelected()) {vizualis2 = "N/A";}}
+                
                 if(vizualis_csekk5.isSelected()) {
-                    vizualis3 = "igen";
+                    vizualis3 = "OK";
                 }
                 else if(vizualis_csekk6.isSelected()) {
-                    vizualis3 = "nem";
+                    vizualis3 = "NOK";
                 }
-                else {}
+                else {if(csekk3.isSelected()) {vizualis3 = "N/A";}}
+                
                 if(ict_csekk1.isSelected()) {
-                    ict1 = "igen";
+                    ict1 = "OK";
                 }
                 else if(ict_csekk2.isSelected()) {
-                    ict1 = "nem";
+                    ict1 = "NOK";
                 }
-                else {}
+                else {if(csekk4.isSelected()) { ict1 = "N/A";}}
+                
                 if(ict_csekk3.isSelected()) {
-                    ict2 = "igen";
+                    ict2 = "OK";
                 }
                 else if(ict_csekk4.isSelected()) {
-                    ict2 = "nem";
+                    ict2 = "NOK";
                 }
-                else {}
+                else {if(csekk5.isSelected()) { ict2 = "N/A";}}
+                
                 if(ict_csekk5.isSelected()) {
-                    ict3 = "igen";
+                    ict3 = "OK";
                 }
                 else if(ict_csekk6.isSelected()) {
-                    ict3 = "nem";
+                    ict3 = "NOK";
                 }
-                else {}
+                else {if(csekk6.isSelected()) { ict3 = "N/A";}}
+                
                 if(fct_csekk1.isSelected()) {
-                    fct1 = "igen";
+                    fct1 = "OK";
                 }
                 else if(fct_csekk2.isSelected()) {
-                    fct1 = "nem";
+                    fct1 = "NOK";
                 }
-                else {}
+                else {if(csekk7.isSelected()) { fct1 = "N/A";}}
+                
                 if(fct_csekk3.isSelected()) {
-                    fct2 = "igen";
+                    fct2 = "OK";
                 }
                 else if(fct_csekk4.isSelected()) {
-                    fct2 = "nem";
+                    fct2 = "NOK";
                 }
-                else {}
+                else {if(csekk8.isSelected()) { fct2 = "N/A";}}
+                
                 if(fct_csekk5.isSelected()) {
-                    fct3 = "igen";
+                    fct3 = "OK";
                 }
                 else if(fct_csekk6.isSelected()) {
-                    fct3 = "nem";
+                    fct3 = "NOK";
                 }
-                else {}
+                else {if(csekk9.isSelected()) { fct3 = "N/A";}}
+                
                 if(meres_csekk1.isSelected()) {
-                    meres1 = "igen";
+                    meres1 = "OK";
                 }
                 else if(meres_csekk2.isSelected()) {
-                    meres1 = "nem";
+                    meres1 = "NOK";
                 }
-                else {}
+                else {if(csekk10.isSelected()) { meres1 = "N/A";}}
+                
                 if(meres_csekk3.isSelected()) {
-                    meres2 = "igen";
+                    meres2 = "OK";
                 }
                 else if(meres_csekk4.isSelected()) {
-                    meres2 = "nem";
+                    meres2 = "NOK";
                 }
-                else {}
+                else {if(csekk11.isSelected()) { meres2 = "N/A";}}
+                
                 if(meres_csekk5.isSelected()) {
-                    meres3 = "igen";
+                    meres3 = "OK";
                 }
                 else if(meres_csekk6.isSelected()) {
-                    meres3 = "nem";
+                    meres3 = "NOK";
                 }
-                else {}
+                else {if(csekk12.isSelected()) { meres3 = "N/A";}}
+                
                 if(rontgen_csekk1.isSelected()) {
-                    rontgen1 = "igen";
+                    rontgen1 = "OK";
                 }
                 else if(rontgen_csekk2.isSelected()) {
-                    rontgen1 = "nem";
+                    rontgen1 = "NOK";
                 }
-                else {}
+                else {if(csekk13.isSelected()) { rontgen1 = "N/A";}}
+                
                 if(rontgen_csekk3.isSelected()) {
-                    rontgen2 = "igen";
+                    rontgen2 = "OK";
                 }
                 else if(rontgen_csekk4.isSelected()) {
-                    rontgen2 = "nem";
+                    rontgen2 = "NOK";
                 }
-                else {}
+                else {if(csekk14.isSelected()) { rontgen2 = "N/A";}}
+                
                 if(rontgen_csekk5.isSelected()) {
-                    rontgen3 = "igen";
+                    rontgen3 = "OK";
                 }
                 else if(rontgen_csekk6.isSelected()) {
-                    rontgen3 = "nem";
+                    rontgen3 = "NOK";
                 }
-                else {}
+                else {if(csekk15.isSelected()) { rontgen3 = "N/A";}}
+                
                 if(egyeb_csekk1.isSelected()) {
-                    egyeb1 = "igen";
+                    egyeb1 = "OK";
                 }
                 else if(egyeb_csekk2.isSelected()) {
-                    egyeb1 = "nem";
+                    egyeb1 = "NOK";
                 }
-                else {}
+                else {if(csekk16.isSelected()) { egyeb1 = "N/A";}}
+                
                 if(egyeb_csekk3.isSelected()) {
-                    egyeb2 = "igen";
+                    egyeb2 = "OK";
                 }
                 else if(egyeb_csekk4.isSelected()) {
-                    egyeb2 = "nem";
+                    egyeb2 = "NOK";
                 }
-                else {}
+                else {if(csekk17.isSelected()) { egyeb2 = "N/A";}}
+                
                 if(egyeb_csekk5.isSelected()) {
-                    egyeb3 = "igen";
+                    egyeb3 = "OK";
                 }
                 else if(egyeb_csekk6.isSelected()) {
-                    egyeb3 = "nem";
+                    egyeb3 = "NOK";
                 }
-                else {}
+                else {if(csekk18.isSelected()) { egyeb3 = "N/A";}}
+                
                 if(beszallito.isSelected()) {
                     hibaeredet = "Beszállító";
                 }
@@ -848,11 +1026,11 @@ public class Retour_szeriaszamok extends JPanel {
                     hibaeredet = "Vevő";
                 }
                 else {}
-                if(kiszallithato_igen.isSelected()) {
-                    kiszallithato = "igen";
+                if(kiszallithato_OK.isSelected()) {
+                    kiszallithato = "OK";
                 }
-                else if(kiszallithato_nem.isSelected()) {
-                    kiszallithato = "nem";
+                else if(kiszallithato_NOK.isSelected()) {
+                    kiszallithato = "NOK";
                 }
                 else {}
                 
@@ -869,133 +1047,151 @@ public class Retour_szeriaszamok extends JPanel {
             else
             {
                 if(vizualis_csekk1.isSelected()) {
-                    vizualis1 = "igen";
+                    vizualis1 = "OK";
                 }
                 else if(vizualis_csekk2.isSelected()) {
-                    vizualis1 = "nem";
+                    vizualis1 = "NOK";
                 }
-                else {}
+                else {if(csekk1.isSelected()) {vizualis1 = "N/A";}}
+                
                 if(vizualis_csekk3.isSelected()) {
-                    vizualis2 = "igen";
+                    vizualis2 = "OK";
                 }
                 else if(vizualis_csekk4.isSelected()) {
-                    vizualis2 = "nem";
+                    vizualis2 = "NOK";
                 }
-                else {}
+                else {if(csekk2.isSelected()) {vizualis2 = "N/A";}}
+                
                 if(vizualis_csekk5.isSelected()) {
-                    vizualis3 = "igen";
+                    vizualis3 = "OK";
                 }
                 else if(vizualis_csekk6.isSelected()) {
-                    vizualis3 = "nem";
+                    vizualis3 = "NOK";
                 }
-                else {}
+                else {if(csekk3.isSelected()) {vizualis3 = "N/A";}}
+                
                 if(ict_csekk1.isSelected()) {
-                    ict1 = "igen";
+                    ict1 = "OK";
                 }
                 else if(ict_csekk2.isSelected()) {
-                    ict1 = "nem";
+                    ict1 = "NOK";
                 }
-                else {}
+                else {if(csekk4.isSelected()) { ict1 = "N/A";}}
+                
                 if(ict_csekk3.isSelected()) {
-                    ict2 = "igen";
+                    ict2 = "OK";
                 }
                 else if(ict_csekk4.isSelected()) {
-                    ict2 = "nem";
+                    ict2 = "NOK";
                 }
-                else {}
+                else {if(csekk5.isSelected()) { ict2 = "N/A";}}
+                
                 if(ict_csekk5.isSelected()) {
-                    ict3 = "igen";
+                    ict3 = "OK";
                 }
                 else if(ict_csekk6.isSelected()) {
-                    ict3 = "nem";
+                    ict3 = "NOK";
                 }
-                else {}
+                else {if(csekk6.isSelected()) { ict3 = "N/A";}}
+                
                 if(fct_csekk1.isSelected()) {
-                    fct1 = "igen";
+                    fct1 = "OK";
                 }
                 else if(fct_csekk2.isSelected()) {
-                    fct1 = "nem";
+                    fct1 = "NOK";
                 }
-                else {}
+                else {if(csekk7.isSelected()) { fct1 = "N/A";}}
+                
                 if(fct_csekk3.isSelected()) {
-                    fct2 = "igen";
+                    fct2 = "OK";
                 }
                 else if(fct_csekk4.isSelected()) {
-                    fct2 = "nem";
+                    fct2 = "NOK";
                 }
-                else {}
+                else {if(csekk8.isSelected()) { fct2 = "N/A";}}
+                
                 if(fct_csekk5.isSelected()) {
-                    fct3 = "igen";
+                    fct3 = "OK";
                 }
                 else if(fct_csekk6.isSelected()) {
-                    fct3 = "nem";
+                    fct3 = "NOK";
                 }
-                else {}
+                else {if(csekk9.isSelected()) { fct3 = "N/A";}}
+                
                 if(meres_csekk1.isSelected()) {
-                    meres1 = "igen";
+                    meres1 = "OK";
                 }
                 else if(meres_csekk2.isSelected()) {
-                    meres1 = "nem";
+                    meres1 = "NOK";
                 }
-                else {}
+                else {if(csekk10.isSelected()) { meres1 = "N/A";}}
+                
                 if(meres_csekk3.isSelected()) {
-                    meres2 = "igen";
+                    meres2 = "OK";
                 }
                 else if(meres_csekk4.isSelected()) {
-                    meres2 = "nem";
+                    meres2 = "NOK";
                 }
-                else {}
+                else {if(csekk11.isSelected()) { meres2 = "N/A";}}
+                
                 if(meres_csekk5.isSelected()) {
-                    meres3 = "igen";
+                    meres3 = "OK";
                 }
                 else if(meres_csekk6.isSelected()) {
-                    meres3 = "nem";
+                    meres3 = "NOK";
                 }
-                else {}
+                else {if(csekk12.isSelected()) { meres3 = "N/A";}}
+                
                 if(rontgen_csekk1.isSelected()) {
-                    rontgen1 = "igen";
+                    rontgen1 = "OK";
                 }
                 else if(rontgen_csekk2.isSelected()) {
-                    rontgen1 = "nem";
+                    rontgen1 = "NOK";
                 }
-                else {}
+                else {if(csekk13.isSelected()) { rontgen1 = "N/A";}}
+                
                 if(rontgen_csekk3.isSelected()) {
-                    rontgen2 = "igen";
+                    rontgen2 = "OK";
                 }
                 else if(rontgen_csekk4.isSelected()) {
-                    rontgen2 = "nem";
+                    rontgen2 = "NOK";
                 }
-                else {}
+                else {if(csekk14.isSelected()) { rontgen2 = "N/A";}}
+                
                 if(rontgen_csekk5.isSelected()) {
-                    rontgen3 = "igen";
+                    rontgen3 = "OK";
                 }
                 else if(rontgen_csekk6.isSelected()) {
-                    rontgen3 = "nem";
+                    rontgen3 = "NOK";
                 }
-                else {}
+                else {if(csekk15.isSelected()) { rontgen3 = "N/A";}}
+                
                 if(egyeb_csekk1.isSelected()) {
-                    egyeb1 = "igen";
+                    egyeb1 = "OK";
                 }
                 else if(egyeb_csekk2.isSelected()) {
-                    egyeb1 = "nem";
+                    egyeb1 = "NOK";
                 }
-                else {}
+                else {if(csekk16.isSelected()) { egyeb1 = "N/A";}}
+                
                 if(egyeb_csekk3.isSelected()) {
-                    egyeb2 = "igen";
+                    egyeb2 = "OK";
                 }
                 else if(egyeb_csekk4.isSelected()) {
-                    egyeb2 = "nem";
+                    egyeb2 = "NOK";
                 }
-                else {}
+                else {if(csekk17.isSelected()) { egyeb2 = "N/A";}}
+                
                 if(egyeb_csekk5.isSelected()) {
-                    egyeb3 = "igen";
+                    egyeb3 = "OK";
                 }
                 else if(egyeb_csekk6.isSelected()) {
-                    egyeb3 = "nem";
+                    egyeb3 = "NOK";
                 }
-                else {}
+                else {if(csekk18.isSelected()) { egyeb3 = "N/A";}}
+                
                 if(beszallito.isSelected()) {
-                    hibaeredet = "beszállító";
+                    hibaeredet = "Beszállító";
                 }
                 else if(veas.isSelected()) {
                     hibaeredet = "VEAS";
@@ -1004,11 +1200,11 @@ public class Retour_szeriaszamok extends JPanel {
                     hibaeredet = "Vevő";
                 }
                 else {}
-                if(kiszallithato_igen.isSelected()) {
-                    kiszallithato = "igen";
+                if(kiszallithato_OK.isSelected()) {
+                    kiszallithato = "OK";
                 }
-                else if(kiszallithato_nem.isSelected()) {
-                    kiszallithato = "nem";
+                else if(kiszallithato_NOK.isSelected()) {
+                    kiszallithato = "NOK";
                 }
                 else {}
              

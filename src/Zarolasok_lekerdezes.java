@@ -161,7 +161,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 String sql2 = "select zarolas_oka, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
                         + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n"
-                        + "group by projekt order by sum(zarolt_db) desc \r\n";
+                        + "group by zarolas_oka order by sum(zarolt_db) desc limit 10 \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
                 sheet.getRange().get("G" + 1).setText("Zárolás oka");
@@ -176,7 +176,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 }
                 
                 Chart chart5 = sheet.getCharts().add();
-                chart5.setChartTitle("Top zárolási ok");
+                chart5.setChartTitle("Top 10 zárolási ok");
 
                 chart5.setDataRange(sheet.getCellRange("G1:I" + cella2));
                 chart5.setSeriesDataFromRange(false);
@@ -206,27 +206,76 @@ public class Zarolasok_lekerdezes extends JPanel {
                     cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
                 }
                 
+                /***************************************************  mennyi idő   **********************************************************/
+                
                 sql2 = "select sum(ellenorzes_ido)/60, sum(ellenorzes_ido)/60*7 from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3\r\n"
                         + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
-                sheet.getRange().get("S" + 1).setText("TOP10");
-                sheet.getRange().get("T" + 1).setText("Költség");
+                sheet.getRange().get("K" + 1).setText("");
+                sheet.getRange().get("L" + 1).setText("Költség");
                 if(resultset.next())
                 {
-                    sheet.getRange().get("S" + 2).setText("Válogatásra fordított idő");
-                    sheet.getRange().get("T" + 2).setNumberValue(resultset.getInt(1));
-                    sheet.getRange().get("U" + 2).setText("óra");
-                    sheet.getRange().get("S" + 3).setText("Válogatás költsége");
-                    sheet.getRange().get("T" + 3).setNumberValue(resultset.getInt(2));
-                    sheet.getRange().get("U" + 3).setText("euró");
+                    sheet.getRange().get("K" + 2).setText("Válogatásra fordított idő");
+                    sheet.getRange().get("L" + 2).setNumberValue(resultset.getInt(1));
+                    sheet.getRange().get("M" + 2).setText("óra");
+                    sheet.getRange().get("K" + 3).setText("Válogatás költsége");
+                    sheet.getRange().get("L" + 3).setNumberValue(resultset.getInt(2));
+                    sheet.getRange().get("M" + 3).setText("euró");
                 }
+                ///////////////////////////////////////////////// minden adat
                 sql = "select * from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3 \r\n"
                         + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n"
                         + "order by zarolas_datuma asc \r\n";
-               
+                
+                /********************************************Harmadik diagramm*************************************************/
+                
+                sql2 = "select sum(ellenorzes_ido), zarolas_oka \r\n"
+                        + "from qualitydb.Zarolasok \r\n"
+                        + "where 3 = 3\r\n"
+                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"'\r\n"
+                        + "group by zarolas_oka order by sum(ellenorzes_ido) desc limit 10";
+                stmt.execute(sql2);
+                resultset = stmt.getResultSet();
+                sheet.getRange().get("Q" + 1).setText("Zárolás oka");
+                sheet.getRange().get("R" + 1).setText("Válogatás idő/perc");
+                
+                cella2 = 2;
+                while(resultset.next())
+                {   
+                    sheet.getRange().get("Q" + cella2).setText(resultset.getString(2));
+                    sheet.getCellRange("R" + cella2).setNumberValue(resultset.getInt(1));                        
+                    cella2++;
+                }
+                
+                Chart chart2 = sheet.getCharts().add();
+                chart2.setChartTitle("Top 10 zárolásra fordított idő");
+
+                chart2.setDataRange(sheet.getCellRange("Q1:R" + cella2));
+                chart2.setSeriesDataFromRange(false);
+                chart2.getPrimaryValueAxis().setTitle("Válogaátsra fordított idő");
+                //chart5.getSecondaryValueAxis().setTitle("Üzemben töltött átlag");
+         
+                //Set position of the chart
+                chart2.setLeftColumn(1);
+                chart2.setTopRow(52);
+                chart2.setRightColumn(18);
+                chart2.setBottomRow(81);
+                chart2.getPrimaryCategoryAxis().getTitleArea().setTextRotationAngle(90);
+                chart2.getPrimaryValueAxis().hasMajorGridLines(false);
+                
+                ChartSeries series2 = chart2.getSeries();
+                for (int i = 0;i < series2.size();i++)
+                {
+                    ChartSerie cs = series2.get(i);
+                    cs.getFormat().getOptions().isVaryColor(true);
+                    cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+                }
+                
+                
+                /////////////////////////////////////////////////////////////
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 jdbcAdapter.fillDataTable(datatable2, resultSet);
@@ -234,7 +283,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
                 sheet2.getAllocatedRange().autoFitColumns();
                 sheet2.getAllocatedRange().autoFitRows();
-                sheet.getAllocatedRange().autoFitColumns();
+                //sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
                 sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 

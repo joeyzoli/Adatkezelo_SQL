@@ -278,7 +278,7 @@ public class Email
         }        
     }
     
-    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki)
+    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki, String datum, String muszak)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -292,7 +292,7 @@ public class Email
             message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
             message.addRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(cimzettek));                                       //címzett beállítása
-            message.setSubject("Nem töltött ellenőri papírt");                                            //tárgy beállítása
+            message.setSubject("Zárolás");                                            //tárgy beállítása
            
             Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
            
@@ -305,6 +305,8 @@ public class Email
                     + "Zárolt db: "+ db +"\n"
                     + "Zárolás oka: "+ ok +"\n"
                     + "Zárolta: "+ ki +"\n"
+                    + "Dátum: "+ datum +"\n"
+                    + "Műszak: "+ muszak+"\n"
                     + "A zárolás technikusi beavatkozást igényel!");                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                    

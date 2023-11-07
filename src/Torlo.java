@@ -105,7 +105,7 @@ public class Torlo extends JPanel
 			 {
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			    Db_iro atiras = new Db_iro();
-			    atiras.atir("Tóth Zoltánoltán", "Tóth Zoltán");
+			    atiras.atir("nem", "NOK");
 			    /*
 			    Workbook workbook = new Workbook();
 			    workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\Java projekt\\emerson felosztás.xlsx");

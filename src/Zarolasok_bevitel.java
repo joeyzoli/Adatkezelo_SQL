@@ -792,18 +792,19 @@ public class Zarolasok_bevitel extends JPanel {
                         Email uzenet = new Email();
                         if(felelosterulet_box.getSelectedItem().equals("Gépes"))
                         {
-                            uzenet.zarolas_email(technikus, technikus, technikus, technikus, SQL, sql, technikus);
+                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
                         }
                         else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                         {
-                            
+                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
                         }
                         else
                         {
-                            
-                        }
-                        
-                        
+                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
+                        }                                               
                     }
                     sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
                             + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
@@ -817,6 +818,28 @@ public class Zarolasok_bevitel extends JPanel {
                     
                 }
                 lekerdezes.mindenes(sql);
+                eszleleshelye_mezo.setText("");
+                muszak_mezo.setText("");
+                mernok_mezo.setText("");
+                zaroltdb_mezo.setText("0");
+                zarolas_helye.setText("");
+                zarolasoka_mezo.setText("");
+                intezkedes_mezo.setText("");
+                datum_mezo.setText("");
+                sorszam_mezo.setText("");
+                eredmeny_mezo.setText("");
+                ujradatum_mezo.setText("");
+                ido_mezo.setText("");
+                technikus_csekk.setSelected(false);
+                felelos_mezo.setText("");
+                gyokerok_mezo.setText("");
+                gyokerintezkedes_mezo.setText("");
+                b2_mezo.setText("");
+                visszaellenorzes_mezo.setText("");
+                meszam_mezo.setText("");
+                projekt_box.setSelectedIndex(1);
+                tipus_box.setSelectedIndex(1);
+                zarolta_box.setSelectedIndex(1);
             }
             catch (Exception e1) 
             {

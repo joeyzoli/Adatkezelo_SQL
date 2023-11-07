@@ -923,7 +923,7 @@ public class Db_iro
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
                                                                                                                  
-        String query = "update qualitydb.SQA_reklamaciok set  Inditotta = '" + mire + "' where Inditotta = '" + mit + "'";
+        String query = "update qualitydb.Retour_szeriaszamok set  vizualis_jav_elott = '" + mire + "' where vizualis_jav_elott = '" + mit + "'";
         stmt.executeUpdate(query);
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

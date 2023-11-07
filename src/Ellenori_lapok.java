@@ -671,14 +671,17 @@ public class Ellenori_lapok extends JPanel {
                     CellRange cell2 = sheet.getCellRange(1, szamlalo);
                     SimpleDateFormat rovid = new SimpleDateFormat("yyyy.mm.dd");
                     String[] koztes = cell2.getValue().toString().split(" ");
-                    Date excel = rovid.parse(koztes[0]+koztes[1]+koztes[2]);
-                    String[] koztes2 = datum[0].split("-");
-                    Date result = rovid.parse(koztes2[0]+"."+koztes2[1]+"."+koztes2[2]);
-                    if(excel.compareTo(result) == 0) 
+                    if(koztes.length > 1)
                     {
-                        System.out.println("egyezik");
-                        oszlopszam = szamlalo;
-                    }               
+                        Date excel = rovid.parse(koztes[0]+koztes[1]+koztes[2]);
+                        String[] koztes2 = datum[0].split("-");
+                        Date result = rovid.parse(koztes2[0]+"."+koztes2[1]+"."+koztes2[2]);
+                        if(excel.compareTo(result) == 0) 
+                        {
+                            //System.out.println("egyezik");
+                            oszlopszam = szamlalo;
+                        }
+                    }
                 }                                               //"juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu"
                 Email email = new Email();
                 for(int szamlalo2 = 3; szamlalo2 < 8; szamlalo2++)
