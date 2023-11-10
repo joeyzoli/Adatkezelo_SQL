@@ -84,6 +84,7 @@ public class Foablak extends JFrame
 	private Fajl_atiras fajlok;
 	private Ellenori_lapok lapok;
 	private CSV csv;
+	private Techem_OQC techem;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -225,6 +226,10 @@ public class Foablak extends JFrame
 		JMenuItem zarolasok_kimutatasa = new JMenuItem("Zárolások");
 		zarolasok_kimutatasa.addActionListener(new Panelcsere_Zarolas_kimutatas());
 		lekerdezes.add(zarolasok_kimutatasa);
+		
+		JMenuItem techem = new JMenuItem("Techem");
+		techem.addActionListener(new Panelcsere_Techem());
+		lekerdezes.add(techem);
 		lekerdezes.add(sajat_sql);
 		
 		JMenuItem po_szam = new JMenuItem("PO szám lekérdezés");
@@ -887,6 +892,17 @@ public class Foablak extends JFrame
          {
             csv = new CSV();
             JScrollPane ablak = new JScrollPane(csv);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Techem implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            techem = new Techem_OQC();
+            JScrollPane ablak = new JScrollPane(techem);
             setContentPane(ablak);
             pack();
          }

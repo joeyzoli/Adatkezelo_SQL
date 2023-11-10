@@ -115,15 +115,7 @@ public class SQA_SQL {
         stmt.close();
         conn.close();
                 
-        } 
-        catch (SQLException e1) 
-        {
-            e1.printStackTrace();
-            String hibauzenet = e1.toString();
-            Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-        } 
+        }          
         catch (Exception e) 
         {
             e.printStackTrace();

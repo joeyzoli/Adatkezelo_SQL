@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Osszehasonlito());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1617,13 +1617,13 @@ public class Torlo extends JPanel
                         + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
                         + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
-                String sql = "select                   fkov.panel\n"
-                        + "from                                        (select panel\n"
-                        + "                                               from videoton.fkov\n"
-                        + "                                               where 3=3\n"
-                        + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
-                        + "inner join            videoton.fkov on fkov.panel = tempTable.panel\n"
-                        + "where fkov.panel = tempTable.panel  and hely in (16,49);";
+                String sql = "select selejt.azon,selejt.panel AS 'Panel kód',cast(concat(kod,' - ',megnev) as char) AS 'Feltétel',selejt.beepszint 'Beép. szint',selejt.poz 'Pozíció',selejt.dolgozo AS'Dolgozó',\n"
+                        + "teendo AS 'Teendő',megj AS'Megjegyzés',users.nev AS'Név',selejt.felvido AS'Dátum'\n"
+                        + "from videoton.selejt,videoton.selejthibakod,videoton.users where\n"
+                        + "selejt.hibakod=selejthibakod.azon and \n"
+                        + "users.ukod=selejt.felvdolg and\n"
+                        + "selejt.felvido >= '2023.09.01' and selejt.felvido <= '2023.11.04'\n"
+                        + "and panel like 'WA%' ";
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);

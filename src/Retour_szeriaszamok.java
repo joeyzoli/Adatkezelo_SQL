@@ -3,6 +3,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -48,6 +49,7 @@ public class Retour_szeriaszamok extends JPanel {
     private JRadioButton csekk1;private JRadioButton csekk2;private JRadioButton csekk3;private JRadioButton csekk4;private JRadioButton csekk5;private JRadioButton csekk6;private JRadioButton csekk7;
     private JRadioButton csekk8;private JRadioButton csekk9;private JRadioButton csekk10;private JRadioButton csekk11;private JRadioButton csekk12;private JRadioButton csekk13;private JRadioButton csekk14;
     private JRadioButton csekk15;private JRadioButton csekk16;private JRadioButton csekk17;private JRadioButton csekk18;
+    private JButton kepmentes_gomb;
 
     /**
      * Create the panel.
@@ -383,7 +385,7 @@ public class Retour_szeriaszamok extends JPanel {
         kepcsatol_gomb.setBounds(535, 626, 123, 23);
         add(kepcsatol_gomb);
         
-        JButton kepmentes_gomb = new JButton("Asztalra");
+        kepmentes_gomb = new JButton("Asztalra");
         kepmentes_gomb.addActionListener(new Kepmentes());
         kepmentes_gomb.setBounds(1027, 654, 89, 23);
         add(kepmentes_gomb);
@@ -490,7 +492,9 @@ public class Retour_szeriaszamok extends JPanel {
                 if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
                 {
                     Connection conn = null;
-                    Statement stmt = null;        
+                    Statement stmt = null;
+                    kephelye.clear();
+                    kepneve.clear();
                     try 
                     {
                        try 
@@ -781,6 +785,18 @@ public class Retour_szeriaszamok extends JPanel {
                             javitas_mezo.setText(rs.getString(26));
                             hibaoka_mezo.setText(rs.getString(27));
                             intezkedes_mezo.setText(rs.getString(28));
+                        }
+                        
+                        sql = "select * from qualitydb.Retour_kepek where Szeriaszam = '"+ szeriaszam_mezo.getText() +"'";
+                        stmt.execute(sql);
+                        rs = stmt.getResultSet();
+                        if(rs.next())
+                        {
+                            kepmentes_gomb.setBackground(Color.GREEN);
+                        }
+                        else
+                        {
+                            kepmentes_gomb.setBackground(Color.RED);
                         }
                         
                     }
@@ -1257,7 +1273,25 @@ public class Retour_szeriaszamok extends JPanel {
             egyeb_csekk3.setSelected(false);        
             egyeb_csekk4.setSelected(false);        
             egyeb_csekk5.setSelected(false);        
-            egyeb_csekk6.setSelected(false);       
+            egyeb_csekk6.setSelected(false);
+            csekk1.setSelected(false);
+            csekk2.setSelected(false); 
+            csekk3.setSelected(false); 
+            csekk4.setSelected(false); 
+            csekk5.setSelected(false); 
+            csekk6.setSelected(false); 
+            csekk7.setSelected(false); 
+            csekk8.setSelected(false); 
+            csekk9.setSelected(false); 
+            csekk10.setSelected(false); 
+            csekk11.setSelected(false); 
+            csekk12.setSelected(false); 
+            csekk13.setSelected(false); 
+            csekk14.setSelected(false); 
+            csekk15.setSelected(false); 
+            csekk16.setSelected(false); 
+            csekk17.setSelected(false); 
+            csekk18.setSelected(false); 
             hibakod_box.setSelectedIndex(1);        
             beszallito.setSelected(false);        
             veas.setSelected(false);        

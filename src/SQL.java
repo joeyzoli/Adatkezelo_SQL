@@ -2920,7 +2920,7 @@ public class SQL
         }   
     }
 	
-	public void lekerdez_retour(String datumtol, String datumig, String id)
+	public void lekerdez_retour(String datumtol, String datumig, String id, String vevo, String rma)
     {
     
         String driverName = "com.mysql.cj.jdbc.Driver";                     //driver stringje
@@ -2936,13 +2936,27 @@ public class SQL
             String sql = "";       //"select * from qualitydb.Retour where ";
             if(id.equals(""))
             {
-                sql = "select * from qualitydb.Retour where Datum >= '"+ datumtol + "' and Datum <= '"+ datumig + "'";
+                if(rma.equals(""))
+                {
+                    if(vevo.equals("-"))
+                    {
+                        sql = "select * from qualitydb.Retour where Datum >= '"+ datumtol + "' and Datum <= '"+ datumig + "'";
+                    }
+                    else
+                    {
+                        sql = "select * from qualitydb.Retour where Datum >= '"+ datumtol + "' and Datum <= '"+ datumig + "' and Vevo = '"+ vevo +"'";
+                    }
+                }
+                else
+                {
+                    sql = "select * from qualitydb.Retour where RMA = '"+ rma + "'";
+                }
             }
             else
             {
                 sql = "select * from qualitydb.Retour where id = '"+ id + "'";
             }
-                
+       
             stmt.execute(sql);
             //String sql = "select * from " + DB;
             ResultSet resultSet = stmt.getResultSet();

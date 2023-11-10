@@ -34,6 +34,7 @@ public class Retour_lekerdez extends JPanel
     private JTextField id_mezo;
     private ComboBox combobox_tomb;
     private JComboBox<String> vevo_box;
+    private JTextField rma_mezo;
     /**
      * Create the panel.
      */
@@ -45,27 +46,27 @@ public class Retour_lekerdez extends JPanel
         new ComboBox();
         JLabel lblNewLabel = new JLabel("Retour adatok lekérdezése");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lblNewLabel.setBounds(481, 33, 264, 22);
+        lblNewLabel.setBounds(482, 11, 264, 22);
         add(lblNewLabel);
         
         JLabel lblNewLabel_2 = new JLabel("Dátum -tól");
         lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_2.setBounds(420, 93, 90, 14);
+        lblNewLabel_2.setBounds(420, 65, 90, 14);
         add(lblNewLabel_2);
         
         datumtol = new JTextField();
-        datumtol.setBounds(520, 90, 86, 20);
+        datumtol.setBounds(520, 62, 86, 20);
         datumtol.setText("2023.01.01");
         add(datumtol);
         datumtol.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Dátim -ig");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_3.setBounds(430, 124, 80, 14);
+        lblNewLabel_3.setBounds(430, 96, 80, 14);
         add(lblNewLabel_3);
         
         datumig = new JTextField();
-        datumig.setBounds(520, 121, 86, 20);
+        datumig.setBounds(520, 93, 86, 20);
         add(datumig);
         datumig.setColumns(10);
         
@@ -81,7 +82,7 @@ public class Retour_lekerdez extends JPanel
         
         id_mezo = new JTextField();
         id_mezo.addKeyListener(new Enter());
-        id_mezo.setBounds(520, 152, 86, 20);
+        id_mezo.setBounds(520, 124, 86, 20);
         
         id_mezo.addKeyListener(new Enter());
         add(id_mezo);
@@ -89,7 +90,7 @@ public class Retour_lekerdez extends JPanel
         
         JLabel lblNewLabel_4 = new JLabel("ID");
         lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_4.setBounds(464, 155, 46, 14);
+        lblNewLabel_4.setBounds(464, 127, 46, 14);
         add(lblNewLabel_4);
         
         JLabel lblNewLabel_8 = new JLabel("Excel grafikonnal");
@@ -144,6 +145,16 @@ public class Retour_lekerdez extends JPanel
         JLabel lblNewLabel_7 = new JLabel("Szériaszámokhoz tartozó képek mentése");
         lblNewLabel_7.setBounds(266, 724, 244, 14);
         add(lblNewLabel_7);
+        
+        rma_mezo = new JTextField();
+        rma_mezo.setBounds(520, 155, 157, 20);
+        add(rma_mezo);
+        rma_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_9 = new JLabel("RMA szám");
+        lblNewLabel_9.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_9.setBounds(420, 158, 90, 14);
+        add(lblNewLabel_9);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -152,7 +163,7 @@ public class Retour_lekerdez extends JPanel
          {
             try 
             {
-                lekerdezes.lekerdez_retour(datumtol.getText(), datumig.getText(), id_mezo.getText());
+                lekerdezes.lekerdez_retour(datumtol.getText(), datumig.getText(), id_mezo.getText(), String.valueOf(vevo_box.getSelectedItem()), rma_mezo.getText());
             } 
             catch (Exception e1) 
             {              
@@ -172,7 +183,7 @@ public class Retour_lekerdez extends JPanel
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
             {
-                lekerdezes.lekerdez_retour(datumtol.getText(), datumig.getText(), id_mezo.getText());
+                lekerdezes.lekerdez_retour(datumtol.getText(), datumig.getText(), id_mezo.getText(), String.valueOf(vevo_box.getSelectedItem()), rma_mezo.getText());
             }
          
         }
@@ -363,7 +374,7 @@ public class Retour_lekerdez extends JPanel
                     }
                     idk = idk.substring(0, idk.length() - 1);                   
                     
-                    sql = "select * from qualitydb.Retour_kepek where Retour_ID in ("+ idk +")";
+                    sql = "select * from qualitydb.Retour_kepek where Retour_ID in ("+ idk +") group by kepneve";
                     stmt.execute(sql);
                     rs = stmt.getResultSet();         
                     byte b[];
