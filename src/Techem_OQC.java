@@ -1,7 +1,6 @@
 import javax.swing.JPanel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
@@ -27,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JButton;
 
 public class Techem_OQC extends JPanel {
@@ -230,10 +228,12 @@ public class Techem_OQC extends JPanel {
                             for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
                             {    
                                 workbook3.removeSheetAt(i); 
-                            }      
+                            }
+                            
                             FileOutputStream output = new FileOutputStream(hova);
                             workbook3.write(output);
                             output.close();
+                            
                         }
                     } 
                 }

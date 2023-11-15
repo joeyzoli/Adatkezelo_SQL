@@ -1617,13 +1617,13 @@ public class Torlo extends JPanel
                         + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
                         + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
-                String sql = "select ido, panel, hibakod, kod2\n"
+                String sql = "select yearweek(ido), count(panel)\n"
                         + "from videoton.fkov\n"
-                        + "inner join  videoton.fkovsor on videoton.fkovsor.azon = fkov.hely\n"
                         + "where 3=3\n"
-                        + "and hely = '16'\n"
-                        + "and ido >= '2023.08.01'\n"
-                        + "and hibakod = 'A422' and poz = 'U300'";
+                        + "-- and panel = 'E0112201-01 2327 02703'\n"
+                        + "and hely = 27 and ido > '2023.08.01'\n"
+                        + "group by yearweek(ido)";
+                
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);
