@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
@@ -172,16 +173,18 @@ public class Techem_OQC extends JPanel {
                                     if(rs.next())
                                     {
                                         SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
-                                        Date mikor = null;
-                                        mikor = hosszu.parse(rs.getString(1));
+                                        Date mikor = hosszu.parse(rs.getString(1));
                                         Calendar cal = Calendar.getInstance(); // creates calendar                                        
                                         cal.setTime(mikor);               // sets calendar time/date
                                         //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
                                         //cal.getTime();                         // returns new date object plus one hour
-                                        String[] pontos = datum[0].split("-"); 
-                                        Date ma = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[1]);                                        
-                                        if(ma.compareTo(mikor) > 0) 
+                                        System.out.println(sheet.getRange().get("D" + 2).getText());
+                                        String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                        Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                        System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                        if(ellenorzes.compareTo(mikor) > 0) 
                                         {
+                                            //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
                                             cal.add(Calendar.HOUR_OF_DAY, 600);
                                             String[] lejar = hosszu.format(cal.getTime()).split(" ");
                                             String szoveg = "Result after " + lejar[0];
@@ -190,6 +193,7 @@ public class Techem_OQC extends JPanel {
                                         }
                                         else
                                         {
+                                            System.out.println("Jövőben Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
                                             cal.add(Calendar.HOUR_OF_DAY, 300);
                                             String[] lejar = hosszu.format(cal.getTime()).split(" ");
                                             String szoveg = "Result after " + lejar[0];
@@ -232,8 +236,7 @@ public class Techem_OQC extends JPanel {
                             
                             FileOutputStream output = new FileOutputStream(hova);
                             workbook3.write(output);
-                            output.close();
-                            
+                            output.close();                           
                         }
                     } 
                 }
@@ -264,6 +267,9 @@ public class Techem_OQC extends JPanel {
                 con.close(); 
                 con2.close();
                 con3.close();
+                
+                //Process p = Runtime.getRuntime().exec("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\SQL.jar");               
+
                 JOptionPane.showMessageDialog(null, "Mentve az asztalra", "Info", 1); 
                 Foablak.frame.setCursor(null); 
             }           

@@ -1617,12 +1617,20 @@ public class Torlo extends JPanel
                         + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
                         + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
-                String sql = "select yearweek(ido), count(panel)\n"
-                        + "from videoton.fkov\n"
-                        + "where 3=3\n"
-                        + "-- and panel = 'E0112201-01 2327 02703'\n"
-                        + "and hely = 27 and ido > '2023.08.01'\n"
-                        + "group by yearweek(ido)";
+                String sql = "Select adatok.Szeriaszam, TIMESTAMPDIFF(MINUTE,adatok.fail,adatok.Pass) as Percig_allt \n"
+                        + "from\n"
+                        + "(select kulso.panel as Szeriaszam, min(kulso.ido) as Pass, belso.ido as Fail\n"
+                        + "from videoton.fkov kulso,\n"
+                        + "    (select ido, panel\n"
+                        + "    from videoton.fkov\n"
+                        + "    where 3=3\n"
+                        + "        and hely in (43,44,45,46,47,48,98,99,100,101,102,103)\n"
+                        + "        and ok = 0\n"
+                        + "        and ido >= '2023.10.01' and ido <= '2023.10.31') belso\n"
+                        + "where belso.panel = kulso.panel\n"
+                        + "and belso.ido < kulso.ido and ok = -1\n"
+                        + "group by kulso.panel) adatok\n"
+                        + "where 3 = 3";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,

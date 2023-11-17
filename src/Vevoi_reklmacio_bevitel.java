@@ -59,10 +59,10 @@ public class Vevoi_reklmacio_bevitel extends JPanel
     static JComboBox<String> tipus_box;
     static JComboBox<String> vagy_vagy;
     static JComboBox<String> hibaokozoja_box;
-    private JCheckBox muszaki_igen;
-    private JCheckBox muszaki_nem;
-    private JCheckBox termeles_igen;
-    private JCheckBox termeles_nem;
+    static JCheckBox muszaki_igen;
+    static JCheckBox muszaki_nem;
+    static JCheckBox termeles_igen;
+    static JCheckBox termeles_nem;
     private JTextArea intezkedes_det;
     private ArrayList<String> kephelye = new ArrayList<String>();
     private ArrayList<String> kepneve = new ArrayList<String>();
@@ -578,7 +578,10 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     felelos_tabla.setModel(modell);
                     zarolt_tabla.setModel(modell2);
                     helyesbito_tabla.setModel(modell3);
-                    
+                    muszaki_igen.setSelected(false);
+                    muszaki_nem.setSelected(false);
+                    termeles_igen.setSelected(false);
+                    termeles_nem.setSelected(false);
                 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres!", "Info", 1);
             } 

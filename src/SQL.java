@@ -618,22 +618,68 @@ public class SQL
         Vevoi_reklmacio_bevitel.gyartasidopontja_mezo.setText(datatable.getRows().get(0).getString(6));
         Vevoi_reklmacio_bevitel.rma_mezo.setText(datatable.getRows().get(0).getString(7));
         
-        String sql2 = "SELECT zarolt, zarolt_db, talalt_db, felelos, hatarido FROM  qualitydb.Vevoireklamacio_felelosok "
-                + "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Cikkszam = '"+ datatable.getRows().get(0).getString(2) +"' "; 
+        String sql2 = "SELECT zarolt, zarolt_db, talalt_db, felelos, hatarido, muszaki_doku, termeles FROM  qualitydb.Vevoireklamacio_felelosok "
+                + "where ID = '"+ id +"' ";      //+ "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Cikkszam = '"+ datatable.getRows().get(0).getString(2) +"' ";
         stmt2.execute(sql2);
         resultSet2 = stmt2.getResultSet();
         jdbcAdapter2.fillDataTable(datatable2, resultSet2);        
         int szamlalo2 = 1;            
         Vevoi_reklmacio_bevitel.modell.setRowCount(0);
         Vevoi_reklmacio_bevitel.modell2.setRowCount(0);
+        Vevoi_reklmacio_bevitel.muszaki_igen.setSelected(false);
+        Vevoi_reklmacio_bevitel.muszaki_nem.setSelected(false);
+        Vevoi_reklmacio_bevitel.termeles_igen.setSelected(false);
+        Vevoi_reklmacio_bevitel.termeles_nem.setSelected(false);
+        int rowCount = Vevoi_reklmacio_bevitel.modell.getRowCount();
+        int rowCount2 = Vevoi_reklmacio_bevitel.modell2.getRowCount();
+        int rowCount3 = Vevoi_reklmacio_bevitel.modell3.getRowCount();
+        int rowCount4 = Vevoi_reklmacio_bevitel.modell4.getRowCount();
+
+        for (int i = rowCount - 1; i > -1; i--) 
+        {
+            Vevoi_reklmacio_bevitel.modell.removeRow(i);
+        }
+        for (int i = rowCount2 - 1; i > -1; i--) 
+        {
+            Vevoi_reklmacio_bevitel.modell2.removeRow(i);
+        }
+        for (int i = rowCount3 - 1; i > -1; i--) 
+        {
+            Vevoi_reklmacio_bevitel.modell3.removeRow(i);
+        }
+        for (int i = rowCount4 - 1; i > -1; i--) 
+        {
+            Vevoi_reklmacio_bevitel.modell4.removeRow(i);
+        }
+        Vevoi_reklmacio_bevitel.table.setModel(Vevoi_reklmacio_bevitel.modell4);
+        Vevoi_reklmacio_bevitel.felelos_tabla.setModel(Vevoi_reklmacio_bevitel.modell);
+        Vevoi_reklmacio_bevitel.zarolt_tabla.setModel(Vevoi_reklmacio_bevitel.modell2);
+        Vevoi_reklmacio_bevitel.helyesbito_tabla.setModel(Vevoi_reklmacio_bevitel.modell3);
         for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
         {
             Vevoi_reklmacio_bevitel.modell.addRow(new Object[]{datatable2.getRows().get(szamlalo).getString(3), datatable2.getRows().get(szamlalo).getString(4)});
             Vevoi_reklmacio_bevitel.modell2.addRow(new Object[]{szamlalo2, datatable2.getRows().get(szamlalo).getString(0), datatable2.getRows().get(szamlalo).getString(1), datatable2.getRows().get(szamlalo).getString(2)});
             szamlalo2++;
+            if(datatable2.getRows().get(0).getString(5).equals("igen"))
+            {
+                Vevoi_reklmacio_bevitel.muszaki_igen.setSelected(true);
+            }
+            else
+            {
+                Vevoi_reklmacio_bevitel.muszaki_nem.setSelected(true);
+            }
+            
+            if(datatable2.getRows().get(0).getString(6).equals("igen"))
+            {
+                Vevoi_reklmacio_bevitel.termeles_igen.setSelected(true);
+            }
+            else
+            {
+                Vevoi_reklmacio_bevitel.termeles_nem.setSelected(true);
+            }
         }                       
         Vevoi_reklmacio_bevitel.felelos_tabla.setModel(Vevoi_reklmacio_bevitel.modell);
-        Vevoi_reklmacio_bevitel.zarolt_tabla.setModel(Vevoi_reklmacio_bevitel.modell2);
+        Vevoi_reklmacio_bevitel.zarolt_tabla.setModel(Vevoi_reklmacio_bevitel.modell2);             
         
         String sql3 = "SELECT hiba_oka, hiba_okozoja, hiba_oka2, hiba_okozoja2 FROM  qualitydb.Vevoireklamacio_alapadat "
                 + "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Tipus = '"+ datatable.getRows().get(0).getString(2) +"' "; 
