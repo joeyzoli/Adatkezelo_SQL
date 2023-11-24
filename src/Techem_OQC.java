@@ -178,10 +178,10 @@ public class Techem_OQC extends JPanel {
                                         cal.setTime(mikor);               // sets calendar time/date
                                         //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
                                         //cal.getTime();                         // returns new date object plus one hour
-                                        System.out.println(sheet.getRange().get("D" + 2).getText());
+                                        //System.out.println(sheet.getRange().get("D" + 2).getText());
                                         String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
                                         Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
-                                        System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                        //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
                                         if(ellenorzes.compareTo(mikor) > 0) 
                                         {
                                             //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
@@ -193,7 +193,6 @@ public class Techem_OQC extends JPanel {
                                         }
                                         else
                                         {
-                                            System.out.println("Jövőben Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
                                             cal.add(Calendar.HOUR_OF_DAY, 300);
                                             String[] lejar = hosszu.format(cal.getTime()).split(" ");
                                             String szoveg = "Result after " + lejar[0];
@@ -215,8 +214,7 @@ public class Techem_OQC extends JPanel {
                                 }                        
                             }
                         }
-                        //System.out.println("lefutott: "+ szam);                        
-                        //szam++;
+
                     }
                     if(vanilyen > 0)
                     {
@@ -268,8 +266,9 @@ public class Techem_OQC extends JPanel {
                 con2.close();
                 con3.close();
                 
-                //Process p = Runtime.getRuntime().exec("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\SQL.jar");               
-
+                Process p = Runtime.getRuntime().exec("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\PDF_keszito.jar");               
+                System.out.println(p);
+                
                 JOptionPane.showMessageDialog(null, "Mentve az asztalra", "Info", 1); 
                 Foablak.frame.setCursor(null); 
             }           

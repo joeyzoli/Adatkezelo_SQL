@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Techem_feltolt());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2249,6 +2249,94 @@ public class Torlo extends JPanel
                conn.close(); 
                Foablak.frame.setCursor(null);     
             }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
+	class Techem_feltolt implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\TEchem\\";
+               File fajl = new File(excelfile1);
+               if(fajl != null)
+               {
+                   String hely = fajl.getAbsolutePath();
+                   Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                   File mappa = new File(hely);                                         //mappa beolvasása
+                   
+                   FilenameFilter filter = new FilenameFilter()                                            //fájlnév filter metódus
+                   {
+                       
+                       @Override
+                       public boolean accept(File f, String name) 
+                       {
+                                                                                                           // csak az xlsx fájlokat listázza ki 
+                           return name.endsWith(".ods");  
+                       }
+                   };               
+                   
+                   File[] fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja    
+                   Workbook workbook = new Workbook();
+                   for(int szamlalo = 0; szamlalo < fajlok.length; szamlalo++)
+                   {
+                       String fajlneve = fajlok[szamlalo].getName();
+                       if(fajlneve.startsWith("~$")){}
+                       else
+                       {               
+                           File excel = new File(hely+ "\\" +fajlok[szamlalo].getName());
+                                        
+                           workbook.loadFromFile(excel.getAbsolutePath());
+                           Worksheet sheet =workbook.getWorksheets().get(0);
+                           DataTable datatable = new DataTable();
+                           datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                           
+                           for(int szamlalo2 = 6; szamlalo2 < 38; szamlalo2++)
+                           {
+                               /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) +"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                                       + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'"); */
+                               System.out.println(datatable.getRows().get(szamlalo).getString(2));
+                           }
+                                             
+                           
+                       }
+                   
+                   
+                   
+               }
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                        
+                 
+                             
+                                        
+               stmt.close();
+               conn.close();                
+            }
+            }
             catch (Exception e1) 
             {
                 e1.printStackTrace();
