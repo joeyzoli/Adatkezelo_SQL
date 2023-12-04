@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Techem_feltolt());
+		feltolt.addActionListener(new Retour_frissit());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2071,7 +2071,8 @@ public class Torlo extends JPanel
                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                {
                    stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) +"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'"); 
+                           + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                   System.out.println("Fut a For");
                }              
                                         
                stmt.close();
@@ -2266,7 +2267,8 @@ public class Torlo extends JPanel
          {
             Connection conn = null;
             Statement stmt = null;
-          
+            File[] fajlok = null;
+            int szamlalo3 = 0;
             try 
             {
                try 
@@ -2300,7 +2302,7 @@ public class Torlo extends JPanel
                        }
                    };               
                    
-                   File[] fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja    
+                   fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja    
                    Workbook workbook = new Workbook();
                    for(int szamlalo = 0; szamlalo < fajlok.length; szamlalo++)
                    {
@@ -2309,7 +2311,7 @@ public class Torlo extends JPanel
                        else
                        {               
                            File excel = new File(hely+ "\\" +fajlok[szamlalo].getName());
-                                        
+                           szamlalo3 = szamlalo;             
                            workbook.loadFromFile(excel.getAbsolutePath());
                            Worksheet sheet =workbook.getWorksheets().get(0);
                            DataTable datatable = new DataTable();
@@ -2317,22 +2319,36 @@ public class Torlo extends JPanel
                            
                            for(int szamlalo2 = 6; szamlalo2 < 38; szamlalo2++)
                            {
+                               System.out.println(datatable.getRows().get(1).getString(3));
+                               System.out.println(datatable.getRows().get(1).getString(9));
                                /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) +"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                                       + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'"); */
-                               System.out.println(datatable.getRows().get(szamlalo).getString(2));
-                           }
-                                             
-                           
-                       }
-                   
-                   
-                   
+                                       + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'"); 
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(1));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(2));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(3));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(4));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(5));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(6));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(7));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(8));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(9));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(10));
+                               System.out.print(datatable.getRows().get(szamlalo2).getString(11));
+                               System.out.println();
+                               */
+                               String sql = "insert into qualitydb.Techem_OQC (Datum,Ellenor,LOT_szam,Szeriaszam,Cimke,Lezaro_cimke,Meter_lab,Pass,Szigetelo_anyag,Rogzito_fulek,Szabotazs_kapcs,HKRL,Kijelzo,Megjegyzes) "
+                               + "Values ('"+datatable.getRows().get(1).getString(3)+"','"+ datatable.getRows().get(1).getString(9)+"','"
+                               +datatable.getRows().get(szamlalo2).getString(1)+"','"+datatable.getRows().get(szamlalo2).getString(2)+"'"
+                               +",'"+datatable.getRows().get(szamlalo2).getString(3)+"','"+datatable.getRows().get(szamlalo2).getString(4)+"','"+datatable.getRows().get(szamlalo2).getString(5)+"','"
+                               +datatable.getRows().get(szamlalo2).getString(6)+"','"+datatable.getRows().get(szamlalo2).getString(7)+"','"+datatable.getRows().get(szamlalo2).getString(8)+"','"+
+                               datatable.getRows().get(szamlalo2).getString(9)+"','"+datatable.getRows().get(szamlalo2).getString(10)+"','"+datatable.getRows().get(szamlalo2).getString(11)
+                               +"','"+ "" +"')";
+                               stmt.executeUpdate(sql);
+                           }                           
+                       }               
                }
-               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
-                        
-                 
-                             
-                                        
+               Foablak.frame.setCursor(null);                
+                                       
                stmt.close();
                conn.close();                
             }
@@ -2340,6 +2356,7 @@ public class Torlo extends JPanel
             catch (Exception e1) 
             {
                 e1.printStackTrace();
+                System.out.println(fajlok[szamlalo3].getName());
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
