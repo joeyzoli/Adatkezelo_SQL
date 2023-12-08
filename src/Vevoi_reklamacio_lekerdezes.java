@@ -50,7 +50,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         lblNewLabel_1.setBounds(464, 57, 46, 14);
         add(lblNewLabel_1);
         
-        projekt_box = new JComboBox<String>(combobox.getCombobox(ComboBox.projekt));                   //combobox.getCombobox(ComboBox.projekt)
+        projekt_box = new JComboBox<String>(combobox.getCombobox(ComboBox.vevoi_projekt));                   //combobox.getCombobox(ComboBox.projekt)
         projekt_box.setBounds(520, 53, 172, 22);
         add(projekt_box);
         

@@ -92,6 +92,40 @@ public class SQA_SQL {
                            
      }
     
+    public String[] tombvissza(String sql)
+    {
+        //String cikkbox[] = null;
+        ArrayList<String> adatok = new ArrayList<String>();
+        try
+        {            
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+            Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+            Statement stmt = con.createStatement();              
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                adatok.add(rs.getString(1));
+            }
+            con.close();  
+            Foablak.frame.setCursor(null);        
+        }           
+        catch(Exception e1)
+        { 
+            System.out.println(e1);
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+        }
+        String[] cikkbox = adatok.toArray(new String[adatok.size()]);
+        return cikkbox;  
+                           
+     }
+    
     public void mindenes(String SQL)
     {
         Connection conn = null;

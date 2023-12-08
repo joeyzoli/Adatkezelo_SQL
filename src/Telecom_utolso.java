@@ -122,6 +122,7 @@ public class Telecom_utolso extends JPanel {
                                   + "group by TRACY_SERIAL_NO) belso\r\n"
                                   + "where belso.szeriaszam = TRACY_SERIAL_NO\r\n"
                                   + "and belso.maxido = PROCESS_DATE");
+                          System.out.println("Fut..");
                           if(rs.next())
                           {                        
                               sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
