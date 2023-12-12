@@ -44,6 +44,7 @@ import com.spire.xls.Worksheet;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
+
 public class SQA_bevitel extends JPanel {
     private JTextField datum_mezo;
     private JTextField hibasdb_mezo;
@@ -1128,6 +1129,7 @@ public class SQA_bevitel extends JPanel {
                             }
                             
                             String cikkszam = "";
+                            String megnevezes = "";
                             String gyarto = "";
                             String beszallito = "";
                             String projekt = "";
@@ -1148,21 +1150,19 @@ public class SQA_bevitel extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 cikkszam += table.getValueAt(szamlalo, 0).toString() +"\n";
-                                gyarto += table.getValueAt(szamlalo, 1).toString() +"\n";
-                                beszallito += table.getValueAt(szamlalo, 2).toString() +"\n";
-                                projekt += table.getValueAt(szamlalo, 3).toString() +"\n";
-                                kontakt += table.getValueAt(szamlalo, 4).toString() +"\n";
-                                egysegar += table.getValueAt(szamlalo, 5).toString() +"\n";
+                                megnevezes += table.getValueAt(szamlalo, 1).toString() +"\n";
+                                gyarto += table.getValueAt(szamlalo, 2).toString() +"\n";
+                                beszallito += table.getValueAt(szamlalo, 3).toString() +"\n";
+                                projekt += table.getValueAt(szamlalo, 4).toString() +"\n";
+                                kontakt += table.getValueAt(szamlalo, 5).toString() +"\n";
+                                egysegar += table.getValueAt(szamlalo, 6).toString() +"\n";
                                 if(hibaleiras.length > 1)
                                 {
                                     hibaleir += hibaleiras[szamlalo]+"\n";
-                                    System.out.println("Hibaleírás hosszabb mint 1");
-                                    System.out.println(hibaleir);
                                 }
                                 else
                                 {
                                     hibaleir = hibaleiras_mezo.getText()+"\n";
-                                    System.out.println("Hibaleírás üres");
                                 }
                                 if(belsointezkedes.length > 1)
                                 {
@@ -1250,7 +1250,8 @@ public class SQA_bevitel extends JPanel {
                                     + deviza_mezo.getText()+"', Osszertek = '"+ertek+"', Beszallitoi_valasz ='"
                                     + besz_valasz+"',Gyokerok = '"+gyoker+"',Beszallitoi_karterites ='"+terit+"',Belso_koltseg ='"+koltseg
                                     +"',Veszteseg = '"+veszt+"',Mappa_helye = '"+link2+"',8D = '"+ d +"',Credit_note = '"+ cn +"',kontakt = '"+ kontakt +"',cikkszam = '"+ cikkszam +"'"
-                                    + ",gyarto = '"+ gyarto +"',beszallito = '"+ beszallito +"',projekt = '"+ projekt +"',egysegar = '"+ egysegar +"' where id ='" + id_mezo.getText() + "'";
+                                    + ",gyarto = '"+ gyarto +"',beszallito = '"+ beszallito +"',projekt = '"+ projekt +"',egysegar = '"+ egysegar +"',Megnevezes = '"+ megnevezes +"' "
+                                            + "where id ='" + id_mezo.getText() + "'";
                         }
                         else
                         {
@@ -1310,7 +1311,7 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 else
                                 {
-                                    gyarto += table.getValueAt(szamlalo, 1).toString() +"\n";
+                                    gyarto += table.getValueAt(szamlalo, 2).toString() +"\n";
                                 }                               
                                 if(table.getValueAt(szamlalo, 3) == null)
                                 {
@@ -1324,7 +1325,14 @@ public class SQA_bevitel extends JPanel {
                                 projekt += table.getValueAt(szamlalo, 4).toString() +"\n";
                                 kontakt += table.getValueAt(szamlalo, 5).toString() +"\n";
                                 egysegar += table.getValueAt(szamlalo, 6).toString() +"\n";
-                                
+                                /*System.out.println(table.getValueAt(szamlalo, 0).toString());
+                                System.out.println(table.getValueAt(szamlalo, 1).toString());
+                                System.out.println(table.getValueAt(szamlalo, 2).toString());
+                                System.out.println(table.getValueAt(szamlalo, 3).toString());
+                                System.out.println(table.getValueAt(szamlalo, 4).toString());
+                                System.out.println(table.getValueAt(szamlalo, 5).toString());
+                                System.out.println(table.getValueAt(szamlalo, 6).toString());
+                                */
                                 if(table.getRowCount() > 1)
                                 {
                                     hibaleir = hibaleiras[szamlalo]+"\n";

@@ -76,6 +76,8 @@ public class Techem_OQC extends JPanel {
         start2_gomb.addActionListener(new Manualis_osszerak());
         start2_gomb.setBounds(519, 335, 89, 23);
         add(start2_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

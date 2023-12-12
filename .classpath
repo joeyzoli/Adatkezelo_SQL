@@ -16,7 +16,5 @@
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/xmlbeans-3.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/Spire.Xls.jar"/>
-	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/itextpdf-5.4.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/PDF_keszito/pdfbox-app-3.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
