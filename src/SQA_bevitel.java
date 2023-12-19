@@ -877,11 +877,7 @@ public class SQA_bevitel extends JPanel {
                     TableColumn sportColumn2 = table.getColumnModel().getColumn(2);
                     JComboBox<String> comboBox2 = new JComboBox<String>(gyartotomb);
                     sportColumn2.setCellEditor(new DefaultCellEditor(comboBox2));
-                    
-                    for(int szamlalo = 0; szamlalo < gyartotomb.length; szamlalo++)
-                    {
-                        System.out.println(gyartotomb[szamlalo]);
-                    }
+                                        
                     String gyarto = lekerdezes.beszallito(sql);
              
                     sql = "select second_commodity\r\n"
@@ -1164,6 +1160,7 @@ public class SQA_bevitel extends JPanel {
                                 {
                                     hibaleir = hibaleiras_mezo.getText()+"\n";
                                 }
+                                System.out.println(hibaleir);
                                 if(belsointezkedes.length > 1)
                                 {
                                     intezked += belsointezkedes[szamlalo]+"\n";
@@ -1335,12 +1332,13 @@ public class SQA_bevitel extends JPanel {
                                 */
                                 if(table.getRowCount() > 1)
                                 {
-                                    hibaleir = hibaleiras[szamlalo]+"\n";
+                                    hibaleir += hibaleiras[szamlalo]+"\n";
                                 }
                                 else
                                 {
                                     hibaleir = hibaleiras_mezo.getText()+"\n";
                                 }
+                                //System.out.println(hibaleir);
                                 if(table.getRowCount() > 1)
                                 {
                                     intezked += belsointezkedes[szamlalo]+"\n";
@@ -1415,7 +1413,7 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
-                                veszt += veszteseg[szamlalo]+"\n";
+                                    veszt += veszteseg[szamlalo]+"\n";
                                 }                                  
                                 else
                                 {             
@@ -1485,253 +1483,15 @@ public class SQA_bevitel extends JPanel {
                 int key = e.getKeyCode();
                 if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
                 {
-                    Connection conn = null;
-                    Statement stmt = null;        
-                    try 
-                    {
-                       try 
-                       {
-                          Class.forName("com.mysql.cj.jdbc.Driver");
-                       } 
-                       catch (Exception e1) 
-                       {
-                          System.out.println(e);
-                          String hibauzenet2 = e.toString();
-                          JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                    }
-                    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-                    stmt = (Statement) conn.createStatement();
-                    String SQL = "select * from qualitydb.SQA_reklamaciok where id = '"+ id_mezo.getText() +"'";
-                    ResultSet rs = stmt.executeQuery(SQL);
-                    if(rs.next())
-                    {
-                        futoid_mezo.setText(rs.getString(2));
-                        String[] ido = rs.getString(3).split(" ");
-                        String ido2 = ido[0];
-                        datum_mezo.setText(ido[0]);
-                        indito_box.setSelectedItem(rs.getString(4));
-                        intezkedes_box.setSelectedItem(rs.getString(5));                           
-                        fajta_box.setSelectedItem(rs.getString(7));
-                        deviza_mezo.setText(rs.getString(17));
-                        
-                        String[] cikkszam = rs.getString(6).split("\n");
-                        String[] megnevezes = rs.getString(32).split("\n");
-                        String[] gyarto = rs.getString(8).split("\n");
-                        String[] beszallito = rs.getString(9).split("\n");
-                        String[] projekt = rs.getString(10).split("\n");
-                        String[] kontakt = rs.getString(11).split("\n");
-                        String[] egysegar = rs.getString(18).split("\n");
-                        for(int szamlalo = 0;szamlalo < cikkszam.length;szamlalo++)
-                        {
-                            modell.addRow(new Object[]{cikkszam[szamlalo],megnevezes[szamlalo],gyarto[szamlalo],beszallito[szamlalo],projekt[szamlalo],kontakt[szamlalo],egysegar[szamlalo]});                            
-                        }
-                        
-                        final TableColumnModel columnModel = table.getColumnModel();                    //JTable automatikus mértezése
-                        for (int column = 0; column < table.getColumnCount(); column++) {
-                            int width = 15; // Min width
-                            for (int row = 0; row < table.getRowCount(); row++) {
-                                TableCellRenderer renderer = table.getCellRenderer(row, column);
-                                Component comp = table.prepareRenderer(renderer, row, column);
-                                width = Math.max(comp.getPreferredSize().width +1 , width);
-                            }
-                            if(width > 300)
-                                width=300;
-                            columnModel.getColumn(column).setPreferredWidth(width);
-                        }
-                        table.setRowSelectionInterval(0, 0);
-                        String link2 = rs.getString(25);
-                        
-                        hibaleiras = new String[table.getRowCount()];
-                        belsointezkedes = new String[table.getRowCount()];
-                        valasz = new String[table.getRowCount()];
-                        gyokerok = new String[table.getRowCount()];
-                        
-                        String[] hibaleira = rs.getString(12).split("\n");
-                        for(int szamlalo =0; szamlalo < hibaleira.length;szamlalo++)
-                        {
-                            hibaleiras[szamlalo] = hibaleira[szamlalo];
-                        }
-                        String[] belsointezkede =  rs.getString(13).split("\n");
-                        for(int szamlalo =0; szamlalo < belsointezkede.length;szamlalo++)
-                        {
-                            belsointezkedes[szamlalo] = belsointezkede[szamlalo];
-                        }
-                        String[] valas = rs.getString(20).split("\n");
-                        for(int szamlalo =0; szamlalo < valas.length;szamlalo++)
-                        {
-                            valasz[szamlalo] = valas[szamlalo];
-                        }
-                        String[] gyokero = rs.getString(21).split("\n");
-                        for(int szamlalo =0; szamlalo < gyokero.length;szamlalo++)
-                        {
-                            gyokerok[szamlalo] = gyokero[szamlalo];
-                        }
-                        
-                        if(hibaleiras.length > 0)
-                        {
-                            hibaleiras_mezo.setText(hibaleiras[0]);
-                        }
-                        if(belsointezkedes.length > 0)
-                        {
-                            intezkedes_mezo.setText(belsointezkedes[0]);
-                        }
-                        if(valasz.length > 0)
-                        {
-                            valasz_mezo.setText(valasz[0]);
-                        }
-                        if(gyokerok.length > 0)
-                        {
-                            gyokerok_mezo.setText(gyokerok[0]);
-                        }
-                        
-                        hibasdb = new String[table.getRowCount()];
-                        megjelenes = new String[table.getRowCount()];
-                        rekkezdet = new String[table.getRowCount()];
-                        osszertek = new String[table.getRowCount()];
-                        karterites = new String[table.getRowCount()];
-                        belsokoltseg = new String[table.getRowCount()];
-                        veszteseg = new String[table.getRowCount()];
-                        
-                        
-                        String[] hibasd = rs.getString(14).split("\n");
-                        for(int szamlalo =0; szamlalo < hibasd.length;szamlalo++)
-                        {
-                            hibasdb[szamlalo] = hibasd[szamlalo];
-                        }
-                        String[] megjelene = rs.getString(15).split("\n");
-                        for(int szamlalo =0; szamlalo < megjelene.length;szamlalo++)
-                        {
-                            megjelenes[szamlalo] = megjelene[szamlalo];
-                        }
-                        String[] rekkezde = rs.getString(16).split("\n");
-                        for(int szamlalo =0; szamlalo < rekkezde.length;szamlalo++)
-                        {
-                            rekkezdet[szamlalo] = rekkezde[szamlalo];
-                        }
-                        String[] osszerte = rs.getString(19).split("\n");
-                        for(int szamlalo =0; szamlalo < osszerte.length;szamlalo++)
-                        {
-                            osszertek[szamlalo] = osszerte[szamlalo];
-                        }
-                        String[] karterite = rs.getString(22).split("\n");
-                        for(int szamlalo =0; szamlalo < karterite.length;szamlalo++)
-                        {
-                            karterites[szamlalo] = karterite[szamlalo];
-                        }
-                        String[] belsokoltse= rs.getString(23).split("\n");
-                        for(int szamlalo =0; szamlalo < belsokoltse.length;szamlalo++)
-                        {
-                            belsokoltseg[szamlalo] = belsokoltse[szamlalo];
-                        }
-                        String[] vesztese = rs.getString(24).split("\n");
-                        for(int szamlalo =0; szamlalo < vesztese.length;szamlalo++)
-                        {
-                            veszteseg[szamlalo] = vesztese[szamlalo];
-                        }
-                        
-                        if(hibasdb.length > 0)
-                        {
-                            hibasdb_mezo.setText(hibasdb[0]);
-                            //ido = rs.getString(15).split(" ");
-                        }
-                        if(megjelenes.length > 0)
-                        {
-                            megjelenes_ido.setText(megjelenes[0]);
-                            //ido = rs.getString(16).split(" ");
-                        }
-                        if(rekkezdet.length > 0)
-                        {
-                            reklamacio_ido.setText(rekkezdet[0]);
-                        }
-                        
-                        if(osszertek.length > 0)
-                        {
-                            osszertek_mezo.setText(osszertek[0]);
-                        }
-                        //egysegar_mezo.setText(rs.getString(18));
-                        if(karterites.length > 0)
-                        {
-                            karterites_mezo.setText(karterites[0]);
-                        }
-                        if(belsokoltseg.length > 0)
-                        {
-                            belsokoltseg_mezo.setText(belsokoltseg[0]);
-                        }
-                        if(veszteseg.length > 0)
-                        {
-                            veszteseg_mezo.setText(veszteseg[0]);
-                        }
-                        
-                        if(rs.getString(26).equals("igen"))
-                        {
-                            d_csekk.setSelected(true);
-                        }
-                        if(rs.getString(27).equals("igen"))
-                        {
-                            cn_csekk.setSelected(true);
-                        }                       
-                        statusz_mezo.setText(rs.getString(28));
-                        if(rs.getString(29) != null)
-                        {
-                            ido = rs.getString(29).split(" ");
-                            tortenesideje_mezo.setText(ido[0]);
-                        }
-                        if(rs.getString(30) != null)
-                        {                            
-                            String[] lezarasideje = rs.getString(30).split(" ");
-                            SQL = "select  DATEDIFF('"+ lezarasideje[0] +"', '"+ ido2 +"')";
-                            rs = stmt.executeQuery(SQL);
-                            if(rs.next())
-                            {
-                                nyitva_mezo.setText(rs.getString(1));
-                                lezarido_mezo.setText(lezarasideje[0]);
-                            } 
-                        }
-                        else
-                        {
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-                            Date date = new Date();                                     
-                            SQL = "select  DATEDIFF('"+ formatter.format(date) +"', '"+ ido2 +"')";
-                            rs = stmt.executeQuery(SQL);
-                            if(rs.next())
-                            {
-                                nyitva_mezo.setText(rs.getString(1));
-                            } 
-                        }
-                        link_mezo.setText(link2);
-                        link = new File("\\\\10.1.0.11\\minosegbiztositas\\SQA\\\\reklamációk\\"+link2);
-                        
-                    }
-                    stmt.close();
-                    conn.close();
-                            
-                    }                     
-                    catch (Exception e1) 
-                    {
-                       e1.printStackTrace();
-                       String hibauzenet = e1.toString();
-                       Email hibakuldes = new Email();
-                       hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-                    } finally 
-                    {
-                       try 
-                       {
-                          if (stmt != null)
-                             conn.close();
-                       } 
-                       catch (SQLException se) {}
-                       try 
-                       {
-                          if (conn != null)
-                             conn.close();
-                       } 
-                       catch (SQLException se) 
-                       {
-                          se.printStackTrace();
-                       }  
-                    }
+                    String id = id_mezo.getText();
+                    SQA_bevitel sqa_rek = new SQA_bevitel(id);
+                    JScrollPane ablak = new JScrollPane(sqa_rek);
+                    ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                    Foablak.frame.setContentPane(ablak);
+                    Foablak.frame.pack();
                 }
+                
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             } 
             catch (Exception e1) 

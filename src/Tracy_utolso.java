@@ -63,15 +63,18 @@ public class Tracy_utolso extends JPanel {
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();                
                 Workbook workbook = new Workbook();
+                workbook.setVersion(ExcelVersion.Version2016);
                 if(fajl != null)
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     workbook.loadFromFile(fajl.getAbsolutePath());
+                    workbook.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet = workbook.getWorksheets().get(0);
                     DataTable datatable = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                     
                     Workbook workbook2 = new Workbook();
+                    workbook2.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet2 = workbook2.getWorksheets().get(0);
                      
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                     //jdbc mysql driver meghÃ­vÃ¡sa
@@ -100,9 +103,11 @@ public class Tracy_utolso extends JPanel {
                       sheet2.getRange().get("P" + cellaszam).setText("error");
                       sheet2.getRange().get("Q" + cellaszam).setText("Dolgozó");
                       cellaszam++;
-                      
+                      int szam = 1;
                       for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                       {
+                          System.out.println(szam);
+                          szam++;
                           ResultSet rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                                   + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
                                   + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "

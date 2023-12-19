@@ -75,7 +75,7 @@ public class SQA_osszesito extends JPanel {
         lblNewLabel_3.setBounds(431, 622, 79, 14);
         add(lblNewLabel_3);
         adatok();
-
+        
     }
     
     private void adatok()

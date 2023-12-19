@@ -85,6 +85,7 @@ public class Foablak extends JFrame
 	private Ellenori_lapok lapok;
 	private CSV csv;
 	private Techem_OQC techem;
+	private AIN_fordito fordito;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -340,6 +341,10 @@ public class Foablak extends JFrame
 		JMenuItem csv_gyart = new JMenuItem("CSV készítő");
 		csv_gyart.addActionListener(new Panelcsere_CSV());
 		egyeb.add(csv_gyart);
+		
+		JMenuItem ain = new JMenuItem("AIN fordító");
+		egyeb.add(ain);
+		ain.addActionListener(new Panelcsere_AIN());
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
 		
@@ -908,6 +913,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_AIN implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            fordito = new AIN_fordito();
+            JScrollPane ablak = new JScrollPane(fordito);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1041,6 +1057,7 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            
             //System.out.println(System.getProperty("user.name"));
             /*
             Runtime runtime = Runtime.getRuntime();

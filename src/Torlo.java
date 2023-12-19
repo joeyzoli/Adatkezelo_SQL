@@ -1617,9 +1617,11 @@ public class Torlo extends JPanel
                         + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
                         + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
-                String sql = "select *\n"
-                        + "from videoton.fkovavm\n"
-                        + " WHERE ain = '139790661066'";
+                String sql = "select  panel\n"
+                        + "from videoton.fkov\n"
+                        + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
+                        + "where 3=3\n"
+                        + "and nev = 'INSTAGRID FCT'";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,

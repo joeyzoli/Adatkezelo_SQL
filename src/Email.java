@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -153,7 +154,7 @@ public class Email
         }        
     }
     
-    public void retour_emailkuldes(String feladoemail, String cimzett, String id, String vevo, String cikkszam, String nap, String hol)
+    public void retour_emailkuldes(String feladoemail, String cimzett, String vevo, File excel)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -166,15 +167,16 @@ public class Email
             message.setFrom(new InternetAddress(feladoemail));                                  //feladó beállítása
             message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(cimzett));                                                //címzett beállítása
-            message.setSubject("Beragadt retour");                                              //tárgy beállítása
+            message.setSubject("Beragadt retour "+ vevo);                                              //tárgy beállítása
            
             Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
            
             MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
-            
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(excel);
+            multipart.addBodyPart(attachmentPart);
             textPart.setText("Sziasztok! \n  \n"
-                    + "A "+ id +" ID-val rendelkező "+ vevo +" "+ cikkszam +" retourral nem történt semmi "+ nap +" napja!  \n"
-                            + "Utolsó bejegyzés: "+ hol);                                          //levél tartalmának csatolása
+                    + "A beragadt retourok a csatolt excelben vannak!!");                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                    
             message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
