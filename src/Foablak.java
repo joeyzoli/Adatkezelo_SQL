@@ -86,6 +86,7 @@ public class Foablak extends JFrame
 	private CSV csv;
 	private Techem_OQC techem;
 	private AIN_fordito fordito;
+	private OQC_valaszto oqcvalaszto;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -289,6 +290,7 @@ public class Foablak extends JFrame
 		menuBar.add(oqc_menu);
 		
 		JMenuItem oqc_adatbevitel = new JMenuItem("OQC adatbevitel");
+		oqc_adatbevitel.addActionListener(new Panelcsere_OQC_valaszto());
 		oqc_menu.add(oqc_adatbevitel);
 		
 		JMenuItem oqc_adatok = new JMenuItem("OQC adatok");
@@ -919,6 +921,17 @@ public class Foablak extends JFrame
          {
             fordito = new AIN_fordito();
             JScrollPane ablak = new JScrollPane(fordito);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_OQC_valaszto implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            oqcvalaszto = new OQC_valaszto();
+            JScrollPane ablak = new JScrollPane(oqcvalaszto);
             setContentPane(ablak);
             pack();
          }
