@@ -3,9 +3,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -63,7 +67,7 @@ public class FB7530 extends JPanel {
         add(lblNewLabel_1);
         
         ComboBox combobox_tomb = new ComboBox();
-        ellenor_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));
+        ellenor_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));                                                  //combobox_tomb.getCombobox2(ComboBox.ellenorok)
         ellenor_box.setSelectedIndex(1);
         ellenor_box.setBounds(125, 75, 208, 22);
         add(ellenor_box);
@@ -82,7 +86,7 @@ public class FB7530 extends JPanel {
         add(lblNewLabel_3);
         
         String[] tipus = {"FB7530_2","FB7530 INTER_2","FB7530AX_2","FB7530AX INTER_2"};
-        tipus_box = new JComboBox<String> (tipus);
+        tipus_box = new JComboBox<String> (tipus);                                                   //tipus
         tipus_box.setBounds(639, 75, 150, 22);
         add(tipus_box);
         
@@ -91,7 +95,7 @@ public class FB7530 extends JPanel {
         add(lblNewLabel_4);
         
         String[] teszttipus = {"F","V"};
-        teszttipus_box = new JComboBox<String> (teszttipus);
+        teszttipus_box = new JComboBox<String> (teszttipus);                                              //teszttipus
         teszttipus_box.setBounds(975, 75, 52, 22);
         add(teszttipus_box);
         
@@ -119,6 +123,7 @@ public class FB7530 extends JPanel {
         
         termek_mezo = new JTextField();
         termek_mezo.setBounds(188, 257, 144, 20);
+        termek_mezo.addKeyListener(new Enter());
         add(termek_mezo);
         termek_mezo.setColumns(10);
         
@@ -126,7 +131,7 @@ public class FB7530 extends JPanel {
         lblNewLabel_8.setBounds(47, 305, 115, 14);
         add(lblNewLabel_8);
         
-        egyezes_mezo = new JTextField();
+        egyezes_mezo = new JTextField();       
         egyezes_mezo.setEditable(false);
         egyezes_mezo.setBounds(188, 302, 86, 20);
         add(egyezes_mezo);
@@ -246,7 +251,8 @@ public class FB7530 extends JPanel {
         lblNewLabel_19.setBounds(47, 441, 103, 14);
         add(lblNewLabel_19);
         
-        hibacsoport_box = new JComboBox<String>();
+        String[] hibacsoport = {"","Címke","Funkció","Papír","Tartozék","Termék","Szerelés"};
+        hibacsoport_box = new JComboBox<String>(hibacsoport);                                              //hibacsoport
         hibacsoport_box.setBounds(188, 437, 215, 22);
         add(hibacsoport_box);
         
@@ -254,7 +260,7 @@ public class FB7530 extends JPanel {
         lblNewLabel_20.setBounds(47, 488, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>();
+        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(188, 484, 215, 22);
         add(hiba_box);
         
@@ -262,7 +268,8 @@ public class FB7530 extends JPanel {
         lblNewLabel_21.setBounds(47, 531, 103, 14);
         add(lblNewLabel_21);
         
-        hibakategoria_box = new JComboBox<String>();
+        String[] kategoria = {"","Kritikus hiba","Súlyos hiba","Enyhe hiba"};
+        hibakategoria_box = new JComboBox<String>(kategoria);                                    //kategoria
         hibakategoria_box.setBounds(188, 527, 215, 22);
         add(hibakategoria_box);
         
@@ -302,6 +309,7 @@ public class FB7530 extends JPanel {
         add(mennyiseg_label);
         
         JButton mentes_gomb = new JButton("Mentés");
+        mentes_gomb.addActionListener(new Mentes());
         mentes_gomb.setBounds(499, 600, 89, 23);
         add(mentes_gomb);
         
@@ -337,8 +345,32 @@ public class FB7530 extends JPanel {
          {
             try 
             {
+                String kritikus = "";
+                String sulyos = "";
+                String enyhe = "";
+                if(String.valueOf(tipus_box.getSelectedItem()).equals("Kritikus hiba"))
+                {
+                    kritikus = "X";
+                }
+                if(String.valueOf(tipus_box.getSelectedItem()).equals("Súlyos hiba"))
+                {
+                    sulyos = "X";
+                }
+                if(String.valueOf(tipus_box.getSelectedItem()).equals("Enyhe hiba"))
+                {
+                    enyhe = "X";
+                }
+                SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
-                        + "Wlan_tx_iperf,Wlan_rx_iperf)";
+                        + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
+                        + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
+                        + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ raklap_mezo.getText() +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
+                        + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
+                        + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
+                        + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
+                        + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
+                        + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"')";
                 SQA_SQL ment = new SQA_SQL();
                 ment.mindenes(sql);
             } 
@@ -351,5 +383,37 @@ public class FB7530 extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                if(doboz_mezo.getText().equals(termek_mezo.getText()))
+                {
+                    egyezes_mezo.setText("OK");
+                    egyezes_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    egyezes_mezo.setText("NOK");
+                    egyezes_mezo.setBackground(Color.RED);
+                }
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
 }
