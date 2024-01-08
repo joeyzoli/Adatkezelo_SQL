@@ -48,6 +48,7 @@ public class FB7530 extends JPanel {
     private JComboBox<String> hiba_box;
     private JComboBox<String> hibakategoria_box;
     private JTextArea megjegyzes_mezo;
+    private JLabel mennyiseg_label;
 
     /**
      * Create the panel.
@@ -181,6 +182,7 @@ public class FB7530 extends JPanel {
         
         jel2_mezo = new JTextField();
         jel2_mezo.setBounds(786, 172, 52, 20);
+        jel2_mezo.addKeyListener(new Jel2());
         add(jel2_mezo);
         jel2_mezo.setColumns(10);
         
@@ -189,6 +191,7 @@ public class FB7530 extends JPanel {
         add(lblNewLabel_17);
         
         jel5 = new JTextField();
+        jel5.addKeyListener(new Jel5());
         jel5.setBounds(874, 172, 52, 20);
         add(jel5);
         jel5.setColumns(10);
@@ -199,11 +202,13 @@ public class FB7530 extends JPanel {
         
         tx_gui2 = new JTextField();
         tx_gui2.setBounds(786, 217, 52, 20);
+        tx_gui2.addKeyListener(new TX_gui2());
         add(tx_gui2);
         tx_gui2.setColumns(10);
         
         tx_gui5 = new JTextField();
         tx_gui5.setBounds(874, 217, 52, 20);
+        tx_gui5.addKeyListener(new TX_gui5());
         add(tx_gui5);
         tx_gui5.setColumns(10);
         
@@ -304,7 +309,7 @@ public class FB7530 extends JPanel {
         lblNewLabel_25.setBounds(47, 136, 129, 14);
         add(lblNewLabel_25);
         
-        JLabel mennyiseg_label = new JLabel("0");
+        mennyiseg_label = new JLabel("0");
         mennyiseg_label.setBounds(188, 136, 46, 14);
         add(mennyiseg_label);
         
@@ -348,15 +353,15 @@ public class FB7530 extends JPanel {
                 String kritikus = "";
                 String sulyos = "";
                 String enyhe = "";
-                if(String.valueOf(tipus_box.getSelectedItem()).equals("Kritikus hiba"))
+                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
                 {
                     kritikus = "X";
                 }
-                if(String.valueOf(tipus_box.getSelectedItem()).equals("Súlyos hiba"))
+                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
                 {
                     sulyos = "X";
                 }
-                if(String.valueOf(tipus_box.getSelectedItem()).equals("Enyhe hiba"))
+                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
                 {
                     enyhe = "X";
                 }
@@ -373,6 +378,37 @@ public class FB7530 extends JPanel {
                         + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"')";
                 SQA_SQL ment = new SQA_SQL();
                 ment.mindenes(sql);
+                
+                raklap_mezo.setText("");
+                doboz_mezo.setText("");
+                termek_mezo.setText("");
+                guide_mezo.setText("");
+                egyezes_mezo.setText("");
+                egyezes_mezo.setBackground(Color.WHITE);
+                jel2_mezo.setText("");
+                tx_gui2.setText("");
+                rx_gui2.setText("");
+                tx_iperf2.setText("");
+                rx_iperf2.setText("");
+                bandwith2.setText("");
+                jel5.setText("");
+                tx_gui5.setText("");
+                rx_gui5.setText("");
+                tx_iperf5.setText("");
+                rx_iperf5.setText("");
+                bandwith5.setText("");
+                firmware_mezo.setText("");
+                phone_mezo.setText("");
+                download_mezo.setText("");
+                upload_mezo.setText("");
+                hiba_box.setSelectedIndex(0);
+                hibacsoport_box.setSelectedIndex(0);
+                hibakategoria_box.setSelectedIndex(0);
+                megjegyzes_mezo.setText("");
+                int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
+                mennyiseg++;
+                mennyiseg_label.setText(String.valueOf(mennyiseg));
+                
             } 
             catch (Exception e1) 
             {              
@@ -402,18 +438,117 @@ public class FB7530 extends JPanel {
                     egyezes_mezo.setText("NOK");
                     egyezes_mezo.setBackground(Color.RED);
                 }
-            }
-         
+            }       
         }
         @Override
-        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            // TODO Auto-generated method stub           
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+    }
+    
+    class Jel2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
         }
         @Override
         public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
         {
-            // TODO Auto-generated method stub           
+            if(jel2_mezo.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(jel2_mezo.getText());
+                if(jel >= 0 && jel <= 100)
+                {
+                    jel2_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    jel2_mezo.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Jel5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(jel5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(jel5.getText());
+                if(jel >= 0 && jel <= 100)
+                {
+                    jel5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    jel5.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class TX_gui2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(tx_gui2.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(tx_gui2.getText());
+                if(jel >= 100 && jel <= 160)
+                {
+                    tx_gui2.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    tx_gui2.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class TX_gui5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(tx_gui5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(tx_gui5.getText());
+                if(jel >= 900 && jel <= 1500)
+                {
+                    tx_gui5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    tx_gui5.setBackground(Color.RED);
+                }
+            }           
         }    
     }
 }
