@@ -213,41 +213,49 @@ public class FB7530 extends JPanel {
         tx_gui5.setColumns(10);
         
         rx_gui2 = new JTextField();
+        rx_gui2.addKeyListener(new RX_gui2());
         rx_gui2.setBounds(786, 257, 52, 20);
         add(rx_gui2);
         rx_gui2.setColumns(10);
         
         rx_gui5 = new JTextField();
+        rx_gui5.addKeyListener(new RX_gui5());
         rx_gui5.setBounds(874, 257, 52, 20);
         add(rx_gui5);
         rx_gui5.setColumns(10);
         
         tx_iperf2 = new JTextField();
+        tx_iperf2.addKeyListener(new TX_iperf2());
         tx_iperf2.setBounds(786, 302, 52, 20);
         add(tx_iperf2);
         tx_iperf2.setColumns(10);
         
         tx_iperf5 = new JTextField();
+        tx_iperf5.addKeyListener(new TX_iperf5());
         tx_iperf5.setBounds(874, 302, 52, 20);
         add(tx_iperf5);
         tx_iperf5.setColumns(10);
         
         rx_iperf2 = new JTextField();
+        rx_iperf2.addKeyListener(new RX_iperf2());
         rx_iperf2.setBounds(786, 341, 52, 20);
         add(rx_iperf2);
         rx_iperf2.setColumns(10);
         
         rx_iperf5 = new JTextField();
+        rx_iperf5.addKeyListener(new RX_iperf5());
         rx_iperf5.setBounds(874, 341, 52, 20);
         add(rx_iperf5);
         rx_iperf5.setColumns(10);
         
         bandwith2 = new JTextField();
+        bandwith2.addKeyListener(new Bandwith2());
         bandwith2.setBounds(786, 379, 52, 20);
         add(bandwith2);
         bandwith2.setColumns(10);
         
         bandwith5 = new JTextField();
+        bandwith5.addKeyListener(new Bandwith5());
         bandwith5.setBounds(874, 379, 52, 20);
         add(bandwith5);
         bandwith5.setColumns(10);
@@ -296,11 +304,13 @@ public class FB7530 extends JPanel {
         phone_mezo.setColumns(10);
         
         download_mezo = new JTextField();
+        download_mezo.addKeyListener(new Download());
         download_mezo.setBounds(740, 485, 46, 20);
         add(download_mezo);
         download_mezo.setColumns(10);
         
         upload_mezo = new JTextField();
+        upload_mezo.addKeyListener(new Upload());
         upload_mezo.setBounds(740, 528, 46, 20);
         add(upload_mezo);
         upload_mezo.setColumns(10);
@@ -319,6 +329,7 @@ public class FB7530 extends JPanel {
         add(mentes_gomb);
         
         JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles());
         torles_gomb.setBounds(47, 600, 89, 23);
         add(torles_gomb);
         
@@ -350,64 +361,122 @@ public class FB7530 extends JPanel {
          {
             try 
             {
-                String kritikus = "";
-                String sulyos = "";
-                String enyhe = "";
-                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
+                if(raklap_mezo.getText().equals(""))
                 {
-                    kritikus = "X";
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a gyűjtődoboz!", "Hiba üzenet", 2);
                 }
-                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
+                else if(doboz_mezo.getText().equals(""))
                 {
-                    sulyos = "X";
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a szériaszám doboz!", "Hiba üzenet", 2);
                 }
-                if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
+                else if(termek_mezo.getText().equals(""))
                 {
-                    enyhe = "X";
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a szériaszám termék!", "Hiba üzenet", 2);
                 }
-                SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
-                        + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
-                        + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
-                        + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ raklap_mezo.getText() +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
-                        + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
-                        + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
-                        + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
-                        + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
-                        + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"')";
-                SQA_SQL ment = new SQA_SQL();
-                ment.mindenes(sql);
-                
-                raklap_mezo.setText("");
-                doboz_mezo.setText("");
-                termek_mezo.setText("");
-                guide_mezo.setText("");
-                egyezes_mezo.setText("");
-                egyezes_mezo.setBackground(Color.WHITE);
-                jel2_mezo.setText("");
-                tx_gui2.setText("");
-                rx_gui2.setText("");
-                tx_iperf2.setText("");
-                rx_iperf2.setText("");
-                bandwith2.setText("");
-                jel5.setText("");
-                tx_gui5.setText("");
-                rx_gui5.setText("");
-                tx_iperf5.setText("");
-                rx_iperf5.setText("");
-                bandwith5.setText("");
-                firmware_mezo.setText("");
-                phone_mezo.setText("");
-                download_mezo.setText("");
-                upload_mezo.setText("");
-                hiba_box.setSelectedIndex(0);
-                hibacsoport_box.setSelectedIndex(0);
-                hibakategoria_box.setSelectedIndex(0);
-                megjegyzes_mezo.setText("");
-                int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
-                mennyiseg++;
-                mennyiseg_label.setText(String.valueOf(mennyiseg));
+                else if(guide_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a quick guide!", "Hiba üzenet", 2);
+                }
+                else if(firmware_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a firmware verzió!", "Hiba üzenet", 2);
+                }
+                else if(jel2_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a jel 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(jel5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a jel 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(tx_gui2.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a TX GUI 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(tx_gui5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a TX GUI 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(rx_gui2.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a RX GUI 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(rx_gui5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a RX GUI 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(tx_iperf2.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a TX iperf 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(tx_iperf5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a TX iperf 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(rx_iperf2.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a RX iperf 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(rx_iperf5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a RX iperf 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(bandwith2.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a Bandwith 2.4 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(bandwith5.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a Bandwith 5 Ghz!", "Hiba üzenet", 2);
+                }
+                else if(phone_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a Phone!", "Hiba üzenet", 2);
+                }
+                else if(download_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a Download!", "Hiba üzenet", 2);
+                }
+                else if(upload_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a Upload!", "Hiba üzenet", 2);
+                }
+                else
+                {
+                    String kritikus = "";
+                    String sulyos = "";
+                    String enyhe = "";
+                    if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
+                    {
+                        kritikus = "X";
+                    }
+                    if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
+                    {
+                        sulyos = "X";
+                    }
+                    if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
+                    {
+                        enyhe = "X";
+                    }
+                    SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
+                            + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
+                            + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
+                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ raklap_mezo.getText() +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
+                            + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
+                            + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
+                            + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
+                            + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
+                            + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"')";
+                    SQA_SQL ment = new SQA_SQL();
+                    ment.mindenes(sql);
+                    
+                    visszaallit();
+                    int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
+                    mennyiseg++;
+                    mennyiseg_label.setText(String.valueOf(mennyiseg));
+                }
                 
             } 
             catch (Exception e1) 
@@ -419,6 +488,50 @@ public class FB7530 extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    private void visszaallit()
+    {
+        raklap_mezo.setText("");
+        doboz_mezo.setText("");
+        termek_mezo.setText("");
+        guide_mezo.setText("");
+        egyezes_mezo.setText("");
+        egyezes_mezo.setBackground(Color.WHITE);
+        jel2_mezo.setText("");
+        jel2_mezo.setBackground(Color.WHITE);
+        tx_gui2.setText("");
+        tx_gui2.setBackground(Color.WHITE);
+        rx_gui2.setText("");
+        rx_gui2.setBackground(Color.WHITE);
+        tx_iperf2.setText("");
+        tx_iperf2.setBackground(Color.WHITE);
+        rx_iperf2.setText("");
+        rx_iperf2.setBackground(Color.WHITE);
+        bandwith2.setText("");
+        bandwith2.setBackground(Color.WHITE);
+        jel5.setText("");
+        jel5.setBackground(Color.WHITE);
+        tx_gui5.setText("");
+        tx_gui5.setBackground(Color.WHITE);
+        rx_gui5.setText("");
+        rx_gui5.setBackground(Color.WHITE);
+        tx_iperf5.setText("");
+        tx_iperf5.setBackground(Color.WHITE);
+        rx_iperf5.setText("");
+        rx_iperf5.setBackground(Color.WHITE);
+        bandwith5.setText("");
+        bandwith5.setBackground(Color.WHITE);
+        firmware_mezo.setText("");
+        phone_mezo.setText("");
+        download_mezo.setText("");
+        download_mezo.setBackground(Color.WHITE);
+        upload_mezo.setText("");
+        upload_mezo.setBackground(Color.WHITE);
+        hiba_box.setSelectedIndex(0);
+        hibacsoport_box.setSelectedIndex(0);
+        hibakategoria_box.setSelectedIndex(0);
+        megjegyzes_mezo.setText("");
     }
     
     class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
@@ -550,5 +663,284 @@ public class FB7530 extends JPanel {
                 }
             }           
         }    
+    }
+    
+    class RX_gui2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(rx_gui2.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(rx_gui2.getText());
+                if(jel >= 100 && jel <= 160)
+                {
+                    rx_gui2.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    rx_gui2.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class RX_gui5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(rx_gui5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(rx_gui5.getText());
+                if(jel >= 900 && jel <= 1500)
+                {
+                    rx_gui5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    rx_gui5.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class TX_iperf2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(tx_iperf2.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(tx_iperf2.getText());
+                if(jel >= 40 && jel <= 1000)
+                {
+                    tx_iperf2.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    tx_iperf2.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class TX_iperf5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(tx_iperf5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(tx_iperf5.getText());
+                if(jel >= 400 && jel <= 800)
+                {
+                    tx_iperf5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    tx_iperf5.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class RX_iperf2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(rx_iperf2.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(rx_iperf2.getText());
+                if(jel >= 40 && jel <= 1000)
+                {
+                    rx_iperf2.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    rx_iperf2.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class RX_iperf5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(rx_iperf5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(rx_iperf5.getText());
+                if(jel >= 400 && jel <= 800)
+                {
+                    rx_iperf5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    rx_iperf5.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Bandwith2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(bandwith2.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(bandwith2.getText());
+                if(jel == 20)
+                {
+                    bandwith2.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    bandwith2.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Bandwith5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(bandwith5.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(bandwith5.getText());
+                if(jel == 80)
+                {
+                    bandwith5.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    bandwith5.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Download implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(download_mezo.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(download_mezo.getText());
+                if(jel >= 310 && jel <= 345)
+                {
+                    download_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    download_mezo.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Upload implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) {            
+        }
+        @Override
+        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            if(upload_mezo.getText().equals("")) {}
+            else
+            {
+                int jel  = Integer.valueOf(upload_mezo.getText());
+                if(jel == 50.48)
+                {
+                    upload_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    upload_mezo.setBackground(Color.RED);
+                }
+            }           
+        }    
+    }
+    
+    class Torles implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                visszaallit();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
 }

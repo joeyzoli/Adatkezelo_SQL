@@ -115,7 +115,20 @@ public class OQC_adatok extends JPanel {
                         }
                         while(rs2.next())
                         {
-                            modell2.addRow(new Object[]{rs2.getString(1), rs2.getString(2), rs2.getString(3), rs2.getString(4),rs2.getString(5),rs2.getString(6)});
+                            String hibafajta = "";
+                            if(rs2.getString(5).equals("X"))
+                            {
+                                hibafajta = "Kritikus";
+                            }
+                            if(rs2.getString(6).equals("X"))
+                            {
+                                hibafajta = "Súlyos";
+                            }
+                            if(rs2.getString(7).equals("X"))
+                            {
+                                hibafajta = "Enyhe";
+                            }
+                            modell2.addRow(new Object[]{rs2.getString(1), rs2.getString(2), "", rs2.getString(3), rs2.getString(4),hibafajta});
                         }
                         table_2.setModel(modell2);
                     }
@@ -143,7 +156,7 @@ public class OQC_adatok extends JPanel {
         add(lblNewLabel_1);
         
         cikkszamok();
-        termek_box = new JComboBox<String>(cikkszamok);
+        termek_box = new JComboBox<String>(cikkszamok);                       //cikkszamok
         termek_box.addActionListener(new Cikkvalaszto());
         termek_box.setBounds(144, 55, 269, 22);
         add(termek_box);
@@ -198,6 +211,7 @@ public class OQC_adatok extends JPanel {
         add(excel_gomb);
         
         JButton kiajaln_gomb = new JButton("Kiajánlás");
+        kiajaln_gomb.addActionListener(new Kiajanlo());
         kiajaln_gomb.setBounds(724, 705, 89, 23);
         add(kiajaln_gomb);
         
@@ -566,6 +580,58 @@ public class OQC_adatok extends JPanel {
                       se.printStackTrace();
                    }  
                 }
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Kiajanlo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                SQA_SQL atir = new SQA_SQL();
+                String db = "";
+                if(String.valueOf(termek_box.getSelectedItem()).contains("FB7530"))
+                {
+                    db = "OQC_FB7530";
+                }
+                if(String.valueOf(termek_box.getSelectedItem()).contains("FD302"))
+                {
+                    db = "OQC_FD302";
+                }
+                if(String.valueOf(termek_box.getSelectedItem()).contains("FR1200"))
+                {
+                    db = "OQC_FR1200";
+                }
+                if(String.valueOf(termek_box.getSelectedItem()).contains("FR2400"))
+                {
+                    db = "OQC_FR2400";
+                }
+                if(String.valueOf(termek_box.getSelectedItem()).contains("FR600"))
+                {
+                    db = "OQC_FR600";
+                }
+                
+                for(int szamlalo = 0; szamlalo < table_3.getRowCount(); szamlalo++)
+                {
+                    String sql = "Update qualitydb."+ db +" set Kiajanlva = 'Igen' where Raklapszam = '"+ table_3.getValueAt(szamlalo, 0).toString() +"'";
+                    atir.mindenes(sql);
+                }
+                for (int i = modell3.getRowCount() - 1; i > -1; i--) {
+                    modell3.removeRow(i);
+                }
+                table_3.setModel(modell3);
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
             catch (Exception e1) 

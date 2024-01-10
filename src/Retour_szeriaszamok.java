@@ -50,6 +50,7 @@ public class Retour_szeriaszamok extends JPanel {
     private JRadioButton csekk8;private JRadioButton csekk9;private JRadioButton csekk10;private JRadioButton csekk11;private JRadioButton csekk12;private JRadioButton csekk13;private JRadioButton csekk14;
     private JRadioButton csekk15;private JRadioButton csekk16;private JRadioButton csekk17;private JRadioButton csekk18;
     private JButton kepmentes_gomb;
+    private JCheckBox nff;
 
     /**
      * Create the panel.
@@ -479,6 +480,10 @@ public class Retour_szeriaszamok extends JPanel {
         JLabel lblNewLabel_29 = new JLabel("Nem alkalmazott");
         lblNewLabel_29.setBounds(703, 202, 100, 14);
         add(lblNewLabel_29);
+        
+        nff = new JCheckBox("NFF");
+        nff.setBounds(1115, 225, 53, 23);
+        add(nff);
 
     }
     
@@ -570,6 +575,7 @@ public class Retour_szeriaszamok extends JPanel {
                     beszallito.setSelected(false);        
                     veas.setSelected(false);        
                     vevo.setSelected(false);
+                    nff.setSelected(false);
                     hiba_mezo.setText("");
                     javitas_mezo.setText("");
                     hibaoka_mezo.setText("");
@@ -765,6 +771,9 @@ public class Retour_szeriaszamok extends JPanel {
                             }
                             else if(rs.getString(24).equals("Vevő")) {
                                 vevo.setSelected(true);
+                            }
+                            else if(rs.getString(24).equals("NFF")) {
+                                nff.setSelected(true);
                             }
                             else {}
                             hiba_mezo.setText(rs.getString(25));
@@ -1041,6 +1050,9 @@ public class Retour_szeriaszamok extends JPanel {
                 else if(vevo.isSelected()) {
                     hibaeredet = "Vevő";
                 }
+                else if(nff.isSelected()) {
+                    hibaeredet = "NFF";
+                }
                 else {}
                 if(kiszallithato_OK.isSelected()) {
                     kiszallithato = "OK";
@@ -1048,8 +1060,7 @@ public class Retour_szeriaszamok extends JPanel {
                 else if(kiszallithato_NOK.isSelected()) {
                     kiszallithato = "NOK";
                 }
-                else {}
-                
+                else {}                
                 
                 String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
                         + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
@@ -1215,6 +1226,9 @@ public class Retour_szeriaszamok extends JPanel {
                 else if(vevo.isSelected()) {
                     hibaeredet = "Vevő";
                 }
+                else if(nff.isSelected()) {
+                    hibaeredet = "NFF";
+                }
                 else {}
                 if(kiszallithato_OK.isSelected()) {
                     kiszallithato = "OK";
@@ -1295,7 +1309,8 @@ public class Retour_szeriaszamok extends JPanel {
             hibakod_box.setSelectedIndex(1);        
             beszallito.setSelected(false);        
             veas.setSelected(false);        
-            vevo.setSelected(false);                            
+            vevo.setSelected(false);
+            nff.setSelected(false);
             szeriaszam_mezo.setText("");
             hiba_mezo.setText("");
             javitas_mezo.setText("");

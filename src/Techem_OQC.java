@@ -29,12 +29,18 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JSeparator;
+import javax.swing.JComboBox;
 
 public class Techem_OQC extends JPanel {
     
-    private String excelfile = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC_control_datasheet.xlsx";   
+    private String excelfile = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC_control_datasheet.xlsx";
+    private String excelfile2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC_control_datasheet_URES_UJ.xlsx";
     private JTextField datumtol_mezo;
     private JTextField datumig_mezo;
+    private JTextField datumtol2_mezo;
+    private JTextField datumig2_mezo;
+    private JComboBox<String> cikk_box;
     
     /**
      * Create the panel.
@@ -78,12 +84,56 @@ public class Techem_OQC extends JPanel {
         add(start2_gomb);
         
         setBackground(Foablak.hatter_szine);
+        
+        JLabel lblNewLabel_3 = new JLabel("KPI adatok");
+        lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblNewLabel_3.setBounds(342, 407, 89, 14);
+        add(lblNewLabel_3);
+        
+        JLabel lblNewLabel_4 = new JLabel("Dátum -tól");
+        lblNewLabel_4.setBounds(441, 407, 68, 14);
+        add(lblNewLabel_4);
+        
+        JLabel lblNewLabel_5 = new JLabel("Dátum -ig");
+        lblNewLabel_5.setBounds(441, 451, 68, 14);
+        add(lblNewLabel_5);
+        
+        datumtol2_mezo = new JTextField();
+        datumtol2_mezo.setBounds(519, 404, 86, 20);
+        add(datumtol2_mezo);
+        datumtol2_mezo.setColumns(10);
+        
+        datumig2_mezo = new JTextField();
+        datumig2_mezo.setBounds(519, 448, 86, 20);
+        add(datumig2_mezo);
+        datumig2_mezo.setColumns(10);
+        
+        JButton start3_gomb = new JButton("Start");
+        start3_gomb.addActionListener(new Kereses());
+        start3_gomb.setBounds(519, 497, 89, 23);
+        add(start3_gomb);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(84, 382, 1045, 14);
+        add(separator);
+        
+        JLabel lblNewLabel_6 = new JLabel("Alap lekérdezés");
+        lblNewLabel_6.setBounds(389, 140, 107, 14);
+        add(lblNewLabel_6);
+        
+        String[] cikkszamok = {"1742", "376421"};
+        cikk_box = new JComboBox<String>(cikkszamok);                         //cikkszamok
+        cikk_box.setBounds(519, 87, 161, 22);
+        add(cikk_box);
+        
+        JLabel lblNewLabel_7 = new JLabel("Cikkszám");
+        lblNewLabel_7.setBounds(414, 91, 82, 14);
+        add(lblNewLabel_7);
 
     }
     
     class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
-        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
          {
             try
@@ -93,9 +143,18 @@ public class Techem_OQC extends JPanel {
                 Workbook workbook2 = new Workbook();
                 Workbook workbook3 = new Workbook();
                 Workbook workbook5 = new Workbook();
-                workbook.loadFromFile(excelfile);
-                workbook3.loadFromFile(excelfile);
-                workbook5.loadFromFile(excelfile);
+                if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
+                {
+                    workbook.loadFromFile(excelfile);
+                    workbook3.loadFromFile(excelfile);
+                    workbook5.loadFromFile(excelfile);
+                }
+                else
+                {
+                    workbook.loadFromFile(excelfile2);
+                    workbook3.loadFromFile(excelfile2);
+                    workbook5.loadFromFile(excelfile2);
+                }               
                 Worksheet sheet = workbook.getWorksheets().get(0);
                 Worksheet sheet2 = workbook2.getWorksheets().get(0);
                 Worksheet sheet3 = workbook3.getWorksheets().get(0);
@@ -131,15 +190,15 @@ public class Techem_OQC extends JPanel {
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);
                 ResultSet rs = stmt.executeQuery("Select contract, part_no, location_no, waiv_dev_rej_no, availability_control_id, to_char(RECEIPT_DATE ,'YYYY.MM.DD') from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                        + "where PART_NO = '1742' and QTY_ONHAND > 0\r\n"
+                        + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0\r\n"
                         + "and location_no like 'TE0%'");
                 JdbcAdapter jdbcAdapter = new JdbcAdapter();
                 jdbcAdapter.fillDataTable(datatable, rs);
                 sheet2.insertDataTable(datatable, true, 1, 1);
                 
                 stmt.execute("Select location_no from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                        + "where PART_NO = '1742' and QTY_ONHAND > 0\r\n"
-                        + "and location_no like 'TE0%' group by location_no");
+                        + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0\r\n"
+                        + "and location_no like 'TE0%' group by location_no");          //TE0%
                 //int szam = 1;
                 
                 rs = stmt.getResultSet();
@@ -153,7 +212,7 @@ public class Techem_OQC extends JPanel {
                 for(int szamlalo = 0; szamlalo < raklapok.size(); szamlalo++)      //raklapok.size()
                 {
                     stmt.execute("Select waiv_dev_rej_no from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                            + "where location_no = '"+ raklapok.get(szamlalo) +"'");
+                            + "where location_no = '"+ raklapok.get(szamlalo) +"' and QTY_ONHAND > 0");
                     
                     rs = stmt.getResultSet();
                     int vanilyen = 0;
@@ -189,146 +248,284 @@ public class Techem_OQC extends JPanel {
                             
                             for(int szamlalo2 = 0; szamlalo2 < szeriaszamok.size(); szamlalo2++)
                             {
-                                if(harmincketto >= 65) 
+                                if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
                                 {
-                                    ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
-                                    if(rs3.next())
+                                    if(harmincketto >= 65) 
                                     {
-                                        String[] datum = rs3.getString(2).split(" ");
-                                        sheet5.getRange().get("D" + 2).setText(datum[0]);
-                                        sheet5.getRange().get("J" + 2).setText(rs3.getString(3));
-                                        sheet5.getRange().get("B" + cellaszam3).setText(rs3.getString(4));
-                                        sheet5.getRange().get("C" + cellaszam3).setText(rs3.getString(5));
-                                        sheet5.getRange().get("D" + cellaszam3).setText(rs3.getString(6));
-                                        sheet5.getRange().get("E" + cellaszam3).setText(rs3.getString(7));
-                                        sheet5.getRange().get("F" + cellaszam3).setText(rs3.getString(8));
-                                        sheet5.getRange().get("G" + cellaszam3).setText(rs3.getString(9));
-                                        sheet5.getRange().get("H" + cellaszam3).setText(rs3.getString(10));
-                                        sheet5.getRange().get("I" + cellaszam3).setText(rs3.getString(11));
-                                        sheet5.getRange().get("J" + cellaszam3).setText(rs3.getString(12));
-                                        sheet5.getRange().get("K" + cellaszam3).setText(rs3.getString(13));
-                                        sheet5.getRange().get("L" + cellaszam3).setText(rs3.getString(14));
-                                        
-                                        System.out.println(harmincketto);
-                                        rs = stmt3.executeQuery("select max(ido)\r\n"
-                                                + "from videoton.fkov\r\n"
-                                                + "where\r\n"
-                                                + "videoton.fkov.hely = \"93\"   and\r\n"
-                                                + "videoton.fkov.panel like \"4TCH%\" \r\n"
-                                                + "and poz = 2");
-                                        if(rs.next())
+                                        ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
+                                        if(rs3.next())
                                         {
-                                            SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
-                                            Date mikor = hosszu.parse(rs.getString(1));
-                                            Calendar cal = Calendar.getInstance(); // creates calendar                                        
-                                            cal.setTime(mikor);               // sets calendar time/date
-                                            //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
-                                            //cal.getTime();                         // returns new date object plus one hour
-                                            //System.out.println(sheet.getRange().get("D" + 2).getText());
-                                            String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
-                                            Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
-                                            //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
-                                            if(ellenorzes.compareTo(mikor) > 0) 
+                                            String[] datum = rs3.getString(2).split(" ");
+                                            sheet5.getRange().get("D" + 2).setText(datum[0]);
+                                            sheet5.getRange().get("J" + 2).setText(rs3.getString(3));
+                                            sheet5.getRange().get("B" + cellaszam3).setText(rs3.getString(4));
+                                            sheet5.getRange().get("C" + cellaszam3).setText(rs3.getString(5));
+                                            sheet5.getRange().get("D" + cellaszam3).setText(rs3.getString(6));
+                                            sheet5.getRange().get("E" + cellaszam3).setText(rs3.getString(7));
+                                            sheet5.getRange().get("F" + cellaszam3).setText(rs3.getString(8));
+                                            sheet5.getRange().get("G" + cellaszam3).setText(rs3.getString(9));
+                                            sheet5.getRange().get("H" + cellaszam3).setText(rs3.getString(10));
+                                            sheet5.getRange().get("I" + cellaszam3).setText(rs3.getString(11));
+                                            sheet5.getRange().get("J" + cellaszam3).setText(rs3.getString(12));
+                                            sheet5.getRange().get("K" + cellaszam3).setText(rs3.getString(13));
+                                            sheet5.getRange().get("L" + cellaszam3).setText(rs3.getString(14));
+                                            
+                                            System.out.println(harmincketto);
+                                            rs = stmt3.executeQuery("select max(ido)\r\n"
+                                                    + "from videoton.fkov\r\n"
+                                                    + "where\r\n"
+                                                    + "videoton.fkov.hely = \"93\"   and\r\n"
+                                                    + "videoton.fkov.panel like \"4TCH%\" \r\n"
+                                                    + "and poz = 2");
+                                            if(rs.next())
                                             {
-                                                //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
-                                                cal.add(Calendar.HOUR_OF_DAY, 600);
-                                                String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                String szoveg = "Result after " + lejar[0];
-                                                sheet5.getRange().get("M" + cellaszam3).setText(szoveg);
-                                                sheet5.getCellRange("M" + cellaszam3 +":O"+ cellaszam3).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                Date mikor = hosszu.parse(rs.getString(1));
+                                                Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                cal.setTime(mikor);               // sets calendar time/date
+                                                //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                //cal.getTime();                         // returns new date object plus one hour
+                                                //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                if(ellenorzes.compareTo(mikor) > 0) 
+                                                {
+                                                    //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
+                                                    cal.add(Calendar.HOUR_OF_DAY, 600);
+                                                    String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                    String szoveg = "Result after " + lejar[0];
+                                                    sheet5.getRange().get("M" + cellaszam3).setText(szoveg);
+                                                    sheet5.getCellRange("M" + cellaszam3 +":O"+ cellaszam3).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                }
+                                                else
+                                                {
+                                                    cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                    String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                    String szoveg = "Result after " + lejar[0];
+                                                    sheet5.getRange().get("M" + cellaszam3).setText(szoveg);
+                                                    sheet5.getCellRange("M" + cellaszam3 +":O"+ cellaszam3).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                }
+                                            }
+                                            if(rs3.getString(15) == null) {}
+                                            else if(rs3.getString(15).equals(""))  {}
+                                            else
+                                            {
+                                                sheet5.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
+                                                megjegyzes++;
+                                                sorszam++;
+                                            }
+                                            harmincketto++;
+                                            cellaszam3++;
+                                            vanilyen3++;
+                                        }
+                                    }
+                                    else if(harmincketto >= 33 && harmincketto < 65) 
+                                    {
+                                        ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
+                                        if(rs3.next())
+                                        {
+                                            String[] datum = rs3.getString(2).split(" ");
+                                            sheet3.getRange().get("D" + 2).setText(datum[0]);
+                                            sheet3.getRange().get("J" + 2).setText(rs3.getString(3));
+                                            sheet3.getRange().get("B" + cellaszam2).setText(rs3.getString(4));
+                                            sheet3.getRange().get("C" + cellaszam2).setText(rs3.getString(5));
+                                            sheet3.getRange().get("D" + cellaszam2).setText(rs3.getString(6));
+                                            sheet3.getRange().get("E" + cellaszam2).setText(rs3.getString(7));
+                                            sheet3.getRange().get("F" + cellaszam2).setText(rs3.getString(8));
+                                            sheet3.getRange().get("G" + cellaszam2).setText(rs3.getString(9));
+                                            sheet3.getRange().get("H" + cellaszam2).setText(rs3.getString(10));
+                                            sheet3.getRange().get("I" + cellaszam2).setText(rs3.getString(11));
+                                            sheet3.getRange().get("J" + cellaszam2).setText(rs3.getString(12));
+                                            sheet3.getRange().get("K" + cellaszam2).setText(rs3.getString(13));
+                                            sheet3.getRange().get("L" + cellaszam2).setText(rs3.getString(14));
+                                            
+                                            System.out.println(harmincketto);
+                                            rs = stmt3.executeQuery("select max(ido)\r\n"
+                                                    + "from videoton.fkov\r\n"
+                                                    + "where\r\n"
+                                                    + "videoton.fkov.hely = \"93\"   and\r\n"
+                                                    + "videoton.fkov.panel like \"4TCH%\" \r\n"
+                                                    + "and poz = 2");
+                                            if(rs.next())
+                                            {
+                                                SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                Date mikor = hosszu.parse(rs.getString(1));
+                                                Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                cal.setTime(mikor);               // sets calendar time/date
+                                                //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                //cal.getTime();                         // returns new date object plus one hour
+                                                //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                if(ellenorzes.compareTo(mikor) > 0) 
+                                                {
+                                                    //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
+                                                    cal.add(Calendar.HOUR_OF_DAY, 600);
+                                                    String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                    String szoveg = "Result after " + lejar[0];
+                                                    sheet3.getRange().get("M" + cellaszam2).setText(szoveg);
+                                                    sheet3.getCellRange("M" + cellaszam2 +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                }
+                                                else
+                                                {
+                                                    cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                    String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                    String szoveg = "Result after " + lejar[0];
+                                                    sheet3.getRange().get("M" + cellaszam2).setText(szoveg);
+                                                    sheet3.getCellRange("M" + cellaszam2 +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                }
+                                            }
+                                            if(rs3.getString(15) == null) {}
+                                            else if(rs3.getString(15).equals(""))  {}
+                                            else
+                                            {
+                                                sheet.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
+                                                megjegyzes++;
+                                                sorszam++;
+                                            }
+                                            harmincketto++;
+                                            cellaszam2++;
+                                            vanilyen2++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
+                                        if(rs3.next())
+                                        {
+                                            if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
+                                            {
+                                                String[] datum = rs3.getString(2).split(" ");
+                                                sheet.getRange().get("D" + 2).setText(datum[0]);
+                                                sheet.getRange().get("J" + 2).setText(rs3.getString(3));
+                                                sheet.getRange().get("B" + cellaszam).setText(rs3.getString(4));
+                                                sheet.getRange().get("C" + cellaszam).setText(rs3.getString(5));
+                                                sheet.getRange().get("D" + cellaszam).setText(rs3.getString(6));
+                                                sheet.getRange().get("E" + cellaszam).setText(rs3.getString(7));
+                                                sheet.getRange().get("F" + cellaszam).setText(rs3.getString(8));
+                                                sheet.getRange().get("G" + cellaszam).setText(rs3.getString(9));
+                                                sheet.getRange().get("H" + cellaszam).setText(rs3.getString(10));
+                                                sheet.getRange().get("I" + cellaszam).setText(rs3.getString(11));
+                                                sheet.getRange().get("J" + cellaszam).setText(rs3.getString(12));
+                                                sheet.getRange().get("K" + cellaszam).setText(rs3.getString(13));
+                                                sheet.getRange().get("L" + cellaszam).setText(rs3.getString(14));
+                                                
+                                                System.out.println(harmincketto);
+                                                rs = stmt3.executeQuery("select max(ido)\r\n"
+                                                        + "from videoton.fkov\r\n"
+                                                        + "where\r\n"
+                                                        + "videoton.fkov.hely = \"93\"   and\r\n"
+                                                        + "videoton.fkov.panel like \"4TCH%\" \r\n"
+                                                        + "and poz = 2");
+                                                if(rs.next())
+                                                {
+                                                    SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                    Date mikor = hosszu.parse(rs.getString(1));
+                                                    Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                    cal.setTime(mikor);               // sets calendar time/date
+                                                    //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                    //cal.getTime();                         // returns new date object plus one hour
+                                                    //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                    String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                    Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                    //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                    if(ellenorzes.compareTo(mikor) > 0) 
+                                                    {
+                                                        //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
+                                                        cal.add(Calendar.HOUR_OF_DAY, 600);
+                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                        String szoveg = "Result after " + lejar[0];
+                                                        sheet.getRange().get("M" + cellaszam).setText(szoveg);
+                                                        sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                    }
+                                                    else
+                                                    {
+                                                        cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                        String szoveg = "Result after " + lejar[0];
+                                                        sheet.getRange().get("M" + cellaszam).setText(szoveg);
+                                                        sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                    }
+                                                }
+                                                if(rs3.getString(15) == null) {}
+                                                else if(rs3.getString(15).equals(""))  {}
+                                                else
+                                                {
+                                                    sheet.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
+                                                    megjegyzes++;
+                                                    sorszam++;
+                                                }
+                                                harmincketto++;
+                                                cellaszam++;
+                                                vanilyen++;
                                             }
                                             else
                                             {
-                                                cal.add(Calendar.HOUR_OF_DAY, 300);
-                                                String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                String szoveg = "Result after " + lejar[0];
-                                                sheet5.getRange().get("M" + cellaszam3).setText(szoveg);
-                                                sheet5.getCellRange("M" + cellaszam3 +":O"+ cellaszam3).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                String[] datum = rs3.getString(2).split(" ");
+                                                sheet.getRange().get("D" + 2).setText(datum[0]);
+                                                sheet.getRange().get("I" + 2).setText(rs3.getString(3));
+                                                sheet.getRange().get("B" + cellaszam).setText(rs3.getString(4));
+                                                sheet.getRange().get("C" + cellaszam).setText(rs3.getString(5));
+                                                sheet.getRange().get("D" + cellaszam).setText(rs3.getString(6));
+                                                sheet.getRange().get("E" + cellaszam).setText(rs3.getString(7));
+                                                sheet.getRange().get("F" + cellaszam).setText(rs3.getString(8));
+                                                sheet.getRange().get("G" + cellaszam).setText(rs3.getString(9));
+                                                sheet.getRange().get("H" + cellaszam).setText(rs3.getString(10));                                           
+                                                
+                                                System.out.println(harmincketto);
+                                                rs = stmt3.executeQuery("select max(ido)\r\n"
+                                                        + "from videoton.fkov\r\n"
+                                                        + "where\r\n"
+                                                        + "videoton.fkov.hely = \"93\"   and\r\n"
+                                                        + "videoton.fkov.panel like \"F003764210%\" \r\n"
+                                                        + "and poz = 2");
+                                                if(rs.next())
+                                                {
+                                                    SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                    Date mikor = hosszu.parse(rs.getString(1));
+                                                    Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                    cal.setTime(mikor);               // sets calendar time/date
+                                                    //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                    //cal.getTime();                         // returns new date object plus one hour
+                                                    //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                    String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                    Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                    //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                    if(ellenorzes.compareTo(mikor) > 0) 
+                                                    {
+                                                        //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
+                                                        cal.add(Calendar.HOUR_OF_DAY, 600);
+                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                        String szoveg = "Result after " + lejar[0];
+                                                        sheet.getRange().get("I" + cellaszam).setText(szoveg);
+                                                        sheet.getCellRange("I" + cellaszam +":K"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                    }
+                                                    else
+                                                    {
+                                                        cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                        String szoveg = "Result after " + lejar[0];
+                                                        sheet.getRange().get("I" + cellaszam).setText(szoveg);
+                                                        sheet.getCellRange("I" + cellaszam +":K"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                    }
+                                                }
+                                                if(rs3.getString(15) == null) {}
+                                                else if(rs3.getString(15).equals(""))  {}
+                                                else
+                                                {
+                                                    sheet.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
+                                                    megjegyzes++;
+                                                    sorszam++;
+                                                }
+                                                harmincketto++;
+                                                cellaszam++;
+                                                vanilyen++;
                                             }
                                         }
-                                        if(rs3.getString(15) == null) {}
-                                        else if(rs3.getString(15).equals(""))  {}
-                                        else
-                                        {
-                                            sheet5.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
-                                            megjegyzes++;
-                                            sorszam++;
-                                        }
-                                        harmincketto++;
-                                        cellaszam3++;
-                                        vanilyen3++;
                                     }
-                                }
-                                else if(harmincketto >= 33 && harmincketto < 65) 
-                                {
-                                    ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
-                                    if(rs3.next())
-                                    {
-                                        String[] datum = rs3.getString(2).split(" ");
-                                        sheet3.getRange().get("D" + 2).setText(datum[0]);
-                                        sheet3.getRange().get("J" + 2).setText(rs3.getString(3));
-                                        sheet3.getRange().get("B" + cellaszam2).setText(rs3.getString(4));
-                                        sheet3.getRange().get("C" + cellaszam2).setText(rs3.getString(5));
-                                        sheet3.getRange().get("D" + cellaszam2).setText(rs3.getString(6));
-                                        sheet3.getRange().get("E" + cellaszam2).setText(rs3.getString(7));
-                                        sheet3.getRange().get("F" + cellaszam2).setText(rs3.getString(8));
-                                        sheet3.getRange().get("G" + cellaszam2).setText(rs3.getString(9));
-                                        sheet3.getRange().get("H" + cellaszam2).setText(rs3.getString(10));
-                                        sheet3.getRange().get("I" + cellaszam2).setText(rs3.getString(11));
-                                        sheet3.getRange().get("J" + cellaszam2).setText(rs3.getString(12));
-                                        sheet3.getRange().get("K" + cellaszam2).setText(rs3.getString(13));
-                                        sheet3.getRange().get("L" + cellaszam2).setText(rs3.getString(14));
-                                        
-                                        System.out.println(harmincketto);
-                                        rs = stmt3.executeQuery("select max(ido)\r\n"
-                                                + "from videoton.fkov\r\n"
-                                                + "where\r\n"
-                                                + "videoton.fkov.hely = \"93\"   and\r\n"
-                                                + "videoton.fkov.panel like \"4TCH%\" \r\n"
-                                                + "and poz = 2");
-                                        if(rs.next())
-                                        {
-                                            SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
-                                            Date mikor = hosszu.parse(rs.getString(1));
-                                            Calendar cal = Calendar.getInstance(); // creates calendar                                        
-                                            cal.setTime(mikor);               // sets calendar time/date
-                                            //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
-                                            //cal.getTime();                         // returns new date object plus one hour
-                                            //System.out.println(sheet.getRange().get("D" + 2).getText());
-                                            String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
-                                            Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
-                                            //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
-                                            if(ellenorzes.compareTo(mikor) > 0) 
-                                            {
-                                                //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
-                                                cal.add(Calendar.HOUR_OF_DAY, 600);
-                                                String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                String szoveg = "Result after " + lejar[0];
-                                                sheet3.getRange().get("M" + cellaszam2).setText(szoveg);
-                                                sheet3.getCellRange("M" + cellaszam2 +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
-                                            }
-                                            else
-                                            {
-                                                cal.add(Calendar.HOUR_OF_DAY, 300);
-                                                String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                String szoveg = "Result after " + lejar[0];
-                                                sheet3.getRange().get("M" + cellaszam2).setText(szoveg);
-                                                sheet3.getCellRange("M" + cellaszam2 +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
-                                            }
-                                        }
-                                        if(rs3.getString(15) == null) {}
-                                        else if(rs3.getString(15).equals(""))  {}
-                                        else
-                                        {
-                                            sheet.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
-                                            megjegyzes++;
-                                            sorszam++;
-                                        }
-                                        harmincketto++;
-                                        cellaszam2++;
-                                        vanilyen2++;
-                                    }
-                                }
+                                }   //if vége
                                 else
                                 {
                                     ResultSet rs3 = stmt2.executeQuery("select * from qualitydb.Techem_OQC where Szeriaszam like '"+ szeriaszamok.get(szamlalo2) +"%'");                        
@@ -336,25 +533,21 @@ public class Techem_OQC extends JPanel {
                                     {
                                         String[] datum = rs3.getString(2).split(" ");
                                         sheet.getRange().get("D" + 2).setText(datum[0]);
-                                        sheet.getRange().get("J" + 2).setText(rs3.getString(3));
+                                        sheet.getRange().get("I" + 2).setText(rs3.getString(3));
                                         sheet.getRange().get("B" + cellaszam).setText(rs3.getString(4));
                                         sheet.getRange().get("C" + cellaszam).setText(rs3.getString(5));
                                         sheet.getRange().get("D" + cellaszam).setText(rs3.getString(6));
                                         sheet.getRange().get("E" + cellaszam).setText(rs3.getString(7));
                                         sheet.getRange().get("F" + cellaszam).setText(rs3.getString(8));
                                         sheet.getRange().get("G" + cellaszam).setText(rs3.getString(9));
-                                        sheet.getRange().get("H" + cellaszam).setText(rs3.getString(10));
-                                        sheet.getRange().get("I" + cellaszam).setText(rs3.getString(11));
-                                        sheet.getRange().get("J" + cellaszam).setText(rs3.getString(12));
-                                        sheet.getRange().get("K" + cellaszam).setText(rs3.getString(13));
-                                        sheet.getRange().get("L" + cellaszam).setText(rs3.getString(14));
+                                        sheet.getRange().get("H" + cellaszam).setText(rs3.getString(10));                                           
                                         
                                         System.out.println(harmincketto);
                                         rs = stmt3.executeQuery("select max(ido)\r\n"
                                                 + "from videoton.fkov\r\n"
                                                 + "where\r\n"
                                                 + "videoton.fkov.hely = \"93\"   and\r\n"
-                                                + "videoton.fkov.panel like \"4TCH%\" \r\n"
+                                                + "videoton.fkov.panel like \"F003764210%\" \r\n"
                                                 + "and poz = 2");
                                         if(rs.next())
                                         {
@@ -374,16 +567,16 @@ public class Techem_OQC extends JPanel {
                                                 cal.add(Calendar.HOUR_OF_DAY, 600);
                                                 String[] lejar = hosszu.format(cal.getTime()).split(" ");
                                                 String szoveg = "Result after " + lejar[0];
-                                                sheet.getRange().get("M" + cellaszam).setText(szoveg);
-                                                sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                sheet.getRange().get("I" + cellaszam).setText(szoveg);
+                                                sheet.getCellRange("I" + cellaszam +":K"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
                                             }
                                             else
                                             {
                                                 cal.add(Calendar.HOUR_OF_DAY, 300);
                                                 String[] lejar = hosszu.format(cal.getTime()).split(" ");
                                                 String szoveg = "Result after " + lejar[0];
-                                                sheet.getRange().get("M" + cellaszam).setText(szoveg);
-                                                sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                sheet.getRange().get("I" + cellaszam).setText(szoveg);
+                                                sheet.getCellRange("I" + cellaszam +":K"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
                                             }
                                         }
                                         if(rs3.getString(15) == null) {}
@@ -396,10 +589,10 @@ public class Techem_OQC extends JPanel {
                                         }
                                         harmincketto++;
                                         cellaszam++;
-                                        vanilyen++;
+                                        vanilyen++;                                       
                                     }
                                 }
-                            }
+                            }       //for vége
                         }
 
                     }
@@ -516,7 +709,6 @@ public class Techem_OQC extends JPanel {
     
     class Manualis_osszerak implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
-        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
          {
             try
@@ -691,5 +883,42 @@ public class Techem_OQC extends JPanel {
          }
     }
     
-    
+    class Kereses implements ActionListener                                                                                       //mentés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                SQA_SQL letolt = new SQA_SQL();
+                if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
+                {
+                    String sql = "select yearweek(datum) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
+                            + "from qualitydb.Techem_OQC\r\n"
+                            + "where datum >= '"+ datumtol2_mezo.getText() +"' and datum <= '"+ datumig2_mezo.getText() +"' and szeriaszam like '4TCH%' \r\n"
+                            + "group by yearweek(datum)";
+                    letolt.minden_excel(sql, "KPI adatok.xlsx");
+                }
+                else
+                {
+                    String sql = "select yearweek(datum) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
+                            + "from qualitydb.Techem_OQC\r\n"
+                            + "where datum >= '"+ datumtol2_mezo.getText() +"' and datum <= '"+ datumig2_mezo.getText() +"' and szeriaszam like 'F003764210%' \r\n"
+                            + "group by yearweek(datum)";
+                    letolt.minden_excel(sql, "KPI adatok.xlsx");
+                }
+                
+                Foablak.frame.setCursor(null);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+      
+    }
 }
