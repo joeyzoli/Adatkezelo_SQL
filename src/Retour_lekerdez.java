@@ -278,31 +278,35 @@ public class Retour_lekerdez extends JPanel
                     String sql = "";
                     if(id_mezo.getText().equals(""))
                     {
-                        sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
-                    
-                    
-                        if(vevo_box.getSelectedItem().equals("-"))
+                        if(rma_mezo.getText().equals(""))
                         {
-                            sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                            if(vevo_box.getSelectedItem().equals("-"))
+                            {
+                                sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"'";
+                            }
+                            else
+                            {
+                                sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
+                            }
+                            stmt.execute(sql);
+                            ResultSet rs = stmt.getResultSet();
+                            String idk = "";
+                            while(rs.next())
+                            {
+                                idk += rs.getString(1) +",";
+                            }
+                            idk = idk.substring(0, idk.length() - 1);
+                            stmt.close();
+                            conn.close();
+                            
+                            sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID in ("+ idk +")";
+                            excel.minden_excel(sql, "Retour szériaszámok.xlsx");      
                         }
                         else
                         {
-                            sql = "select ID from qualitydb.Retour where datum >= '"+ datumtol.getText() +"' and datum <= '" + datumig.getText() +"' and Vevo = '"+ vevo_box.getSelectedItem() +"'";
-                        }
-                    
-                        stmt.execute(sql);
-                        ResultSet rs = stmt.getResultSet();
-                        String idk = "";
-                        while(rs.next())
-                        {
-                            idk += rs.getString(1) +",";
-                        }
-                        idk = idk.substring(0, idk.length() - 1);
-                        stmt.close();
-                        conn.close();
-                        
-                        sql = "select * from qualitydb.Retour_szeriaszamok where Retour_ID in ("+ idk +")";
-                        excel.minden_excel(sql, "Retour szériaszámok.xlsx");                      
+                            sql = "select * from qualitydb.Retour_szeriaszamok where RMA = '"+ rma_mezo.getText() +"'";
+                            excel.minden_excel(sql, "Retour szériaszámok.xlsx");
+                        }                                      
                     }
                     else
                     {

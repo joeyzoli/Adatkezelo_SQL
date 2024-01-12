@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JTextField;
-
+import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -34,6 +34,7 @@ public class Gepes_ellenorok extends JPanel
     private JComboBox<String> nxt_box;
     private ArrayList<String> ellenorok = new ArrayList<String>();
     private DefaultComboBoxModel<String> model;
+    static DefaultTableModel modell;
     private JTextField cikkszam_mezo;
     static JTable table_2;
 
@@ -87,6 +88,11 @@ public class Gepes_ellenorok extends JPanel
         gorgeto.setBounds(10, 270, 1765, 172);
         add(gorgeto);
         
+        modell = new DefaultTableModel();
+        modell.setColumnIdentifiers(new Object[]{"Ellenőr","Dátum","NXT sor","Cikkszám","Műveleti utasítás", "Panel jelölés", "Ónpaszta típusa", "Ónpaszta poziciója","Ónpaszta vastagsága","Ragasztó típusa","Ragasztó poziciója","Hőprofil érvényesség",
+                "Tárazás ell.","Panel alátámasztás","N2 gáz","Első darab ellenőrzés","Ragasztott alkatrész nyomaték","Tétel kísérő lap"});
+        table.setModel(modell);
+        
         JLabel lblNewLabel_5 = new JLabel("Cikkszám");
         lblNewLabel_5.setBounds(493, 182, 69, 14);
         add(lblNewLabel_5);
@@ -101,7 +107,7 @@ public class Gepes_ellenorok extends JPanel
         add(ellenor_box);
         
         String[] nxtk = {"-","NXT01","NXT02","NXT03","NXT04","NXT05","NXT06","NXT07","NXT08","NXT09","NXT10"};
-        nxt_box = new JComboBox<String>(nxtk);          //nxtk
+        nxt_box = new JComboBox<String>(nxtk);                                                                      //nxtk
         nxt_box.setBounds(618, 147, 69, 22);
         add(nxt_box);
         

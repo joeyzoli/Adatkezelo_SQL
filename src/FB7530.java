@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -49,6 +48,7 @@ public class FB7530 extends JPanel {
     private JComboBox<String> hibakategoria_box;
     private JTextArea megjegyzes_mezo;
     private JLabel mennyiseg_label;
+    private static Long timer_start;
 
     /**
      * Create the panel.
@@ -115,6 +115,7 @@ public class FB7530 extends JPanel {
         
         doboz_mezo = new JTextField();
         doboz_mezo.setBounds(188, 217, 144, 20);
+        doboz_mezo.addKeyListener(new Enter2());
         add(doboz_mezo);
         doboz_mezo.setColumns(10);
         
@@ -355,6 +356,22 @@ public class FB7530 extends JPanel {
         datum_mezo.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
     }
     
+    static public float measureTime(boolean run)                    //idõmérõ metódus
+    {
+        long current_time = System.nanoTime();                      //a rendszeridõt nekiadjuk egy változónak
+                
+        if (run == true)                                            //ha igazra állítjuk elindul
+        {
+                timer_start = System.nanoTime();                    //idõzítõ indulási értéke a rendszer aktuális ideje
+                return (-1.0f);
+        }
+        else
+        {
+            long elapsed_time = current_time - timer_start;         //ha false lesz az érték
+            return (elapsed_time);                                  //visszatér a különbséggel
+        }
+    }
+    
     class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -443,6 +460,16 @@ public class FB7530 extends JPanel {
                 }
                 else
                 {
+                    /*end = System.currentTimeMillis();
+                    long millis = end - start;                    
+                    int seconds = (int) (millis / 1000) % 60 ;
+                    int minutes = (int) ((millis / (1000*60)) % 60);
+                    int hours   = (int) ((millis / (1000*60*60)) % 24);                    
+                    System.out.println(hours +":"+ minutes +":"+ seconds); */                   
+                    int petifele = (int) (measureTime(false) / 1000000);
+                    //System.out.println("Azzal számolva: "+ (petifele/ (1000*60*60) % 24)+" óra "+ ((petifele / (1000*60)) % 60) +" perc "+ (petifele / 1000) % 60  +" másodperc");
+                    String tesztido = String.valueOf( (petifele/ (1000*60*60) % 24))+":"+ String.valueOf(((petifele / (1000*60)) % 60)) +":"+ String.valueOf((petifele / 1000) % 60);
+                    System.out.println(tesztido);
                     String kritikus = "";
                     String sulyos = "";
                     String enyhe = "";
@@ -458,17 +485,18 @@ public class FB7530 extends JPanel {
                     {
                         enyhe = "X";
                     }
+                    String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                     String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
                             + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
-                            + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
-                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ raklap_mezo.getText() +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
+                            + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
+                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
                             + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
                             + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
                             + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
                             + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
-                            + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"')";
+                            + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
                     
@@ -551,6 +579,25 @@ public class FB7530 extends JPanel {
                     egyezes_mezo.setText("NOK");
                     egyezes_mezo.setBackground(Color.RED);
                 }
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+    }
+    
+    class Enter2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                measureTime(true);
+                System.out.println("Elindult a mérés");
             }       
         }
         @Override
@@ -913,7 +960,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(upload_mezo.getText());
-                if(jel == 50.48)
+                if(jel == 50)
                 {
                     upload_mezo.setBackground(Color.GREEN);
                 }

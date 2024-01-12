@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Retour_frissit());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2052,7 +2052,7 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\hibalírás.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA1748.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
@@ -2065,7 +2065,7 @@ public class Torlo extends JPanel
                            + "where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
                    System.out.println("Fut a For");
                }              
-                                        
+               Foablak.frame.setCursor(null);                        
                stmt.close();
                conn.close();                
             }             
@@ -2220,21 +2220,25 @@ public class Torlo extends JPanel
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
-               stmt.execute("select veas_id, retour_id from  qualitydb.Retour_szeriaszamok where 3 = 3 and Retour_id > 791");
+               stmt.execute("select id, rma from  qualitydb.Retour where 3 = 3 ");
                ResultSet rs = stmt.getResultSet();
                ArrayList<String> tomb = new ArrayList<String>();
                
                while(rs.next())
                {
-                   tomb.add(rs.getString(1)+":"+ rs.getString(2));
-                   System.out.println(rs.getString(1)+":"+ rs.getString(2));
+                   tomb.add(rs.getString(1)+";"+ rs.getString(2));
+                   System.out.println(rs.getString(1)+";"+ rs.getString(2));
                }
                
                for(int szamlalo = 0; szamlalo < tomb.size(); szamlalo++)
                {
-                   String[] darabolt = tomb.get(szamlalo).split(":");
-                   stmt.executeUpdate("update qualitydb.Retour_kepek set Retour_ID = '"+ darabolt[1] +"' where Szeriaszam = '"+ darabolt[0] + "'");
-                   System.out.println("update qualitydb.Retour_kepek set Retour_ID = '"+ darabolt[1] +"' where Szeriaszam = '"+ darabolt[0] + "'");
+                   String[] darabolt = tomb.get(szamlalo).split(";");
+                   if(darabolt.length > 1)
+                   {
+                       stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set RMA = '"+ darabolt[1] +"' where Retour_ID = '"+ darabolt[0] + "'");
+                       System.out.println("update qualitydb.Retour_szeriaszamok set RMA = '"+ darabolt[1] +"' where ID = '"+ darabolt[0] + "'");
+                   }
+                   
                }              
                                         
                stmt.close();

@@ -3222,7 +3222,13 @@ public class SQL
                 stmt.execute(querry);
                 resultSet = stmt.getResultSet();
                 
-                Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
+                //Gepes_ellenorok.table.setModel(buildTableModel(resultSet));
+                while(resultSet.next())
+                {
+                    Gepes_ellenorok.modell.addRow(new Object[]{resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6),
+                            resultSet.getString(7),resultSet.getString(8),resultSet.getString(9),resultSet.getString(10),resultSet.getString(11),resultSet.getString(12),resultSet.getString(13),
+                            resultSet.getString(14),resultSet.getString(15),resultSet.getString(16),resultSet.getString(17),resultSet.getString(18)});
+                }
                 
                 stmt.execute(querry2);
                 resultSet = stmt.getResultSet();

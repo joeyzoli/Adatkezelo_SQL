@@ -50,6 +50,7 @@ public class OQC_adatok extends JPanel {
     private JComboBox<String> termek_box;
     private ArrayList<String[]> adatok = new ArrayList<String[]>();
     private ArrayList<String> raklapok = new ArrayList<String>();
+    private ArrayList<String[]> adatok2 = new ArrayList<String[]>();
     
     /**
      * Create the panel.
@@ -75,6 +76,16 @@ public class OQC_adatok extends JPanel {
                    int row = target.getSelectedRow(); // select a row
                    modell3.addRow(new Object[]{table.getValueAt(row, 2)});
                    table_3.setModel(modell3);
+                   String zarolt = "";
+                   if(table.getValueAt(table.getSelectedRow(), 7) == null) {System.out.println("Null értéke van!");}
+                   else {
+                       zarolt = table.getValueAt(table.getSelectedRow(), 7).toString();
+                   }
+                   String[] ideiglenes = {table.getValueAt(table.getSelectedRow(), 0).toString(), table.getValueAt(table.getSelectedRow(), 1).toString(), table.getValueAt(table.getSelectedRow(), 2).toString(),
+                           table.getValueAt(table.getSelectedRow(), 3).toString(),table.getValueAt(table.getSelectedRow(), 4).toString(),table.getValueAt(table.getSelectedRow(), 5).toString(),
+                           table.getValueAt(table.getSelectedRow(), 6).toString(),zarolt};
+                   adatok2.add(ideiglenes);
+                   modell.removeRow(table.getSelectedRow());
                    raklapok.add(String.valueOf(table.getValueAt(row, 1))+ ";" +String.valueOf(table.getValueAt(row, 2)));      //String.valueOf()
                 }
                 else if (me.getClickCount() == 1) {     // to detect doble click events
@@ -196,13 +207,27 @@ public class OQC_adatok extends JPanel {
         lblNewLabel_5.setBounds(837, 442, 168, 14);
         add(lblNewLabel_5);
         
-        table_3 = new JTable();
+        table_3 = new JTable(){
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+          };;
         JScrollPane gorgeto3 = new JScrollPane(table_3);
+        table_3.setFocusable(false);
+        table_3.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 2) {     // to detect doble click events  
+                    modell.addRow(adatok2.get(table_3.getSelectedRow()));
+                    table.setModel(modell);
+                    modell3.removeRow(table_3.getSelectedRow());
+                }   
+             }
+        });
         gorgeto3.setBounds(837, 467, 313, 158);       
         add(gorgeto3);
         
         modell3 = new DefaultTableModel();
-        modell3.setColumnIdentifiers(new Object[]{"P Vonalkód"});
+        modell3.setColumnIdentifiers(new Object[]{"P Vonalkód"});        
         table_3.setModel(modell3);
         
         JButton excel_gomb = new JButton("Excel");
@@ -308,13 +333,13 @@ public class OQC_adatok extends JPanel {
                     if(rs2 != null)
                     {
                         if(rs2.next())
-                        {
-                            String[] ideiglenes = {rs.getString(2), rs.getString(3), rs.getString(8), rs.getString(9),rs.getString(12),rs.getString(13),rs2.getString(1),rs2.getString(3)};
-                            adatok.add(ideiglenes);
+                        {                           
                             if(rs2.getString(2) != null)
                             {
                                 if(rs2.getString(2).equals("Nem"))
-                                {                                   
+                                {
+                                    String[] ideiglenes = {rs.getString(2), rs.getString(3), rs.getString(8), rs.getString(9),rs.getString(12),rs.getString(13),rs2.getString(1),rs2.getString(3)};
+                                    adatok.add(ideiglenes);
                                     modell.addRow(new Object[]{rs.getString(2), rs.getString(3), rs.getString(8), rs.getString(9),rs.getString(12),rs.getString(13),rs2.getString(1),rs2.getString(3)});
                                 }
                             }

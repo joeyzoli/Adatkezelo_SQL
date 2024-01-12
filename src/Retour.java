@@ -363,16 +363,16 @@ public class Retour extends JPanel
                         {
                             if(table.getValueAt(szamlalo, 0).toString().equals(datatable.getRows().get(szamlalo2).getString(0)) || table.getValueAt(szamlalo, 1).toString().equals(datatable.getRows().get(szamlalo2).getString(0)))
                             {
-                                String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                        + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"')";
+                                String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa, RMA) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
+                                        + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"','"+ rma_mezo.getText() +"')";
                                 iro.mindenes(sql);
                             }
                         }
                     }
                     else
                     {
-                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"')";
+                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
+                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ rma_mezo.getText() +")";
                         iro.mindenes(sql);
                     }
                 }

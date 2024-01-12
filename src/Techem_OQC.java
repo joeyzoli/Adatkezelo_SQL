@@ -893,18 +893,18 @@ public class Techem_OQC extends JPanel {
                 SQA_SQL letolt = new SQA_SQL();
                 if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
                 {
-                    String sql = "select yearweek(datum) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
+                    String sql = "select yearweek(datum, 1) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
                             + "from qualitydb.Techem_OQC\r\n"
                             + "where datum >= '"+ datumtol2_mezo.getText() +"' and datum <= '"+ datumig2_mezo.getText() +"' and szeriaszam like '4TCH%' \r\n"
-                            + "group by yearweek(datum)";
+                            + "group by yearweek(datum, 1)";
                     letolt.minden_excel(sql, "KPI adatok.xlsx");
                 }
                 else
                 {
-                    String sql = "select yearweek(datum) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
+                    String sql = "select yearweek(datum, 1) as Ev_het, count(Szeriaszam) as Ellenorzott_szeriaszam, sum(if(megjegyzes = '', 0,1)) as Hibas_darab\r\n"
                             + "from qualitydb.Techem_OQC\r\n"
                             + "where datum >= '"+ datumtol2_mezo.getText() +"' and datum <= '"+ datumig2_mezo.getText() +"' and szeriaszam like 'F003764210%' \r\n"
-                            + "group by yearweek(datum)";
+                            + "group by yearweek(datum, 1)";
                     letolt.minden_excel(sql, "KPI adatok.xlsx");
                 }
                 
