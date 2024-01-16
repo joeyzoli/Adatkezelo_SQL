@@ -372,8 +372,12 @@ public class SQA_bevitel extends JPanel {
         lblNewLabel_34.setBounds(251, 474, 86, 14);
         add(lblNewLabel_34);
         
+        Utolso_sor sorszam = new Utolso_sor();
+        int kovetkezo = Integer.parseInt(sorszam.utolso("qualitydb.SQA_reklamaciok"));
+        id_mezo.setText(String.valueOf(kovetkezo + 1));
+        
         link_mezo = new JTextField();
-        link_mezo.setText("2024\\");            //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
+        link_mezo.setText("2024\\"+ id_mezo.getText());            //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);
@@ -406,11 +410,7 @@ public class SQA_bevitel extends JPanel {
         ujranyit_gomb.addActionListener(new Ujranyit());
         ujranyit_gomb.setBounds(477, 932, 89, 23);
         add(ujranyit_gomb);
-        
-        Utolso_sor sorszam = new Utolso_sor();
-        int kovetkezo = Integer.parseInt(sorszam.utolso("qualitydb.SQA_reklamaciok"));
-        id_mezo.setText(String.valueOf(kovetkezo + 1));
-        
+
         d_csekk = new JCheckBox("");
         d_csekk.setBounds(71, 470, 23, 23);
         add(d_csekk);
@@ -471,6 +471,11 @@ public class SQA_bevitel extends JPanel {
         JLabel lblNewLabel_4 = new JLabel("Összérték");
         lblNewLabel_4.setBounds(1049, 360, 85, 14);
         add(lblNewLabel_4);
+        
+        JButton letrehoz_gomb = new JButton("Mappa létrehozása");
+        letrehoz_gomb.addActionListener(new Mappa_letrehoz());
+        letrehoz_gomb.setBounds(726, 516, 136, 23);
+        add(letrehoz_gomb);
        
         beszallitok.clear();
         gyartok.clear();
@@ -840,6 +845,12 @@ public class SQA_bevitel extends JPanel {
         JLabel lblNewLabel_4 = new JLabel("Összérték");
         lblNewLabel_4.setBounds(1049, 360, 85, 14);
         add(lblNewLabel_4);
+        
+        JButton letrehoz_gomb = new JButton("Mappa létrehozása");
+        letrehoz_gomb.setBounds(726, 516, 136, 23);
+        add(letrehoz_gomb);
+        
+        letrehoz_gomb.addActionListener(new Mappa_letrehoz());
         
         letezik = 1;
         
@@ -1581,7 +1592,7 @@ public class SQA_bevitel extends JPanel {
                                     +"','"+intezked+"','"+hibas+"','"+megjelen+"','"+kezdet
                                     +"','"+dev+"','"+egysegar+"','"+ertek
                                     +"','"+besz_valasz+"','"+gyoker+"','"+terit+"','"+koltseg+"','"+veszt
-                                    +"','"+link2+"','"+ d +"','"+ cn +"','"+ megnevezes +"'','"+ mindenertek_mezo.getText() +")";
+                                    +"','"+link2+"','"+ d +"','"+ cn +"','"+ megnevezes +"','"+ mindenertek_mezo.getText() +"')";
                         }
                         lekerdezes.mindenes(sql);
                         futoid_mezo.setText("");
@@ -2089,6 +2100,35 @@ public class SQA_bevitel extends JPanel {
          }
     }
     
+    class Mappa_letrehoz implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                link = new File("\\\\10.1.0.11\\minosegbiztositas\\SQA\\\\reklamációk\\"+link_mezo.getText()+"\\");
+                if(link.exists()){System.out.println("Létezik");}
+                else
+                {
+                    link.mkdirs();
+                    System.out.println("Nem Létezik");
+                    //link.createNewFile();  
+                }
+                
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
     private class Sorvalaszto implements ListSelectionListener {
 
         @Override
@@ -2152,13 +2192,35 @@ public class SQA_bevitel extends JPanel {
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                     int sor = table.getSelectedRow();
+                    if(sor < 0)
+                    {
+                        sor = 0;
+                    }
                     osszertek_mezo.setText(String.valueOf(Integer.parseInt(hibasdb_mezo.getText()) * Integer.parseInt(table.getValueAt(sor, 6).toString())));
                     int ertek = 0;
-                    for(int szamlalo = 0; szamlalo < osszertek.length; szamlalo++)
+                    if(osszertek.length > 1)
                     {
-                        ertek += Integer.parseInt(osszertek[szamlalo]);
+                        for(int szamlalo = 0; szamlalo < osszertek.length; szamlalo++)
+                        {
+                            try
+                            {
+                                ertek += Integer.parseInt(osszertek[szamlalo]);
+                            }
+                            catch (Exception e1) 
+                            {
+                                e1.printStackTrace();                           
+                            }
+                        }
+                        System.out.println("Több sor");
+                        mindenertek_mezo.setText(String.valueOf(ertek));
                     }
-                    mindenertek_mezo.setText(String.valueOf(ertek));
+                    if(table.getRowCount() == 1)
+                    {
+                        System.out.println(osszertek_mezo.getText());
+                        mindenertek_mezo.setText(osszertek_mezo.getText());
+                        System.out.println("Csak 1 sor");
+                    }
+                    
                     Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 }
             }

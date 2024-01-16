@@ -2012,7 +2012,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("02"))
             {
                 sheet.getCellRange("R" + cella4).setText("Február");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".02.28', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".03.01' and Datum <= '"+ ig +".02.28'";
                 stmt.execute(sql);
@@ -2027,7 +2027,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
             {                
                 sheet.getCellRange("R" + cella4).setText("Január");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".01.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".02.01' and Datum <= '"+ ig +".01.31'";
                 stmt.execute(sql);
@@ -2042,7 +2042,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("03"))
             {
                 sheet.getCellRange("R" + cella4).setText("Március");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".03.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".04.01' and Datum <= '"+ ig +".03.31'";
                 stmt.execute(sql);
@@ -2057,7 +2057,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("04"))
             {
                 sheet.getCellRange("R" + cella4).setText("Április");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".04.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".05.01' and Datum <= '"+ ig +".04.30'";
                 stmt.execute(sql);
@@ -2072,7 +2072,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("05"))
             {
                 sheet.getCellRange("R" + cella4).setText("Május");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".05.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".06.01' and Datum <= '"+ ig +".05.31'";
                 stmt.execute(sql);
@@ -2087,7 +2087,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("06"))
             {
                 sheet.getCellRange("R" + cella4).setText("Június");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".06.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".07.01' and Datum <= '"+ ig +".06.30'";
                 stmt.execute(sql);
@@ -2102,7 +2102,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("07"))
             {
                 sheet.getCellRange("R" + cella4).setText("Július");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".07.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".08.01' and Datum <= '"+ ig +".07.31'";
                 stmt.execute(sql);
@@ -2117,7 +2117,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("08"))
             {
                 sheet.getCellRange("R" + cella4).setText("Augusztus");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".08.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".09.01' and Datum <= '"+ ig +".08.31'";
                 stmt.execute(sql);
@@ -2132,7 +2132,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("09"))
             {
                 sheet.getCellRange("R" + cella4).setText("Szeptember");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".09.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".10.01' and Datum <= '"+ ig +".09.30'";
                 stmt.execute(sql);
@@ -2147,7 +2147,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("10"))
             {
                 sheet.getCellRange("R" + cella4).setText("Október");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".10.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".11.01' and Datum <= '"+ ig +".10.31'";
                 stmt.execute(sql);
@@ -2162,9 +2162,9 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("11"))
             {
                 sheet.getCellRange("R" + cella4).setText("November");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".11.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "where 3=3 and Datum >= '"+ tol +".12.01' and Datum <= '"+ ig +".03.31'";
+                        + "where 3=3 and Datum >= '"+ tol +".12.01' and Datum <= '"+ ig +".11.30'";
                 stmt.execute(sql);
                 resultSet = stmt.getResultSet();
                 if(resultSet.next())
@@ -2177,7 +2177,7 @@ public class SQL
             if(datatable6.getRows().get(szamlalo).getString(0).contains("12"))
             {
                 sheet.getCellRange("R" + cella4).setText("December");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".12.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ ig +".01.01' and Datum <= '"+ ig +".12.31'";
                 stmt.execute(sql);
@@ -2202,7 +2202,7 @@ public class SQL
         
         Chart chart5 = sheet.getCharts().add();
         chart5.setChartTitle("Nyitott és lezárt visszajelzés és reklamáció");
-        chart5.setDataRange(sheet.getCellRange("R1:W14"));
+        chart5.setDataRange(sheet.getCellRange("R1:W13"));
         chart5.setSeriesDataFromRange(false);
         chart5.getPrimaryValueAxis().setTitle("Reklamáció db szám");
         chart5.getSecondaryValueAxis().setTitle("Átlag nyitva nap");

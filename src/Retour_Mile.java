@@ -51,7 +51,7 @@ public class Retour_Mile extends JPanel {
 
     }
     
-    class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
+    class Lekerdezes implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
          {

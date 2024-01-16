@@ -61,7 +61,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         datumtol = new JTextField();
         datumtol.setBounds(520, 90, 86, 20);
-        datumtol.setText("2022.08.01");
+        datumtol.setText("2023.01.01");
         add(datumtol);
         datumtol.setColumns(10);
         
