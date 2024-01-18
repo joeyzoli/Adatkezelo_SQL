@@ -87,6 +87,8 @@ public class Foablak extends JFrame
 	private Techem_OQC techem;
 	private AIN_fordito fordito;
 	private OQC_valaszto oqcvalaszto;
+	private Kockazatimatrix_felvetel felvetel;
+	private Kockazatimatrix_ertekeles ertekeles;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -320,6 +322,21 @@ public class Foablak extends JFrame
 		iqc_1.addActionListener(new PanelCsere_iqc());
 		beszallitoi_ppm.addActionListener(new PanelCsere_beszallitoi_ppm());
 		avm_csomagolas.addActionListener(new PanelCsere_avm());
+		
+		JMenu kockazatimatrix = new JMenu("Kockázatimátrix");
+		kockazatimatrix.setForeground(new Color(0, 153, 0));
+		menuBar.add(kockazatimatrix);
+		
+		JMenuItem matrix_felvetel = new JMenuItem("Kockázat felvétele");
+		matrix_felvetel.addActionListener(new Panelcsere_Kocakazatimatrix_felvetel());
+		kockazatimatrix.add(matrix_felvetel);
+		
+		JMenuItem matrix_ertekeles = new JMenuItem("Kockázat értékelése");
+		matrix_ertekeles.addActionListener(new Panelcsere_Kocakazatimatrix_ertekeles());
+		kockazatimatrix.add(matrix_ertekeles);
+		
+		JMenuItem matrix_osszesit = new JMenuItem("Kockázat összesítés");
+		kockazatimatrix.add(matrix_osszesit);
 		
 		JMenu egyeb = new JMenu("Egyéb");
 		menuBar.add(egyeb);
@@ -937,6 +954,28 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Kocakazatimatrix_felvetel implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            felvetel = new Kockazatimatrix_felvetel();
+            JScrollPane ablak = new JScrollPane(felvetel);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Kocakazatimatrix_ertekeles implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            ertekeles = new Kockazatimatrix_ertekeles();
+            JScrollPane ablak = new JScrollPane(ertekeles);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1070,7 +1109,12 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
-            
+            /*String kerdojel = "";
+            for(int szamlalo = 1; szamlalo < 63; szamlalo++)
+            {
+                kerdojel += "?,";
+            }
+            System.out.println(kerdojel);
             //System.out.println(System.getProperty("user.name"));
             /*
             Runtime runtime = Runtime.getRuntime();

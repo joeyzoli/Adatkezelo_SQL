@@ -840,6 +840,9 @@ public class Zarolasok_bevitel extends JPanel {
                 projekt_box.setSelectedIndex(1);
                 tipus_box.setSelectedIndex(1);
                 zarolta_box.setSelectedIndex(1);
+                
+                int kovetkezo = Integer.parseInt(id_mezo.getText());
+                id_mezo.setText(String.valueOf(kovetkezo + 1));
             }
             catch (Exception e1) 
             {

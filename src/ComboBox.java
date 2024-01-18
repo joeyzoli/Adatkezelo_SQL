@@ -31,6 +31,9 @@ public class ComboBox
     static final String socomec_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Socomec_rovid.csv";
     static final String hager = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager.csv";
     static final String hager_rovid = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Hager_rovid.csv";
+    static final String kockazati_vezetok = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kockázatimátrix\\Kockázatimátrix vezetők.csv";
+    static final String kockazati_folyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kockázatimátrix\\Kockázatimártix folyamat.csv";
+    static final String kockazati_alfolyamat = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kockázatimátrix\\Kockázatimátrix alfolyamat.csv";
     
 	
 	private void listakeszito(String hely)																						//VT-azonosítókat dolgozza fel

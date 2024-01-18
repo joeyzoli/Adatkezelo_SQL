@@ -643,7 +643,7 @@ public class Ellenori_lapok extends JPanel {
             stmt = (Statement) conn.createStatement();
             Utolso_sor id = new Utolso_sor();
             String sorszam = id.utolso("qualitydb.Ellenori_lapok"); 
-            String sql = "select *, yearweek(Datum) from qualitydb.Ellenori_lapok where id = '"+ sorszam + "'";
+            String sql = "select *, yearweek(Datum, 1) from qualitydb.Ellenori_lapok where id = '"+ sorszam + "'";
             stmt.execute(sql);
             ResultSet rs = stmt.getResultSet();
             if(rs.next())
@@ -653,7 +653,8 @@ public class Ellenori_lapok extends JPanel {
                 String[] socomec  = rs.getString(7).split(";");String[] loxonefolyamat = rs.getString(8).split(";");String[] loxonewallbox  = rs.getString(9).split(";");
                 String[] techem  = rs.getString(10).split(";");String[] proglove  = rs.getString(11).split(";");String[] hc  = rs.getString(12).split(";");//String[] chamber  = rs.getString(13).split(";");
                 String evhet = rs.getString(14);
-                String[] het = evhet.split("2023");
+                String[] ev = datum_mezo.getText().split("\\.");
+                String[] het = evhet.split(ev[0]);
                 stmt.close();
                 conn.close();
                 
