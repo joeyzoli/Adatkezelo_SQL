@@ -3,6 +3,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -27,6 +29,7 @@ import com.spire.xls.Worksheet;
 import javax.swing.JCheckBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JTextField;
 
 public class Kockazatimatrix_felvetel extends JPanel {
     private JTable table;
@@ -42,6 +45,8 @@ public class Kockazatimatrix_felvetel extends JPanel {
     private JCheckBox vezeto17;private JCheckBox vezeto18;private JCheckBox vezeto19;
     private ArrayList<String> kivalasztott = new ArrayList<String>();
     private String link = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kockázatimátrix\\Kockázatimátrix folyamat és alfolyamat.xlsx";
+    private JLabel lblNewLabel_7;
+    private JTextField kulcsszo_mezo;
     
 
     /**         1400*910
@@ -77,7 +82,7 @@ public class Kockazatimatrix_felvetel extends JPanel {
         add(alfolyamat_box);
         
         JLabel lblNewLabel_3 = new JLabel("Meglévő kockázatok");
-        lblNewLabel_3.setBounds(229, 185, 124, 14);
+        lblNewLabel_3.setBounds(69, 222, 124, 14);
         add(lblNewLabel_3);
         
         modell = new DefaultTableModel();
@@ -85,23 +90,23 @@ public class Kockazatimatrix_felvetel extends JPanel {
         table = new JTable(modell);
         table.getSelectionModel().addListSelectionListener(new Sorvalaszto());
         JScrollPane gorgeto = new JScrollPane(table);
-        gorgeto.setBounds(36, 207, 1318, 188);
+        gorgeto.setBounds(36, 247, 1318, 188);
         add(gorgeto);
         
         JLabel lblNewLabel_4 = new JLabel("Új kockázat");
-        lblNewLabel_4.setBounds(229, 420, 104, 14);
+        lblNewLabel_4.setBounds(229, 451, 104, 14);
         add(lblNewLabel_4);
         
         ujkockazat_mezo = new JTextArea();
         ujkockazat_mezo.setLineWrap(true);
         ujkockazat_mezo.setWrapStyleWord(true);
-        ujkockazat_mezo.setBounds(354, 420, 366, 99);
+        ujkockazat_mezo.setBounds(354, 446, 366, 99);
         add(ujkockazat_mezo);
         
         setBackground(Foablak.hatter_szine);
         
         JLabel lblNewLabel_5 = new JLabel("Vezetők");
-        lblNewLabel_5.setBounds(229, 537, 71, 14);
+        lblNewLabel_5.setBounds(69, 547, 71, 14);
         add(lblNewLabel_5);
         
         vezeto1 = new JCheckBox("Klambauer Csaba");
@@ -186,16 +191,49 @@ public class Kockazatimatrix_felvetel extends JPanel {
         add(mentes_gomb);
         
         JLabel lblNewLabel_6 = new JLabel("Jelenlegi intézkedés");
-        lblNewLabel_6.setBounds(754, 420, 124, 14);
+        lblNewLabel_6.setBounds(754, 451, 124, 14);
         add(lblNewLabel_6);
         
         intezkedes_mezo = new JTextArea();
         intezkedes_mezo.setLineWrap(true);
         intezkedes_mezo.setWrapStyleWord(true);
-        intezkedes_mezo.setBounds(888, 415, 372, 104);
+        intezkedes_mezo.setBounds(888, 446, 372, 104);
         add(intezkedes_mezo);
         
+        lblNewLabel_7 = new JLabel("Kockázat kulcsszóra keresés");
+        lblNewLabel_7.setBounds(229, 201, 184, 14);
+        add(lblNewLabel_7);
+        
+        kulcsszo_mezo = new JTextField();
+        kulcsszo_mezo.setBounds(412, 198, 379, 20);
+        add(kulcsszo_mezo);
+        kulcsszo_mezo.setColumns(10);
+        
+        JButton keres_gomb = new JButton("Keresés");
+        keres_gomb.addActionListener(new Keres());
+        keres_gomb.setBounds(820, 197, 89, 23);
+        add(keres_gomb);
+        
+        table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
+        table.getColumnModel().getColumn(1).setCellRenderer(new WordWrapCellRenderer());
+        
         kockazatok();
+    }
+    
+    private class WordWrapCellRenderer extends JTextArea implements TableCellRenderer {
+        WordWrapCellRenderer() {
+            setLineWrap(true);
+            setWrapStyleWord(true);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+            if (table.getRowHeight(row) != getPreferredSize().height) {
+                table.setRowHeight(row, getPreferredSize().height);
+            }
+            return this;
+        }
     }
     
     private void kockazatok()
@@ -789,10 +827,51 @@ public class Kockazatimatrix_felvetel extends JPanel {
                 Statement stmt = con.createStatement();
                 String sql = "Select kockazat, jelen_intezkedes from qualitydb.Kockazatimatrix_alap where Folyamat = '"+ folyamat +"' and Alfolyamat = '"+ alfolyamat +"'";
                 ResultSet rs = stmt.executeQuery(sql);
+                modell.setColumnIdentifiers(new Object[]{"Kockázatok","Jelenlegi intézkedés"}); 
                 while(rs.next())
                 {
                     modell.addRow(new Object[]{rs.getString(1),rs.getString(2)});
                 }
+                table.setModel(modell);
+                Foablak.frame.setCursor(null);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Keres implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                int rowCount = modell.getRowCount();
+                for (int i = rowCount - 1; i > -1; i--) 
+                {
+                  modell.removeRow(i);
+                }               
+                //DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                Class.forName("com.mysql.cj.jdbc.Driver");  //.driver
+                                    
+                Connection con = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                                      
+                Statement stmt = con.createStatement();
+                String sql = "Select folyamat, alfolyamat, kockazat, jelen_intezkedes from qualitydb.Kockazatimatrix_alap where kockazat Like '%"+ kulcsszo_mezo.getText() +"%'";
+                ResultSet rs = stmt.executeQuery(sql);
+                modell.setColumnIdentifiers(new Object[]{"Folyamat","Alfolyamat","Kockázatok","Jelenlegi intézkedés"}); 
+                while(rs.next())
+                {
+                    modell.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+                }
+                table.getColumnModel().getColumn(2).setCellRenderer(new WordWrapCellRenderer());
+                table.getColumnModel().getColumn(3).setCellRenderer(new WordWrapCellRenderer());
                 table.setModel(modell);
                 Foablak.frame.setCursor(null);
             } 

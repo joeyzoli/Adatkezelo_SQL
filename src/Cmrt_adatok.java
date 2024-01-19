@@ -75,6 +75,8 @@ public class Cmrt_adatok extends JPanel {
         rendeles_gomb.addActionListener(new Redndelesek());
         rendeles_gomb.setBounds(661, 253, 89, 23);
         add(rendeles_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

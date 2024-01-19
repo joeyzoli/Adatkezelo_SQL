@@ -89,6 +89,7 @@ public class Foablak extends JFrame
 	private OQC_valaszto oqcvalaszto;
 	private Kockazatimatrix_felvetel felvetel;
 	private Kockazatimatrix_ertekeles ertekeles;
+	private Kockazatimatrix_osszesites osszesites;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -336,6 +337,7 @@ public class Foablak extends JFrame
 		kockazatimatrix.add(matrix_ertekeles);
 		
 		JMenuItem matrix_osszesit = new JMenuItem("Kockázat összesítés");
+		matrix_osszesit.addActionListener(new Panelcsere_Kocakazatimatrix_osszesites());
 		kockazatimatrix.add(matrix_osszesit);
 		
 		JMenu egyeb = new JMenu("Egyéb");
@@ -971,6 +973,17 @@ public class Foablak extends JFrame
          {
             ertekeles = new Kockazatimatrix_ertekeles();
             JScrollPane ablak = new JScrollPane(ertekeles);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Kocakazatimatrix_osszesites implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            osszesites = new Kockazatimatrix_osszesites();
+            JScrollPane ablak = new JScrollPane(osszesites);
             setContentPane(ablak);
             pack();
          }

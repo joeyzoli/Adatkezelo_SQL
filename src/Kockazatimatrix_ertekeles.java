@@ -17,6 +17,7 @@ import java.sql.Statement;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -57,6 +58,18 @@ public class Kockazatimatrix_ertekeles extends JPanel {
         modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"Folyamat","Alfolyamat","Kockázat","Jelen intézkedés","Valószínűség","Következmény"});
         table = new JTable(modell);
+        table.setRowHeight(32);
+        /*table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 1) {     // to detect doble click events
+                    int columnIndex = table.getSelectedColumn();
+                    
+                }
+             }
+          });  */     
+        table.getColumnModel().getColumn(1).setCellRenderer(new WordWrapCellRenderer());
+        table.getColumnModel().getColumn(2).setCellRenderer(new WordWrapCellRenderer());
+        table.getColumnModel().getColumn(3).setCellRenderer(new WordWrapCellRenderer());
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(40, 221, 1350, 239);
         add(gorgeto);
@@ -70,6 +83,22 @@ public class Kockazatimatrix_ertekeles extends JPanel {
 
     }
     
+    private class WordWrapCellRenderer extends JTextArea implements TableCellRenderer {
+        WordWrapCellRenderer() {
+            setLineWrap(true);
+            setWrapStyleWord(true);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+            if (table.getRowHeight(row) != getPreferredSize().height) {
+                table.setRowHeight(row, getPreferredSize().height);
+            }
+            return this;
+        }
+    }
+
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -165,7 +194,6 @@ public class Kockazatimatrix_ertekeles extends JPanel {
                 {
                     sql = "select Folyamat, Alfolyamat, Kockazat, Jelen_intezkedes, FT_v, FT_K from qualitydb.Kockazatimatrix_alap where FT_kell = 'x'";
                 }
-                
                 ResultSet rs = stmt.executeQuery(sql);
                 while(rs.next())
                 {
@@ -226,119 +254,122 @@ public class Kockazatimatrix_ertekeles extends JPanel {
                 {
                     if(vezeto.equals("Klambauer Csaba"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set KCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and KCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set KCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', KCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Tóth Attila"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set TA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and TA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set TA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', TA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Fábián Zoltán"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set FZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and FZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set FZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', FZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Sinkó Szabolcs"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set SSZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and SSZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set SSZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', SSZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Bakk Attila"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set BaA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and BaA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set BaA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', BaA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Faragó András"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set FA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and FA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set FA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', FA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Tóth Csaba"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set TCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and TCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set TCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', TCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Breznai András"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set BrA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and BrA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set BrA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', BrA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Müller Tamás"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set MT_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and MT_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set MT_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', MT_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Makk Áron"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set MA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and MA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set MA_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', MA_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Pass Zoltán"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set PZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and PZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set PZ_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', PZ_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Bakter László"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set BL_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and BL_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set BL_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', BL_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Dr. Gódányné T. Katalin"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set TK_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and TK_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set TK_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', TK_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Bolla Balázs"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set BB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and BB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set BB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', BB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Purmann Ildikó"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set PI_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and PI_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set PI_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', PI_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Csókás-Fülöp Brigitta"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set FB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and FB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set FB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', FB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Krausz Balázs"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set KB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and KB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set KB_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', KB_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else if(vezeto.equals("Mikó Csaba"))
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set MCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and MCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set MCS_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', MCS_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
                                 + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
                     }
                     else
                     {
-                        sql = "update qualitydb.Kockazatimatrix_alap set FT_v = '"+ table.getValueAt(szamlalo, 4).toString() +"' and FT_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
+                        sql = "update qualitydb.Kockazatimatrix_alap set FT_v = '"+ table.getValueAt(szamlalo, 4).toString() +"', FT_K = '"+ table.getValueAt(szamlalo, 5).toString() +"' "
                                 + "where folyamat = '"+ table.getValueAt(szamlalo, 0).toString() +"' and alfolyamat = '"+ table.getValueAt(szamlalo, 1).toString() +"' and "
-                                + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";                       
+                                + "kockazat = '"+ table.getValueAt(szamlalo, 2).toString() +"' and jelen_intezkedes = '"+ table.getValueAt(szamlalo, 3).toString() +"'";
+                        System.out.println(table.getValueAt(szamlalo, 0).toString() +" és "+ table.getValueAt(szamlalo, 1).toString());
+                        System.out.println(table.getValueAt(szamlalo, 2).toString() +" és "+ table.getValueAt(szamlalo, 3).toString());
+                        System.out.println(table.getValueAt(szamlalo, 4).toString() +" és "+ table.getValueAt(szamlalo, 5).toString());
                     }
-                    System.out.println(table.getValueAt(szamlalo, 4).toString() +" és "+ table.getValueAt(szamlalo, 5).toString());
+                    
                     ment.mindenes(sql);
                 }
                 
