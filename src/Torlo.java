@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_frissit());
+		feltolt.addActionListener(new Hanyszor_tesztelve());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2084,7 +2084,7 @@ public class Torlo extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
-            String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Eredmények_FD301.xlsx";                             
+            String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Eredmények.xlsx";                             
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
             Workbook workbook = new Workbook();
             workbook.loadFromFile(excelfile1);

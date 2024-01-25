@@ -75,6 +75,11 @@ public class Kockazatimatrix_osszesites extends JPanel {
         add(gorgeto);
         
         setBackground(Foablak.hatter_szine);
+        
+        JButton megnyit_gomb = new JButton("Intézkedés megnyitása");
+        megnyit_gomb.addActionListener(new Kovetkezo());
+        megnyit_gomb.setBounds(507, 512, 199, 23);
+        add(megnyit_gomb);
 
     }
     
@@ -428,11 +433,37 @@ public class Kockazatimatrix_osszesites extends JPanel {
                             width=300;
                         columnModel.getColumn(column).setPreferredWidth(width);
                     }
-                    //table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
-                    //table.getColumnModel().getColumn(1).setCellRenderer(new WordWrapCellRenderer());
+                    
                     table.setModel(modell);
+                    table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
+                    table.getColumnModel().getColumn(1).setCellRenderer(new WordWrapCellRenderer());
                 }
                 Foablak.frame.setCursor(null);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Kovetkezo implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                int sor = table.getSelectedRow();
+                Kockazatimatrix_intezkedes intezkedes = new Kockazatimatrix_intezkedes(table.getValueAt(sor, 0).toString(),table.getValueAt(sor, 1).toString(),table.getValueAt(sor, 4).toString());
+                JScrollPane ablak = new JScrollPane(intezkedes);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
+                Foablak.frame.pack();
             } 
             catch (Exception e1) 
             {              

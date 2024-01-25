@@ -766,93 +766,110 @@ public class Zarolasok_bevitel extends JPanel {
                 ResultSet rs = stmt.executeQuery(SQL);
                 String sql = "";
                 String technikus = "Nem";
-                if(rs.next())
+                
+                if(ido_mezo.getText().equals(""))
                 {
-                    if(technikus_csekk.isSelected())
-                    {
-                        technikus = "Igen";
-                        
-                    }
-                    sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
-                            + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
-                            + "muszak ='"+ muszak_mezo.getText() +"',Zarolo_mernok = '"+ mernok_mezo.getText() +"',Zarolt_db ='"+Integer.parseInt(zaroltdb_mezo.getText())+"',Hol_van ='"+ zarolas_helye.getText() +"',"
-                            + "Zarolas_oka ='"+ zarolasoka_mezo.getText() +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
-                            + "Zarolta ='"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
-                            + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
-                            + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
-                            + "Felelos ='"+ felelos_mezo.getText() +"',Hiba_gyokeroka ='"+ gyokerok_mezo.getText() +"',Gyokerok_intezkedes ='"+ gyokerintezkedes_mezo.getText() +"',"
-                            + "B2_zarolas ='"+ b2_mezo.getText() +"',visszaellenorzes ='"+ visszaellenorzes_mezo.getText() +"',ME_szam ='"+ meszam_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
-                    
+                    ido_mezo.setText("0");
                 }
+                if(datum_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátumot!!", "Hiba üzenet", 2);
+                }
+                else if(zaroltdb_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg darabszámot!!", "Hiba üzenet", 2);
+                }            
                 else
                 {
-                    if(technikus_csekk.isSelected())
+                    if(rs.next())
                     {
-                        technikus = "Igen";
-                        Email uzenet = new Email();
-                        if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                        if(technikus_csekk.isSelected())
                         {
-                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
+                            technikus = "Igen";
+                            
                         }
-                        else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
-                        {
-                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
-                        }
-                        else
-                        {
-                            uzenet.zarolas_email("automataemail@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                    zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
-                        }                                               
+                        sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
+                                + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
+                                + "muszak ='"+ muszak_mezo.getText() +"',Zarolo_mernok = '"+ mernok_mezo.getText() +"',Zarolt_db ='"+Integer.parseInt(zaroltdb_mezo.getText())+"',Hol_van ='"+ zarolas_helye.getText() +"',"
+                                + "Zarolas_oka ='"+ zarolasoka_mezo.getText() +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
+                                + "Zarolta ='"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
+                                + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
+                                + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
+                                + "Felelos ='"+ felelos_mezo.getText() +"',Hiba_gyokeroka ='"+ gyokerok_mezo.getText() +"',Gyokerok_intezkedes ='"+ gyokerintezkedes_mezo.getText() +"',"
+                                + "B2_zarolas ='"+ b2_mezo.getText() +"',visszaellenorzes ='"+ visszaellenorzes_mezo.getText() +"',ME_szam ='"+ meszam_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
+                        
                     }
-                    sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
-                            + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
-                            + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam) "
-                            + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
-                            + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
-                            + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
-                            + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
-                            + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
-                                    + ",'"+ meszam_mezo.getText() +"')";
+                    else
+                    {
+                        if(technikus_csekk.isSelected())
+                        {
+                            technikus = "Igen";
+                            Email uzenet = new Email();
+                            if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                            {
+                                uzenet.zarolas_email("automataemail@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                        zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
+                            }
+                            else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                            {
+                                uzenet.zarolas_email("automataemail@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                        zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
+                            }
+                            else
+                            {
+                                uzenet.zarolas_email("automataemail@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                        zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText());
+                            }                                               
+                        }
+                        sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
+                                + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
+                                + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam) "
+                                + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
+                                + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
+                                + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
+                                + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
+                                + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
+                                        + ",'"+ meszam_mezo.getText() +"')";
+                        
+                    }
+                    lekerdezes.mindenes(sql);
+                    eszleleshelye_mezo.setText("");
+                    muszak_mezo.setText("");
+                    mernok_mezo.setText("");
+                    zaroltdb_mezo.setText("0");
+                    zarolas_helye.setText("");
+                    zarolasoka_mezo.setText("");
+                    intezkedes_mezo.setText("");
+                    datum_mezo.setText("");
+                    sorszam_mezo.setText("");
+                    eredmeny_mezo.setText("");
+                    ujradatum_mezo.setText("");
+                    ido_mezo.setText("");
+                    technikus_csekk.setSelected(false);
+                    felelos_mezo.setText("");
+                    gyokerok_mezo.setText("");
+                    gyokerintezkedes_mezo.setText("");
+                    b2_mezo.setText("");
+                    visszaellenorzes_mezo.setText("");
+                    meszam_mezo.setText("");
+                    projekt_box.setSelectedIndex(1);
+                    tipus_box.setSelectedIndex(1);
+                    zarolta_box.setSelectedIndex(1);
                     
+                    int kovetkezo = Integer.parseInt(id_mezo.getText());
+                    id_mezo.setText(String.valueOf(kovetkezo + 1));
                 }
-                lekerdezes.mindenes(sql);
-                eszleleshelye_mezo.setText("");
-                muszak_mezo.setText("");
-                mernok_mezo.setText("");
-                zaroltdb_mezo.setText("0");
-                zarolas_helye.setText("");
-                zarolasoka_mezo.setText("");
-                intezkedes_mezo.setText("");
-                datum_mezo.setText("");
-                sorszam_mezo.setText("");
-                eredmeny_mezo.setText("");
-                ujradatum_mezo.setText("");
-                ido_mezo.setText("");
-                technikus_csekk.setSelected(false);
-                felelos_mezo.setText("");
-                gyokerok_mezo.setText("");
-                gyokerintezkedes_mezo.setText("");
-                b2_mezo.setText("");
-                visszaellenorzes_mezo.setText("");
-                meszam_mezo.setText("");
-                projekt_box.setSelectedIndex(1);
-                tipus_box.setSelectedIndex(1);
-                zarolta_box.setSelectedIndex(1);
-                
-                int kovetkezo = Integer.parseInt(id_mezo.getText());
-                id_mezo.setText(String.valueOf(kovetkezo + 1));
             }
-            catch (Exception e1) 
-            {
-                e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-            }
-            Foablak.frame.setCursor(null);                                                                                         //egér mutató alaphelyzetbe állítása
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                }
+                Foablak.frame.setCursor(null);                                                                                         //egér mutató alaphelyzetbe állítása
+            
            
          }
     }

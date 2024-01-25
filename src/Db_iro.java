@@ -226,33 +226,23 @@ public class Db_iro
            
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
-        String sql = "select * from qualitydb.Vevoireklamacio_detekt where ID = '" + id +"' and Felelos = '" + felelos + "'";
+        String sql = "select * from qualitydb.Vevoireklamacio_detekt where ID = '" + id +"' and Felelos = '" + felelos + "' and Intezkedes = '" + intezkedes + "' and hatarido = '" + hatarido + "'";
         stmt.execute(sql);
         ResultSet rs = stmt.getResultSet();
         if(rs.next())
         {
-            System.out.println("Van ilyen");
             String query1 = "Update qualitydb.Vevoireklamacio_detekt set  Intezkedes = '"+intezkedes+"', Hatarido = '" + hatarido +"' where "
-                    + "ID = '"+ rs.getString(1) +"' and  Felelos = '" + felelos + "' "; 
+                    + "sorszam = '"+ rs.getString(10) +"'";
             stmt.executeUpdate(query1);
         }
         else
         {
-            System.out.println("nincs ilyen");
             String query1 = "INSERT INTO qualitydb.Vevoireklamacio_detekt (Datum, Cikkszam, Intezkedes, Felelos, Hatarido)" + 
                             "VALUES ('" + datum +"', '"+ koztes[0]+"', '"+intezkedes+"', '" + felelos + "', '" + hatarido +"')"; 
             stmt.executeUpdate(query1);                                                                                                             //sql utasítás végrehajtása
         }
         //+ szam +",
-        } 
-        catch (SQLException e1)                                                     //kivétel esetén történik
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
-        } 
+        }         
         catch (Exception e) 
         {
            e.printStackTrace();

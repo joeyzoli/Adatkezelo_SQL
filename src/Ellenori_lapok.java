@@ -57,7 +57,7 @@ public class Ellenori_lapok extends JPanel {
     private JCheckBox de11;
     private JCheckBox du11;
     private JCheckBox ej11;
-    private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Gyártási_minőség_követése\\Gyártási minőségbiztosítás\\Minőségellenőrzési csoport\\Beosztás MEO 250-es épület 2023.xlsx";
+    private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Gyártási_minőség_követése\\Gyártási minőségbiztosítás\\Minőségellenőrzési csoport\\Beosztás MEO 250-es épület 2024.xlsx";
     private Workbook excel;
     private Worksheet sheet;
 

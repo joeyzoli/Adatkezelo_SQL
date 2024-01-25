@@ -198,7 +198,7 @@ public class Techem_OQC extends JPanel {
                 
                 stmt.execute("Select location_no from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
                         + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0\r\n"
-                        + "and location_no like 'TE0%' group by location_no");          //TE0%
+                        + " group by location_no");          //TE0%                 and location_no like 'TE0%'
                 //int szam = 1;
                 
                 rs = stmt.getResultSet();
