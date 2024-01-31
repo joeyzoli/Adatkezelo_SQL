@@ -89,24 +89,24 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_3);
         
         tipus_box = new JComboBox<String>(cikkszamok());                      //cikkszamok()
-        tipus_box.setBounds(362, 84, 212, 22);
+        tipus_box.setBounds(362, 84, 283, 22);
         add(tipus_box);
         
         JLabel lblNewLabel_4 = new JLabel("Észlelés helye");
-        lblNewLabel_4.setBounds(621, 88, 85, 14);
+        lblNewLabel_4.setBounds(664, 88, 85, 14);
         add(lblNewLabel_4);
         
         eszleleshelye_mezo = new JTextField();
-        eszleleshelye_mezo.setBounds(716, 85, 184, 20);
+        eszleleshelye_mezo.setBounds(784, 85, 184, 20);
         add(eszleleshelye_mezo);
         eszleleshelye_mezo.setColumns(10);
         
         JLabel lblNewLabel_5 = new JLabel("Műszak");
-        lblNewLabel_5.setBounds(943, 88, 46, 14);
+        lblNewLabel_5.setBounds(995, 88, 46, 14);
         add(lblNewLabel_5);
         
         muszak_mezo = new JTextField();
-        muszak_mezo.setBounds(999, 85, 46, 20);
+        muszak_mezo.setBounds(1051, 85, 46, 20);
         add(muszak_mezo);
         muszak_mezo.setColumns(10);
         
@@ -583,19 +583,21 @@ public class Zarolasok_bevitel extends JPanel {
                                 
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
             Statement stmt = con.createStatement();              
-            ResultSet rs = stmt.executeQuery("select part_no, REVISION_TEXT \r\n"
-                    + "from ifsapp.PART_REVISION\r\n"
+            ResultSet rs = stmt.executeQuery("select cikkszamok.part_no, \r\n"
+                    + "        cikkszamok.REVISION_TEXT,\r\n"
+                    + "        cikkszamok.CF$_PRODUCT_CODE_DESC \r\n"
+                    + "from ifsapp.PART_REVISION_cfv cikkszamok\r\n"
                     + "where 3 = 3 order by part_no asc");
             ArrayList<String> cikkszamok = new ArrayList<String>();
             while(rs.next())
             {
                 if(rs.getString(2) != null)
                 {
-                    cikkszamok.add(rs.getString(1)+ "-"+ rs.getString(2));
+                    cikkszamok.add(rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3));
                 }
                 else
                 {
-                    cikkszamok.add(rs.getString(1));
+                    cikkszamok.add(rs.getString(1)+ " "+ rs.getString(3));
                 }
             }
             cikkbox = cikkszamok.toArray(new String[cikkszamok.size()]);

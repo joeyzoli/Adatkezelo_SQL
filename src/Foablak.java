@@ -90,6 +90,7 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_felvetel felvetel;
 	private Kockazatimatrix_ertekeles ertekeles;
 	private Kockazatimatrix_osszesites osszesites;
+	private Forraszthatosagi_vizsgalat vizsgalat;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -208,6 +209,10 @@ public class Foablak extends JFrame
 		menu.add(ellenori_nevsor);
 		menu.add(ujadat);
 		menu.add(adat_torles);
+		
+		JMenuItem forraszthatosagi_vizsgalat = new JMenuItem("Forraszthatósági vizsgálat");
+		forraszthatosagi_vizsgalat.addActionListener(new Panelcsere_Forraszthatosag());
+		menu.add(forraszthatosagi_vizsgalat);
 		menu.add(torles);
 		
 		JMenu lekerdezes = new JMenu("Lekérdezés");
@@ -989,6 +994,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Forraszthatosag implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            vizsgalat = new Forraszthatosagi_vizsgalat();
+            JScrollPane ablak = new JScrollPane(vizsgalat);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1122,6 +1138,10 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            //Email email = new Email();
+            //email.mindenes_email("schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu", "Coming out", "Szia Norbi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Robi");
+            //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
+            //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";
             for(int szamlalo = 1; szamlalo < 63; szamlalo++)
             {
