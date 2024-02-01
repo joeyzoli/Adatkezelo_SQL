@@ -1117,14 +1117,14 @@ public class Foablak extends JFrame
         public void run()
         {
             SQL lekerdez = new SQL();
-            lekerdez.vevoi_email();            
+            lekerdez.vevoi_email();
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();
                 sqa.sqa_email();
-                sqa.retour_email();                
+                sqa.retour_email();
                 System.out.println("Lefutott az SQA email");
             }
             else
@@ -1138,6 +1138,7 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            
             //Email email = new Email();
             //email.mindenes_email("schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu", "Coming out", "Szia Norbi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Robi");
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu

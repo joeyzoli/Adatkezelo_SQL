@@ -198,43 +198,47 @@ public class Email
     
     public void hibauzenet(String feladoemail, String hibauzenet)
     {
-        Properties props = new Properties(); //new Properties();     System.getProperties();
-        
-        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
-        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
-        
-        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
-        try 
+        if(System.getProperty("user.name").equals("toth.zoltan")) {}
+        else
         {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
-            message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                           //címzett beállítása
-            message.setSubject("Hibaüzenet");                                            //tárgy beállítása
-           
-            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
-           
-            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            Properties props = new Properties(); //new Properties();     System.getProperties();
             
-            textPart.setText(hibauzenet);                                          //levél tartalmának csatolása
-            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
-                   
-            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
-            Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
-            Transport.send(message);                                                        //levél küldése
-
-            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
-        
+            props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+            props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+            
+            Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+            try 
+            {
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+                message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                           //címzett beállítása
+                message.setSubject("Hibaüzenet");                                            //tárgy beállítása
+               
+                Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+               
+                MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+                
+                textPart.setText(hibauzenet);                                          //levél tartalmának csatolása
+                multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                       
+                message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                Foablak.frame.setCursor(null);                                                  //egér mutató alaphelyzetbe állítása
+                Transport.send(message);                                                        //levél küldése
+    
+                System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+            
+            }
+            catch (Exception e1) 
+            {
+                String hibauzenet2 = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                e1.printStackTrace();
+                Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
+            }
         }
-        catch (Exception e1) 
-        {
-            String hibauzenet2 = e1.toString();
-            //Email hibakuldes = new Email();
-            //hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-            e1.printStackTrace();
-            Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
-        } 
             
     }
     
@@ -332,30 +336,31 @@ public class Email
     
     public void mindenes_email(String feladoemail, String cimzettek, String cc, String targy, String tartalom)
     {
-        Properties props = new Properties(); //new Properties();     System.getProperties();
+        Properties props =  System.getProperties(); //new Properties();     System.getProperties();
         
         props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
         props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
         
-        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+        Session session = Session.getDefaultInstance(props);                               //session létrehozűsa a megadott paraméterekkel            Session.getInstance(props, null);  
         try 
         {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(feladoemail));                              //feladó beállítása
             message.addRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzettek));                                       //címzett beállítása
+                InternetAddress.parse(cimzettek));                                          //címzett beállítása
             message.setRecipients(Message.RecipientType.CC,
                     InternetAddress.parse(cc));
-            message.setSubject(targy);                                            //tárgy beállítása
+            message.setSubject(targy);                                                      //tárgy beállítása
            
-            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+            //Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
            
-            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            //MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
             
-            textPart.setText(tartalom);                                          //levél tartalmának csatolása
-            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+            //textPart.setText(tartalom);                                                     //levél tartalmának csatolása
+            //multipart.addBodyPart(textPart);                                                //csatolmány osztály           
                    
-            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            //message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            message.setText(tartalom);
             
             Transport.send(message);                                                        //levél küldése
 

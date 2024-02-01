@@ -100,7 +100,7 @@ public class SQA_bevitel extends JPanel {
     private JTextField mindenertek_mezo;
     private JTextField cseredatum_mezo;
     private String cimzettek = "csader.zsolt@veas.videoton.hu,etl.csaba@veas.videoton.hu,ternak.sandor@veas.videoton.hu,kadar.zoltan@veas.videoton.hu,molnar.jozsef@veas.videoton.hu,nagy.balint@veas.videoton.hu,"
-            + "rabine.anita@veas.videoton.hu,fekete.mercedesz@veas.videoton.hu";
+            + "rabine.anita@veas.videoton.hu,fekete.mercedesz@veas.videoton.hu,QA-Assy@veas.videoton.hu";
     private String cc = "schweighardt.robert@veas.videoton.hu,horvath.balazs@veas.videoton.hu,toth.zoltan@veas.videoton.hu";
     
      
@@ -187,7 +187,7 @@ public class SQA_bevitel extends JPanel {
         add(deviza_mezo);
         deviza_mezo.setColumns(10);
         
-        String[] deviza = {"EUR","USD","CHF","HUF"};
+        String[] deviza = {"EUR","USD","CHF","HUF","GBP","JPY"};
         deviza_box = new JComboBox<String>(deviza);                     //deviza
         deviza_box.setBounds(1105, 232, 59, 22);
         add(deviza_box);
@@ -578,7 +578,7 @@ public class SQA_bevitel extends JPanel {
         add(deviza_mezo);
         deviza_mezo.setColumns(10);
         
-        String[] deviza = {"EUR","USD","CHF","HUF"};
+        String[] deviza = {"EUR","USD","CHF","HUF","GBP","JPY"};
         deviza_box = new JComboBox<String>(deviza);                     //deviza
         deviza_box.setBounds(1105, 232, 59, 22);
         add(deviza_box);

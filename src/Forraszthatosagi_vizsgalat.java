@@ -1,6 +1,11 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JSeparator;
@@ -53,6 +58,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         add(lblNewLabel_2);
         
         cikkszam_mezo = new JTextField();
+        cikkszam_mezo.addKeyListener(new Enter());
         cikkszam_mezo.setBounds(128, 104, 191, 20);
         add(cikkszam_mezo);
         cikkszam_mezo.setColumns(10);
@@ -203,5 +209,66 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         mentes_gomb.setBounds(562, 537, 89, 23);
         add(mentes_gomb);
 
+    }   
+    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {                
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    try
+                    {
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                        SQA_SQL lekerdezes = new SQA_SQL();
+                        String valasztott = cikkszam_mezo.getText();                                                           //kiválasztott elem Stringé alakítása
+                        String sql = "select DESCRIPTION \r\n"
+                                + "from ifsapp.INVENTORY_PART\r\n"
+                                + "where 3 = 3\r\n"
+                                + "and PART_NO = '"+ valasztott +"' -- and PRIMARY_VENDOR_DB = 'Y'";
+                        
+                        
+                        if(lekerdezes.beszallito(sql) == null)
+                        {
+                            JOptionPane.showMessageDialog(null, "Nem létezik ilyen cikkszám", "Hiba üzenet", 2);
+                        }
+                        else
+                        {
+                            megnevezes_mezo.setText(lekerdezes.beszallito(sql));
+                            sql = "select second_commodity\r\n"
+                                    + "from ifsapp.INVENTORY_PART\r\n"
+                                    + "where 3 = 3 \r\n"
+                                    + "and part_no = '"+ valasztott +"'";
+                            
+                            String projekt = lekerdezes.beszallito(sql);
+                            projekt_mezo.setText(projekt);
+                   
+                        }
+                        Foablak.frame.pack();
+                        Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                    }
+                    catch (Exception e1) 
+                    {
+                        e1.printStackTrace();
+                        String hibauzenet = e1.toString();
+                        Email hibakuldes = new Email();
+                        hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                        JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                    }
+                }            
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása      
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
 }
