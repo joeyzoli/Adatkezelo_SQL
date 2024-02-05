@@ -11,10 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -92,8 +89,8 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_osszesites osszesites;
 	private Forraszthatosagi_vizsgalat vizsgalat;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
-	private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
-	private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
+	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
+	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
 	private String jelszo;
 	private JPasswordField mezo;
 	private static final String jelszavam = "polip13";
@@ -393,7 +390,7 @@ public class Foablak extends JFrame
 		
 		JScrollPane gorgeto = new JScrollPane(contentPane);
 		getContentPane().add(gorgeto);
-		
+		/*
 		SimpleDateFormat rovid = new SimpleDateFormat("dd-MMM-yyyy");
 		SimpleDateFormat hosszu = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 		Date mai = new Date();
@@ -473,7 +470,11 @@ public class Foablak extends JFrame
     		ImageIcon img = new ImageIcon(kep);
     		hatter = new JLabel("", img ,JLabel.CENTER);
     		contentPane.add(hatter);
-		}
+		}*/
+		JLabel hatter;
+		ImageIcon img = new ImageIcon(kep);
+        hatter = new JLabel("", img ,JLabel.CENTER);
+        contentPane.add(hatter);
 		contentPane.setBackground(hatter_szine);
 		
 		//setContentPane(gorgeto);
@@ -1138,9 +1139,9 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
-            
-            //Email email = new Email();
-            //email.mindenes_email("schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu", "Coming out", "Szia Norbi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Robi");
+            //System.out.println(System.getProperty("user.name"));
+            Email email = new Email();
+            email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "toth.zoltan@veas.videoton.hu","", "Teszt", "TEszt szöveg");
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";

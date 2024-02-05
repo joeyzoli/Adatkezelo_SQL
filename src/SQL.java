@@ -1506,7 +1506,7 @@ public class SQL
         
         for (int szamlalo = 0; szamlalo < adatok.size(); szamlalo++) 
         {
-            if(adatok.get(szamlalo)[0].equals("202201"))
+            if(adatok.get(szamlalo)[0].contains("01"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1516,19 +1516,8 @@ public class SQL
                 {
                     visszajelzes_jan++;
                 }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202202"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_feb++;                     
-                }
-                else
-                {
-                    visszajelzes_feb++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202203"))
+            }          
+            else if(adatok.get(szamlalo)[0].contains("03"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1539,7 +1528,7 @@ public class SQL
                     visszajelzes_mar++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202204"))
+            else if(adatok.get(szamlalo)[0].contains("04"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1550,7 +1539,7 @@ public class SQL
                     visszajelzes_apr++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202205"))
+            else if(adatok.get(szamlalo)[0].contains("05"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1561,7 +1550,7 @@ public class SQL
                     visszajelzes_maj++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202206"))
+            else if(adatok.get(szamlalo)[0].contains("06"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1572,7 +1561,7 @@ public class SQL
                     visszajelzes_jun++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202207"))
+            else if(adatok.get(szamlalo)[0].contains("07"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1583,7 +1572,7 @@ public class SQL
                     visszajelzes_jul++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202208"))
+            else if(adatok.get(szamlalo)[0].contains("08"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1594,7 +1583,7 @@ public class SQL
                     visszajelzes_aug++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202209"))
+            else if(adatok.get(szamlalo)[0].contains("09"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1605,7 +1594,7 @@ public class SQL
                     visszajelzes_sze++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202210"))
+            else if(adatok.get(szamlalo)[0].contains("10"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1616,7 +1605,7 @@ public class SQL
                     visszajelzes_okt++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202211"))
+            else if(adatok.get(szamlalo)[0].contains("11"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1627,7 +1616,7 @@ public class SQL
                     visszajelzes_nov++;
                 }
             }
-            else if(adatok.get(szamlalo)[0].equals("202212"))
+            else if(adatok.get(szamlalo)[0].contains("12"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1638,18 +1627,7 @@ public class SQL
                     visszajelzes_dec++;
                 }
             }///idáig kell           
-            else if(adatok.get(szamlalo)[0].equals("202301"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_jan++;                     
-                }
-                else
-                {
-                    visszajelzes_jan++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202302"))
+            else if(adatok.get(szamlalo)[0].contains("02"))
             {            
                 if(adatok.get(szamlalo)[2].equals("Reklamáció"))
                 {
@@ -1659,117 +1637,7 @@ public class SQL
                 {
                     visszajelzes_feb++;
                 }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202303"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_mar++;                     
-                }
-                else
-                {
-                    visszajelzes_mar++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202304"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_apr++;                     
-                }
-                else
-                {
-                    visszajelzes_apr++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202305"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_maj++;                     
-                }
-                else
-                {
-                    visszajelzes_maj++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202306"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_jun++;                     
-                }
-                else
-                {
-                    visszajelzes_jun++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202307"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_jul++;                     
-                }
-                else
-                {
-                    visszajelzes_jul++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202308"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_aug++;                     
-                }
-                else
-                {
-                    visszajelzes_aug++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202309"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_sze++;                     
-                }
-                else
-                {
-                    visszajelzes_sze++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202310"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_okt++;                     
-                }
-                else
-                {
-                    visszajelzes_okt++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202311"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_nov++;                     
-                }
-                else
-                {
-                    visszajelzes_nov++;
-                }
-            }
-            else if(adatok.get(szamlalo)[0].equals("202312"))
-            {            
-                if(adatok.get(szamlalo)[2].equals("Reklamáció"))
-                {
-                   reklamacio_dec++;                     
-                }
-                else
-                {
-                    visszajelzes_dec++;
-                }
-            }           
+            } 
         }   
         sheet.getRange().get("A" + 2).setText("Január");
         sheet.getRange().get("A" + 3).setText("Február");
@@ -1997,8 +1865,16 @@ public class SQL
         int cella4 = 2;
         int sum = 0;
         String[] evszam = datumig.split("\\.");
+        String[] evszam2 = datumtol.split("\\.");
+        int valtoev = 0;
+        if(Integer.valueOf(evszam[0]) > Integer.valueOf(evszam2[0]))
+        { 
+            valtoev = 1;
+        }
         int ig = Integer.valueOf(evszam[0]);
         int tol = ig-1;
+        System.out.println(ig);
+        System.out.println(tol);
         for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
         {
             if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
@@ -2011,6 +1887,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("02"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 2)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Február");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".02.28', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2025,7 +1916,22 @@ public class SQL
                 }
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
-            {                
+            {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 1)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Január");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".01.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2041,6 +1947,21 @@ public class SQL
             }          
             if(datatable6.getRows().get(szamlalo).getString(0).contains("03"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 3)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Március");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".03.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2056,6 +1977,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("04"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 4)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Április");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".04.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2071,6 +2007,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("05"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 5)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Május");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".05.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2086,6 +2037,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("06"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 6)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Június");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".06.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2101,6 +2067,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("07"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 7)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Július");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".07.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2116,6 +2097,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("08"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 8)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Augusztus");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".08.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2131,6 +2127,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("09"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 9)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Szeptember");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".09.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2146,6 +2157,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("10"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 10)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("Október");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".10.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2161,6 +2187,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("11"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 11)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("November");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".11.30', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2176,6 +2217,21 @@ public class SQL
             }
             if(datatable6.getRows().get(szamlalo).getString(0).contains("12"))
             {
+                if(valtoev == 1)
+                {
+                    if(Integer.valueOf(evszam[1]) >= 12)
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                    }
+                    else
+                    {
+                        ig = Integer.valueOf(evszam[0]);
+                        tol = ig-1;
+                        ig--;
+                        tol--;
+                    }
+                }
                 sheet.getCellRange("R" + cella4).setText("December");
                 sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".12.31', Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
@@ -2237,7 +2293,7 @@ public class SQL
                 + "sum(selejt_koltseg),\n"
                 + "sum(egyeb_koltseg)\n"
                 + "from qualitydb.Vevoireklamacio_alapadat\n"
-                + "where 3=3\n"
+                + "where 3=3 and datum >= '"+datumtol +"' and datum <= '"+ datumig +"'\n"
                 + "group by projekt order by projekt asc";
         stmt.execute(sql);
         resultSet = stmt.getResultSet();
