@@ -372,7 +372,7 @@ public class Retour extends JPanel
                     else
                     {
                         String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ rma_mezo.getText() +")";
+                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ rma_mezo.getText() +"')";
                         iro.mindenes(sql);
                     }
                 }

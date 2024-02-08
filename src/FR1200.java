@@ -17,7 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
-public class FB7530 extends JPanel {
+public class FR1200 extends JPanel {
+    
     private JTextField datum_mezo;
     private JTextField raklap_mezo;
     private JTextField doboz_mezo;
@@ -25,8 +26,6 @@ public class FB7530 extends JPanel {
     private JTextField egyezes_mezo;
     private JTextField guide_mezo;
     private JTextField firmware_mezo;
-    private JTextField jel2_mezo;
-    private JTextField jel5;
     private JTextField tx_gui2;
     private JTextField tx_gui5;
     private JTextField rx_gui2;
@@ -37,9 +36,6 @@ public class FB7530 extends JPanel {
     private JTextField rx_iperf5;
     private JTextField bandwith2;
     private JTextField bandwith5;
-    private JTextField phone_mezo;
-    private JTextField download_mezo;
-    private JTextField upload_mezo;
     private JComboBox<String> hibacsoport_box;
     private JComboBox<String> ellenor_box ;
     private JComboBox<String> tipus_box;
@@ -49,14 +45,20 @@ public class FB7530 extends JPanel {
     private JTextArea megjegyzes_mezo;
     private JLabel mennyiseg_label;
     private static Long timer_start;
+    private JTextField wlanmac_back;
+    private JTextField wlankey_back;
+    private JTextField wlanmac_gui;
+    private JTextField wlankey_gui;
+    private JTextField egyezes2_mezo;
+    private JTextField egyezes3_mezo;
 
     /**
      * Create the panel.
      */
-    public FB7530() {
+    public FR1200() {
         setLayout(null);
         
-        JLabel lblNewLabel = new JLabel("FB7530 OQC adatgyűjtő");
+        JLabel lblNewLabel = new JLabel("FR1200 OQC adatgyűjtő");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel.setBounds(499, 29, 188, 14);
         add(lblNewLabel);
@@ -86,7 +88,7 @@ public class FB7530 extends JPanel {
         lblNewLabel_3.setBounds(583, 79, 46, 14);
         add(lblNewLabel_3);
         
-        String[] tipus = {"FB7530_2","FB7530 INTER_2","FB7530AX_2","FB7530AX INTER_2"};
+        String[] tipus = {"FR1200","FR1200 INTER","FR1200AX"};
         tipus_box = new JComboBox<String> (tipus);                                                   //tipus
         tipus_box.setBounds(639, 75, 150, 22);
         add(tipus_box);
@@ -139,7 +141,7 @@ public class FB7530 extends JPanel {
         add(egyezes_mezo);
         egyezes_mezo.setColumns(10);
         
-        JLabel lblNewLabel_9 = new JLabel("Szériaszám Quick guide");
+        JLabel lblNewLabel_9 = new JLabel("ARTICLE NUMBER");
         lblNewLabel_9.setBounds(47, 344, 168, 14);
         add(lblNewLabel_9);
         
@@ -157,107 +159,91 @@ public class FB7530 extends JPanel {
         add(firmware_mezo);
         firmware_mezo.setColumns(10);
         
-        JLabel lblNewLabel_11 = new JLabel("Jelerősség %");
-        lblNewLabel_11.setBounds(583, 175, 103, 14);
-        add(lblNewLabel_11);
-        
         JLabel lblNewLabel_12 = new JLabel("Wlan TX (Mbit\\s) on GUI");
-        lblNewLabel_12.setBounds(583, 220, 150, 14);
+        lblNewLabel_12.setBounds(583, 175, 150, 14);
         add(lblNewLabel_12);
         
         JLabel lblNewLabel_13 = new JLabel("Wlan RX (Mbit\\s) on GUI");
-        lblNewLabel_13.setBounds(583, 260, 150, 14);
+        lblNewLabel_13.setBounds(583, 220, 150, 14);
         add(lblNewLabel_13);
         
         JLabel lblNewLabel_14 = new JLabel("Wlan TX (Mbit\\s) on iperf");
-        lblNewLabel_14.setBounds(583, 305, 150, 14);
+        lblNewLabel_14.setBounds(583, 260, 150, 14);
         add(lblNewLabel_14);
         
         JLabel lblNewLabel_15 = new JLabel("Wlan RX (Mbit\\s) on iperf");
-        lblNewLabel_15.setBounds(583, 344, 150, 14);
+        lblNewLabel_15.setBounds(583, 305, 150, 14);
         add(lblNewLabel_15);
         
         JLabel lblNewLabel_16 = new JLabel("Wlan Bandwith (Mhz)");
-        lblNewLabel_16.setBounds(583, 382, 150, 14);
+        lblNewLabel_16.setBounds(583, 344, 150, 14);
         add(lblNewLabel_16);
-        
-        jel2_mezo = new JTextField();
-        jel2_mezo.setBounds(786, 172, 52, 20);
-        jel2_mezo.addKeyListener(new Jel2());
-        add(jel2_mezo);
-        jel2_mezo.setColumns(10);
         
         JLabel lblNewLabel_17 = new JLabel("2,4 Ghz");
         lblNewLabel_17.setBounds(792, 136, 46, 14);
         add(lblNewLabel_17);
-        
-        jel5 = new JTextField();
-        jel5.addKeyListener(new Jel5());
-        jel5.setBounds(874, 172, 52, 20);
-        add(jel5);
-        jel5.setColumns(10);
         
         JLabel lblNewLabel_18 = new JLabel("5 Ghz");
         lblNewLabel_18.setBounds(880, 136, 46, 14);
         add(lblNewLabel_18);
         
         tx_gui2 = new JTextField();
-        tx_gui2.setBounds(786, 217, 52, 20);
+        tx_gui2.setBounds(786, 172, 52, 20);
         tx_gui2.addKeyListener(new TX_gui2());
         add(tx_gui2);
         tx_gui2.setColumns(10);
         
         tx_gui5 = new JTextField();
-        tx_gui5.setBounds(874, 217, 52, 20);
+        tx_gui5.setBounds(874, 172, 52, 20);
         tx_gui5.addKeyListener(new TX_gui5());
         add(tx_gui5);
         tx_gui5.setColumns(10);
         
         rx_gui2 = new JTextField();
         rx_gui2.addKeyListener(new RX_gui2());
-        rx_gui2.setBounds(786, 257, 52, 20);
+        rx_gui2.setBounds(786, 217, 52, 20);
         add(rx_gui2);
         rx_gui2.setColumns(10);
         
         rx_gui5 = new JTextField();
         rx_gui5.addKeyListener(new RX_gui5());
-        rx_gui5.setBounds(874, 257, 52, 20);
+        rx_gui5.setBounds(874, 217, 52, 20);
         add(rx_gui5);
         rx_gui5.setColumns(10);
         
         tx_iperf2 = new JTextField();
         tx_iperf2.addKeyListener(new TX_iperf2());
-        tx_iperf2.setBounds(786, 302, 52, 20);
+        tx_iperf2.setBounds(786, 257, 52, 20);
         add(tx_iperf2);
         tx_iperf2.setColumns(10);
         
         tx_iperf5 = new JTextField();
         tx_iperf5.addKeyListener(new TX_iperf5());
-        tx_iperf5.setBounds(874, 302, 52, 20);
+        tx_iperf5.setBounds(874, 257, 52, 20);
         add(tx_iperf5);
         tx_iperf5.setColumns(10);
         
         rx_iperf2 = new JTextField();
         rx_iperf2.addKeyListener(new RX_iperf2());
-        rx_iperf2.setBounds(786, 341, 52, 20);
+        rx_iperf2.setBounds(786, 302, 52, 20);
         add(rx_iperf2);
         rx_iperf2.setColumns(10);
         
         rx_iperf5 = new JTextField();
         rx_iperf5.addKeyListener(new RX_iperf5());
-        rx_iperf5.setBounds(874, 341, 52, 20);
+        rx_iperf5.setBounds(874, 302, 52, 20);
         add(rx_iperf5);
         rx_iperf5.setColumns(10);
         
         bandwith2 = new JTextField();
         bandwith2.addKeyListener(new Bandwith2());
-        bandwith2.setBounds(786, 379, 52, 20);
+        bandwith2.setBounds(786, 341, 52, 20);
         add(bandwith2);
         bandwith2.setColumns(10);
         
         bandwith5 = new JTextField();
         bandwith5.addKeyListener(new Bandwith5());
-        bandwith5.setBounds(874, 379, 52, 20);
+        bandwith5.setBounds(874, 341, 52, 20);
         add(bandwith5);
         bandwith5.setColumns(10);
         
@@ -287,35 +273,6 @@ public class FB7530 extends JPanel {
         hibakategoria_box.setBounds(188, 527, 215, 22);
         add(hibakategoria_box);
         
-        JLabel lblNewLabel_22 = new JLabel("Phone (dBm)");
-        lblNewLabel_22.setBounds(583, 441, 86, 14);
-        add(lblNewLabel_22);
-        
-        JLabel lblNewLabel_23 = new JLabel("Download (Mbit/s)");
-        lblNewLabel_23.setBounds(583, 488, 103, 14);
-        add(lblNewLabel_23);
-        
-        JLabel lblNewLabel_24 = new JLabel("Upload (Mbit/s)");
-        lblNewLabel_24.setBounds(583, 531, 104, 14);
-        add(lblNewLabel_24);
-        
-        phone_mezo = new JTextField();
-        phone_mezo.setBounds(740, 438, 46, 20);
-        add(phone_mezo);
-        phone_mezo.setColumns(10);
-        
-        download_mezo = new JTextField();
-        download_mezo.addKeyListener(new Download());
-        download_mezo.setBounds(740, 485, 46, 20);
-        add(download_mezo);
-        download_mezo.setColumns(10);
-        
-        upload_mezo = new JTextField();
-        upload_mezo.addKeyListener(new Upload());
-        upload_mezo.setBounds(740, 528, 46, 20);
-        add(upload_mezo);
-        upload_mezo.setColumns(10);
-        
         JLabel lblNewLabel_25 = new JLabel("Ellenörzött mennyiség");
         lblNewLabel_25.setBounds(47, 136, 129, 14);
         add(lblNewLabel_25);
@@ -332,18 +289,73 @@ public class FB7530 extends JPanel {
         JButton torles_gomb = new JButton("Törlés");
         torles_gomb.addActionListener(new Torles());
         torles_gomb.setBounds(47, 600, 89, 23);
-        add(torles_gomb);
+        add(torles_gomb);        
         
-        megjegyzes_mezo = new JTextArea();       
+        JLabel lblNewLabel_26 = new JLabel("Megjegyzés");
+        lblNewLabel_26.setBounds(583, 467, 85, 14);
+        add(lblNewLabel_26);
+        
+        megjegyzes_mezo = new JTextArea();
         megjegyzes_mezo.setLineWrap(true);
         megjegyzes_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto = new JScrollPane(megjegyzes_mezo);
-        gorgeto.setBounds(880, 461, 280, 84);
+        gorgeto.setBounds(583, 481, 280, 84);
         add(gorgeto);
         
-        JLabel lblNewLabel_26 = new JLabel("Megjegyzés");
-        lblNewLabel_26.setBounds(880, 441, 85, 14);
-        add(lblNewLabel_26);
+        
+        JLabel lblNewLabel_11 = new JLabel("WLAN MAC Adress");
+        lblNewLabel_11.setBounds(583, 412, 129, 14);
+        add(lblNewLabel_11);
+        
+        JLabel lblNewLabel_22 = new JLabel("WLAN Key");
+        lblNewLabel_22.setBounds(583, 437, 104, 14);
+        add(lblNewLabel_22);
+        
+        wlanmac_back = new JTextField();
+        wlanmac_back.setBounds(722, 409, 162, 20);
+        add(wlanmac_back);
+        wlanmac_back.setColumns(10);
+        
+        wlankey_back = new JTextField();
+        wlankey_back.setBounds(722, 438, 162, 20);
+        add(wlankey_back);
+        wlankey_back.setColumns(10);
+        
+        wlanmac_gui = new JTextField();
+        wlanmac_gui.addKeyListener(new Enter3());
+        wlanmac_gui.setBounds(928, 409, 162, 20);
+        add(wlanmac_gui);
+        wlanmac_gui.setColumns(10);
+        
+        wlankey_gui = new JTextField();
+        wlankey_gui.addKeyListener(new Enter4());
+        wlankey_gui.setBounds(928, 438, 162, 20);
+        add(wlankey_gui);
+        wlankey_gui.setColumns(10);
+        
+        JLabel lblNewLabel_23 = new JLabel("from the GUI");
+        lblNewLabel_23.setBounds(989, 382, 86, 14);
+        add(lblNewLabel_23);
+        
+        JLabel lblNewLabel_24 = new JLabel("from the back side og product");
+        lblNewLabel_24.setBounds(737, 382, 178, 14);
+        add(lblNewLabel_24);
+        
+        JLabel lblNewLabel_27 = new JLabel("Egyezés");
+        lblNewLabel_27.setBounds(1133, 382, 58, 14);
+        add(lblNewLabel_27);
+        
+        egyezes2_mezo = new JTextField();
+        egyezes2_mezo.setEditable(false);
+        egyezes2_mezo.setBounds(1117, 409, 86, 20);
+        add(egyezes2_mezo);
+        egyezes2_mezo.setColumns(10);
+        
+        egyezes3_mezo = new JTextField();
+        egyezes3_mezo.setEditable(false);
+        egyezes3_mezo.setBounds(1117, 438, 86, 20);
+        add(egyezes3_mezo);
+        egyezes3_mezo.setColumns(10);
         
         ido();
 
@@ -397,15 +409,7 @@ public class FB7530 extends JPanel {
                 else if(firmware_mezo.getText().equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "Nincs megadva a firmware verzió!", "Hiba üzenet", 2);
-                }
-                else if(jel2_mezo.getText().equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, "Nincs megadva a jel 2.4 Ghz!", "Hiba üzenet", 2);
-                }
-                else if(jel5.getText().equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, "Nincs megadva a jel 5 Ghz!", "Hiba üzenet", 2);
-                }
+                }                
                 else if(tx_gui2.getText().equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "Nincs megadva a TX GUI 2.4 Ghz!", "Hiba üzenet", 2);
@@ -445,19 +449,7 @@ public class FB7530 extends JPanel {
                 else if(bandwith5.getText().equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "Nincs megadva a Bandwith 5 Ghz!", "Hiba üzenet", 2);
-                }
-                else if(phone_mezo.getText().equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, "Nincs megadva a Phone!", "Hiba üzenet", 2);
-                }
-                else if(download_mezo.getText().equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, "Nincs megadva a Download!", "Hiba üzenet", 2);
-                }
-                else if(upload_mezo.getText().equals(""))
-                {
-                    JOptionPane.showMessageDialog(null, "Nincs megadva a Upload!", "Hiba üzenet", 2);
-                }
+                }                
                 else
                 {
                     /*end = System.currentTimeMillis();
@@ -488,15 +480,19 @@ public class FB7530 extends JPanel {
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
-                            + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
-                            + "Megjegyzes,Kritikus_hiba, Sulyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
-                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ guide_mezo.getText() +"',"
-                            + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
-                            + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
-                            + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
-                            + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
+                    String sql = "INSERT INTO qualitydb.OQC_FR1200 (Datum, Tesztelo,Tipus,Artikel_szam,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Egyezes,Teszt_tipusa,Wlan_macadress_prod,"
+                            + "Wlan_macadress_gui,Mac_egyezes,Wlan_key_prod,Wlan_key_gui,wlan_egyezes,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Wlan_tx_gui,Wlan_rx_gui,"
+                            + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Firmware,Hiba,Hibacsoport,"
+                            + "Megjegyzes,Kritikus_hiba, Súlyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
+                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ guide_mezo.getText() +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"',"
+                            + "'"+ egyezes_mezo.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+wlanmac_back.getText() +"','"+ wlanmac_gui.getText() +"','"+ egyezes2_mezo.getText() +"',"
+                            + "'"+ wlankey_back.getText() +"','"+ wlankey_gui.getText() +"','"+ egyezes3_mezo.getText() +"',"
+                            + "'"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
+                            + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
+                            + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ firmware_mezo.getText() +"',"
+                            + "'"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
                             + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
+                    
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
                     
@@ -525,9 +521,7 @@ public class FB7530 extends JPanel {
         termek_mezo.setText("");
         guide_mezo.setText("");
         egyezes_mezo.setText("");
-        egyezes_mezo.setBackground(Color.WHITE);
-        jel2_mezo.setText("");
-        jel2_mezo.setBackground(Color.WHITE);
+        egyezes_mezo.setBackground(Color.WHITE);        
         tx_gui2.setText("");
         tx_gui2.setBackground(Color.WHITE);
         rx_gui2.setText("");
@@ -537,9 +531,7 @@ public class FB7530 extends JPanel {
         rx_iperf2.setText("");
         rx_iperf2.setBackground(Color.WHITE);
         bandwith2.setText("");
-        bandwith2.setBackground(Color.WHITE);
-        jel5.setText("");
-        jel5.setBackground(Color.WHITE);
+        bandwith2.setBackground(Color.WHITE);       
         tx_gui5.setText("");
         tx_gui5.setBackground(Color.WHITE);
         rx_gui5.setText("");
@@ -550,16 +542,19 @@ public class FB7530 extends JPanel {
         rx_iperf5.setBackground(Color.WHITE);
         bandwith5.setText("");
         bandwith5.setBackground(Color.WHITE);
-        firmware_mezo.setText("");
-        phone_mezo.setText("");
-        download_mezo.setText("");
-        download_mezo.setBackground(Color.WHITE);
-        upload_mezo.setText("");
-        upload_mezo.setBackground(Color.WHITE);
+        firmware_mezo.setText("");        
         hiba_box.setSelectedIndex(0);
         hibacsoport_box.setSelectedIndex(0);
         hibakategoria_box.setSelectedIndex(0);
         megjegyzes_mezo.setText("");
+        wlanmac_back.setText("");
+        wlanmac_gui.setText("");
+        wlankey_back.setText("");
+        wlankey_gui.setText("");
+        egyezes2_mezo.setText("");
+        egyezes2_mezo.setBackground(Color.WHITE);
+        egyezes3_mezo.setText("");
+        egyezes3_mezo.setBackground(Color.WHITE);
     }
     
     class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
@@ -578,6 +573,60 @@ public class FB7530 extends JPanel {
                 {
                     egyezes_mezo.setText("NOK");
                     egyezes_mezo.setBackground(Color.RED);
+                }
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+    }
+    
+    class Enter3 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                if(wlanmac_back.getText().equals(wlanmac_gui.getText()))
+                {
+                    egyezes2_mezo.setText("OK");
+                    egyezes2_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    egyezes2_mezo.setText("NOK");
+                    egyezes2_mezo.setBackground(Color.RED);
+                }
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+    }
+    
+    class Enter4 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                if(wlankey_back.getText().equals(wlankey_gui.getText()))
+                {
+                    egyezes3_mezo.setText("OK");
+                    egyezes3_mezo.setBackground(Color.GREEN);
+                }
+                else
+                {
+                    egyezes3_mezo.setText("NOK");
+                    egyezes3_mezo.setBackground(Color.RED);
                 }
             }       
         }
@@ -608,58 +657,6 @@ public class FB7530 extends JPanel {
         }    
     }
     
-    class Jel2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
-    {
-        public void keyPressed (KeyEvent e) {            
-        }
-        @Override
-        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            if(jel2_mezo.getText().equals("")) {}
-            else
-            {
-                int jel  = Integer.valueOf(jel2_mezo.getText());
-                if(jel >= 0 && jel <= 100)
-                {
-                    jel2_mezo.setBackground(Color.GREEN);
-                }
-                else
-                {
-                    jel2_mezo.setBackground(Color.RED);
-                }
-            }           
-        }    
-    }
-    
-    class Jel5 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
-    {
-        public void keyPressed (KeyEvent e) {            
-        }
-        @Override
-        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            if(jel5.getText().equals("")) {}
-            else
-            {
-                int jel  = Integer.valueOf(jel5.getText());
-                if(jel >= 0 && jel <= 100)
-                {
-                    jel5.setBackground(Color.GREEN);
-                }
-                else
-                {
-                    jel5.setBackground(Color.RED);
-                }
-            }           
-        }    
-    }
-    
     class TX_gui2 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
         public void keyPressed (KeyEvent e) {            
@@ -674,7 +671,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(tx_gui2.getText());
-                if(jel >= 100 && jel <= 160)
+                if(jel >= 130 && jel <= 192)
                 {
                     tx_gui2.setBackground(Color.GREEN);
                 }
@@ -700,7 +697,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(tx_gui5.getText());
-                if(jel >= 900 && jel <= 1500)
+                if(jel >= 500 && jel <= 866)
                 {
                     tx_gui5.setBackground(Color.GREEN);
                 }
@@ -726,7 +723,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(rx_gui2.getText());
-                if(jel >= 100 && jel <= 160)
+                if(jel >= 130 && jel <= 192)
                 {
                     rx_gui2.setBackground(Color.GREEN);
                 }
@@ -752,7 +749,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(rx_gui5.getText());
-                if(jel >= 900 && jel <= 1500)
+                if(jel >= 500 && jel <= 866)
                 {
                     rx_gui5.setBackground(Color.GREEN);
                 }
@@ -778,7 +775,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(tx_iperf2.getText());
-                if(jel >= 40 && jel <= 1000)
+                if(jel >= 80 && jel <= 1000)
                 {
                     tx_iperf2.setBackground(Color.GREEN);
                 }
@@ -804,7 +801,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(tx_iperf5.getText());
-                if(jel >= 400 && jel <= 800)
+                if(jel >= 300 && jel <= 1000)
                 {
                     tx_iperf5.setBackground(Color.GREEN);
                 }
@@ -830,7 +827,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(rx_iperf2.getText());
-                if(jel >= 40 && jel <= 1000)
+                if(jel >= 80 && jel <= 1000)
                 {
                     rx_iperf2.setBackground(Color.GREEN);
                 }
@@ -856,7 +853,7 @@ public class FB7530 extends JPanel {
             else
             {
                 int jel  = Integer.valueOf(rx_iperf5.getText());
-                if(jel >= 400 && jel <= 800)
+                if(jel >= 300 && jel <= 1000)
                 {
                     rx_iperf5.setBackground(Color.GREEN);
                 }
@@ -920,58 +917,6 @@ public class FB7530 extends JPanel {
         }    
     }
     
-    class Download implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
-    {
-        public void keyPressed (KeyEvent e) {            
-        }
-        @Override
-        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            if(download_mezo.getText().equals("")) {}
-            else
-            {
-                int jel  = Integer.valueOf(download_mezo.getText());
-                if(jel >= 310 && jel <= 345)
-                {
-                    download_mezo.setBackground(Color.GREEN);
-                }
-                else
-                {
-                    download_mezo.setBackground(Color.RED);
-                }
-            }           
-        }    
-    }
-    
-    class Upload implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
-    {
-        public void keyPressed (KeyEvent e) {            
-        }
-        @Override
-        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            if(upload_mezo.getText().equals("")) {}
-            else
-            {
-                int jel  = Integer.valueOf(upload_mezo.getText());
-                if(jel == 50)
-                {
-                    upload_mezo.setBackground(Color.GREEN);
-                }
-                else
-                {
-                    upload_mezo.setBackground(Color.RED);
-                }
-            }           
-        }    
-    }
-    
     class Torles implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -991,3 +936,5 @@ public class FB7530 extends JPanel {
          }
     }
 }
+
+

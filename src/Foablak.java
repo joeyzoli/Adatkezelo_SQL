@@ -88,6 +88,7 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_ertekeles ertekeles;
 	private Kockazatimatrix_osszesites osszesites;
 	private Forraszthatosagi_vizsgalat vizsgalat;
+	private Vevoireklamacio_V2 vevoirek;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -210,6 +211,10 @@ public class Foablak extends JFrame
 		JMenuItem forraszthatosagi_vizsgalat = new JMenuItem("Forraszthatósági vizsgálat");
 		forraszthatosagi_vizsgalat.addActionListener(new Panelcsere_Forraszthatosag());
 		menu.add(forraszthatosagi_vizsgalat);
+		
+		JMenuItem vevoirek_v2 = new JMenuItem("Vevőireklmáció V2.0");
+		vevoirek_v2.addActionListener(new Panelcsere_Vevoi2());
+		menu.add(vevoirek_v2);
 		menu.add(torles);
 		
 		JMenu lekerdezes = new JMenu("Lekérdezés");
@@ -1006,6 +1011,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Vevoi2 implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            vevoirek = new Vevoireklamacio_V2();
+            JScrollPane ablak = new JScrollPane(vevoirek);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1140,8 +1156,8 @@ public class Foablak extends JFrame
                 System.out.println("A hét napja:" + nap);
             }
             //System.out.println(System.getProperty("user.name"));
-            Email email = new Email();
-            email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "toth.zoltan@veas.videoton.hu","", "Teszt", "TEszt szöveg");
+            //Email email = new Email();
+            //email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "toth.zoltan@veas.videoton.hu","", "Teszt", "TEszt szöveg");
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";

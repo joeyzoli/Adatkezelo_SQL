@@ -23,16 +23,16 @@ public class Email
         try 
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setFrom(new InternetAddress(feladoemail));                                  //feladó beállítása
             message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzett));                           //címzett beállítása
+                InternetAddress.parse(cimzett));                                                //címzett beállítása
             message.setRecipients(Message.RecipientType.CC,
-                    InternetAddress.parse(cc));                           //címzett beállítása
+                    InternetAddress.parse(cc));                                                 //címzett beállítása
             message.setSubject("Lejár a határidő!");                                            //tárgy beállítása
            
-            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
            
-            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
             
             textPart.setText("Tisztelt " + felado + "! \n  \n Lejárt a határideje a vevői reklamációnál aminél Ön a felelős!"
                     + "\n Reklamáció ID: " + id
@@ -40,14 +40,14 @@ public class Email
                     + "\n Reklamált cikkszám: \n " + cikk
                     + "\n Hiba leírása: \n " + hibaleiras
                     + "\n Elvégzendő feladat: \n " + intezkedes
-                    + "\n Kérem minnél elöbb zárja le!");                                          //levél tartalmának csatolása
-            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                    + "\n Kérem minnél elöbb zárja le!");                                       //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                                    //csatolmány osztály           
                    
-            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            message.setContent(multipart);                                                      //message üzenethez mindent hozzáad
             
-            Transport.send(message);                                                        //levél küldése
+            Transport.send(message);                                                            //levél küldése
 
-            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+            System.out.println("Done");                                                         //kiírja, ha lefutott minden rendben
         
         }
         catch (Exception e1) 
@@ -73,14 +73,14 @@ public class Email
         try 
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setFrom(new InternetAddress(feladoemail));                                  //feladó beállítása
             message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzett));                           //címzett beállítása
+                InternetAddress.parse(cimzett));                                                //címzett beállítása
             message.setSubject("Lejár a határidő!");                                            //tárgy beállítása
            
-            Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
+            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
            
-            MimeBodyPart textPart = new MimeBodyPart();                                     //levél szövegények osztály példányosítása
+            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
             
             textPart.setText("Tisztelt " + felado + "! \n  \n 5 napon bellül lejár a határideje a vevői reklamációnál aminél Ön a felelős!"
                     + "\n Reklamáció ID: " + id
@@ -88,14 +88,14 @@ public class Email
                     + "\n Reklamált cikkszám: \n " + cikk
                     + "\n Hiba leírása: \n " + hibaleiras
                     + "\n Elvégzendő feladat: \n " + intezkedes
-                    + "\n Kérem minnél elöbb zárja le!");                                          //levél tartalmának csatolása
-            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                    + "\n Kérem minnél elöbb zárja le!");                                           //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                                        //csatolmány osztály           
                    
-            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            message.setContent(multipart);                                                          //message üzenethez mindent hozzáad
             
-            Transport.send(message);                                                        //levél küldése
+            Transport.send(message);                                                                //levél küldése
 
-            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+            System.out.println("Done");                                                             //kiírja, ha lefutott minden rendben
         
         }
         catch (Exception e1) 
@@ -121,9 +121,9 @@ public class Email
         try 
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(feladoemail));                         //feladó beállítása
+            message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
             message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(cimzett));                           //címzett beállítása
+                InternetAddress.parse(cimzett));                                        //címzett beállítása
             message.setSubject("Lejár a határidő!");                                            //tárgy beállítása
            
             Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása

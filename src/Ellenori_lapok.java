@@ -627,6 +627,7 @@ public class Ellenori_lapok extends JPanel {
         Statement stmt = null;
         excel = new Workbook();
         excel.loadFromFile(excelhelye);
+        int oszlopszam = 0;
         try 
         {
            try 
@@ -666,7 +667,6 @@ public class Ellenori_lapok extends JPanel {
                     }
                 }
                 //sheet = excel.getWorksheets().get("WK41 új");
-                int oszlopszam = 0;
                 for(int szamlalo = 9; szamlalo < 15; szamlalo++)
                 {
                     CellRange cell2 = sheet.getCellRange(1, szamlalo);
@@ -1038,6 +1038,7 @@ public class Ellenori_lapok extends JPanel {
         }
         catch (Exception e) 
         {
+            System.out.println("Amivel kieset oszlopszám: " +oszlopszam);
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();

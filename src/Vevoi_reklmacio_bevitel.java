@@ -516,14 +516,14 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     if(zarolt_tabla.getRowCount() == 0)
                     {
                         iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), 0, hibaoka_mezo.getText(),                             
-                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), "", Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(),1);
+                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), "", Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(),1,rma_mezo.getText());
                     }
                     else
                     {
                         for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
                         {
                             iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
-                                    String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2);
+                                    String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2,rma_mezo.getText());
                         }
                     }
                     for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)

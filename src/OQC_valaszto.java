@@ -23,14 +23,17 @@ public class OQC_valaszto extends JPanel {
         add(lblNewLabel);
         
         JButton fr600 = new JButton("FR600");
+        fr600.addActionListener(new FR600_());
         fr600.setBounds(536, 98, 89, 23);
         add(fr600);
         
         JButton fr1200 = new JButton("FR1200");
+        fr1200.addActionListener(new FR1200_());
         fr1200.setBounds(536, 161, 89, 23);
         add(fr1200);
         
         JButton fr2400 = new JButton("FR2400");
+        fr2400.addActionListener(new FR2400_());
         fr2400.setBounds(536, 227, 89, 23);
         add(fr2400);
         
@@ -55,6 +58,78 @@ public class OQC_valaszto extends JPanel {
             {               
                 FB7530 fb7530 = new FB7530();
                 JScrollPane ablak = new JScrollPane(fb7530);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
+                Foablak.frame.pack();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class FR2400_ implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {               
+                FR2400 fr2400 = new FR2400();
+                JScrollPane ablak = new JScrollPane(fr2400);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
+                Foablak.frame.pack();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class FR1200_ implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {               
+                FR1200 fr1200 = new FR1200();
+                JScrollPane ablak = new JScrollPane(fr1200);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
+                Foablak.frame.pack();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class FR600_ implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {               
+                FR600 fr600 = new FR600();
+                JScrollPane ablak = new JScrollPane(fr600);
                 ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                 Foablak.frame.setContentPane(ablak);

@@ -16,5 +16,11 @@
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/xmlbeans-3.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/Spire.Xls.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/hsqldb-2.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/jackcess-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ucanload.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ucanaccess-5.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

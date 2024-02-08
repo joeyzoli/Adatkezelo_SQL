@@ -2119,10 +2119,18 @@ public class Torlo extends JPanel
                             {
                                 if(ismetlesek > 0)
                                 {
-                                    sheet2.getRange().get("A" + cellaszam).setText(sheet.getRange().get(szamlalo2, 5).getText().toString());
-                                    sheet2.getRange().get("B" + cellaszam).setText(String.valueOf(ismetlesek));
-                                    cellaszam++;
-                                    ismetlesek = 0;
+                                    if(sheet.getRange().get(szamlalo2, 13).getText().toString().toUpperCase().contains("U300"))
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(sheet.getRange().get(szamlalo2, 5).getText().toString());
+                                        sheet2.getRange().get("B" + cellaszam).setText(String.valueOf(ismetlesek));
+                                        cellaszam++;
+                                        ismetlesek = 0;
+                                    }
+                                    else
+                                    {
+                                        ismetlesek = 0;
+                                    }
+                                    
                                 }                                
                             }                               
                             else           //datatable2.getRows().get(szamlalo).getString(0).equals(datatable.getRows().get(szamlalo2).getString(4))
@@ -2164,7 +2172,7 @@ public class Torlo extends JPanel
             catch(Exception e1)
             {
                 try
-                {
+                {                   
                     System.out.println(sheet.getRange().get(szam, 3).getText().toString() +" "+sheet.getRange().get(szam, 5).getText().toString() +" "+ sheet.getRange().get(szam, 7).getText().toString());
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
                     sheet2.getAllocatedRange().autoFitColumns();
@@ -2356,6 +2364,81 @@ public class Torlo extends JPanel
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
+	class Acces_olvaso implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            //String databaseURL = "jdbc:ucanaccess:c:\\Users\\kovacs.zoltan\\Desktop\\Access\\AVM_OQC_adatok.accdb";
+            
+         // variables
+            Connection connection = null;
+            Statement statement = null;
+            ResultSet resultSet = null;
+     
+            // Step 1: Loading or
+            // registering Oracle JDBC driver class
+            try {
+     
+                Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            }
+            catch(ClassNotFoundException cnfex) {
+     
+                System.out.println("Problem in loading or "
+                        + "registering MS Access JDBC driver");
+                cnfex.printStackTrace();
+            }
+     
+            // Step 2: Opening database connection
+            try {
+
+                //String dbURL = "jdbc:ucanaccess:\\c:\\Users\\kovacs.zoltan\\Desktop\\Access\\AVM_OQC_adatok.accdb";
+                String msAccDB = "c:/Users/kovacs.zoltan/Desktop/Access/AVM_OQC_adatok.accdb";
+                String dbURL = "jdbc:ucanaccess://"
+                        + msAccDB;
+                // Step 2.A: Create and
+                // get connection using DriverManager class
+                connection = DriverManager.getConnection(dbURL);
+     
+                // Step 2.B: Creating JDBC Statement
+                statement = connection.createStatement();
+     
+                // Step 2.C: Executing SQL and
+                // retrieve data into ResultSet
+                resultSet = statement.executeQuery("SELECT * FROM FB7530 where Gyűjtődoboz_száma ='P891754501-AA..300.1.17492908.20240205'");
+     
+                System.out.println("ID\tName\t\t\tAge\tMatches");
+                System.out.println("==\t================\t===\t=======");
+     
+                // processing returned data and printing into console
+                while(resultSet.next()) {
+                    System.out.println(resultSet.getInt(1) + "\t" +
+                            resultSet.getString(2) + "\t" +
+                            resultSet.getString(3) + "\t" +
+                            resultSet.getString(4));
+                }
+            }
+            catch(SQLException sqlex){
+                sqlex.printStackTrace();
+            }
+            finally {
+                // Step 3: Closing database connection
+                try {
+                    if(null != connection) {
+                        // cleanup resources, once after processing
+                        resultSet.close();
+                        statement.close();
+     
+                        // and then finally close connection
+                        connection.close();
+                    }
+                }
+                catch (SQLException sqlex) {
+                    sqlex.printStackTrace();
+                }
             }
          }
     }
