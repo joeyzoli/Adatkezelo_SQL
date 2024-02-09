@@ -329,6 +329,8 @@ public class Retour extends JPanel
         dbszam_szoveg.setBounds(402, 358, 46, 14);
         add(dbszam_szoveg);
         kivalasztott = new ArrayList<String>();
+        
+        workbook = new Workbook();
 
     }
     
@@ -351,7 +353,7 @@ public class Retour extends JPanel
                 String id = id_mezo.getText();
                 SQA_SQL iro = new SQA_SQL();
                 DataTable datatable = new DataTable();
-                workbook = new Workbook();
+                
                 sheet = workbook.getWorksheets().get(0);
                 datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                 for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)

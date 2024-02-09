@@ -64,6 +64,7 @@ public class SQA_osszesito extends JPanel {
         ujreki_gomb.addActionListener(new Uj_reklamacio());
         ujreki_gomb.setBounds(643, 570, 89, 23);
         add(ujreki_gomb);
+        
         setBackground(Foablak.hatter_szine);
         
         JButton excel_gomb = new JButton("excel");

@@ -33,12 +33,12 @@ import javax.swing.JRadioButton;
 public class Retour_szeriaszamok extends JPanel {
     private JTextField retourid_mezo;
     private JTextField szeriaszam_mezo;
-    private JCheckBox vizualis_csekk1;private JCheckBox vizualis_csekk2;private JCheckBox vizualis_csekk3;private JCheckBox vizualis_csekk4;private JCheckBox vizualis_csekk5;private JCheckBox vizualis_csekk6;
-    private JCheckBox ict_csekk1;private JCheckBox ict_csekk2;private JCheckBox ict_csekk3;private JCheckBox ict_csekk4;private JCheckBox ict_csekk5;private JCheckBox ict_csekk6;
-    private JCheckBox fct_csekk1;private JCheckBox fct_csekk2;private JCheckBox fct_csekk3;private JCheckBox fct_csekk4;private JCheckBox fct_csekk5;private JCheckBox fct_csekk6;
-    private JCheckBox meres_csekk1;private JCheckBox meres_csekk2;private JCheckBox meres_csekk3;private JCheckBox meres_csekk4;private JCheckBox meres_csekk5;private JCheckBox meres_csekk6;
-    private JCheckBox rontgen_csekk1;private JCheckBox rontgen_csekk2;private JCheckBox rontgen_csekk3;private JCheckBox rontgen_csekk4;private JCheckBox rontgen_csekk5;private JCheckBox rontgen_csekk6;
-    private JCheckBox egyeb_csekk1;private JCheckBox egyeb_csekk2;private JCheckBox egyeb_csekk3;private JCheckBox egyeb_csekk4;private JCheckBox egyeb_csekk5;private JCheckBox egyeb_csekk6;
+    private JCheckBox vizualis_csekk1;private JCheckBox vizualis_csekk3;private JCheckBox vizualis_csekk4;private JCheckBox vizualis_csekk5;private JCheckBox vizualis_csekk6;
+    private JCheckBox ict_csekk1;private JCheckBox ict_csekk3;private JCheckBox ict_csekk4;private JCheckBox ict_csekk5;private JCheckBox ict_csekk6;
+    private JCheckBox fct_csekk1;private JCheckBox fct_csekk3;private JCheckBox fct_csekk4;private JCheckBox fct_csekk5;private JCheckBox fct_csekk6;
+    private JCheckBox meres_csekk1;private JCheckBox meres_csekk3;private JCheckBox meres_csekk4;private JCheckBox meres_csekk5;private JCheckBox meres_csekk6;
+    private JCheckBox rontgen_csekk1;private JCheckBox rontgen_csekk3;private JCheckBox rontgen_csekk4;private JCheckBox rontgen_csekk5;private JCheckBox rontgen_csekk6;
+    private JCheckBox egyeb_csekk1;private JCheckBox egyeb_csekk3;private JCheckBox egyeb_csekk4;private JCheckBox egyeb_csekk5;private JCheckBox egyeb_csekk6;
     private JCheckBox kiszallithato_OK;private JCheckBox kiszallithato_NOK;
     private JCheckBox beszallito;private JCheckBox veas;private JCheckBox vevo;
     private JTextArea hiba_mezo;private JTextArea javitas_mezo;private JTextArea hibaoka_mezo;private JTextArea intezkedes_mezo;
@@ -111,19 +111,11 @@ public class Retour_szeriaszamok extends JPanel {
         vizualis_csekk1.setBounds(220, 225, 37, 23);
         add(vizualis_csekk1);
         
-        vizualis_csekk2 = new JCheckBox("");
-        vizualis_csekk2.setBounds(271, 225, 37, 23);
-        add(vizualis_csekk2);
-        
-        JLabel lblNewLabel_9 = new JLabel("Ok");
-        lblNewLabel_9.setBounds(219, 202, 46, 14);
+        JLabel lblNewLabel_9 = new JLabel("Alkalazott");
+        lblNewLabel_9.setBounds(219, 202, 77, 14);
         add(lblNewLabel_9);
         
-        JLabel lblNewLabel_10 = new JLabel("NOK");
-        lblNewLabel_10.setBounds(271, 202, 46, 14);
-        add(lblNewLabel_10);
-        
-        JLabel lblNewLabel_11 = new JLabel("Ellenőrzés / Vizsgálat");
+        JLabel lblNewLabel_11 = new JLabel("Szükséges vizsgálatok");
         lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 12));
         lblNewLabel_11.setBounds(206, 177, 156, 14);
         add(lblNewLabel_11);
@@ -148,27 +140,7 @@ public class Retour_szeriaszamok extends JPanel {
         egyeb_csekk1.setBounds(220, 461, 37, 23);
         add(egyeb_csekk1);
         
-        ict_csekk2 = new JCheckBox("");
-        ict_csekk2.setBounds(271, 269, 37, 23);
-        add(ict_csekk2);
-        
-        fct_csekk2 = new JCheckBox("");
-        fct_csekk2.setBounds(271, 315, 37, 23);
-        add(fct_csekk2);
-        
-        meres_csekk2 = new JCheckBox("");
-        meres_csekk2.setBounds(271, 362, 37, 23);
-        add(meres_csekk2);
-        
-        rontgen_csekk2 = new JCheckBox("");
-        rontgen_csekk2.setBounds(271, 411, 37, 23);
-        add(rontgen_csekk2);
-        
-        egyeb_csekk2 = new JCheckBox("");
-        egyeb_csekk2.setBounds(271, 461, 37, 23);
-        add(egyeb_csekk2);
-        
-        JLabel lblNewLabel_12 = new JLabel("Javítás előtt");
+        JLabel lblNewLabel_12 = new JLabel("Beérkezéskor");
         lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
         lblNewLabel_12.setBounds(425, 177, 100, 14);
         add(lblNewLabel_12);
@@ -402,7 +374,7 @@ public class Retour_szeriaszamok extends JPanel {
         add(csekk1);
         
         JLabel lblNewLabel_27 = new JLabel("Nem alkalmazott");
-        lblNewLabel_27.setBounds(316, 202, 104, 14);
+        lblNewLabel_27.setBounds(289, 202, 104, 14);
         add(lblNewLabel_27);
         
         csekk4 = new JRadioButton("");
@@ -517,38 +489,32 @@ public class Retour_szeriaszamok extends JPanel {
                     String sql = "select * from qualitydb.Retour_szeriaszamok where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"' order by id desc";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
-                    vizualis_csekk1.setSelected(false);
-                    vizualis_csekk2.setSelected(false);        
+                    vizualis_csekk1.setSelected(false);        
                     vizualis_csekk3.setSelected(false);        
                     vizualis_csekk4.setSelected(false);        
                     vizualis_csekk5.setSelected(false);        
                     vizualis_csekk6.setSelected(false);       
-                    ict_csekk1.setSelected(false);       
-                    ict_csekk2.setSelected(false);        
+                    ict_csekk1.setSelected(false);              
                     ict_csekk3.setSelected(false);        
                     ict_csekk4.setSelected(false);        
                     ict_csekk5.setSelected(false);       
                     ict_csekk6.setSelected(false);       
-                    fct_csekk1.setSelected(false);       
-                    fct_csekk2.setSelected(false);       
+                    fct_csekk1.setSelected(false);             
                     fct_csekk3.setSelected(false);      
                     fct_csekk4.setSelected(false);        
                     fct_csekk5.setSelected(false);      
                     fct_csekk6.setSelected(false);       
-                    meres_csekk1.setSelected(false);       
-                    meres_csekk2.setSelected(false);       
+                    meres_csekk1.setSelected(false);            
                     meres_csekk3.setSelected(false);        
                     meres_csekk4.setSelected(false);       
                     meres_csekk5.setSelected(false);        
                     meres_csekk6.setSelected(false);       
-                    rontgen_csekk1.setSelected(false);        
-                    rontgen_csekk2.setSelected(false);        
+                    rontgen_csekk1.setSelected(false);              
                     rontgen_csekk3.setSelected(false);        
                     rontgen_csekk4.setSelected(false);       
                     rontgen_csekk5.setSelected(false);      
                     rontgen_csekk6.setSelected(false);       
-                    egyeb_csekk1.setSelected(false);       
-                    egyeb_csekk2.setSelected(false);        
+                    egyeb_csekk1.setSelected(false);               
                     egyeb_csekk3.setSelected(false);        
                     egyeb_csekk4.setSelected(false);        
                     egyeb_csekk5.setSelected(false);        
@@ -584,10 +550,7 @@ public class Retour_szeriaszamok extends JPanel {
                         if(rs.getString(5) != null) {
                             if(rs.getString(5).equals("OK")) {
                                 vizualis_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(5).equals("NOK")) {
-                                vizualis_csekk2.setSelected(true);
-                            }
+                            }                            
                             else if(rs.getString(5).equals("N/A")) {
                                 csekk1.setSelected(true);
                             }
@@ -614,10 +577,7 @@ public class Retour_szeriaszamok extends JPanel {
                             else {}
                             if(rs.getString(8).equals("OK")) {
                                 ict_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(8).equals("NOK")) {
-                                ict_csekk2.setSelected(true);
-                            }
+                            }                            
                             else if(rs.getString(8).equals("N/A")) {
                                 csekk4.setSelected(true);
                             }
@@ -644,10 +604,7 @@ public class Retour_szeriaszamok extends JPanel {
                             else {}
                             if(rs.getString(11).equals("OK")) {
                                 fct_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(11).equals("NOK")) {
-                                fct_csekk2.setSelected(true);
-                            }
+                            }                           
                             else if(rs.getString(11).equals("N/A")) {
                                 csekk7.setSelected(true);
                             }
@@ -674,10 +631,7 @@ public class Retour_szeriaszamok extends JPanel {
                             else {}
                             if(rs.getString(14).equals("OK")) {
                                 meres_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(14).equals("NOK")) {
-                                meres_csekk2.setSelected(true);
-                            }
+                            }                            
                             else if(rs.getString(14).equals("N/A")) {
                                 csekk10.setSelected(true);
                             }
@@ -704,10 +658,7 @@ public class Retour_szeriaszamok extends JPanel {
                             else {}
                             if(rs.getString(17).equals("OK")) {
                                 rontgen_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(17).equals("NOK")) {
-                                rontgen_csekk2.setSelected(true);
-                            }
+                            }                            
                             else if(rs.getString(17).equals("N/A")) {
                                 csekk13.setSelected(true);
                             }
@@ -734,10 +685,7 @@ public class Retour_szeriaszamok extends JPanel {
                             else {}
                             if(rs.getString(20).equals("OK")) {
                                 egyeb_csekk1.setSelected(true);
-                            }
-                            else if(rs.getString(20).equals("NOK")) {
-                                egyeb_csekk2.setSelected(true);
-                            }
+                            }                            
                             else if(rs.getString(20).equals("N/A")) {
                                 csekk16.setSelected(true);
                             }
@@ -899,10 +847,7 @@ public class Retour_szeriaszamok extends JPanel {
             {
                 if(vizualis_csekk1.isSelected()) {
                     vizualis1 = "OK";
-                }
-                else if(vizualis_csekk2.isSelected()) {
-                    vizualis1 = "NOK";
-                }
+                }                
                 else {if(csekk1.isSelected()) {vizualis1 = "N/A";}}
                 
                 if(vizualis_csekk3.isSelected()) {
@@ -923,10 +868,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(ict_csekk1.isSelected()) {
                     ict1 = "OK";
-                }
-                else if(ict_csekk2.isSelected()) {
-                    ict1 = "NOK";
-                }
+                }                
                 else {if(csekk4.isSelected()) { ict1 = "N/A";}}
                 
                 if(ict_csekk3.isSelected()) {
@@ -947,10 +889,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(fct_csekk1.isSelected()) {
                     fct1 = "OK";
-                }
-                else if(fct_csekk2.isSelected()) {
-                    fct1 = "NOK";
-                }
+                }                
                 else {if(csekk7.isSelected()) { fct1 = "N/A";}}
                 
                 if(fct_csekk3.isSelected()) {
@@ -971,10 +910,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(meres_csekk1.isSelected()) {
                     meres1 = "OK";
-                }
-                else if(meres_csekk2.isSelected()) {
-                    meres1 = "NOK";
-                }
+                }                
                 else {if(csekk10.isSelected()) { meres1 = "N/A";}}
                 
                 if(meres_csekk3.isSelected()) {
@@ -995,10 +931,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(rontgen_csekk1.isSelected()) {
                     rontgen1 = "OK";
-                }
-                else if(rontgen_csekk2.isSelected()) {
-                    rontgen1 = "NOK";
-                }
+                }             
                 else {if(csekk13.isSelected()) { rontgen1 = "N/A";}}
                 
                 if(rontgen_csekk3.isSelected()) {
@@ -1019,10 +952,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(egyeb_csekk1.isSelected()) {
                     egyeb1 = "OK";
-                }
-                else if(egyeb_csekk2.isSelected()) {
-                    egyeb1 = "NOK";
-                }
+                }               
                 else {if(csekk16.isSelected()) { egyeb1 = "N/A";}}
                 
                 if(egyeb_csekk3.isSelected()) {
@@ -1075,10 +1005,7 @@ public class Retour_szeriaszamok extends JPanel {
             {
                 if(vizualis_csekk1.isSelected()) {
                     vizualis1 = "OK";
-                }
-                else if(vizualis_csekk2.isSelected()) {
-                    vizualis1 = "NOK";
-                }
+                }                
                 else {if(csekk1.isSelected()) {vizualis1 = "N/A";}}
                 
                 if(vizualis_csekk3.isSelected()) {
@@ -1099,10 +1026,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(ict_csekk1.isSelected()) {
                     ict1 = "OK";
-                }
-                else if(ict_csekk2.isSelected()) {
-                    ict1 = "NOK";
-                }
+                }                
                 else {if(csekk4.isSelected()) { ict1 = "N/A";}}
                 
                 if(ict_csekk3.isSelected()) {
@@ -1123,10 +1047,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(fct_csekk1.isSelected()) {
                     fct1 = "OK";
-                }
-                else if(fct_csekk2.isSelected()) {
-                    fct1 = "NOK";
-                }
+                }               
                 else {if(csekk7.isSelected()) { fct1 = "N/A";}}
                 
                 if(fct_csekk3.isSelected()) {
@@ -1147,10 +1068,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(meres_csekk1.isSelected()) {
                     meres1 = "OK";
-                }
-                else if(meres_csekk2.isSelected()) {
-                    meres1 = "NOK";
-                }
+                }               
                 else {if(csekk10.isSelected()) { meres1 = "N/A";}}
                 
                 if(meres_csekk3.isSelected()) {
@@ -1171,10 +1089,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(rontgen_csekk1.isSelected()) {
                     rontgen1 = "OK";
-                }
-                else if(rontgen_csekk2.isSelected()) {
-                    rontgen1 = "NOK";
-                }
+                }               
                 else {if(csekk13.isSelected()) { rontgen1 = "N/A";}}
                 
                 if(rontgen_csekk3.isSelected()) {
@@ -1195,10 +1110,7 @@ public class Retour_szeriaszamok extends JPanel {
                 
                 if(egyeb_csekk1.isSelected()) {
                     egyeb1 = "OK";
-                }
-                else if(egyeb_csekk2.isSelected()) {
-                    egyeb1 = "NOK";
-                }
+                }                
                 else {if(csekk16.isSelected()) { egyeb1 = "N/A";}}
                 
                 if(egyeb_csekk3.isSelected()) {
@@ -1252,38 +1164,32 @@ public class Retour_szeriaszamok extends JPanel {
                iro_kep(szeriaszam_mezo.getText(), kephelye.get(szamlalo), kepneve.get(szamlalo));          
             }
             
-            vizualis_csekk1.setSelected(false);
-            vizualis_csekk2.setSelected(false);        
+            vizualis_csekk1.setSelected(false);       
             vizualis_csekk3.setSelected(false);        
             vizualis_csekk4.setSelected(false);        
             vizualis_csekk5.setSelected(false);        
             vizualis_csekk6.setSelected(false);       
-            ict_csekk1.setSelected(false);       
-            ict_csekk2.setSelected(false);        
+            ict_csekk1.setSelected(false);               
             ict_csekk3.setSelected(false);        
             ict_csekk4.setSelected(false);        
             ict_csekk5.setSelected(false);       
             ict_csekk6.setSelected(false);       
-            fct_csekk1.setSelected(false);       
-            fct_csekk2.setSelected(false);       
+            fct_csekk1.setSelected(false);              
             fct_csekk3.setSelected(false);      
             fct_csekk4.setSelected(false);        
             fct_csekk5.setSelected(false);      
             fct_csekk6.setSelected(false);       
-            meres_csekk1.setSelected(false);       
-            meres_csekk2.setSelected(false);       
+            meres_csekk1.setSelected(false);              
             meres_csekk3.setSelected(false);        
             meres_csekk4.setSelected(false);       
             meres_csekk5.setSelected(false);        
             meres_csekk6.setSelected(false);       
-            rontgen_csekk1.setSelected(false);        
-            rontgen_csekk2.setSelected(false);        
+            rontgen_csekk1.setSelected(false);                
             rontgen_csekk3.setSelected(false);        
             rontgen_csekk4.setSelected(false);       
             rontgen_csekk5.setSelected(false);      
             rontgen_csekk6.setSelected(false);       
-            egyeb_csekk1.setSelected(false);       
-            egyeb_csekk2.setSelected(false);        
+            egyeb_csekk1.setSelected(false);               
             egyeb_csekk3.setSelected(false);        
             egyeb_csekk4.setSelected(false);        
             egyeb_csekk5.setSelected(false);        
