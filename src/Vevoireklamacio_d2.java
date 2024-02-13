@@ -7,11 +7,20 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -107,47 +116,145 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_6);
         
         JLabel lblNewLabel_7 = new JLabel("Mi látható a képen?");
-        lblNewLabel_7.setBounds(693, 298, 124, 14);
+        lblNewLabel_7.setBounds(693, 283, 124, 14);
         add(lblNewLabel_7);
         
         kepleiras_mezo = new JTextField();
-        kepleiras_mezo.setBounds(827, 295, 260, 20);
+        kepleiras_mezo.setBounds(827, 280, 314, 20);
         add(kepleiras_mezo);
         kepleiras_mezo.setColumns(10);
         
-        JLabel lblNewLabel_8 = new JLabel("NOK kép hozzáadása");
-        lblNewLabel_8.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_8.setBounds(188, 334, 142, 14);
-        add(lblNewLabel_8);
-        
-        JButton nok_gomb = new JButton("Hozzáad");
-        nok_gomb.addActionListener(new Megnyit_nok());
-        nok_gomb.setBounds(340, 330, 89, 23);
-        add(nok_gomb);
-        
-        JButton ok_gomb = new JButton("Hozzáad");
-        ok_gomb.addActionListener(new Megnyit_ok());
-        ok_gomb.setBounds(827, 330, 89, 23);
-        add(ok_gomb);
-        
-        JLabel lblNewLabel_9 = new JLabel("Ok kép hozzáadása");
-        lblNewLabel_9.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_9.setBounds(693, 334, 124, 14);
-        add(lblNewLabel_9);
-        
         nok_kep = new JLabel("");
-        nok_kep.setBounds(239, 397, 377, 275);
+        nok_kep.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+        nok_kep.addMouseListener (new MouseListener () {
+            //override the method
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+                try
+                {
+                    JFileChooser mentes_helye = new JFileChooser();
+                    mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                    mentes_helye.setMultiSelectionEnabled(true);
+                    mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    mentes_helye.showOpenDialog(mentes_helye);
+                    File fajl = mentes_helye.getSelectedFile();
+                    if(fajl != null)
+                    {
+                        ImageIcon icon2 = null;
+                        icon2 = new ImageIcon(fajl.getAbsolutePath());
+                        Image icon = icon2.getImage();  
+                        Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                        nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                        modell.addRow(new Object[]{fajl.getName()});
+                        table.setModel(modell);
+                    }
+                }
+                catch (Exception e1) 
+                {;
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+                }
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        nok_kep.setBounds(135, 334, 465, 338);
         add(nok_kep);
         
         ok_kep = new JLabel("");
-        ok_kep.setBounds(740, 397, 377, 275);
+        ok_kep.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
+        ok_kep.addMouseListener (new MouseListener () {
+            //override the method
+            public void mousePressed(MouseEvent e) {
+                
+        }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+                try
+                {
+                    JFileChooser mentes_helye = new JFileChooser();
+                    mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                    mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    mentes_helye.setMultiSelectionEnabled(true);
+                    mentes_helye.showOpenDialog(mentes_helye);
+                    File fajl = mentes_helye.getSelectedFile();
+                    if(fajl != null)
+                    {
+                        ImageIcon icon2 = null;
+                        icon2 = new ImageIcon(fajl.getAbsolutePath());
+                        Image icon = icon2.getImage();  
+                        Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                        ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                        modell.addRow(new Object[]{fajl.getName()});
+                        table.setModel(modell);
+                    }
+                }
+                catch (Exception e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        ok_kep.setBounds(676, 334, 465, 338);
         add(ok_kep);
         
         JLabel lblNewLabel_10 = new JLabel("Egyéb fájl hozzáadása");
-        lblNewLabel_10.setBounds(1151, 334, 142, 14);
+        lblNewLabel_10.setBounds(1175, 334, 142, 14);
         add(lblNewLabel_10);
         
         JButton fajl_gomb = new JButton("Hozzáad");
+        fajl_gomb.addActionListener(new Hozzaad());
         fajl_gomb.setBounds(1327, 330, 89, 23);
         add(fajl_gomb);
         
@@ -165,7 +272,7 @@ public class Vevoireklamacio_d2 extends JPanel {
 
     }
     
-    class Megnyit_nok implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    class Hozzaad implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -175,14 +282,17 @@ public class Vevoireklamacio_d2 extends JPanel {
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
-                File fajl = mentes_helye.getSelectedFile();         
-                ImageIcon icon2 = null;
-                icon2 = new ImageIcon(fajl.getAbsolutePath());
-                Image icon = icon2.getImage();  
-                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                                                                             //egér mutató alaphelyzetbe állítása
+                mentes_helye.setMultiSelectionEnabled(true);
+                File[] fajl = mentes_helye.getSelectedFiles();
+                if(fajl != null)
+                {
+                    for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
+                    {
+                        modell.addRow(new Object[]{fajl[szamlalo].getName()});
+                        table.setModel(modell);
+                    }
+                }
+                
             }
             catch (Exception e1) 
             {;
@@ -195,33 +305,93 @@ public class Vevoireklamacio_d2 extends JPanel {
          }
     }
     
-    class Megnyit_ok implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    public void mentes()
     {
-        public void actionPerformed(ActionEvent e)
-         {
-            try
-            {
-                JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
-                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                mentes_helye.showOpenDialog(mentes_helye);
-                File fajl = mentes_helye.getSelectedFile();         
-                ImageIcon icon2 = null;
-                icon2 = new ImageIcon(fajl.getAbsolutePath());
-                Image icon = icon2.getImage();  
-                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                                                                             //egér mutató alaphelyzetbe állítása
-            }
-            catch (Exception e1) 
-            {
-                e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
-            }
-         }
+        try 
+        {
+            SQA_SQL ment = new SQA_SQL();
+            String sql = "update qualitydb.Vevoireklamacio_alap set miaproblema = '"+ miaproblema_mezo.getText() +"', holaproblema = '"+ holdetektalta_mezo.getText() +"', "
+                    + "Miertproblema = '"+ miertproblema_mezo.getText() +"', hogydetektalta = '"+ hogyandetektalta_mezo.getText() +"', mikordetektalta = '"+ datum_mezo.getText() +"',"
+                    + "hanydb ='"+ db_mezo.getText() +"', kidetektalta = '"+ ki_mezo.getText()+"', mivanakepen = '"+ kepleiras_mezo.getText() +"' "
+                    + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            ment.mindenes(sql);
+            System.out.println("Ment a D2 is");
+        } 
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    public void visszatolt()
+    {
+        Connection conn = null;
+        Statement stmt = null;        
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        String sql = "select miaproblema,holaproblema,Miertproblema,hogydetektalta,mikordetektalta,hanydb,kidetektalta,mivanakepen from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        stmt.execute(sql);
+        ResultSet rs = stmt.getResultSet();
+        if(rs.next())
+        {
+            miaproblema_mezo.setText(rs.getString(1));
+            holdetektalta_mezo.setText(rs.getString(2));
+            miertproblema_mezo.setText(rs.getString(3));
+            hogyandetektalta_mezo.setText(rs.getString(4));
+            datum_mezo.setText(rs.getString(5));
+            db_mezo.setText(rs.getString(6));
+            ki_mezo.setText(rs.getString(7));
+            kepleiras_mezo.setText(rs.getString(8));
+            
+        }
+        stmt.close();
+        conn.close();        
+        }          
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+        } finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                  stmt.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+               se.printStackTrace();
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+           }  
+        }
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
 }

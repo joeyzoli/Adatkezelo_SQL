@@ -1,11 +1,12 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
@@ -37,7 +38,7 @@ public class Vevoireklamacio_d3 extends JPanel {
     private JLabel lblNewLabel_11;
     private JLabel lblNewLabel_12;
     private JLabel lblNewLabel_13;
-    private JButton btnNewButton;
+    private JButton mentes_gomb;
 
     /**
      * Create the panel.
@@ -57,7 +58,6 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_1);
         
         felelos_mezo = new JTextField();
-        felelos_mezo.addKeyListener(new Szinez());
         felelos_mezo.setBounds(547, 58, 182, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
@@ -208,28 +208,30 @@ public class Vevoireklamacio_d3 extends JPanel {
         lblNewLabel_13.setBounds(389, 516, 148, 14);
         add(lblNewLabel_13);
         
-        btnNewButton = new JButton("D3 zárása");
-        btnNewButton.setBounds(547, 512, 119, 23);
-        add(btnNewButton);
+        mentes_gomb = new JButton("D3 zárása");
+        mentes_gomb.setBounds(547, 512, 119, 23);
+        mentes_gomb.addActionListener(new Mentes());
+        add(mentes_gomb);
 
     }
     
-    class Szinez implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
-        public void keyPressed (KeyEvent e) {            
-        }
-        @Override
-        public void keyTyped(KeyEvent e) {                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom                    
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            if(felelos_mezo.getText().equals("")) {}
-            else
+        public void actionPerformed(ActionEvent e)
+         {
+            try
             {
-                Vevoireklamacio_fejlec.d3 = Color.YELLOW;
-            }           
-        }    
+                Vevoireklamacio_fejlec.d3 = Color.GREEN;
+                Vevoireklamacio_fejlec.d5 = Color.YELLOW;
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
     }
+
 
 }

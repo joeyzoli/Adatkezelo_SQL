@@ -1157,7 +1157,17 @@ public class Foablak extends JFrame
             }
             //System.out.println(System.getProperty("user.name"));
             //Email email = new Email();
-            //email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "toth.zoltan@veas.videoton.hu","", "Teszt", "TEszt szöveg");
+            /*for(int szamlalo = 0; szamlalo < 100; szamlalo++)
+            {                
+                email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "koszegi.csaba@veas.videoton.hu","", "ODBC Driver", "Szia Csabi!\n"
+                        + "\n"
+                        + "Feltennéd az ODBC drivert a Egyedné Adrinak?\n"
+                        + "Előre is köszi!\n"
+                        + "\n"
+                        + "ÜdV:  Z\n"
+                        + "\n"
+                        + "");
+            }
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";
