@@ -7,6 +7,11 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 
@@ -27,14 +32,14 @@ public class Vevoireklamacio_d3 extends JPanel {
     private JTextField szallitas_mezo;
     private JLabel lblNewLabel_7;
     private JLabel lblNewLabel_8;
-    private JTextField textField;
+    private JTextField felkesz_ell;
     private JLabel lblNewLabel_9;
-    private JTextField textField_1;
+    private JTextField felkesz_hibas;
     private JLabel lblNewLabel_10;
-    private JTextField textField_2;
-    private JTextField textField_3;
-    private JTextField textField_4;
-    private JTextField textField_5;
+    private JTextField kesz_ell;
+    private JTextField kesz_hibas;
+    private JTextField alap_ell;
+    private JTextField alap_hibas;
     private JLabel lblNewLabel_11;
     private JLabel lblNewLabel_12;
     private JLabel lblNewLabel_13;
@@ -58,6 +63,7 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_1);
         
         felelos_mezo = new JTextField();
+        felelos_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos_mezo.setBounds(547, 58, 182, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
@@ -67,6 +73,7 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_2);
         
         hatarido_mezo = new JTextField();
+        hatarido_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido_mezo.setBounds(817, 58, 86, 20);
         add(hatarido_mezo);
         hatarido_mezo.setColumns(10);
@@ -76,21 +83,25 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_3);
         
         lezaras_mezo = new JTextField();
+        lezaras_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         lezaras_mezo.setBounds(998, 58, 86, 20);
         add(lezaras_mezo);
         lezaras_mezo.setColumns(10);
         
         felelos2_mezo = new JTextField();
+        felelos2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos2_mezo.setBounds(547, 100, 182, 20);
         add(felelos2_mezo);
         felelos2_mezo.setColumns(10);
         
         hatarido2_mezo = new JTextField();
+        hatarido2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido2_mezo.setBounds(817, 100, 86, 20);
         add(hatarido2_mezo);
         hatarido2_mezo.setColumns(10);
         
         lezaras2_mezo = new JTextField();
+        lezaras2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         lezaras2_mezo.setBounds(998, 100, 86, 20);
         add(lezaras2_mezo);
         lezaras2_mezo.setColumns(10);
@@ -101,16 +112,19 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_4);
         
         felelos3_mezo = new JTextField();
+        felelos3_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos3_mezo.setBounds(547, 147, 182, 20);
         add(felelos3_mezo);
         felelos3_mezo.setColumns(10);
         
         hatarido3_mezo = new JTextField();
+        hatarido3_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido3_mezo.setBounds(817, 147, 86, 20);
         add(hatarido3_mezo);
         hatarido3_mezo.setColumns(10);
         
         lezaras3_mezo = new JTextField();
+        lezaras3_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         lezaras3_mezo.setBounds(998, 147, 86, 20);
         add(lezaras3_mezo);
         lezaras3_mezo.setColumns(10);
@@ -121,6 +135,7 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_5);
         
         felelos4_mezo = new JTextField();
+        felelos4_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos4_mezo.setBounds(547, 196, 182, 20);
         add(felelos4_mezo);
         felelos4_mezo.setColumns(10);
@@ -131,16 +146,19 @@ public class Vevoireklamacio_d3 extends JPanel {
         add(lblNewLabel_6);
         
         hatarido4_mezo = new JTextField();
+        hatarido4_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido4_mezo.setBounds(817, 196, 86, 20);
         add(hatarido4_mezo);
         hatarido4_mezo.setColumns(10);
         
         lezaras4_mezo = new JTextField();
+        lezaras4_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         lezaras4_mezo.setBounds(998, 196, 86, 20);
         add(lezaras4_mezo);
         lezaras4_mezo.setColumns(10);
         
         szallitas_mezo = new JTextField();
+        szallitas_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         szallitas_mezo.setBounds(547, 255, 86, 20);
         add(szallitas_mezo);
         szallitas_mezo.setColumns(10);
@@ -154,44 +172,50 @@ public class Vevoireklamacio_d3 extends JPanel {
         lblNewLabel_8.setBounds(547, 305, 134, 14);
         add(lblNewLabel_8);
         
-        textField = new JTextField();
-        textField.setBounds(547, 330, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        felkesz_ell = new JTextField();
+        felkesz_ell.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        felkesz_ell.setBounds(547, 330, 86, 20);
+        add(felkesz_ell);
+        felkesz_ell.setColumns(10);
         
         lblNewLabel_9 = new JLabel("Hibás mennyiség");
         lblNewLabel_9.setBounds(691, 305, 105, 14);
         add(lblNewLabel_9);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(692, 330, 86, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
+        felkesz_hibas = new JTextField();
+        felkesz_hibas.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        felkesz_hibas.setBounds(692, 330, 86, 20);
+        add(felkesz_hibas);
+        felkesz_hibas.setColumns(10);
         
         lblNewLabel_10 = new JLabel("Félkész termékek válogatása: ");
         lblNewLabel_10.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel_10.setBounds(288, 333, 249, 14);
         add(lblNewLabel_10);
         
-        textField_2 = new JTextField();
-        textField_2.setBounds(547, 368, 86, 20);
-        add(textField_2);
-        textField_2.setColumns(10);
+        kesz_ell = new JTextField();
+        kesz_ell.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        kesz_ell.setBounds(547, 368, 86, 20);
+        add(kesz_ell);
+        kesz_ell.setColumns(10);
         
-        textField_3 = new JTextField();
-        textField_3.setBounds(691, 368, 86, 20);
-        add(textField_3);
-        textField_3.setColumns(10);
+        kesz_hibas = new JTextField();
+        kesz_hibas.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        kesz_hibas.setBounds(691, 368, 86, 20);
+        add(kesz_hibas);
+        kesz_hibas.setColumns(10);
         
-        textField_4 = new JTextField();
-        textField_4.setBounds(547, 410, 86, 20);
-        add(textField_4);
-        textField_4.setColumns(10);
+        alap_ell = new JTextField();
+        alap_ell.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        alap_ell.setBounds(547, 410, 86, 20);
+        add(alap_ell);
+        alap_ell.setColumns(10);
         
-        textField_5 = new JTextField();
-        textField_5.setBounds(692, 410, 86, 20);
-        add(textField_5);
-        textField_5.setColumns(10);
+        alap_hibas = new JTextField();
+        alap_hibas.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        alap_hibas.setBounds(692, 410, 86, 20);
+        add(alap_hibas);
+        alap_hibas.setColumns(10);
         
         lblNewLabel_11 = new JLabel("Késztermékek válogatása: ");
         lblNewLabel_11.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -231,6 +255,154 @@ public class Vevoireklamacio_d3 extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
+    }
+    
+    public void mentes()
+    {
+        try 
+        {
+            SQA_SQL ment = new SQA_SQL();
+            String sql = "update qualitydb.Vevoireklamacio_alap set Felelos1 = '"+ felelos_mezo.getText() +"', Hatarido1 = '"+ hatarido_mezo.getText() +"', "
+                    + "Lezaras1 = '"+ lezaras_mezo.getText() +"', Felelos2 = '"+ felelos2_mezo.getText() +"', Hatarido2 = '"+ hatarido2_mezo.getText() +"',"
+                    + "Lezaras2 ='"+ lezaras2_mezo.getText() +"', Felelos3 = '"+ felelos3_mezo.getText()+"', Hatarido3 = '"+ hatarido3_mezo.getText() +"',"
+                    + "Lezaras3 = '"+ lezaras3_mezo.getText() +"', Felelos4 = '"+ felelos4_mezo.getText() +"', Hatarido4 = '"+ hatarido4_mezo.getText() +"',"
+                    + "Lezaras4 = '"+ lezaras4_mezo.getText() +"',Szallitas_datuma = '"+ szallitas_mezo.getText() +"',"
+                    + "Felkesz = '"+ felkesz_ell.getText()+";"+ felkesz_hibas.getText() +"', kesz = '"+ kesz_ell.getText()+";"+ kesz_hibas.getText()
+                    + "', Alapanyag = '"+ alap_ell.getText()+";"+ alap_hibas.getText()
+                    + "' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            ment.mindenes(sql);
+        } 
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    public void visszatolt()
+    {
+        Connection conn = null;
+        Statement stmt = null;        
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        String sql = "select * from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        stmt.execute(sql);
+        ResultSet rs = stmt.getResultSet();
+        if(rs.next())
+        {
+            if(rs.getString(23) != null)
+            {
+                felelos_mezo.setText(rs.getString(23));
+                hatarido_mezo.setText(rs.getString(24));
+                lezaras_mezo.setText(rs.getString(25));
+                felelos2_mezo.setText(rs.getString(26));
+                hatarido2_mezo.setText(rs.getString(27));
+                lezaras2_mezo.setText(rs.getString(28));
+                felelos3_mezo.setText(rs.getString(29));
+                hatarido3_mezo.setText(rs.getString(30));
+                lezaras3_mezo.setText(rs.getString(31));
+                felelos4_mezo.setText(rs.getString(32));
+                hatarido4_mezo.setText(rs.getString(33));
+                lezaras4_mezo.setText(rs.getString(34));
+                szallitas_mezo.setText(rs.getString(35));
+                String[] felkesz = rs.getString(36).split(";");
+                if(felkesz.length > 1)
+                {
+                    felkesz_ell.setText(felkesz[0]);
+                    felkesz_hibas.setText(felkesz[1]); 
+                }
+                else if(felkesz.length == 1)
+                {
+                    felkesz_ell.setText(felkesz[0]);
+                    felkesz_hibas.setText("");
+                }
+                else
+                {
+                    felkesz_ell.setText("");
+                    felkesz_hibas.setText("");
+                }
+                String[] kesz = rs.getString(37).split(";");
+                if(kesz.length > 1)
+                {
+                    kesz_ell.setText(kesz[0]);
+                    kesz_hibas.setText(kesz[1]); 
+                }
+                else if(kesz.length == 1)
+                {
+                    kesz_ell.setText(kesz[0]);
+                    kesz_hibas.setText("");
+                }
+                else
+                {
+                    kesz_ell.setText("");
+                    kesz_hibas.setText("");
+                }            
+                String[] alap = rs.getString(38).split(";");
+                if(alap.length > 1)
+                {
+                    alap_ell.setText(alap[0]);
+                    alap_hibas.setText(alap[1]); 
+                }
+                else if(alap.length == 1)
+                {
+                    alap_ell.setText(alap[0]);
+                    alap_hibas.setText("");
+                }
+                else
+                {
+                    alap_ell.setText("");
+                    alap_hibas.setText("");
+                }
+            }
+        }        
+        stmt.close();
+        conn.close();        
+        }          
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+        } finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                  stmt.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+               se.printStackTrace();
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+           }  
+        }
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
 
 

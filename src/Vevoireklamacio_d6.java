@@ -1,6 +1,14 @@
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 public class Vevoireklamacio_d6 extends JPanel {
@@ -8,6 +16,8 @@ public class Vevoireklamacio_d6 extends JPanel {
     /**
      * Create the panel.
      */
+    private JTextArea megerosites_mezo;
+    
     public Vevoireklamacio_d6() {
         setLayout(null);
         setBackground(Foablak.hatter_szine);
@@ -16,13 +26,92 @@ public class Vevoireklamacio_d6 extends JPanel {
         lblNewLabel.setBounds(545, 49, 293, 14);
         add(lblNewLabel);
         
-        JTextArea megerosites_mezo = new JTextArea();
+        megerosites_mezo = new JTextArea();
+        megerosites_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         megerosites_mezo.setLineWrap(true);
         megerosites_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto = new JScrollPane(megerosites_mezo);        
         gorgeto.setBounds(121, 84, 980, 465);
         add(gorgeto);
 
+    }
+    
+    public void mentes()
+    {
+        try 
+        {
+            SQA_SQL ment = new SQA_SQL();
+            String sql = "update qualitydb.Vevoireklamacio_alap set Hatekonysag = '"+ megerosites_mezo.getText() +"'";           
+            ment.mindenes(sql);
+        } 
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    public void visszatolt()
+    {
+        Connection conn = null;
+        Statement stmt = null;        
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        String sql = "select Hatekonysag from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        stmt.execute(sql);
+        ResultSet rs = stmt.getResultSet();
+        if(rs.next())
+        {           
+            megerosites_mezo.setText(rs.getString(1));
+        }
+        stmt.close();
+        conn.close();                
+        }          
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+        } finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                  stmt.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+               se.printStackTrace();
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+           }  
+        }
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
 
 }

@@ -27,6 +27,7 @@ public class Vevoireklamacio_d1 extends JPanel {
         add(lblNewLabel);
         
         vezeto_mezo = new JTextField();
+        vezeto_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         vezeto_mezo.setBounds(553, 48, 263, 20);
         add(vezeto_mezo);
         vezeto_mezo.setColumns(10);
@@ -36,6 +37,7 @@ public class Vevoireklamacio_d1 extends JPanel {
         add(lblNewLabel_1);
         
         tagok_mezo = new JTextArea();
+        tagok_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         tagok_mezo.setLineWrap(true);
         tagok_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto = new JScrollPane(tagok_mezo);

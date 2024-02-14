@@ -5,20 +5,28 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import javax.swing.JTextField;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -43,11 +51,14 @@ public class Vevoireklamacio_d2 extends JPanel {
     private  JLabel ok_kep;
     private JTable table;
     private DefaultTableModel modell;
+    static ArrayList<String> fajlok;
     
     
     public Vevoireklamacio_d2() {
         setLayout(null);
         setBackground(Foablak.hatter_szine);
+        
+        fajlok = new ArrayList<String>();
         
         JLabel lblNewLabel = new JLabel("Mi a probléma?");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -55,6 +66,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel);
         
         miaproblema_mezo = new JTextArea();
+        miaproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         miaproblema_mezo.setBounds(340, 59, 260, 64);
         add(miaproblema_mezo);
         
@@ -64,6 +76,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_1);
         
         holdetektalta_mezo = new JTextArea();
+        holdetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         holdetektalta_mezo.setBounds(827, 59, 260, 64);
         add(holdetektalta_mezo);
         
@@ -73,6 +86,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_2);
         
         miertproblema_mezo = new JTextArea();
+        miertproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         miertproblema_mezo.setBounds(340, 140, 260, 64);
         add(miertproblema_mezo);
         
@@ -82,10 +96,12 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_3);
         
         hogyandetektalta_mezo = new JTextArea();
+        hogyandetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hogyandetektalta_mezo.setBounds(827, 140, 260, 64);
         add(hogyandetektalta_mezo);
         
         datum_mezo = new JTextField();
+        datum_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         datum_mezo.setBounds(340, 232, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
@@ -101,11 +117,13 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_5);
         
         db_mezo = new JTextField();
+        db_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         db_mezo.setBounds(827, 232, 86, 20);
         add(db_mezo);
         db_mezo.setColumns(10);
         
         ki_mezo = new JTextField();
+        ki_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         ki_mezo.setBounds(340, 280, 188, 20);
         add(ki_mezo);
         ki_mezo.setColumns(10);
@@ -120,11 +138,13 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_7);
         
         kepleiras_mezo = new JTextField();
+        kepleiras_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         kepleiras_mezo.setBounds(827, 280, 314, 20);
         add(kepleiras_mezo);
         kepleiras_mezo.setColumns(10);
         
         nok_kep = new JLabel("");
+        nok_kep.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         nok_kep.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
         nok_kep.addMouseListener (new MouseListener () {
             //override the method
@@ -145,6 +165,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                     File fajl = mentes_helye.getSelectedFile();
                     if(fajl != null)
                     {
+                        fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
                         ImageIcon icon2 = null;
                         icon2 = new ImageIcon(fajl.getAbsolutePath());
                         Image icon = icon2.getImage();  
@@ -188,6 +209,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(nok_kep);
         
         ok_kep = new JLabel("");
+        ok_kep.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         ok_kep.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
         ok_kep.addMouseListener (new MouseListener () {
             //override the method
@@ -206,8 +228,10 @@ public class Vevoireklamacio_d2 extends JPanel {
                     mentes_helye.setMultiSelectionEnabled(true);
                     mentes_helye.showOpenDialog(mentes_helye);
                     File fajl = mentes_helye.getSelectedFile();
+                    
                     if(fajl != null)
                     {
+                        fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";ok");
                         ImageIcon icon2 = null;
                         icon2 = new ImageIcon(fajl.getAbsolutePath());
                         Image icon = icon2.getImage();  
@@ -272,6 +296,11 @@ public class Vevoireklamacio_d2 extends JPanel {
 
     }
     
+    public void okkep(String fajlhelye)
+    {
+        
+    }
+    
     class Hozzaad implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -288,6 +317,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                 {
                     for(int szamlalo = 0; szamlalo < fajl.length;szamlalo++)
                     {
+                        fajlok.add(fajl[szamlalo].getName() +";"+fajl[szamlalo].getAbsolutePath()+";*");
                         modell.addRow(new Object[]{fajl[szamlalo].getName()});
                         table.setModel(modell);
                     }
@@ -315,7 +345,18 @@ public class Vevoireklamacio_d2 extends JPanel {
                     + "hanydb ='"+ db_mezo.getText() +"', kidetektalta = '"+ ki_mezo.getText()+"', mivanakepen = '"+ kepleiras_mezo.getText() +"' "
                     + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
-            System.out.println("Ment a D2 is");
+            for(int szamlalo = 0; szamlalo < fajlok.size(); szamlalo++)
+            {
+                String[] darabol = fajlok.get(szamlalo).split(";");
+                sql = "select Fajl_neve from qualitydb.Vevoireklamacio_fajlok where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and Fajl_neve = '"+ darabol[0] +"'";
+                String[] letezik = ment.tombvissza_sajat(sql);
+                if(letezik.length > 0){}
+                else
+                {
+                    fajl_mentes(Vevoireklamacio_fejlec.id_mezo.getText(),darabol[0],darabol[1],darabol[2]);
+                }
+            }
+            fajlok.clear();
         } 
         catch (Exception e1) 
         {              
@@ -330,7 +371,8 @@ public class Vevoireklamacio_d2 extends JPanel {
     public void visszatolt()
     {
         Connection conn = null;
-        Statement stmt = null;        
+        Statement stmt = null;
+        PreparedStatement ps = null;
         try 
         {
            try 
@@ -357,8 +399,98 @@ public class Vevoireklamacio_d2 extends JPanel {
             datum_mezo.setText(rs.getString(5));
             db_mezo.setText(rs.getString(6));
             ki_mezo.setText(rs.getString(7));
-            kepleiras_mezo.setText(rs.getString(8));
+            kepleiras_mezo.setText(rs.getString(8));           
+        }
+        
+        
+        File fajl = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\");
+        if(fajl.exists()) {}
+        else
+        {
+            fajl.mkdir();
+        }
+        File[] torlendofajlok = fajl.listFiles();
+        for(int szamlalo = 0; szamlalo < torlendofajlok.length; szamlalo++)
+        {
+            torlendofajlok[szamlalo].delete();
+        }
+        ps= conn.prepareStatement("SELECT Fajl_neve, Fajl,Tipus FROM qualitydb.Vevoireklamacio_fajlok WHERE Rek_ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+        ResultSet rset = ps.executeQuery();         
+        Blob blob;
+        byte b[];
+        FileOutputStream fs=null;
+        ok_kep.setIcon(null);
+        nok_kep.setIcon(null);
+        while(rset.next())
+        {        
+            File f = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\"+ rset.getString(1));
+            f.getParentFile().mkdirs(); 
+            f.createNewFile();  
+            fs = new FileOutputStream(f);
+            blob = rset.getBlob("Fajl");
+            b = blob.getBytes(1, (int)blob.length());
+            fs.write(b);
+            fs.close();
+            String tipus = "*";
+            if(rset.getString(3).equals("ok"))
+            {
+                ImageIcon icon2 = null;
+                icon2 = new ImageIcon(f.getAbsolutePath());
+                Image icon = icon2.getImage();  
+                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                tipus = "ok";
+            }
+            if(rset.getString(3).equals("nok"))
+            {
+                ImageIcon icon2 = null;
+                icon2 = new ImageIcon(f.getAbsolutePath());
+                Image icon = icon2.getImage();  
+                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                tipus = "nok";
+            }
             
+            ImageIcon icon = null;
+            String[] fajltipus = rset.getString(1).split("\\.");
+            if(fajltipus[1].equals("msg"))
+            {
+                icon = new ImageIcon(Vevoireklamacio_fejlec.outlook_kep);
+                tipus = "email";
+            }
+            else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
+            {
+                icon = new ImageIcon(Vevoireklamacio_fejlec.excel_kep);
+            }
+            else if(fajltipus[1].equals("pdf"))
+            {
+                icon = new ImageIcon(Vevoireklamacio_fejlec.pdf_kep);
+            }
+            else if(fajltipus[1].equals("jpg"))
+            {
+                icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
+            }
+            else if(fajltipus[1].equals("png"))
+            {
+                icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
+            }
+            fajlok.add(rset.getString(1)+";"+f.getAbsolutePath()+";"+tipus);
+            Vevoireklamacio_d0.modell.addRow(new Object[]{icon,rset.getString(1)});
+            TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
+            for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
+                int width = 15; // Min width
+                for (int row = 0; row < Vevoireklamacio_d0.table.getRowCount(); row++) {
+                    TableCellRenderer renderer = Vevoireklamacio_d0.table.getCellRenderer(row, column);
+                    Component comp = Vevoireklamacio_d0.table.prepareRenderer(renderer, row, column);
+                    width = Math.max(comp.getPreferredSize().width +1 , width);
+                }
+                if(width > 300)
+                    width=300;
+                columnModel.getColumn(column).setPreferredWidth(width);
+            }
+            Vevoireklamacio_d0.table.setModel(Vevoireklamacio_d0.modell);              
         }
         stmt.close();
         conn.close();        
@@ -393,5 +525,52 @@ public class Vevoireklamacio_d2 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    public void fajl_mentes(String Rek_ID, String Fajl_neve, String fajl, String tipus)
+    {   
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try 
+        {           
+            Class.forName("com.mysql.cj.jdbc.Driver");                                //Driver meghívása   
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása                                                                                                          //csatlakozás
+            
+            File image = new File(fajl);
+            FileInputStream fis = new FileInputStream (image);
+            String sql = "INSERT INTO qualitydb.Vevoireklamacio_fajlok(Rek_ID, Fajl_neve, fajl, tipus) VALUES(?,?,?,?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Rek_ID);
+            stmt.setString(2, Fajl_neve);
+            stmt.setBinaryStream (3, fis, (int) image.length());
+            stmt.setString(4, tipus);
+            stmt.executeUpdate();                                                                                                                 //sql utasítás végrehajtása
+        }         
+        catch (Exception e) 
+        {
+           e.printStackTrace();
+           String hibauzenet = e.toString();
+           Email hibakuldes = new Email();
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        } 
+        finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
     }
 }

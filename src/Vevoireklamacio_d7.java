@@ -7,6 +7,12 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -72,7 +78,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         hatarido_mezo.setColumns(10);
         
         table = new JTable();
-        modell.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma"});
+        modell.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table.setModel(modell);       
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(238, 188, 1018, 133);
@@ -113,7 +119,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         hatarido2_mezo.setColumns(10);
         
         table2 = new JTable();
-        modell2.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma"});
+        modell2.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table2.setModel(modell2);        
         JScrollPane gorgeto2 = new JScrollPane(table2);
         gorgeto2.setBounds(238, 499, 1018, 133);
@@ -148,7 +154,7 @@ public class Vevoireklamacio_d7 extends JPanel {
          {
             try
             {
-                modell.addRow(new Object[]{elofordulas_mezo.getText(), felelos_mezo.getText(),hatarido_mezo.getText()});
+                modell.addRow(new Object[]{elofordulas_mezo.getText(), felelos_mezo.getText(),hatarido_mezo.getText(),"",""});
                 table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
                 table.setModel(modell);
             }
@@ -169,7 +175,7 @@ public class Vevoireklamacio_d7 extends JPanel {
          {
             try
             {
-                modell2.addRow(new Object[]{detektalas_mezo.getText(), felelos2_mezo.getText(),hatarido2_mezo.getText()});
+                modell2.addRow(new Object[]{detektalas_mezo.getText(), felelos2_mezo.getText(),hatarido2_mezo.getText(),"",""});
                 table2.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
                 table2.setModel(modell2);
             }
@@ -182,6 +188,131 @@ public class Vevoireklamacio_d7 extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
             }
          }
+    }
+    
+    public void mentes()
+    {
+        try 
+        {
+            SQA_SQL ment = new SQA_SQL();
+            String sql = "";
+            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+            {
+                if(table.getValueAt(szamlalo, 4).toString().equals(""))
+                {
+                    sql = "insert into qualitydb.Vevoireklamacio_elo (Feladat,Felelos,Hatarido,Lezaras_datuma,D,Rek_ID) values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+table.getValueAt(szamlalo, 1).toString() +"', "
+                          + "'"+ table.getValueAt(szamlalo, 2).toString() +"','"+table.getValueAt(szamlalo, 4).toString() +"','D7','"+ Vevoireklamacio_fejlec.id_mezo.getText() +"')";
+                }
+                else
+                {
+                    sql = "update qualitydb.Vevoireklamacio_elo set Feladat = '"+ table.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table.getValueAt(szamlalo, 1).toString() +"', "
+                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "where id = '"+ table.getValueAt(szamlalo, 4).toString() +"'";
+                }
+                ment.mindenes(sql);
+            }
+            
+            for(int szamlalo = 0; szamlalo < table2.getRowCount(); szamlalo++)
+            {
+                if(table2.getValueAt(szamlalo, 4).toString().equals(""))
+                {
+                    sql = "insert into qualitydb.Vevoireklamacio_det (Feladat,Felelos,Hatarido,Lezaras_datuma,D,Rek_ID) values('"+ table2.getValueAt(szamlalo, 0).toString() +"', '"+table2.getValueAt(szamlalo, 1).toString() +"', "
+                          + "'"+ table2.getValueAt(szamlalo, 2).toString() +"','"+table2.getValueAt(szamlalo, 4).toString() +"','D7','"+ Vevoireklamacio_fejlec.id_mezo.getText() +"')";
+                }
+                else
+                {
+                    sql = "update qualitydb.Vevoireklamacio_det set Feladat = '"+ table2.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table2.getValueAt(szamlalo, 1).toString() +"', "
+                            + "Hatarido = '"+ table2.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table2.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "where id = '"+ table2.getValueAt(szamlalo, 4).toString() +"'";
+                }
+                ment.mindenes(sql);
+            }                        
+        } 
+        catch (Exception e1) 
+        {              
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
+    }
+    
+    public void visszatolt()
+    {
+        int rowCount = modell.getRowCount();
+        
+        for (int i = rowCount - 1; i > -1; i--) 
+        {
+          modell.removeRow(i);
+        }
+        table.setModel(modell);
+        rowCount = modell2.getRowCount();
+        
+        for (int i = rowCount - 1; i > -1; i--) 
+        {
+          modell2.removeRow(i);
+        }
+        table2.setModel(modell2);
+        
+        Connection conn = null;
+        Statement stmt = null;        
+        try 
+        {
+          
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = (Statement) conn.createStatement();
+            String sql = "select * from qualitydb.Vevoireklamacio_elo where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and D = 'D7'";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+            while(rs.next())
+            {
+                modell.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});
+            }
+            table.setModel(modell);
+            
+            sql = "select * from qualitydb.Vevoireklamacio_det where REk_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and D = 'D7'";
+            stmt.execute(sql);
+            rs = stmt.getResultSet();
+            while(rs.next())
+            {
+                modell2.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});
+            }
+            table2.setModel(modell2);
+            stmt.close();
+            conn.close();        
+        }          
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+        } finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                  stmt.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+               se.printStackTrace();
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+           }  
+        }
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
 }
 

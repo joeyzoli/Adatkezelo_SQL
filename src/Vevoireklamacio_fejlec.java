@@ -20,8 +20,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
 
 public class Vevoireklamacio_fejlec extends JPanel {
@@ -46,10 +44,11 @@ public class Vevoireklamacio_fejlec extends JPanel {
     static Color d3 = Color.gray;
     static Color d5 = Color.gray;
     static Color lezaras = Color.gray;
-    private String outlook_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\outlook.jpg";
-    private String excel_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\excel.jpg";
-    private String pdf_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\pdf.jpg";
-    static ArrayList<String> fajlhelye = new ArrayList<String>();
+    static String outlook_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\outlook.jpg";
+    static String excel_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\excel.jpg";
+    static String pdf_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\pdf.jpg";
+    static String kep_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\kep.jpg";
+    static JButton mentes_gomb;
 
     /**
      * Create the panel.
@@ -146,7 +145,8 @@ public class Vevoireklamacio_fejlec extends JPanel {
         csoport.add(d7_gomb);
         csoport.add(d8_gomb);
         
-        JButton mentes_gomb = new JButton("Mentés");
+        mentes_gomb = new JButton("Mentés");
+        mentes_gomb.setEnabled(false);
         mentes_gomb.addActionListener(new Mentes());
         mentes_gomb.setBounds(1257, 64, 116, 23);
         add(mentes_gomb);
@@ -183,12 +183,13 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 {                  
                     Vevoireklamacio_fejlec.d3 = Color.YELLOW;
                     Vevoireklamacio_fejlec.qr = Color.GREEN;
-                    String[] fajltipus = fajl.getName().split("\\.");
-                    fajlhelye.add(fajl.getAbsolutePath());
+                    String[] fajltipus = fajl.getName().split("\\.");                    
                     ImageIcon icon = null;
+                    String tipus = "*";
                     if(fajltipus[1].equals("msg"))
                     {
                         icon = new ImageIcon(outlook_kep);
+                        tipus = "email";
                     }
                     else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
                     {
@@ -198,7 +199,15 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     {
                         icon = new ImageIcon(pdf_kep);
                     }
-                    
+                    else if(fajltipus[1].equals("jpg"))
+                    {
+                        icon = new ImageIcon(kep_kep);
+                    }
+                    else if(fajltipus[1].equals("png"))
+                    {
+                        icon = new ImageIcon(kep_kep);
+                    }
+                    Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+tipus);
                     Vevoireklamacio_d0.modell.addRow(new Object[]{icon,fajl.getName()});
                     TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
                     for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
@@ -292,6 +301,13 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 Vevoireklamacio_V2.d0.mentes();
                 Vevoireklamacio_V2.d1.mentes();
                 Vevoireklamacio_V2.d2.mentes();
+                Vevoireklamacio_V2.d3.mentes();
+                Vevoireklamacio_V2.d4.mentes();
+                Vevoireklamacio_V2.d5.mentes();
+                Vevoireklamacio_V2.d6.mentes();
+                Vevoireklamacio_V2.d7.mentes();
+                Vevoireklamacio_V2.d8.mentes();
+                JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
             }
             catch (Exception e1) 
             {
@@ -310,11 +326,53 @@ public class Vevoireklamacio_fejlec extends JPanel {
         {    
             try 
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre               
-                Vevoireklamacio_V2.d0.visszatolt();
-                Vevoireklamacio_V2.d1.visszatolt();
-                Vevoireklamacio_V2.d2.visszatolt();
-                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                    mentes_gomb.setEnabled(false);
+                    Vevoireklamacio_d2.fajlok.clear();
+                    Vevoireklamacio_V2.d0.visszatolt();
+                    Vevoireklamacio_V2.d1.visszatolt();
+                    Vevoireklamacio_V2.d2.visszatolt();
+                    Vevoireklamacio_V2.d3.visszatolt();
+                    Vevoireklamacio_V2.d4.visszatolt();
+                    Vevoireklamacio_V2.d5.visszatolt();
+                    Vevoireklamacio_V2.d6.visszatolt();
+                    Vevoireklamacio_V2.d7.visszatolt();
+                    Vevoireklamacio_V2.d8.visszatolt();
+                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
+    
+    static class Valtozas_figyelo implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            try 
+            {
+                mentes_gomb.setEnabled(true);
             } 
             catch (Exception e1) 
             {              

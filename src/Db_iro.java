@@ -365,8 +365,7 @@ public class Db_iro
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
            }
            
-        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
-                                                                                                          //csatlakozás
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása                                                                                                          //csatlakozás
         
         File image = new File(kephelye);
         FileInputStream fis = new FileInputStream (image);
@@ -377,15 +376,7 @@ public class Db_iro
         stmt.setBinaryStream (3, fis, (int) image.length());
         stmt.setString(4, kepneve);
         stmt.executeUpdate();                                                                                                                 //sql utasítás végrehajtása
-        } 
-        catch (SQLException e1)                                                     //kivétel esetén történik
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-           JOptionPane.showMessageDialog(null, hibauzenet + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
-        } 
+        }         
         catch (Exception e) 
         {
            e.printStackTrace();
