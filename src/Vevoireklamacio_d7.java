@@ -53,6 +53,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel_1);
         
         elofordulas_mezo = new JTextArea();
+        elofordulas_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         elofordulas_mezo.setLineWrap(true);
         elofordulas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto3 = new JScrollPane(elofordulas_mezo);
@@ -64,6 +65,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel_2);
         
         felelos_mezo = new JTextField();
+        felelos_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos_mezo.setBounds(761, 80, 177, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
@@ -73,6 +75,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel_3);
         
         hatarido_mezo = new JTextField();
+        hatarido_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido_mezo.setBounds(1079, 80, 86, 20);
         add(hatarido_mezo);
         hatarido_mezo.setColumns(10);
@@ -94,6 +97,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(intezkedes_gomb);
         
         detektalas_mezo = new JTextArea();
+        detektalas_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         detektalas_mezo.setLineWrap(true);
         detektalas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto4 = new JScrollPane(detektalas_mezo);
@@ -105,6 +109,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel_5);
         
         felelos2_mezo = new JTextField();
+        felelos2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         felelos2_mezo.setBounds(761, 371, 177, 20);
         add(felelos2_mezo);
         felelos2_mezo.setColumns(10);
@@ -114,6 +119,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel_6);
         
         hatarido2_mezo = new JTextField();
+        hatarido2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         hatarido2_mezo.setBounds(1079, 371, 86, 20);
         add(hatarido2_mezo);
         hatarido2_mezo.setColumns(10);
@@ -206,7 +212,7 @@ public class Vevoireklamacio_d7 extends JPanel {
                 else
                 {
                     sql = "update qualitydb.Vevoireklamacio_elo set Feladat = '"+ table.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table.getValueAt(szamlalo, 1).toString() +"', "
-                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 3).toString() +"' "                   
                             + "where id = '"+ table.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
@@ -222,7 +228,7 @@ public class Vevoireklamacio_d7 extends JPanel {
                 else
                 {
                     sql = "update qualitydb.Vevoireklamacio_det set Feladat = '"+ table2.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table2.getValueAt(szamlalo, 1).toString() +"', "
-                            + "Hatarido = '"+ table2.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table2.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "Hatarido = '"+ table2.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table2.getValueAt(szamlalo, 3).toString() +"' "                   
                             + "where id = '"+ table2.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);

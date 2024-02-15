@@ -25,7 +25,7 @@ import javax.swing.JTable;
 import javax.swing.JSeparator;
 
 public class Vevoireklamacio_d0 extends JPanel {
-    private JTextField vevo_mezo;
+    static JTextField vevo_mezo;
     private JTextField beszallito_mezo;
     private JTextField ertesites_mezo;
     private JTextField vevorek_mezo;
@@ -33,7 +33,7 @@ public class Vevoireklamacio_d0 extends JPanel {
     private JTextField frissites_mezo;
     private JTextField felelos_mezo;
     private JTextField felelos2_mezo;
-    private JTextField tipus_mezo;
+    static JTextField tipus_mezo;
     private JTextField email_mezo;
     private JTextField email2_mezo;
     private JTextField rma_mezo;
@@ -429,6 +429,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 Vevoireklamacio_fejlec.lezaras_cimke.setText(output);
             }                            
             vevorek_mezo.setText(rs.getString(6));
+            veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
             frissites_mezo.setText(rs.getString(7));
             String[] felelos = rs.getString(8).split(";");
             if(felelos.length > 1)
@@ -450,12 +451,12 @@ public class Vevoireklamacio_d0 extends JPanel {
             String[] email = rs.getString(10).split(";");
             if(email.length > 1)
             {
-                email_mezo.setText(felelos[0]);
-                email2_mezo.setText(felelos[1]); 
+                email_mezo.setText(email[0]);
+                email2_mezo.setText(email[1]); 
             }
             else if(email.length == 1)
             {
-                email_mezo.setText(felelos[0]);
+                email_mezo.setText(email[0]);
                 email2_mezo.setText("");
             }
             else
@@ -467,18 +468,18 @@ public class Vevoireklamacio_d0 extends JPanel {
             String[] telefon = rs.getString(12).split(";");
             if(telefon.length > 1)
             {
-                telefonszam_mezo.setText(felelos[0]);
-                telefonszam_mezo.setText(felelos[1]); 
+                telefonszam_mezo.setText(telefon[0]);
+                telefonszam2_mezo.setText(telefon[1]); 
             }
             else if(telefon.length == 1)
             {
-                telefonszam_mezo.setText(felelos[0]);
-                telefonszam_mezo.setText("");
+                telefonszam_mezo.setText(telefon[0]);
+                telefonszam2_mezo.setText("");
             }
             else
             {
                 telefonszam_mezo.setText("");
-                telefonszam_mezo.setText("");
+                telefonszam2_mezo.setText("");
             }        
             visszakuldes_mezo.setText(rs.getString(13));
         }

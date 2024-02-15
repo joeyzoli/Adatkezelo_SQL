@@ -7,10 +7,19 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.spire.xls.ExcelPicture;
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +35,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -52,6 +63,7 @@ public class Vevoireklamacio_d2 extends JPanel {
     private JTable table;
     private DefaultTableModel modell;
     static ArrayList<String> fajlok;
+    private String epl = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\EPL_ÜRES_HUN.xlsx";
     
     
     public Vevoireklamacio_d2() {
@@ -240,7 +252,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                         ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         modell.addRow(new Object[]{fajl.getName()});
                         table.setModel(modell);
-                    }
+                    }                                      
                 }
                 catch (Exception e1) 
                 {
@@ -293,14 +305,101 @@ public class Vevoireklamacio_d2 extends JPanel {
         JScrollPane gorgeto = new JScrollPane(table);        
         gorgeto.setBounds(1172, 422, 244, 146);
         add(gorgeto);
+        
+        JLabel lblNewLabel_8 = new JLabel("Egypontos lecke készítése");
+        lblNewLabel_8.setBounds(1236, 96, 169, 14);
+        add(lblNewLabel_8);
+        
+        JButton epl_keszites = new JButton("EPL");
+        epl_keszites.addActionListener(new EPL_keszito());
+        epl_keszites.setBounds(1250, 123, 89, 23);
+        add(epl_keszites);
 
     }
     
-    public void okkep(String fajlhelye)
+    class EPL_keszito implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
-        
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(epl);
+                workbook.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                sheet.getRange().get("B5").setText(Vevoireklamacio_d0.vevo_mezo.getText());
+                sheet.getRange().get("J5").setText(Vevoireklamacio_d0.tipus_mezo.getText());
+                sheet.getRange().get("B10").setText(miaproblema_mezo.getText());
+                sheet.getRange().get("B12").setText(miertproblema_mezo.getText());
+                sheet.getRange().get("J12").setText(holdetektalta_mezo.getText());
+                sheet.getRange().get("B14").setText(ki_mezo.getText());
+                sheet.getRange().get("J14").setText(hogyandetektalta_mezo.getText());
+                sheet.getRange().get("B16").setText(datum_mezo.getText());
+                sheet.getRange().get("J16").setText(db_mezo.getText());
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+                Date date = new Date();
+                sheet.getRange().get("D44").setText(formatter.format(date));
+                sheet.getRange().get("L44").setText("Vevőireklamáció kezelő program");
+                for(int szamlalo = 0; szamlalo < fajlok.size();szamlalo++)
+                {
+                    String[] darabol = fajlok.get(szamlalo).split(";");
+                    if(darabol[2].equals("nok"))
+                    {
+                        ExcelPicture pic = sheet.getPictures().add(21, 2,darabol[1]);
+                        pic.setWidth(400);
+                        pic.setHeight(280);
+                    }
+                    if(darabol[2].equals("ok"))
+                    {
+                        ExcelPicture pic = sheet.getPictures().add(21, 10,darabol[1]);
+                        pic.setWidth(400);
+                        pic.setHeight(280);
+                    }
+                }
+                String hova = System.getProperty("user.home") + "\\Desktop\\EPL Vevőireklmáció ID_ "+ Vevoireklamacio_fejlec.id_mezo.getText() +".xlsx";
+                workbook.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                
+                String hova2 = System.getProperty("user.home") + "\\Ideiglenes Fájlok\\EPL Vevőireklmáció ID_ "+ Vevoireklamacio_fejlec.id_mezo.getText() +".xlsx";
+                workbook.saveToFile(hova2, ExcelVersion.Version2016);
+                fileStream = new FileInputStream(hova2);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                File epl = new File(hova2);
+                fajlok.add(epl.getName()+";"+epl.getAbsolutePath()+";*");
+                Foablak.frame.setCursor(null);                                                //egér mutató változtatása munka a háttérbenre
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra EPL Vevőireklmáció ID_ "+ Vevoireklamacio_fejlec.id_mezo.getText() +".xlsx néven", "Info", 1);
+            }
+            catch (Exception e1) 
+            {;
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }
+         }
     }
-    
+        
     class Hozzaad implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)

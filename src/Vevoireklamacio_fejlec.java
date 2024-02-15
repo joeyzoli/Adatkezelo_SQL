@@ -4,6 +4,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.spire.xls.ExcelPicture;
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.HorizontalAlignType;
+import com.spire.xls.VerticalAlignType;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -20,6 +30,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.swing.JButton;
 
 public class Vevoireklamacio_fejlec extends JPanel {
@@ -48,6 +67,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
     static String excel_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\excel.jpg";
     static String pdf_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\pdf.jpg";
     static String kep_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\kep.jpg";
+    private String d8 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Q-JK-003 8D report.xlsx";
     static JButton mentes_gomb;
 
     /**
@@ -152,6 +172,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         add(mentes_gomb);
         
         JButton attekinto_gomb = new JButton("Áttekintő");
+        attekinto_gomb.addActionListener(new Attekinto());
         attekinto_gomb.setBounds(1257, 20, 116, 23);
         add(attekinto_gomb);
         
@@ -394,6 +415,472 @@ public class Vevoireklamacio_fejlec extends JPanel {
         {
             // TODO Auto-generated method stub           
         }    
+    }
+    
+    class Attekinto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {                
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                Connection conn = null;
+                Statement stmt = null;
+                Statement stmt2 = null;
+                Statement stmt3 = null;
+                
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) conn.createStatement();
+                stmt2 = (Statement) conn.createStatement();
+                stmt3 = (Statement) conn.createStatement();
+                String sql = "select * from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                stmt.execute(sql);
+                ResultSet rs = stmt.getResultSet();
+                
+                sql = "select * from qualitydb.Vevoireklamacio_elo where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                stmt2.execute(sql);
+                ResultSet rs2 = stmt2.getResultSet();
+                
+                sql = "select * from qualitydb.Vevoireklamacio_det where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                stmt3.execute(sql);
+                ResultSet rs3 = stmt3.getResultSet();
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(d8);
+                workbook.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                if(rs.next())
+                {
+                    ////////D1
+                    sheet.getRange().get("C4").setText(rs.getString(3));
+                    sheet.getRange().get("F4").setText(rs.getString(4));
+                    sheet.getRange().get("K4").setText(rs.getString(5));
+                    sheet.getRange().get("C5").setText(rs.getString(6));
+                    sheet.getRange().get("F5").setText(rs.getString(1));                    
+                    sheet.getRange().get("K5").setText(rs.getString(7));
+                    String[] felelosok = rs.getString(8).split(";");
+                    if(felelosok.length > 1)
+                    {
+                        sheet.getRange().get("C6").setText(felelosok[0]);
+                        sheet.getRange().get("F6").setText(felelosok[1]);
+                    }
+                    else if(felelosok.length == 1)
+                    {
+                        sheet.getRange().get("C6").setText(felelosok[0]);
+                        sheet.getRange().get("F6").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C6").setText("");
+                        sheet.getRange().get("F6").setText("");
+                    }
+                    sheet.getRange().get("K6").setText(rs.getString(9));
+                    String[] email = rs.getString(10).split(";");
+                    if(email.length > 1)
+                    {
+                        sheet.getRange().get("C7").setText(email[0]);
+                        sheet.getRange().get("F7").setText(email[1]);
+                    }
+                    else if(email.length == 1)
+                    {
+                        sheet.getRange().get("C7").setText(email[0]);
+                        sheet.getRange().get("F7").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C7").setText("");
+                        sheet.getRange().get("F7").setText("");
+                    }                   
+                    sheet.getRange().get("K7").setText(rs.getString(11));
+                    String[] telefon = rs.getString(12).split(";");
+                    if(telefon.length > 1)
+                    {
+                        sheet.getRange().get("C8").setText(telefon[0]);
+                        sheet.getRange().get("F8").setText(telefon[1]);
+                    }
+                    else if(telefon.length == 1)
+                    {
+                        sheet.getRange().get("C8").setText(telefon[0]);
+                        sheet.getRange().get("F8").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C8").setText("");
+                        sheet.getRange().get("F8").setText("");
+                    }                    
+                    sheet.getRange().get("K8").setText(rs.getString(13));
+                    String[] csapat = rs.getString(14).split(";");
+                    String[] csapattagok = csapat[1].split("\n");
+                    sheet.getRange().get("C11").setText(csapat[0]);
+                    String emberek = "";
+                    for(int szamlalo = 0; szamlalo < csapattagok.length; szamlalo++)
+                    {
+                        emberek += csapattagok[szamlalo]+", ";
+                    }
+                    sheet.getRange().get("C12").setText(emberek);
+                    ///////D2
+                    String alap = sheet.getRange().get("B16").getText();
+                    sheet.getRange().get("B16").setText(alap +" "+rs.getString(15));
+                    alap = sheet.getRange().get("B18").getText();
+                    sheet.getRange().get("B18").setText(alap +" "+rs.getString(17));
+                    alap = sheet.getRange().get("B20").getText();
+                    sheet.getRange().get("B20").setText(alap +" "+rs.getString(19));
+                    alap = sheet.getRange().get("B22").getText();
+                    sheet.getRange().get("B22").setText(alap +" "+rs.getString(21));
+                    alap = sheet.getRange().get("B24").getText();
+                    sheet.getRange().get("B24").setText(alap +" "+rs.getString(16));
+                    alap = sheet.getRange().get("B26").getText();
+                    sheet.getRange().get("B26").setText(alap +" "+rs.getString(18));
+                    alap = sheet.getRange().get("B28").getText();
+                    sheet.getRange().get("B28").setText(alap +" "+rs.getString(20));
+                    alap = sheet.getRange().get("I28").getText();
+                    sheet.getRange().get("I28").setText(alap +" "+rs.getString(22));
+                    //////D3
+                    sheet.getRange().get("J32").setText(rs.getString(23));
+                    sheet.getRange().get("K32").setText(rs.getString(24));
+                    sheet.getRange().get("M32").setText(rs.getString(25));
+                    sheet.getRange().get("J33").setText(rs.getString(26));
+                    sheet.getRange().get("K33").setText(rs.getString(27));
+                    sheet.getRange().get("M33").setText(rs.getString(28));
+                    sheet.getRange().get("J34").setText(rs.getString(29));
+                    sheet.getRange().get("K34").setText(rs.getString(30));
+                    sheet.getRange().get("M34").setText(rs.getString(31));
+                    sheet.getRange().get("J35").setText(rs.getString(32));
+                    sheet.getRange().get("K35").setText(rs.getString(33));
+                    sheet.getRange().get("M35").setText(rs.getString(34));
+                    sheet.getRange().get("G36").setText(rs.getString(35));
+                    String[] dbszam = rs.getString(36).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("D37").setText(dbszam[0]);
+                        sheet.getRange().get("G37").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("D37").setText(dbszam[0]);
+                        sheet.getRange().get("G37").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("D37").setText("");
+                        sheet.getRange().get("G37").setText("");
+                    }       
+                    
+                    dbszam = rs.getString(37).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("D38").setText(dbszam[0]);
+                        sheet.getRange().get("G38").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("D38").setText(dbszam[0]);
+                        sheet.getRange().get("G38").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("D38").setText("");
+                        sheet.getRange().get("G38").setText("");
+                    }     
+                    
+                    dbszam = rs.getString(38).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("D39").setText(dbszam[0]);
+                        sheet.getRange().get("G39").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("D39").setText(dbszam[0]);
+                        sheet.getRange().get("G39").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("D39").setText("");
+                        sheet.getRange().get("G39").setText("");
+                    }     
+                    
+                    //////D4
+                    dbszam = rs.getString(39).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("C45").setText(dbszam[0]);
+                        sheet.getRange().get("C50").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("C45").setText(dbszam[0]);
+                        sheet.getRange().get("C50").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C45").setText("");
+                        sheet.getRange().get("C50").setText("");
+                    }
+                    
+                    dbszam = rs.getString(40).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("C46").setText(dbszam[0]);
+                        sheet.getRange().get("C51").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("C46").setText(dbszam[0]);
+                        sheet.getRange().get("C51").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C46").setText("");
+                        sheet.getRange().get("C51").setText("");
+                    }
+                    
+                    dbszam = rs.getString(41).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("C47").setText(dbszam[0]);
+                        sheet.getRange().get("C52").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("C47").setText(dbszam[0]);
+                        sheet.getRange().get("C52").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C47").setText("");
+                        sheet.getRange().get("C52").setText("");
+                    }
+                    
+                    dbszam = rs.getString(42).split(";");
+                    if(dbszam.length > 1)
+                    {
+                        sheet.getRange().get("C48").setText(dbszam[0]);
+                        sheet.getRange().get("C53").setText(dbszam[1]);
+                    }
+                    else if(dbszam.length == 1)
+                    {
+                        sheet.getRange().get("C48").setText(dbszam[0]);
+                        sheet.getRange().get("C53").setText("");
+                    }
+                    else
+                    {
+                        sheet.getRange().get("C48").setText("");
+                        sheet.getRange().get("C53").setText("");
+                    }
+                    
+                    //////D5
+                    int sor = 0;
+                    int cella = 57;
+                    int sorhozzaad = 0;
+                    int d5sor = 61;
+                    int d6sor = 66;
+                    int d7sor = 73;
+                    int d8sor = 84;
+                    while(rs2.next())
+                    {
+                        if(rs2.getString(7).equals("D5"))
+                        {
+                            if(sor > 2)
+                            {
+                                sheet.insertRow(cella);
+                                sheet.getRange().get("B"+cella+":I"+cella).merge();
+                                sheet.getCellRange("J"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("J"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getRange().get("K"+cella+":L"+cella).merge();
+                                sheet.getCellRange("K"+cella+":L"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("K"+cella+":k"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                            }
+                            sheet.getRange().get("B"+cella).setText(rs2.getString(3));
+                            sheet.getRange().get("J"+cella).setText(rs2.getString(4));
+                            sheet.getRange().get("K"+cella).setText(rs2.getString(5));
+                            sheet.getRange().get("M"+cella).setText(rs2.getString(6));
+                            cella++;
+                            sor++;
+                        }
+                    }                    
+                    cella += 1;
+                    if(sor > 3)
+                    {
+                        sorhozzaad = sor -3;
+                        System.out.println(sorhozzaad);
+                    }
+                    else
+                    {
+                        cella = d5sor;
+                    }
+                    sor = 0;
+                    while(rs3.next())
+                    {
+                        if(rs3.getString(7).equals("D5"))
+                        {
+                            if(sor > 3)
+                            {
+                                sheet.insertRow(cella);
+                                sheet.getRange().get("B"+cella+":I"+cella).merge();
+                                sheet.getCellRange("J"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("J"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getRange().get("K"+cella+":L"+cella).merge();
+                                sheet.getCellRange("K"+cella+":L"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("K"+cella+":k"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                            }
+                            sheet.getRange().get("B"+cella).setText(rs3.getString(3));
+                            sheet.getRange().get("J"+cella).setText(rs3.getString(4));
+                            sheet.getRange().get("K"+cella).setText(rs3.getString(5));
+                            sheet.getRange().get("M"+cella).setText(rs3.getString(6));
+                            cella++;
+                            sor++;
+                        }
+                    }
+                    if(sor > 3)
+                    {
+                        int koztes = sorhozzaad;
+                        sorhozzaad = sor -3;
+                        sorhozzaad = koztes + sorhozzaad;
+                        System.out.println(sorhozzaad);
+                    }                    
+                    cella = d6sor + sorhozzaad;
+                    ////////D6
+                    sheet.getRange().get("B"+cella).setText(rs.getString(43));
+                    ////////D7
+                    sql = "select * from qualitydb.Vevoireklamacio_elo where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    stmt2.execute(sql);
+                    rs2 = stmt2.getResultSet();
+                    
+                    sql = "select * from qualitydb.Vevoireklamacio_det where Rek_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    stmt3.execute(sql);
+                    rs3 = stmt3.getResultSet();
+                    cella = d7sor + sorhozzaad;
+                    sor = 0;
+                    while(rs2.next())
+                    {
+                        if(rs2.getString(7).equals("D7"))
+                        {
+                            if(sor > 3)
+                            {
+                                sheet.insertRow(cella);
+                                sheet.getRange().get("B"+cella+":I"+cella).merge();
+                                sheet.getCellRange("J"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("J"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getRange().get("K"+cella+":L"+cella).merge();
+                                sheet.getCellRange("K"+cella+":L"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("K"+cella+":k"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                            }
+                            sheet.getRange().get("B"+cella).setText(rs2.getString(3));
+                            sheet.getRange().get("J"+cella).setText(rs2.getString(4));
+                            sheet.getRange().get("K"+cella).setText(rs2.getString(5));
+                            sheet.getRange().get("M"+cella).setText(rs2.getString(6));
+                            cella++;
+                            sor++;
+                        }
+                    }                    
+                    cella += 1;
+                    if(sor > 3)
+                    {
+                        int koztes = sorhozzaad;
+                        sorhozzaad = sor -3;
+                        sorhozzaad = koztes + sorhozzaad;
+                        System.out.println(sorhozzaad);
+                    }
+                    sor = 1;
+                    while(rs3.next())
+                    {
+                        if(rs3.getString(7).equals("D7"))
+                        {
+                            if(sor > 3)
+                            {
+                                sheet.insertRow(cella);
+                                sheet.getRange().get("B"+cella+":I"+cella).merge();
+                                sheet.getCellRange("J"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("J"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getRange().get("K"+cella+":L"+cella).merge();
+                                sheet.getCellRange("K"+cella+":L"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("K"+cella+":k"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setVerticalAlignment(VerticalAlignType.Center);
+                                sheet.getCellRange("M"+cella).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                            }
+                            sheet.getRange().get("B"+cella).setText(rs3.getString(3));
+                            sheet.getRange().get("J"+cella).setText(rs3.getString(4));
+                            sheet.getRange().get("K"+cella).setText(rs3.getString(5));
+                            sheet.getRange().get("M"+cella).setText(rs3.getString(6));
+                            cella++;
+                            sor++;
+                        }
+                    }
+                    if(sor > 3)
+                    {
+                        int koztes = sorhozzaad;
+                        sorhozzaad = sor -3;
+                        sorhozzaad = koztes + sorhozzaad;
+                        System.out.println(sorhozzaad);
+                    }
+                    ///////D8
+                    cella = d8sor + sorhozzaad;
+                    sheet.getRange().get("B"+cella).setText(rs.getString(44));
+                    sheet.getRange().get("K"+cella).setText(rs.getString(48));
+                    /////////Kép
+                    PreparedStatement ps= conn.prepareStatement("SELECT Fajl_neve, Fajl, tipus FROM qualitydb.Vevoireklamacio_fajlok WHERE Rek_ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+                    ResultSet rset = ps.executeQuery();         
+                    Blob blob;
+                    byte b[];
+                    FileOutputStream fs=null;                    
+                    while(rset.next())
+                    {                       
+                        File f = new File(System.getProperty("user.home") + "\\Desktop\\Vevoireklamacio ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +"\\"+ rset.getString(1));        //"+ Vevoireklamacio_fejlec.id_mezo.getText() +"
+                        System.out.println(f.getAbsolutePath());
+                        f.getParentFile().mkdirs(); 
+                        f.createNewFile();  
+                        fs = new FileOutputStream(f);
+                        blob = rset.getBlob("Fajl");
+                        b = blob.getBytes(1, (int)blob.length());
+                        fs.write(b);
+                        fs.close();
+                        if(rset.getString(3).equals("nok"))
+                        {
+                            ExcelPicture pic = sheet.getPictures().add(16, 9,f.getAbsolutePath());
+                            pic.setWidth(500);
+                            pic.setHeight(280);
+                        }
+                    }                    
+                }
+                //sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                //sheet.getAllocatedRange().autoFitColumns();
+                //sheet.getAllocatedRange().autoFitRows();
+                //sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                String hova = System.getProperty("user.home") + "\\Desktop\\Vevoireklamacio ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +"\\8D REk_ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +".xlsx";
+                workbook.saveToFile(hova, ExcelVersion.Version2016);
+                FileInputStream fileStream = new FileInputStream(hova);
+                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                    {    
+                        workbook3.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(hova);
+                    workbook3.write(output);
+                    output.close();
+                }
+                stmt.close();
+                conn.close();                
+
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
     
 }

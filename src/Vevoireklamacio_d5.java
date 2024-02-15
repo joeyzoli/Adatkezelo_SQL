@@ -260,7 +260,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 else
                 {
                     sql = "update qualitydb.Vevoireklamacio_elo set Feladat = '"+ table.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table.getValueAt(szamlalo, 1).toString() +"', "
-                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 3).toString() +"' "                   
                             + "where id = '"+ table.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
@@ -276,7 +276,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 else
                 {
                     sql = "update qualitydb.Vevoireklamacio_det set Feladat = '"+ table2.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table2.getValueAt(szamlalo, 1).toString() +"', "
-                            + "Hatarido = '"+ table2.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table2.getValueAt(szamlalo, 4).toString() +"' "                   
+                            + "Hatarido = '"+ table2.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table2.getValueAt(szamlalo, 3).toString() +"' "                   
                             + "where id = '"+ table2.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
