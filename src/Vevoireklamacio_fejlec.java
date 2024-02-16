@@ -833,7 +833,6 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     while(rset.next())
                     {                       
                         File f = new File(System.getProperty("user.home") + "\\Desktop\\Vevoireklamacio ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +"\\"+ rset.getString(1));        //"+ Vevoireklamacio_fejlec.id_mezo.getText() +"
-                        System.out.println(f.getAbsolutePath());
                         f.getParentFile().mkdirs(); 
                         f.createNewFile();  
                         fs = new FileOutputStream(f);

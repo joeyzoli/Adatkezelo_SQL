@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
 public class Vevoireklamacio_d1 extends JPanel {
-    private JTextField vezeto_mezo;
+    static JTextField vezeto_mezo;
     private JTextArea tagok_mezo;
 
     /**

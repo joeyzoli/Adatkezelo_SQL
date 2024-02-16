@@ -87,7 +87,7 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_felvetel felvetel;
 	private Kockazatimatrix_ertekeles ertekeles;
 	private Kockazatimatrix_osszesites osszesites;
-	private Forraszthatosagi_vizsgalat vizsgalat;
+	private Forraszthatosagi_osszesito vizsgalat;
 	private Vevoireklamacio_V2 vevoirek;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
@@ -1004,7 +1004,7 @@ public class Foablak extends JFrame
     {
         public void actionPerformed(ActionEvent e)
          {
-            vizsgalat = new Forraszthatosagi_vizsgalat();
+            vizsgalat = new Forraszthatosagi_osszesito();
             JScrollPane ablak = new JScrollPane(vizsgalat);
             setContentPane(ablak);
             pack();

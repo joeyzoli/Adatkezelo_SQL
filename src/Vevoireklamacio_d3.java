@@ -55,7 +55,7 @@ public class Vevoireklamacio_d3 extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Félkész és késztermékek (és adott esetben nyersanyag) blokkolása");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel.setBounds(174, 61, 363, 14);
+        lblNewLabel.setBounds(144, 61, 393, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Felelős");
@@ -131,7 +131,7 @@ public class Vevoireklamacio_d3 extends JPanel {
         
         JLabel lblNewLabel_5 = new JLabel("A hiba észlelhetőségének ellenőrzése tesztberendezéssel. ");
         lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_5.setBounds(214, 150, 323, 14);
+        lblNewLabel_5.setBounds(166, 150, 371, 14);
         add(lblNewLabel_5);
         
         felelos4_mezo = new JTextField();
@@ -403,6 +403,14 @@ public class Vevoireklamacio_d3 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    public void hatarido()
+    {
+        hatarido_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
+        hatarido2_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
+        hatarido3_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
+        hatarido4_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
     }
 
 

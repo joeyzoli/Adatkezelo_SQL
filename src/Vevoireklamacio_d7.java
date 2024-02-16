@@ -49,7 +49,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Előfordulásra");
-        lblNewLabel_1.setBounds(238, 83, 91, 14);
+        lblNewLabel_1.setBounds(148, 84, 91, 14);
         add(lblNewLabel_1);
         
         elofordulas_mezo = new JTextArea();
@@ -57,7 +57,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         elofordulas_mezo.setLineWrap(true);
         elofordulas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto3 = new JScrollPane(elofordulas_mezo);
-        gorgeto3.setBounds(339, 78, 277, 75);
+        gorgeto3.setBounds(249, 78, 367, 99);
         add(gorgeto3);
         
         JLabel lblNewLabel_2 = new JLabel("Felelős");
@@ -88,7 +88,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         add(gorgeto);
         
         JLabel lblNewLabel_4 = new JLabel("Nem detektálhatóságra");
-        lblNewLabel_4.setBounds(238, 374, 131, 14);
+        lblNewLabel_4.setBounds(79, 380, 142, 14);
         add(lblNewLabel_4);
         
         JButton intezkedes_gomb = new JButton("Hozzáad");
@@ -101,7 +101,7 @@ public class Vevoireklamacio_d7 extends JPanel {
         detektalas_mezo.setLineWrap(true);
         detektalas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto4 = new JScrollPane(detektalas_mezo);
-        gorgeto4.setBounds(379, 374, 277, 75);
+        gorgeto4.setBounds(249, 374, 407, 99);
         add(gorgeto4);
         
         JLabel lblNewLabel_5 = new JLabel("Felelős");

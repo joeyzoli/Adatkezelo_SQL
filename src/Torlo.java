@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_frissit());
+		feltolt.addActionListener(new Osszefuz());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2489,6 +2489,34 @@ public class Torlo extends JPanel
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
+         }
+    }
+	
+	class Osszefuz implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+             {
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projektek.xlsx");              
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                String osszefuzve = "";
+                for(int szamlalo = 4; szamlalo < sheet.getLastRow(); szamlalo++ )
+                {
+                    osszefuzve += "\""+ sheet.getRange().get("A"+szamlalo).getText()+ "\",";
+                }
+                System.out.print(osszefuzve);
+             }
+            catch(Exception ex2)
+             {
+                ex2.printStackTrace();
+                String hibauzenet = ex2.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+             }
+            
          }
     }
 }

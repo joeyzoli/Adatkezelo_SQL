@@ -4,6 +4,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -20,9 +22,21 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -38,6 +52,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.TooManyListenersException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -156,6 +172,27 @@ public class Vevoireklamacio_d2 extends JPanel {
         kepleiras_mezo.setColumns(10);
         
         nok_kep = new JLabel("");
+        new DropTarget();
+        final MouseListener listener = new MouseAdapter() {
+            @Override
+            public void mousePressed(final MouseEvent me) {
+                System.out.println("Hozzáad");
+                File fajl = (File) me.getSource();
+                fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
+                ImageIcon icon2 = null;
+                icon2 = new ImageIcon(fajl.getAbsolutePath());
+                Image icon = icon2.getImage();  
+                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                modell.addRow(new Object[]{fajl.getName()});
+                table.setModel(modell);
+
+                //final TransferHandler handler = fajl.getTransferHandler();
+                //handler.exportAsDrag(fajl, me, TransferHandler.COPY);
+            }
+        };
+        nok_kep.addMouseListener(listener);
         nok_kep.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         nok_kep.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
         nok_kep.addMouseListener (new MouseListener () {
@@ -328,8 +365,8 @@ public class Vevoireklamacio_d2 extends JPanel {
                 workbook.loadFromFile(epl);
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
-                sheet.getRange().get("B5").setText(Vevoireklamacio_d0.vevo_mezo.getText());
-                sheet.getRange().get("J5").setText(Vevoireklamacio_d0.tipus_mezo.getText());
+                sheet.getRange().get("B5").setText(String.valueOf(Vevoireklamacio_d0.vevo_box.getSelectedItem()));
+                sheet.getRange().get("J5").setText(String.valueOf(Vevoireklamacio_d0.tipus_box.getSelectedItem()));
                 sheet.getRange().get("B10").setText(miaproblema_mezo.getText());
                 sheet.getRange().get("B12").setText(miertproblema_mezo.getText());
                 sheet.getRange().get("J12").setText(holdetektalta_mezo.getText());
@@ -340,7 +377,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
                 Date date = new Date();
                 sheet.getRange().get("D44").setText(formatter.format(date));
-                sheet.getRange().get("L44").setText("Vevőireklamáció kezelő program");
+                sheet.getRange().get("L44").setText(Vevoireklamacio_d1.vezeto_mezo.getText());
                 for(int szamlalo = 0; szamlalo < fajlok.size();szamlalo++)
                 {
                     String[] darabol = fajlok.get(szamlalo).split(";");
@@ -672,4 +709,65 @@ public class Vevoireklamacio_d2 extends JPanel {
            }  
         }
     }
+    
+    protected class DropTargetHandler implements DropTargetListener {
+
+        protected void processDrag(DropTargetDragEvent dtde) {
+            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                dtde.acceptDrag(DnDConstants.ACTION_COPY);
+            } else {
+                dtde.rejectDrag();
+            }
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent dtde) {
+            
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent dtde) {
+            
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent dtde) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent dte) {
+            
+        }
+
+        @Override
+        public void drop(DropTargetDropEvent dtde) {
+           
+            Transferable transferable = dtde.getTransferable();
+            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                dtde.acceptDrop(dtde.getDropAction());
+                try {
+
+                    File fajl = (File) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
+                    ImageIcon icon2 = null;
+                    icon2 = new ImageIcon(fajl.getAbsolutePath());
+                    Image icon = icon2.getImage();  
+                    Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                    ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                    nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                    modell.addRow(new Object[]{fajl.getName()});
+                    table.setModel(modell);
+                    
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                dtde.rejectDrop();
+            }
+        }
+
+    }
+    
+    
 }
