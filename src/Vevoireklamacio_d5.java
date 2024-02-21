@@ -334,6 +334,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 modell2.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});
             }
             table2.setModel(modell2);
+            hatarido();
             stmt.close();
             conn.close();        
         }          
@@ -367,5 +368,11 @@ public class Vevoireklamacio_d5 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    public void hatarido()
+    {
+        hatarido_mezo.setText(Vevoireklamacio_fejlec.d5_cimke.getText());
+        hatarido2_mezo.setText(Vevoireklamacio_fejlec.d5_cimke.getText());       
     }
 }

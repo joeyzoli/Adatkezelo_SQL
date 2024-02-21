@@ -2373,24 +2373,49 @@ public class SQL
         sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
         String mentes_helye = System.getProperty("user.home") + "\\Desktop\\Vevői reklamáció kimutatás.xlsx";
-        workbook.saveToFile(mentes_helye, ExcelVersion.Version2016);
+        
         resultSet.close();
         stmt.close();
         conn.close();
-        
+        File f = new File(mentes_helye);
+        f.getParentFile().mkdirs();
+        f.createNewFile();
         FileInputStream fileStream = new FileInputStream(mentes_helye);
-        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+        try
         {
-            for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
-            {    
-                workbook2.removeSheetAt(i); 
+            workbook.saveToFile(mentes_helye, ExcelVersion.Version2016);
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }
+                workbook2.setActiveSheet(0);
+                FileOutputStream output = new FileOutputStream(mentes_helye);
+                workbook2.write(output);
+                output.close();
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevői reklamáció kimutatás.xlsx néven", "Info", 1);
             }
-            workbook2.setActiveSheet(0);
-            FileOutputStream output = new FileOutputStream(mentes_helye);
-            workbook2.write(output);
-            output.close();
         }
-        JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevői reklamáció kimutatás.xlsx néven", "Info", 1);
+        catch (Exception e1) 
+        {
+            mentes_helye = System.getProperty("user.home") + "\\Desktop\\Vevői reklamáció kimutatás_"+ Vevoi_reklamacio_lekerdezes.fajlszam +".xlsx";
+            workbook.saveToFile(mentes_helye, ExcelVersion.Version2016);
+            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            {
+                for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                {    
+                    workbook2.removeSheetAt(i); 
+                }
+                workbook2.setActiveSheet(0);
+                FileOutputStream output = new FileOutputStream(mentes_helye);
+                workbook2.write(output);
+                output.close();
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevői reklamáció kimutatás_"+ Vevoi_reklamacio_lekerdezes.fajlszam +".xlsx néven", "Info", 1);
+            }
+            Vevoi_reklamacio_lekerdezes.fajlszam++;
+        } 
+        
 
         resultSet.close();
         stmt.close();
@@ -3260,17 +3285,8 @@ public class SQL
         Statement stmt = null;
       
         try 
-        {
-           try 
-           {
-              Class.forName("com.mysql.cj.jdbc.Driver");
-           } 
-           catch (Exception e) 
-           {
-              System.out.println(e);
-              String hibauzenet2 = e.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-           }
+        {          
+           Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);           
             if(valtozat == 1)

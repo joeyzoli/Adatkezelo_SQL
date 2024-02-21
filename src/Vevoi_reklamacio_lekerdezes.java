@@ -31,6 +31,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
     private SQL lekerdezes = new SQL();
     private JTextField id_mezo;
     private final String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\reklamáció adatbázis.xlsx";
+    static int fajlszam = 1;
     /**
      * Create the panel.
      */

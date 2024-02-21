@@ -312,6 +312,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                     Vevoireklamacio_fejlec.d5 = Color.gray;
                     Vevoireklamacio_fejlec.lezaras = Color.GRAY;
                     Vevoireklamacio_V2.d3.hatarido();
+                    Vevoireklamacio_V2.d5.hatarido();
                     repaint();
                 }
             } 
@@ -502,6 +503,7 @@ public class Vevoireklamacio_d0 extends JPanel {
           modell.removeRow(i);
         }
         table.setModel(modell);
+        Vevoireklamacio_V2.d5.hatarido();
         stmt.close();
         conn.close();        
         }          

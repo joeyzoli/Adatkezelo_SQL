@@ -4,7 +4,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -22,23 +21,13 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,9 +41,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.TooManyListenersException;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -172,28 +158,15 @@ public class Vevoireklamacio_d2 extends JPanel {
         kepleiras_mezo.setColumns(10);
         
         nok_kep = new JLabel("");
-        new DropTarget();
-        final MouseListener listener = new MouseAdapter() {
+        nok_kep.addMouseMotionListener((MouseMotionListener) new MouseAdapter() {
             @Override
-            public void mousePressed(final MouseEvent me) {
-                System.out.println("Hozzáad");
-                File fajl = (File) me.getSource();
-                fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
-                ImageIcon icon2 = null;
-                icon2 = new ImageIcon(fajl.getAbsolutePath());
-                Image icon = icon2.getImage();  
-                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                modell.addRow(new Object[]{fajl.getName()});
-                table.setModel(modell);
-
-                //final TransferHandler handler = fajl.getTransferHandler();
-                //handler.exportAsDrag(fajl, me, TransferHandler.COPY);
+            public void mouseDragged(MouseEvent e) {
+                JLabel lbl = (JLabel) e.getSource();
+                TransferHandler handle = lbl.getTransferHandler();
+                handle.exportAsDrag(lbl, e, TransferHandler.COPY);
+                System.out.println("Katt!");
             }
-        };
-        nok_kep.addMouseListener(listener);
-        nok_kep.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        });
         nok_kep.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
         nok_kep.addMouseListener (new MouseListener () {
             //override the method
@@ -223,6 +196,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                         nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         modell.addRow(new Object[]{fajl.getName()});
                         table.setModel(modell);
+                        Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                     }
                 }
                 catch (Exception e1) 
@@ -289,6 +263,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                         ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         modell.addRow(new Object[]{fajl.getName()});
                         table.setModel(modell);
+                        Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                     }                                      
                 }
                 catch (Exception e1) 
@@ -336,6 +311,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_11);
         
         table = new JTable();
+        
         modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"Fájl neve"});  
         table.setModel(modell);
@@ -709,65 +685,5 @@ public class Vevoireklamacio_d2 extends JPanel {
            }  
         }
     }
-    
-    protected class DropTargetHandler implements DropTargetListener {
-
-        protected void processDrag(DropTargetDragEvent dtde) {
-            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                dtde.acceptDrag(DnDConstants.ACTION_COPY);
-            } else {
-                dtde.rejectDrag();
-            }
-        }
-
-        @Override
-        public void dragEnter(DropTargetDragEvent dtde) {
-            
-        }
-
-        @Override
-        public void dragOver(DropTargetDragEvent dtde) {
-            
-        }
-
-        @Override
-        public void dropActionChanged(DropTargetDragEvent dtde) {
-        }
-
-        @Override
-        public void dragExit(DropTargetEvent dte) {
-            
-        }
-
-        @Override
-        public void drop(DropTargetDropEvent dtde) {
-           
-            Transferable transferable = dtde.getTransferable();
-            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                dtde.acceptDrop(dtde.getDropAction());
-                try {
-
-                    File fajl = (File) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-                    fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
-                    ImageIcon icon2 = null;
-                    icon2 = new ImageIcon(fajl.getAbsolutePath());
-                    Image icon = icon2.getImage();  
-                    Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                    ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                    nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                    modell.addRow(new Object[]{fajl.getName()});
-                    table.setModel(modell);
-                    
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else {
-                dtde.rejectDrop();
-            }
-        }
-
-    }
-    
     
 }

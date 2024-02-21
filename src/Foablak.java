@@ -89,6 +89,7 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_osszesites osszesites;
 	private Forraszthatosagi_osszesito vizsgalat;
 	private Vevoireklamacio_V2 vevoirek;
+	private AVM_javitasok javellen;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -275,6 +276,10 @@ public class Foablak extends JFrame
 		ifs_archive.addActionListener(new PanelCsere_ifs_archive());
 		lekerdezes.add(ifs_archive);
 		lekerdezes.add(folyamatellenorok);
+		
+		JMenuItem avmjavitasok = new JMenuItem("AVM javítási adatok");
+		avmjavitasok.addActionListener(new Panelcsere_AVM_javitasok());
+		lekerdezes.add(avmjavitasok);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1017,6 +1022,17 @@ public class Foablak extends JFrame
          {
             vevoirek = new Vevoireklamacio_V2();
             JScrollPane ablak = new JScrollPane(vevoirek);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_AVM_javitasok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            javellen = new AVM_javitasok();
+            JScrollPane ablak = new JScrollPane(javellen);
             setContentPane(ablak);
             pack();
          }

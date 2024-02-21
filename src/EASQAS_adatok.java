@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -35,6 +38,7 @@ public class EASQAS_adatok extends JPanel
 	private String projekt = System.getProperty("user.home") + "\\Desktop\\ProjektPPM.xlsx";
 	private String termek = System.getProperty("user.home") + "\\Desktop\\TermékPPM.xlsx";
 	private String hiba = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai.xlsx";
+	private int fajlszam = 1;
 
 	/**
 	 * Create the panel.
@@ -149,7 +153,9 @@ public class EASQAS_adatok extends JPanel
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-               
+                File file = new File(projekt);
+                @SuppressWarnings({ "resource", "unused" })
+                FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
 			    if(projekt_box.getSelectedItem().equals("-"))
 			    {
 			        if(hiba_box.getSelectedItem().equals("-"))
@@ -179,11 +185,36 @@ public class EASQAS_adatok extends JPanel
 			}
 			catch (Exception e1) 
 	        {
-	            e1.printStackTrace();
-	            String hibauzenet = e.toString();
-	            Email hibakuldes = new Email();
-	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-				JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                SQL lekerdezo = new SQL();
+                projekt = System.getProperty("user.home") + "\\Desktop\\ProjektPPM_"+ fajlszam +".xlsx";
+			    if(projekt_box.getSelectedItem().equals("-"))
+                {
+                    if(hiba_box.getSelectedItem().equals("-"))
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                    }
+                }
+                else
+                {
+                    if(hiba_box.getSelectedItem().equals("-"))
+                    {
+                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                    }
+                                       
+                    
+                }
+			    fajlszam++;
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
 	        }
 		 }
       
@@ -270,6 +301,9 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			    File file = new File(projekt);
+                @SuppressWarnings({ "resource", "unused" })
+                FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
 				String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";																	//tárolt eljárás Stringje
 				SQL lekerdezo = new SQL();																									//példányosítás
 				 if(projekt_box.getSelectedItem().equals("-"))
@@ -299,11 +333,34 @@ public class EASQAS_adatok extends JPanel
 			}
 			catch (Exception e1) 
 	        {
-	            e1.printStackTrace();
-	            String hibauzenet = e.toString();
-	            Email hibakuldes = new Email();
-	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-				JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+			    String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                    //tárolt eljárás Stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                termek = System.getProperty("user.home") + "\\Desktop\\TermékPPM_"+ fajlszam +".xlsx";
+                 if(projekt_box.getSelectedItem().equals("-"))
+                 {
+                     if(hiba_box.getSelectedItem().equals("-"))
+                     {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                     }
+                     else
+                     {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                     }                   
+                 }
+                 else
+                 {
+                     if(hiba_box.getSelectedItem().equals("-"))
+                     {
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                     }
+                     else
+                     {
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                     }                           
+                 }
+                 fajlszam++;
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
 	        }
 		 }
 	}
@@ -359,6 +416,9 @@ public class EASQAS_adatok extends JPanel
 			try
 			{
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			    File file = new File(projekt);
+                @SuppressWarnings({ "resource", "unused" })
+                FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
 			    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
                 SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                 if(projekt_box.getSelectedItem().equals("-"))
@@ -388,11 +448,35 @@ public class EASQAS_adatok extends JPanel
 			}
 			catch (Exception e1) 
 	        {
-	            e1.printStackTrace();
-	            String hibauzenet = e.toString();
-	            Email hibakuldes = new Email();
-	            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-				JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                termek = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai_"+ fajlszam +".xlsx";
+                if(projekt_box.getSelectedItem().equals("-"))
+                {
+                    if(hiba_box.getSelectedItem().equals("-"))
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                    }                   
+                }
+                else
+                {
+                    if(hiba_box.getSelectedItem().equals("-"))
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                    }
+                    else
+                    {
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                    }                           
+                }
+                fajlszam++;
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
 	        }
 		 }
 	}
@@ -460,8 +544,11 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                  //tárolt eljárás Stringje
+                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    File file = new File(projekt);
+                    @SuppressWarnings({ "resource", "unused" })
+                    FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
                     if(projekt_box.getSelectedItem().equals("-"))
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
@@ -491,11 +578,36 @@ public class EASQAS_adatok extends JPanel
                 }
                 catch (Exception e1) 
                 {
-                    e1.printStackTrace();
-                    String hibauzenet = e.toString();
-                    Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();
+                    projekt = System.getProperty("user.home") + "\\Desktop\\ProjektPPM_"+ fajlszam +".xlsx";
+                    if(projekt_box.getSelectedItem().equals("-"))
+                    {
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                        }
+                    }
+                    else
+                    {
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        }
+                                           
+                        
+                    }
+                    fajlszam++;
+                    Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
                 }
             }
          
@@ -523,40 +635,66 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    File file = new File(projekt);
+                    @SuppressWarnings({ "resource", "unused" })
+                    FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
                     String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                    if(projekt_box.getSelectedItem().equals("-"))
-                    {
-                        if(hiba_box.getSelectedItem().equals("-"))
-                        {
-                           lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
-                        }
-                        else
-                        {
-                           lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
-                        }                   
-                    }
-                    else
-                    {
-                        if(hiba_box.getSelectedItem().equals("-"))
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
-                        }
-                        else
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
-                        }                           
-                    }
+                     if(projekt_box.getSelectedItem().equals("-"))
+                     {
+                         if(hiba_box.getSelectedItem().equals("-"))
+                         {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                         }
+                         else
+                         {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                         }                   
+                     }
+                     else
+                     {
+                         if(hiba_box.getSelectedItem().equals("-"))
+                         {
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         }
+                         else
+                         {
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         }                           
+                     }
                     Foablak.frame.setCursor(null);
                     JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {
-                    e1.printStackTrace();
-                    String hibauzenet = e.toString();
-                    Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                    String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                    //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    termek = System.getProperty("user.home") + "\\Desktop\\TermékPPM_"+ fajlszam +".xlsx";
+                     if(projekt_box.getSelectedItem().equals("-"))
+                     {
+                         if(hiba_box.getSelectedItem().equals("-"))
+                         {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                         }
+                         else
+                         {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                         }                   
+                     }
+                     else
+                     {
+                         if(hiba_box.getSelectedItem().equals("-"))
+                         {
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         }
+                         else
+                         {
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         }                           
+                     }
+                     fajlszam++;
+                    Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
                 }
             }
          
@@ -584,7 +722,10 @@ public class EASQAS_adatok extends JPanel
                 try
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                  //tárolt eljárás stringje
+                    File file = new File(projekt);
+                    @SuppressWarnings({ "resource", "unused" })
+                    FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
                     SQL lekerdezo = new SQL();                                                                                                  //példányosítás
                     if(projekt_box.getSelectedItem().equals("-"))
                     {
@@ -607,17 +748,41 @@ public class EASQAS_adatok extends JPanel
                         {
                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                         }                           
-                    }                   
+                    }                               
                     Foablak.frame.setCursor(null);
                     JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {
-                    e1.printStackTrace();
-                    String hibauzenet = e.toString();
-                    Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    termek = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai_"+ fajlszam +".xlsx";
+                    if(projekt_box.getSelectedItem().equals("-"))
+                    {
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                        }                   
+                    }
+                    else
+                    {
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        }                           
+                    }
+                    fajlszam++;
+                    Foablak.frame.setCursor(null);
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
                 }
             }
          

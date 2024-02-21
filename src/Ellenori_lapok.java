@@ -679,18 +679,20 @@ public class Ellenori_lapok extends JPanel {
                         Date result = rovid.parse(koztes2[0]+"."+koztes2[1]+"."+koztes2[2]);
                         if(excel.compareTo(result) == 0) 
                         {
-                            //System.out.println("egyezik");
+                            System.out.println("egyezik");
+                            System.out.println(szamlalo);
                             oszlopszam = szamlalo;
                         }
                     }
                 }                                               //"juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "rabine.anita@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu"
                 Email email = new Email();
-                for(int szamlalo2 = 3; szamlalo2 < 8; szamlalo2++)
+                for(int szamlalo2 = 2; szamlalo2 < 8; szamlalo2++)
                 {
                     for(int szamlalo = 4; szamlalo < sheet.getLastRow(); szamlalo++)
                     {
                         if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("AVM kézi terület folyamatellenőrzés"))
                         {
+                            //System.out.println("Keresi az AVM-et");
                             if(avmkezi[0].equals("nem"))
                             {
                                 if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
@@ -784,6 +786,7 @@ public class Ellenori_lapok extends JPanel {
                         /////////////////////////////////////////
                         if(sheet.getRange().get(szamlalo, szamlalo2).getText().contains("Osram folyamat-, gyártásközi- és végellenőrzés"))
                         {
+                            //System.out.println("Keresi az osramot");
                             if(osram[0].equals("nem"))
                             {
                                 if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))

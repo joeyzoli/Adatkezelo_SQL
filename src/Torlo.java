@@ -81,7 +81,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Osszefuz());
+		feltolt.addActionListener(new Lekerdezes());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1013,7 +1013,7 @@ public class Torlo extends JPanel
                   Statement stmt = con.createStatement();                      
                   
                   
-                  ResultSet rs = stmt.executeQuery("select majdnem.*,\n"
+                  /*ResultSet rs = stmt.executeQuery("select majdnem.*,\n"
                           + "nyilatkozatok.CF$_cmrt as CMRT,\n"
                           + "nyilatkozatok.CF$_reach as Reach,\n"
                           + "nyilatkozatok.CF$_Rohs as Rohs\n"
@@ -1051,8 +1051,21 @@ public class Torlo extends JPanel
                           + "and belso.Cikkszam = kulso.part_no) alap\n"
                           + "where raktar.part_no = alap.cikkszam) majdnem\n"
                           + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\n"
-                          + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");
-                  
+                          + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");*/
+                  ResultSet rs = stmt.executeQuery("select kulso.part_no as cikkszam, to_char(kulso.DATE_TIME_CREATED,'YYYY.MM.DD') as mikor, belso.location_no as honnan, kulso.location_no as hova, kulso.quantity as mennyit \n"
+                          + "from ifsapp.INVENTORY_TRANSACTION_HIST2 kulso,\n"
+                          + "    (select *\n"
+                          + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
+                          + "    where 3 = 3\n"
+                          + "    and TRANSACTION_CODE = 'INVM-ISS'\n"
+                          + "    and DATE_CREATED between to_date( '20230101', 'YYYYMMDD' ) and to_date( '20231231', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
+                          + "    and (ifsapp.Inventory_Location_API.Get_Warehouse(contract,location_no) = '80' or ifsapp.Inventory_Location_API.Get_Warehouse(contract,location_no) = '91')\n"
+                          + "    and PART_NO like 'WA%') belso\n"
+                          + "where kulso.part_no = belso.part_no\n"
+                          + "and kulso.DATE_CREATED = belso.DATE_CREATED\n"
+                          + "and belso.DATE_TIME_CREATED = kulso.DATE_TIME_CREATED\n"
+                          + "and kulso.TRANSACTION_CODE = 'INVM-IN'\n"
+                          + "and kulso.location_no in('AEL00','AEL00-B','PRGL-K','UGYUJTO','UGYUJTO-B','UKEPRO','UPCB','UPRGL')");
                   Workbook workbook = new Workbook();
                   JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
