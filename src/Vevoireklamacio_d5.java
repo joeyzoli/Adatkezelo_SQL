@@ -8,6 +8,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -82,6 +84,18 @@ public class Vevoireklamacio_d5 extends JPanel {
         hatarido_mezo.setColumns(10);
         
         table = new JTable();
+        table.addPropertyChangeListener("tableCellEditor", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getNewValue() == null) {
+                    // editing stopped
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                } else {
+                    // editing started
+                    System.out.println("Gépelek");
+                }
+            }
+        });
         modell.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table.setModel(modell);        
         JScrollPane gorgeto = new JScrollPane(table);
@@ -126,6 +140,18 @@ public class Vevoireklamacio_d5 extends JPanel {
         hatarido2_mezo.setColumns(10);
         
         table2 = new JTable();
+        table2.addPropertyChangeListener("tableCellEditor", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getNewValue() == null) {
+                    // editing stopped
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                } else {
+                    // editing started
+                    System.out.println("Gépelek");
+                }
+            }
+        });
         modell2.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table2.setModel(modell2);        
         JScrollPane gorgeto2 = new JScrollPane(table2);

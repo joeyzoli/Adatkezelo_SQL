@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -204,45 +205,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 {                  
                     Vevoireklamacio_fejlec.d3 = Color.YELLOW;
                     Vevoireklamacio_fejlec.qr = Color.GREEN;
-                    String[] fajltipus = fajl.getName().split("\\.");                    
-                    ImageIcon icon = null;
-                    String tipus = "*";
-                    if(fajltipus[1].equals("msg"))
-                    {
-                        icon = new ImageIcon(outlook_kep);
-                        tipus = "email";
-                    }
-                    else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
-                    {
-                        icon = new ImageIcon(excel_kep);
-                    }
-                    else if(fajltipus[1].equals("pdf"))
-                    {
-                        icon = new ImageIcon(pdf_kep);
-                    }
-                    else if(fajltipus[1].equals("jpg"))
-                    {
-                        icon = new ImageIcon(kep_kep);
-                    }
-                    else if(fajltipus[1].equals("png"))
-                    {
-                        icon = new ImageIcon(kep_kep);
-                    }
-                    Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+tipus);
-                    Vevoireklamacio_d0.modell.addRow(new Object[]{icon,fajl.getName()});
-                    TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
-                    for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
-                        int width = 15; // Min width
-                        for (int row = 0; row < Vevoireklamacio_d0.table.getRowCount(); row++) {
-                            TableCellRenderer renderer = Vevoireklamacio_d0.table.getCellRenderer(row, column);
-                            Component comp = Vevoireklamacio_d0.table.prepareRenderer(renderer, row, column);
-                            width = Math.max(comp.getPreferredSize().width +1 , width);
-                        }
-                        if(width > 300)
-                            width=300;
-                        columnModel.getColumn(column).setPreferredWidth(width);
-                    }
-                    Vevoireklamacio_d0.table.setModel(Vevoireklamacio_d0.modell);                                      
+                    Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+hozzaad(fajl.getName()));                                      
                     JOptionPane.showMessageDialog(null, "Email csatolva!", "Info", 1);
                 }
             }
@@ -280,6 +243,50 @@ public class Vevoireklamacio_fejlec extends JPanel {
         lblNewLabel_5.setBounds(929, 24, 87, 14);
         add(lblNewLabel_5);
         
+    }
+    
+    public String hozzaad(String fajlnev)
+    {
+        String[] fajltipus = fajlnev.split("\\.");                    
+        ImageIcon icon = null;
+        String tipus = "*";
+        if(fajltipus[1].equals("msg"))
+        {
+            icon = new ImageIcon(outlook_kep);
+            tipus = "email";
+        }
+        else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
+        {
+            icon = new ImageIcon(excel_kep);
+        }
+        else if(fajltipus[1].equals("pdf"))
+        {
+            icon = new ImageIcon(pdf_kep);
+        }
+        else if(fajltipus[1].equals("jpg"))
+        {
+            icon = new ImageIcon(kep_kep);
+        }
+        else if(fajltipus[1].equals("png"))
+        {
+            icon = new ImageIcon(kep_kep);
+        }
+        
+        Vevoireklamacio_d0.modell.addRow(new Object[]{icon,fajlnev});
+        TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
+        for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < Vevoireklamacio_d0.table.getRowCount(); row++) {
+                TableCellRenderer renderer = Vevoireklamacio_d0.table.getCellRenderer(row, column);
+                Component comp = Vevoireklamacio_d0.table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            if(width > 300)
+                width=300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+        Vevoireklamacio_d0.table.setModel(Vevoireklamacio_d0.modell);
+        return tipus;
     }
     
     @Override
@@ -843,8 +850,32 @@ public class Vevoireklamacio_fejlec extends JPanel {
                         if(rset.getString(3).equals("nok"))
                         {
                             ExcelPicture pic = sheet.getPictures().add(16, 9,f.getAbsolutePath());
-                            pic.setWidth(500);
-                            pic.setHeight(280);
+                            ImageIcon icon2 = null;
+                            icon2 = new ImageIcon(f.getAbsolutePath());
+                            @SuppressWarnings("unused")
+                            Image icon = icon2.getImage();  
+                            int szelesseg = 0;
+                            int magassag = 0;
+                            if(icon2.getIconWidth() > icon2.getIconHeight())
+                            {
+                                float egyszazalek = icon2.getIconWidth() /100;
+                                float szazalek = 530/egyszazalek;
+                                //float szeles = icon2.getIconHeight()/100*szazalek;
+                                float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = 530;
+                                magassag = (int) magas;
+                            }
+                            else
+                            {
+                                float egyszazalek = icon2.getIconHeight() /100;
+                                float szazalek = 285/egyszazalek;
+                                float szeles = icon2.getIconWidth()/100*szazalek;
+                                //float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = (int) szeles;
+                                magassag = 285;
+                            }
+                            pic.setWidth(szelesseg);
+                            pic.setHeight(magassag);
                         }
                     }                    
                 }

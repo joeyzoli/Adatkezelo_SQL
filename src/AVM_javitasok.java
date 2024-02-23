@@ -28,8 +28,9 @@ import com.spire.xls.Worksheet;
 import javax.swing.JButton;
 
 public class AVM_javitasok extends JPanel {
-    private JTextField datum_mezo;
+    private JTextField datumtol_mezo;
     private int fajlszam = 1;
+    private JTextField datumig_mezo;
 
     /**
      * Create the panel.
@@ -40,22 +41,31 @@ public class AVM_javitasok extends JPanel {
         
         JLabel lblNewLabel = new JLabel("AVM javítára került panelek adatai");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblNewLabel.setBounds(552, 63, 270, 14);
+        lblNewLabel.setBounds(463, 62, 270, 14);
         add(lblNewLabel);
         
-        datum_mezo = new JTextField();
-        datum_mezo.setBounds(628, 119, 86, 20);
-        add(datum_mezo);
-        datum_mezo.setColumns(10);
+        datumtol_mezo = new JTextField();
+        datumtol_mezo.setBounds(569, 119, 86, 20);
+        add(datumtol_mezo);
+        datumtol_mezo.setColumns(10);
         
-        JLabel lblNewLabel_1 = new JLabel("Dátum");
-        lblNewLabel_1.setBounds(533, 122, 46, 14);
+        JLabel lblNewLabel_1 = new JLabel("Dátum -tól");
+        lblNewLabel_1.setBounds(475, 122, 64, 14);
         add(lblNewLabel_1);
         
         JButton keres_gomb = new JButton("Keres");
         keres_gomb.addActionListener(new Hozzaad());
-        keres_gomb.setBounds(628, 177, 89, 23);
+        keres_gomb.setBounds(518, 205, 89, 23);
         add(keres_gomb);
+        
+        JLabel lblNewLabel_2 = new JLabel("Dátum -ig");
+        lblNewLabel_2.setBounds(475, 159, 84, 14);
+        add(lblNewLabel_2);
+        
+        datumig_mezo = new JTextField();
+        datumig_mezo.setBounds(569, 156, 86, 20);
+        add(datumig_mezo);
+        datumig_mezo.setColumns(10);
 
     }
     
@@ -77,7 +87,7 @@ public class AVM_javitasok extends JPanel {
                     stmt = (Statement) conn.createStatement();
                     conn2 = DriverManager.getConnection("jdbc:mysql://192.168.5.145/", "quality", "Qua25!");
                     stmt2 = conn2.createStatement();
-                    String sql = "select Panelszam, Idopont from qualitydb.Beolvasott_panelek where Idopont >= '"+ datum_mezo.getText() +" 00:00:00' and Idopont <= '"+ datum_mezo.getText() +" 23:59:00'  and Projekt = 'AVM'";
+                    String sql = "select Panelszam, Idopont from qualitydb.Beolvasott_panelek where Idopont >= '"+ datumtol_mezo.getText() +" 00:00:00' and Idopont <= '"+ datumig_mezo.getText() +" 23:59:59'  and Projekt = 'AVM'";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
                     ResultSet rs2 = null;

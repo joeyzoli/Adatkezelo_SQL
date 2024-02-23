@@ -81,7 +81,7 @@ public class Forraszthatosagi_osszesito extends JPanel {
         add(lblNewLabel_4);
         
         JButton torles_gomb = new JButton("Törlés");
-        torles_gomb.addActionListener(new Torles());
+        //torles_gomb.addActionListener(new Torles());
         torles_gomb.setBounds(1109, 521, 89, 23);
         add(torles_gomb);
         adatok();
@@ -224,7 +224,7 @@ public class Forraszthatosagi_osszesito extends JPanel {
             }
          }
     }
-    
+    /*
     class Torles implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
         public void actionPerformed(ActionEvent e)
@@ -252,5 +252,5 @@ public class Forraszthatosagi_osszesito extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
-    }
+    }*/
 }

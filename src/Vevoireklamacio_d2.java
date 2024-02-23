@@ -22,11 +22,18 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +48,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -168,7 +177,7 @@ public class Vevoireklamacio_d2 extends JPanel {
             }
         });
         nok_kep.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
-        nok_kep.addMouseListener (new MouseListener () {
+        /*nok_kep.addMouseListener (new MouseListener () {
             //override the method
             public void mousePressed(MouseEvent e) {
                 
@@ -190,13 +199,36 @@ public class Vevoireklamacio_d2 extends JPanel {
                         fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
                         ImageIcon icon2 = null;
                         icon2 = new ImageIcon(fajl.getAbsolutePath());
-                        Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                        nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                        Image icon = icon2.getImage();
+                        int szelesseg = 0;
+                        int magassag = 0;
+                        if(icon2.getIconWidth() > icon2.getIconHeight())
+                        {
+                            float egyszazalek = icon2.getIconWidth() /100;
+                            float szazalek = 465/egyszazalek;
+                            //float szeles = icon2.getIconHeight()/100*szazalek;
+                            float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = 465;
+                            magassag = (int) magas;
+                        }
+                        else
+                        {
+                            float egyszazalek = icon2.getIconHeight() /100;
+                            float szazalek = 338/egyszazalek;
+                            float szeles = icon2.getIconWidth()/100*szazalek;
+                            //float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = (int) szeles;
+                            magassag = 338;
+                        }
+                        Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        ImageIcon meretezett = new ImageIcon(resizedImage);                                                                             //kép képldányosítása
+                        nok_kep.setIcon(meretezett);                                                                                                    //kép hozzáadása a képernyőhöz
                         modell.addRow(new Object[]{fajl.getName()});
                         table.setModel(modell);
                         Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                        Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
+                        //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
+                        //nok_kep.setBounds(135, 334, 465, 338);
                     }
                 }
                 catch (Exception e1) 
@@ -227,14 +259,14 @@ public class Vevoireklamacio_d2 extends JPanel {
                 // TODO Auto-generated method stub
                 
             }
-        });
+        });*/
         nok_kep.setBounds(135, 334, 465, 338);
         add(nok_kep);
         
         ok_kep = new JLabel("");
         ok_kep.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         ok_kep.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
-        ok_kep.addMouseListener (new MouseListener () {
+        /*ok_kep.addMouseListener (new MouseListener () {
             //override the method
             public void mousePressed(MouseEvent e) {
                 
@@ -258,12 +290,34 @@ public class Vevoireklamacio_d2 extends JPanel {
                         ImageIcon icon2 = null;
                         icon2 = new ImageIcon(fajl.getAbsolutePath());
                         Image icon = icon2.getImage();  
-                        Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                        int szelesseg = 0;
+                        int magassag = 0;
+                        if(icon2.getIconWidth() > icon2.getIconHeight())
+                        {
+                            float egyszazalek = icon2.getIconWidth() /100;
+                            float szazalek = 465/egyszazalek;
+                            //float szeles = icon2.getIconHeight()/100*szazalek;
+                            float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = 465;
+                            magassag = (int) magas;
+                        }
+                        else
+                        {
+                            float egyszazalek = icon2.getIconHeight() /100;
+                            float szazalek = 338/egyszazalek;
+                            float szeles = icon2.getIconWidth()/100*szazalek;
+                            //float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = (int) szeles;
+                            magassag = 338;
+                        }
+                        Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
                         ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                         ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
                         modell.addRow(new Object[]{fajl.getName()});
                         table.setModel(modell);
                         Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                        Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
+                        //ok_kep.setBounds(676, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
                     }                                      
                 }
                 catch (Exception e1) 
@@ -293,9 +347,14 @@ public class Vevoireklamacio_d2 extends JPanel {
                 // TODO Auto-generated method stub
                 
             }
-        });
+        });*/
         ok_kep.setBounds(676, 334, 465, 338);
         add(ok_kep);
+        
+        MyDragDropListener myDragDropListener = new MyDragDropListener();
+        MyDragDropListener2 myDragDropListener2 = new MyDragDropListener2();
+        new DropTarget(nok_kep, myDragDropListener);
+        new DropTarget(ok_kep, myDragDropListener2);
         
         JLabel lblNewLabel_10 = new JLabel("Egyéb fájl hozzáadása");
         lblNewLabel_10.setBounds(1175, 334, 142, 14);
@@ -359,15 +418,63 @@ public class Vevoireklamacio_d2 extends JPanel {
                     String[] darabol = fajlok.get(szamlalo).split(";");
                     if(darabol[2].equals("nok"))
                     {
-                        ExcelPicture pic = sheet.getPictures().add(21, 2,darabol[1]);
-                        pic.setWidth(400);
-                        pic.setHeight(280);
+                        ExcelPicture pic = sheet.getPictures().add(20, 2,darabol[1]);                        
+                        ImageIcon icon2 = null;
+                        icon2 = new ImageIcon(darabol[1]);
+                        @SuppressWarnings("unused")
+                        Image icon = icon2.getImage();  
+                        int szelesseg = 0;
+                        int magassag = 0;
+                        if(icon2.getIconWidth() > icon2.getIconHeight())
+                        {
+                            float egyszazalek = icon2.getIconWidth() /100;
+                            float szazalek = 458/egyszazalek;
+                            //float szeles = icon2.getIconHeight()/100*szazalek;
+                            float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = 458;
+                            magassag = (int) magas;
+                        }
+                        else
+                        {
+                            float egyszazalek = icon2.getIconHeight() /100;
+                            float szazalek = 397/egyszazalek;
+                            float szeles = icon2.getIconWidth()/100*szazalek;
+                            //float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = (int) szeles;
+                            magassag = 397;
+                        }
+                        pic.setWidth(szelesseg);
+                        pic.setHeight(magassag);
                     }
                     if(darabol[2].equals("ok"))
                     {
-                        ExcelPicture pic = sheet.getPictures().add(21, 10,darabol[1]);
-                        pic.setWidth(400);
-                        pic.setHeight(280);
+                        ExcelPicture pic = sheet.getPictures().add(20, 10,darabol[1]);
+                        ImageIcon icon2 = null;
+                        icon2 = new ImageIcon(darabol[1]);
+                        @SuppressWarnings("unused")
+                        Image icon = icon2.getImage();  
+                        int szelesseg = 0;
+                        int magassag = 0;
+                        if(icon2.getIconWidth() > icon2.getIconHeight())
+                        {
+                            float egyszazalek = icon2.getIconWidth() /100;
+                            float szazalek = 458/egyszazalek;
+                            //float szeles = icon2.getIconHeight()/100*szazalek;
+                            float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = 458;
+                            magassag = (int) magas;
+                        }
+                        else
+                        {
+                            float egyszazalek = icon2.getIconHeight() /100;
+                            float szazalek = 397/egyszazalek;
+                            float szeles = icon2.getIconWidth()/100*szazalek;
+                            //float magas = icon2.getIconHeight()/100*szazalek;
+                            szelesseg = (int) szeles;
+                            magassag = 397;
+                        }
+                        pic.setWidth(szelesseg);
+                        pic.setHeight(magassag);
                     }
                 }
                 String hova = System.getProperty("user.home") + "\\Desktop\\EPL Vevőireklmáció ID_ "+ Vevoireklamacio_fejlec.id_mezo.getText() +".xlsx";
@@ -422,8 +529,8 @@ public class Vevoireklamacio_d2 extends JPanel {
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                mentes_helye.showOpenDialog(mentes_helye);
                 mentes_helye.setMultiSelectionEnabled(true);
+                mentes_helye.showOpenDialog(mentes_helye);               
                 File[] fajl = mentes_helye.getSelectedFiles();
                 if(fajl != null)
                 {
@@ -432,7 +539,9 @@ public class Vevoireklamacio_d2 extends JPanel {
                         fajlok.add(fajl[szamlalo].getName() +";"+fajl[szamlalo].getAbsolutePath()+";*");
                         modell.addRow(new Object[]{fajl[szamlalo].getName()});
                         table.setModel(modell);
+                        Vevoireklamacio_V2.fejlec.hozzaad(fajl[szamlalo].getName());
                     }
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 }
                 
             }
@@ -548,10 +657,31 @@ public class Vevoireklamacio_d2 extends JPanel {
             {
                 ImageIcon icon2 = null;
                 icon2 = new ImageIcon(f.getAbsolutePath());
-                Image icon = icon2.getImage();  
-                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                Image icon = icon2.getImage();
+                int szelesseg = 0;
+                int magassag = 0;
+                if(icon2.getIconWidth() > icon2.getIconHeight())
+                {
+                    float egyszazalek = icon2.getIconWidth() /100;
+                    float szazalek = 458/egyszazalek;
+                    //float szeles = icon2.getIconHeight()/100*szazalek;
+                    float magas = icon2.getIconHeight()/100*szazalek;
+                    szelesseg = 458;
+                    magassag = (int) magas;
+                }
+                else
+                {
+                    float egyszazalek = icon2.getIconHeight() /100;
+                    float szazalek = 397/egyszazalek;
+                    float szeles = icon2.getIconWidth()/100*szazalek;
+                    //float magas = icon2.getIconHeight()/100*szazalek;
+                    szelesseg = (int) szeles;
+                    magassag = 397;
+                }
+                Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
                 ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                 ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                //ok_kep.setBounds(676, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
                 tipus = "ok";
             }
             if(rset.getString(3).equals("nok"))
@@ -559,9 +689,30 @@ public class Vevoireklamacio_d2 extends JPanel {
                 ImageIcon icon2 = null;
                 icon2 = new ImageIcon(f.getAbsolutePath());
                 Image icon = icon2.getImage();  
-                Image resizedImage = icon.getScaledInstance(icon2.getIconWidth()/3, icon2.getIconHeight()/3,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                int szelesseg = 0;
+                int magassag = 0;
+                if(icon2.getIconWidth() > icon2.getIconHeight())
+                {
+                    float egyszazalek = icon2.getIconWidth() /100;
+                    float szazalek = 458/egyszazalek;
+                    //float szeles = icon2.getIconHeight()/100*szazalek;
+                    float magas = icon2.getIconHeight()/100*szazalek;
+                    szelesseg = 458;
+                    magassag = (int) magas;
+                }
+                else
+                {
+                    float egyszazalek = icon2.getIconHeight() /100;
+                    float szazalek = 397/egyszazalek;
+                    float szeles = icon2.getIconWidth()/100*szazalek;
+                    //float magas = icon2.getIconHeight()/100*szazalek;
+                    szelesseg = (int) szeles;
+                    magassag = 397;
+                }
+                Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
                 ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
                 nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
                 tipus = "nok";
             }
             
@@ -684,6 +835,194 @@ public class Vevoireklamacio_d2 extends JPanel {
               se.printStackTrace();
            }  
         }
+    }
+    
+    class MyDragDropListener implements DropTargetListener {
+
+        @Override
+        public void drop(DropTargetDropEvent event) {
+
+            // Accept copy drops
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+
+            // Get the transfer which can provide the dropped item data
+            Transferable transferable = event.getTransferable();
+
+            // Get the data formats of the dropped item
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+
+            // Loop through the flavors
+            for (DataFlavor flavor : flavors) 
+            {
+                try 
+                {
+                   // If the drop items are files
+                    if (flavor.isFlavorJavaFileListType()) 
+                    {
+                        System.out.println("A nok képhozzáadás fut");
+                        // Get all of the dropped files
+                        List<?> files = (List<?>) transferable.getTransferData(flavor);
+                        System.out.println(files.toString());
+                        System.out.println(files.toString().substring(1,files.toString().length()-1));
+                        File fajl = new File(files.toString().substring(1,files.toString().length()-1));
+                        if(fajl != null)
+                        {
+                            fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";nok");
+                            ImageIcon icon2 = null;
+                            icon2 = new ImageIcon(fajl.getAbsolutePath());
+                            Image icon = icon2.getImage();
+                            int szelesseg = 0;
+                            int magassag = 0;
+                            if(icon2.getIconWidth() > icon2.getIconHeight())
+                            {
+                                float egyszazalek = icon2.getIconWidth() /100;
+                                float szazalek = 465/egyszazalek;
+                                //float szeles = icon2.getIconHeight()/100*szazalek;
+                                float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = 465;
+                                magassag = (int) magas;
+                            }
+                            else
+                            {
+                                float egyszazalek = icon2.getIconHeight() /100;
+                                float szazalek = 338/egyszazalek;
+                                float szeles = icon2.getIconWidth()/100*szazalek;
+                                //float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = (int) szeles;
+                                magassag = 338;
+                            }
+                            Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                            ImageIcon meretezett = new ImageIcon(resizedImage);                                                                             //kép képldányosítása
+                            nok_kep.setIcon(meretezett);                                                                                                    //kép hozzáadása a képernyőhöz
+                            modell.addRow(new Object[]{fajl.getName()});
+                            table.setModel(modell);
+                            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                            Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
+                            //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
+                            //nok_kep.setBounds(135, 334, 465, 338);
+                        }
+                     }
+
+                } 
+                catch (Exception e) 
+                {
+                    // Print out the error stack
+                    e.printStackTrace();
+                }
+            }
+            // Inform that the drop is complete
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {
+        }
+
+    }
+    
+    class MyDragDropListener2 implements DropTargetListener {
+
+        @Override
+        public void drop(DropTargetDropEvent event) {
+
+            // Accept copy drops
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+
+            // Get the transfer which can provide the dropped item data
+            Transferable transferable = event.getTransferable();
+
+            // Get the data formats of the dropped item
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+
+            // Loop through the flavors
+            for (DataFlavor flavor : flavors) 
+            {
+                try 
+                {
+                   // If the drop items are files
+                    if (flavor.isFlavorJavaFileListType()) 
+                    {
+                        System.out.println("Az ok képhozzáadás fut");
+                        // Get all of the dropped files
+                        List<?> files = (List<?>) transferable.getTransferData(flavor);
+                        File fajl = new File(files.toString().substring(1,files.toString().length()-1));
+                        if(fajl != null)
+                        {
+                            fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";ok");
+                            ImageIcon icon2 = null;
+                            icon2 = new ImageIcon(fajl.getAbsolutePath());
+                            Image icon = icon2.getImage();
+                            int szelesseg = 0;
+                            int magassag = 0;
+                            if(icon2.getIconWidth() > icon2.getIconHeight())
+                            {
+                                float egyszazalek = icon2.getIconWidth() /100;
+                                float szazalek = 465/egyszazalek;
+                                //float szeles = icon2.getIconHeight()/100*szazalek;
+                                float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = 465;
+                                magassag = (int) magas;
+                            }
+                            else
+                            {
+                                float egyszazalek = icon2.getIconHeight() /100;
+                                float szazalek = 338/egyszazalek;
+                                float szeles = icon2.getIconWidth()/100*szazalek;
+                                //float magas = icon2.getIconHeight()/100*szazalek;
+                                szelesseg = (int) szeles;
+                                magassag = 338;
+                            }
+                            Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                            ImageIcon meretezett = new ImageIcon(resizedImage);                                                                             //kép képldányosítása
+                            ok_kep.setIcon(meretezett);                                                                                                    //kép hozzáadása a képernyőhöz
+                            modell.addRow(new Object[]{fajl.getName()});
+                            table.setModel(modell);
+                            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                            Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
+                            //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
+                            //nok_kep.setBounds(135, 334, 465, 338);
+                        }
+                     }
+
+                } 
+                catch (Exception e) 
+                {
+                    // Print out the error stack
+                    e.printStackTrace();
+                }
+            }
+            // Inform that the drop is complete
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {
+        }
+
     }
     
 }

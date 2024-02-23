@@ -59,6 +59,7 @@ public class Vevoireklamacio_d0 extends JPanel {
     private JComboBox<String> felelos1_box;
     private JComboBox<String> felelos2_box;
     private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
+    private Kivalaszt valaszto = new Kivalaszt();
 
     /**
      * Create the panel.
@@ -256,7 +257,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         add(separator);
         
         vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                                     //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
-        vevo_box.addActionListener(new Kivalaszt());
+        vevo_box.addActionListener(valaszto);
         vevo_box.setBounds(270, 53, 215, 22);
         add(vevo_box);
         
@@ -349,7 +350,7 @@ public class Vevoireklamacio_d0 extends JPanel {
             {
                 sql = "update qualitydb.Vevoireklamacio_alap set mi = '"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"', Vevo = '"+ String.valueOf(vevo_box.getSelectedItem()) +"', "
                         + "Beszallito = '"+ beszallito_mezo.getText() +"', Ertesites_datuma = '"+ ertesites_mezo.getText() +"', Vevoi_szam = '"+ vevorek_mezo.getText() +"',"
-                        + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ String.valueOf(felelos1_box.getSelectedItem())+";"+ String.valueOf(felelos2_box.getSelectedItem()) +"', Tipus = '"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
+                        + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ String.valueOf(felelos1_box.getSelectedItem())+";"+ String.valueOf(felelos2_box.getSelectedItem()) +"', Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                         + "Email = '"+ email_mezo.getText() +";"+ email2_mezo.getText() +"', RMA_szam = '"+ rma_mezo.getText() +"', Telefon = '"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "Visszakuldes_datuma = '"+ visszakuldes_mezo.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";                
             }
@@ -358,7 +359,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 sql = "insert into qualitydb.Vevoireklamacio_alap (mi,Vevo,Beszallito,Ertesites_datuma,Vevoi_szam,Utolso_frissites,Felelos,Tipus,Email,RMA_szam,Telefon,Visszakuldes_datuma)  "
                         + "Values('"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"','"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
                         + "'"+ beszallito_mezo.getText() +"','"+ ertesites_mezo.getText() +"','"+ vevorek_mezo.getText() +"',"
-                        + "'"+ frissites_mezo.getText() +"','"+ String.valueOf(felelos1_box.getSelectedItem())+";"+ String.valueOf(felelos2_box.getSelectedItem()) +"','"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
+                        + "'"+ frissites_mezo.getText() +"','"+ String.valueOf(felelos1_box.getSelectedItem())+";"+ String.valueOf(felelos2_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                         + "'"+ email_mezo.getText() +";"+ email2_mezo.getText() +"','"+ rma_mezo.getText() +"','"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "'"+ visszakuldes_mezo.getText() +"')";
             }
@@ -404,6 +405,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         ResultSet rs = stmt.getResultSet();
         if(rs.next())
         {
+            vevo_box.removeActionListener(valaszto);
             Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
             vevo_box.setSelectedItem(rs.getString(3));
             beszallito_mezo.setText(rs.getString(4));
@@ -453,14 +455,14 @@ public class Vevoireklamacio_d0 extends JPanel {
             else if(felelos.length == 1)
             {
                 felelos1_box.setSelectedItem((felelos[0]));
-                felelos2_box.setSelectedItem((felelos[1])); 
+                felelos2_box.setSelectedItem(("")); 
             }
             else
             {
-                felelos1_box.setSelectedItem((felelos[0]));
-                felelos2_box.setSelectedItem((felelos[1])); 
+                felelos1_box.setSelectedItem("");
+                felelos2_box.setSelectedItem(""); 
             }
-            vevo_box.setSelectedItem(rs.getString(9));
+            tipus_box.setSelectedItem(rs.getString(9));
             String[] email = rs.getString(10).split(";");
             if(email.length > 1)
             {
@@ -504,6 +506,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         }
         table.setModel(modell);
         Vevoireklamacio_V2.d5.hatarido();
+        vevo_box.addActionListener(valaszto);
         stmt.close();
         conn.close();        
         }          
@@ -563,7 +566,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                         ujmodell[szamlalo] = kivalasztott.get(szamlalo);
                     }
                     model = new DefaultComboBoxModel<>(ujmodell);
-                
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 tipus_box.setModel(model);
                 kivalasztott.clear();
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
@@ -600,6 +603,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                         
                 }
                 Vevoireklamacio_d1.vezeto_mezo.setText(String.valueOf(felelos1_box.getSelectedItem()));
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
             } 
             catch (Exception e1) 
@@ -633,6 +637,8 @@ public class Vevoireklamacio_d0 extends JPanel {
                     }
                         
                 }
+                Vevoireklamacio_d1.vezeto_mezo.setText(String.valueOf(felelos2_box.getSelectedItem()));
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
             } 
             catch (Exception e1) 
