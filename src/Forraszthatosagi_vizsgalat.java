@@ -35,7 +35,6 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
     private JTextField kor_mezo;
     private JTextField mennyiseg_mezo;
     private JTextField idopont_mezo;
-    private JTextField ellenor_mezo;
     private JTextField zarolando_mezo;
     private JTextField kekcimke_mezo;
     private JComboBox<String> eloiras_box;
@@ -43,6 +42,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
     private JTextArea eloiras_mezo;
     private JTextField beerkezettdb_mezo;
     private JComboBox<String> vizsgalat_box;
+    private JComboBox<String> ki_box;
 
     /**
      * Create the panel.
@@ -127,8 +127,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         add(lblNewLabel_8);
         
         kor_mezo = new JTextField();
-        kor_mezo.setBounds(493, 141, 107, 20);
-        kor_mezo.setText("  évnél idősebb");
+        kor_mezo.setBounds(493, 141, 30, 20);
         add(kor_mezo);
         kor_mezo.setColumns(10);
         
@@ -183,11 +182,6 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         JLabel lblNewLabel_14 = new JLabel("Vizsgálatot végezte");
         lblNewLabel_14.setBounds(269, 389, 121, 14);
         add(lblNewLabel_14);
-        
-        ellenor_mezo = new JTextField();
-        ellenor_mezo.setBounds(409, 386, 140, 20);
-        add(ellenor_mezo);
-        ellenor_mezo.setColumns(10);
         
         JLabel lblNewLabel_15 = new JLabel("Vizsgálat eredménye");
         lblNewLabel_15.setBounds(156, 446, 130, 14);
@@ -244,10 +238,19 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         add(beerkezettdb_mezo);
         beerkezettdb_mezo.setColumns(10);
         
-        String[] vizsgalat = {"-","Vizsgálat1","Vizsgálat2","Vizsgálat3","Vizsgálat4","Vizsgálat5","Vizsgálat6"};
-        vizsgalat_box = new JComboBox<String>(vizsgalat);
+        String[] vizsgalat = {"-","Mártó forrasztás","Pasztázott PAD-re helyezés","Alkatrész pasztázás","Normál gyártási folyamat"};
+        vizsgalat_box = new JComboBox<String>(vizsgalat);                                //vizsgalat
         vizsgalat_box.setBounds(627, 336, 570, 22);
         add(vizsgalat_box);
+        
+        JLabel lblNewLabel_19 = new JLabel("évnél idősebb");
+        lblNewLabel_19.setBounds(533, 144, 101, 14);
+        add(lblNewLabel_19);
+        
+        String[] ki = {"-","Kádár Zoltán","Ternák Sándor","Molnár József","Nagy Bálint"};
+        ki_box = new JComboBox<String>(ki);
+        ki_box.setBounds(409, 385, 202, 22);
+        add(ki_box);
 
     }
     
@@ -330,7 +333,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         add(lblNewLabel_8);
         
         kor_mezo = new JTextField();
-        kor_mezo.setBounds(493, 141, 107, 20);
+        kor_mezo.setBounds(493, 141, 30, 20);
         add(kor_mezo);
         kor_mezo.setColumns(10);
         
@@ -384,12 +387,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         
         JLabel lblNewLabel_14 = new JLabel("Vizsgálatot végezte");
         lblNewLabel_14.setBounds(269, 389, 121, 14);
-        add(lblNewLabel_14);
-        
-        ellenor_mezo = new JTextField();
-        ellenor_mezo.setBounds(409, 386, 140, 20);
-        add(ellenor_mezo);
-        ellenor_mezo.setColumns(10);
+        add(lblNewLabel_14);        
         
         JLabel lblNewLabel_15 = new JLabel("Vizsgálat eredménye");
         lblNewLabel_15.setBounds(156, 446, 130, 14);
@@ -447,9 +445,18 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         beerkezettdb_mezo.setColumns(10);
         
         String[] vizsgalat = {"-","Vizsgálat1","Vizsgálat2","Vizsgálat3","Vizsgálat4","Vizsgálat5","Vizsgálat6"};
-        vizsgalat_box = new JComboBox<String>(vizsgalat);
+        vizsgalat_box = new JComboBox<String>(vizsgalat);                                //vizsgalat
         vizsgalat_box.setBounds(627, 336, 570, 22);
         add(vizsgalat_box);
+        
+        JLabel lblNewLabel_19 = new JLabel("évnél idősebb");
+        lblNewLabel_19.setBounds(533, 144, 101, 14);
+        add(lblNewLabel_19);
+        
+        String[] ki = {"-","Kádár Zoltán","Ternák Sándor","Molnár József","Nagy Bálint"};
+        ki_box = new JComboBox<String>(ki);
+        ki_box.setBounds(409, 385, 202, 22);
+        add(ki_box);
         
         id_mezo.setText(id);
         
@@ -532,7 +539,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
                     sql = "update qualitydb.Forraszthatosagi_vizsgalat set Cikkszam = '"+ cikkszam_mezo.getText() +"', Megnevezes = '"+ megnevezes_mezo.getText() +"', Projekt = '"+ projekt_mezo.getText() +"',"
                             + "Gyartas_datuma = '"+ gyartas_mezo.getText() +"', Kora = '"+ kor_mezo.getText() +"', Jkv_sorszam = '"+ sorszam_mezo.getText() +"',"
                             + "Terulet ='"+  String.valueOf(terület_box.getSelectedItem()) +"', Mennyiseg = '"+ mennyiseg_mezo.getText() +"', Idopont = '"+ idopont_mezo.getText() +"', "
-                            + "Vizsgalati_mod = '"+ String.valueOf(vizsgalat_box.getSelectedItem()) +"', Vizsgalatot_vegezte = '"+ ellenor_mezo.getText() +"', Eredmeny = '"+ String.valueOf(eredmeny_box.getSelectedItem()) +"',"
+                            + "Vizsgalati_mod = '"+ String.valueOf(vizsgalat_box.getSelectedItem()) +"', Vizsgalatot_vegezte = '"+ String.valueOf(ki_box.getSelectedItem()) +"', Eredmeny = '"+ String.valueOf(eredmeny_box.getSelectedItem()) +"',"
                             + "Zarolando = '"+ zarolando_mezo.getText() +"', Kek_cimke = '"+ kekcimke_mezo.getText() +"', Beerkezett_db = '"+ beerkezettdb_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
                 }
                 else
@@ -541,7 +548,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
                             + "Vizsgalatot_vegezte,Eredmeny,Zarolando,Kek_cimke,Beerkezett_db)  Values('"+ cikkszam_mezo.getText() +"','"+ megnevezes_mezo.getText() +"','"+ projekt_mezo.getText() +"',"
                             + "'"+ gyartas_mezo.getText() +"','"+ kor_mezo.getText() +"','"+ sorszam_mezo.getText() +"',"
                             + "'"+ String.valueOf(terület_box.getSelectedItem()) +"','"+ mennyiseg_mezo.getText() +"','"+ idopont_mezo.getText() +"',"
-                            + "'"+ String.valueOf(vizsgalat_box.getSelectedItem()) +"','"+ ellenor_mezo.getText() +"','"+ String.valueOf(eredmeny_box.getSelectedItem()) +"',"
+                            + "'"+ String.valueOf(vizsgalat_box.getSelectedItem()) +"','"+ String.valueOf(ki_box.getSelectedItem()) +"','"+ String.valueOf(eredmeny_box.getSelectedItem()) +"',"
                             + "'"+ zarolando_mezo.getText() +"','"+ kekcimke_mezo.getText() +"','"+ beerkezettdb_mezo.getText() +"')";
                 }
                 ment.mindenes(sql);
@@ -582,7 +589,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
                 mennyiseg_mezo.setText(rs.getString(11));
                 idopont_mezo.setText(rs.getString(12));
                 vizsgalat_box.setSelectedItem(rs.getString(13));
-                ellenor_mezo.setText(rs.getString(14));
+                ki_box.setSelectedItem(rs.getString(14));
                 eredmeny_box.setSelectedItem(rs.getString(15));
                 zarolando_mezo.setText(rs.getString(16));
                 kekcimke_mezo.setText(rs.getString(17));
@@ -719,5 +726,4 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
             }
          }
     }
-        
 }

@@ -26,9 +26,11 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 public class Tracy_utolso extends JPanel {
-
+    
+    private int fajlszam = 1;
     /**
      * Create the panel.
+     * 
      */
     public Tracy_utolso() {
         setLayout(null);
@@ -150,20 +152,42 @@ public class Tracy_utolso extends JPanel {
                       sheet2.getAllocatedRange().autoFitRows();
                       sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                       String hova = System.getProperty("user.home") + "\\Desktop\\Tracy utolsó folyamat.xlsx";
-                      workbook2.saveToFile(hova, ExcelVersion.Version2016);
-                      FileInputStream fileStream = new FileInputStream(hova);
-                      try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                      try 
                       {
-                          for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
-                          {    
-                              workbook3.removeSheetAt(i); 
-                          }      
-                          FileOutputStream output = new FileOutputStream(hova);
-                          workbook3.write(output);
-                          output.close();
+                          workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                          FileInputStream fileStream = new FileInputStream(hova);
+                          try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                          {
+                              for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                              {    
+                                  workbook3.removeSheetAt(i); 
+                              }      
+                              FileOutputStream output = new FileOutputStream(hova);
+                              workbook3.write(output);
+                              output.close();
+                          }
+                          JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Tracy utolsó folyamat.xlsx néven!", "Info", 1); 
+                          con.close();
+                      } 
+                      catch (Exception e1) 
+                      {
+                          System.out.println("file is locked");
+                          hova = System.getProperty("user.home") + "\\Desktop\\Tracy utolsó folyamat_"+ fajlszam +".xlsx";
+                          workbook.saveToFile(hova, ExcelVersion.Version2016);
+                          FileInputStream fileStream = new FileInputStream(hova);
+                          try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                          {
+                              for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                              {    
+                                  workbook3.removeSheetAt(i); 
+                              }      
+                              FileOutputStream output = new FileOutputStream(hova);
+                              workbook3.write(output);
+                              output.close();
+                          }
+                          JOptionPane.showMessageDialog(null, "Kész! \n A fájl meg volt nyitva így Tracy utolsó folyamat_"+ fajlszam +".xlsx néven!", "Info", 1);
+                          fajlszam++;
                       }
-                      JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Tracy utolsó folyamat.xlsx néven!", "Info", 1); 
-                      con.close();
                 }
                   Foablak.frame.setCursor(null);  
                   }           

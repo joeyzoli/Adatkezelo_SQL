@@ -76,14 +76,14 @@ public class Forraszthatosagi_osszesito extends JPanel {
         lblNewLabel_3.setBounds(431, 622, 79, 14);
         add(lblNewLabel_3);
         
-        JLabel lblNewLabel_4 = new JLabel("Kiválasztott sor törlése");
-        lblNewLabel_4.setBounds(939, 525, 145, 14);
-        add(lblNewLabel_4);
+        //JLabel lblNewLabel_4 = new JLabel("Kiválasztott sor törlése");
+        //lblNewLabel_4.setBounds(939, 525, 145, 14);
+        //add(lblNewLabel_4);
         
-        JButton torles_gomb = new JButton("Törlés");
+        //JButton torles_gomb = new JButton("Törlés");
         //torles_gomb.addActionListener(new Torles());
-        torles_gomb.setBounds(1109, 521, 89, 23);
-        add(torles_gomb);
+        //torles_gomb.setBounds(1109, 521, 89, 23);
+        //add(torles_gomb);
         adatok();
         
     }
@@ -114,7 +114,7 @@ public class Forraszthatosagi_osszesito extends JPanel {
         rs = stmt.getResultSet();
         while(rs.next())
         {
-            modell.addRow(new Object[]{rs.getString(1),rs.getString(7), rs.getString(2), rs.getString(3), rs.getString(4),rs.getString(6),rs.getString(8),rs.getString(11),rs.getString(12),rs.getString(15)});                                 
+            modell.addRow(new Object[]{rs.getString(1),rs.getString(7), rs.getString(2), rs.getString(3), rs.getString(4),rs.getString(6)+" évnél idősebb",rs.getString(8),rs.getString(11),rs.getString(12),rs.getString(15)});                                 
         }
         final TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {

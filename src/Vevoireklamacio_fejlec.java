@@ -335,6 +335,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 Vevoireklamacio_V2.d6.mentes();
                 Vevoireklamacio_V2.d7.mentes();
                 Vevoireklamacio_V2.d8.mentes();
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
                 JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
             }
             catch (Exception e1) 
@@ -369,6 +370,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     Vevoireklamacio_V2.d6.visszatolt();
                     Vevoireklamacio_V2.d7.visszatolt();
                     Vevoireklamacio_V2.d8.visszatolt();
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
                     Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 }
             } 

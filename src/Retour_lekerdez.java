@@ -125,11 +125,7 @@ public class Retour_lekerdez extends JPanel
         add(vevo_box);
         
         JButton mindenadat_gomb = new JButton("Mentés");
-        mindenadat_gomb.addActionListener(new Retour_minden());
-        mindenadat_gomb.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
+        mindenadat_gomb.addActionListener(new Retour_minden());        
         mindenadat_gomb.setBounds(520, 614, 89, 23);
         add(mindenadat_gomb);
         
@@ -155,6 +151,24 @@ public class Retour_lekerdez extends JPanel
         lblNewLabel_9.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel_9.setBounds(420, 158, 90, 14);
         add(lblNewLabel_9);
+        
+        JLabel lblNewLabel_10 = new JLabel("Kiválasztott sor törlése");
+        lblNewLabel_10.setBounds(816, 565, 149, 14);
+        add(lblNewLabel_10);
+        
+        JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles());
+        torles_gomb.setBounds(975, 561, 89, 23);
+        add(torles_gomb);
+        
+        JLabel lblNewLabel_11 = new JLabel("Kiválasztott sor módósítása");
+        lblNewLabel_11.setBounds(776, 618, 189, 14);
+        add(lblNewLabel_11);
+        
+        JButton modosit_gomb = new JButton("Módosít");
+        modosit_gomb.addActionListener(new Modosit());
+        modosit_gomb.setBounds(975, 614, 89, 23);
+        add(modosit_gomb);
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -458,5 +472,74 @@ public class Retour_lekerdez extends JPanel
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         Date date = new Date();
         datumig.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
+    }
+    
+    class Torles implements ActionListener                                                                                        //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                if(table.getSelectedRow() >= 0)
+                {
+                    int reply = JOptionPane.showConfirmDialog(null, "Biztos, hogy törölni akarod ezt a Retourt??", "Értesítés", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) 
+                    {
+                        SQA_SQL torol = new SQA_SQL();
+                        String sql = "delete from qualitydb.Retour where ID = '"+ table.getValueAt(table.getSelectedRow(), 0) +"'";
+                        torol.mindenes(sql);
+                    }
+                    else {}
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs sor kiválasztva!!", "Hiba üzenet", 2);
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Modosit implements ActionListener                                                                                        //törlés gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                if(table.getSelectedRow() >= 0)
+                {
+                    int reply = JOptionPane.showConfirmDialog(null, "Biztos, hogy módosítani akarod ezt a Retourt??", "Értesítés", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) 
+                    {
+                        SQA_SQL torol = new SQA_SQL();
+                        String sql = "update qualitydb.Retour set Vevo = '"+ table.getValueAt(table.getSelectedRow(), 2) +"', Tipus = '"+ table.getValueAt(table.getSelectedRow(), 3) +"', "
+                                + "Vagy = '"+ table.getValueAt(table.getSelectedRow(), 4) +"', Beerkezett = '"+ table.getValueAt(table.getSelectedRow(), 5) +"', "
+                                + "Elteres ='"+ table.getValueAt(table.getSelectedRow(), 6) +"', RMA = '"+ table.getValueAt(table.getSelectedRow(), 7) +"', "
+                                + "Megjegyzes ='"+ table.getValueAt(table.getSelectedRow(), 8) +"' where ID = '"+ table.getValueAt(table.getSelectedRow(), 0) +"'";
+                        torol.mindenes(sql);
+                    }
+                    else {}
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs sor kiválasztva!!", "Hiba üzenet", 2);
+                }
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
 }

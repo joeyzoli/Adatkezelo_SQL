@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -31,6 +33,7 @@ public class Kockazatimatrix_intezkedes extends JPanel {
     private JTextArea ujintezkedes_mezo;
     private JTextArea hatarido_mezo;
     private JTextArea ujhatarido_mezo;
+    private JTextField modositva_mezo;
 
     /**
      * Create the panel.
@@ -172,6 +175,16 @@ public class Kockazatimatrix_intezkedes extends JPanel {
         vissza_gomb.setBounds(1078, 96, 89, 23);
         add(vissza_gomb);
         
+        JLabel lblNewLabel_12 = new JLabel("Utoljára módósítva");
+        lblNewLabel_12.setBounds(190, 385, 123, 14);
+        add(lblNewLabel_12);
+        
+        modositva_mezo = new JTextField();
+        modositva_mezo.setEditable(false);
+        modositva_mezo.setBounds(323, 382, 180, 20);
+        add(modositva_mezo);
+        modositva_mezo.setColumns(10);
+        
         visszatolt();
 
     }
@@ -197,7 +210,8 @@ public class Kockazatimatrix_intezkedes extends JPanel {
                 allapot_mezo.setText(rs.getString(6));
                 valoszinu_mezo.setText(rs.getString(8));
                 kovetkezmeny_mezo.setText(rs.getString(9));
-                ujkockazatiszint_mezo.setText(rs.getString(10));                
+                ujkockazatiszint_mezo.setText(rs.getString(10));
+                modositva_mezo.setText(rs.getString(11));
             }
             
             Foablak.frame.setCursor(null);
@@ -227,18 +241,20 @@ public class Kockazatimatrix_intezkedes extends JPanel {
                 String sql = "Select * from qualitydb.Kockazatimatrix_intezkedes where Kockazat = '"+ kockazat_mezo.getText() +"'";
                 ResultSet rs = stmt.executeQuery(sql);
                 SQA_SQL ment = new SQA_SQL();
+                SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 if(rs.next())
                 {
-                    sql = "update qualitydb.Kockazatimatrix_intezkedes set Intezkedes = '"+ ujintezkedes_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +"', Hatarido = '"+ hatarido_mezo.getText() +"',"
+                    sql = "update qualitydb.Kockazatimatrix_intezkedes set Modositva = '"+ rogzites.format(timestamp) +"', Intezkedes = '"+ ujintezkedes_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +"', Hatarido = '"+ hatarido_mezo.getText() +"',"
                           + " Allapot = '"+ allapot_mezo.getText() +"', Uj_Hatarido = '"+ ujhatarido_mezo.getText() +"', Valoszinuseg = '"+ valoszinu_mezo.getText() +"', "
                           + " Kovetkezmeny = '"+ kovetkezmeny_mezo.getText() +"', Kockazati_szint = '"+ ujkockazatiszint_mezo.getText() +"' where kockazat = '"+ kockazat_mezo.getText() +"'";
                     ment.mindenes(sql);
                 }
                 else
                 {
-                    sql = "insert into qualitydb.Kockazatimatrix_intezkedes (Kockazat, Intezkedes,Felelos,Hatarido,Allapot,Uj_hatarido,Valoszinuseg,Kovetkezmeny,Kockazati_szint) "
+                    sql = "insert into qualitydb.Kockazatimatrix_intezkedes (Kockazat, Intezkedes,Felelos,Hatarido,Allapot,Uj_hatarido,Valoszinuseg,Kovetkezmeny,Kockazati_szint, Modositva) "
                             + "Values('"+kockazat_mezo.getText()+"','"+ujintezkedes_mezo.getText()+"','"+felelos_mezo.getText()+"','"+hatarido_mezo.getText()+"','"+allapot_mezo.getText()+"',"
-                            + "'"+ujhatarido_mezo.getText()+"','"+valoszinu_mezo.getText()+"','"+kovetkezmeny_mezo.getText() +"','"+ ujkockazatiszint_mezo.getText() +"')";
+                            + "'"+ujhatarido_mezo.getText()+"','"+valoszinu_mezo.getText()+"','"+kovetkezmeny_mezo.getText() +"','"+ ujkockazatiszint_mezo.getText() +"','"+ rogzites.format(timestamp) +"')";
                     ment.mindenes(sql);
                 }
                 Foablak.frame.setCursor(null);
