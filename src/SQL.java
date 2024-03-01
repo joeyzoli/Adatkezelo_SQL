@@ -1691,6 +1691,7 @@ public class SQL
         LocalDate start_date = LocalDate.of(Integer.parseInt(datum_tol[0]),Integer.parseInt(datum_tol[1]),Integer.parseInt(datum_tol[2]));
         LocalDate end_date = LocalDate.of(Integer.parseInt(datum_ig[0]),Integer.parseInt(datum_ig[1]),Integer.parseInt(datum_ig[2]));
         Period diff = Period.between(start_date,end_date);
+        System.out.println(diff.getMonths());
         Float atlagrek = null;
         Float atlagvissza = null;
         if(diff.getMonths() == 0)
@@ -1875,6 +1876,7 @@ public class SQL
         int tol = ig-1;
         System.out.println(ig);
         System.out.println(tol);
+        System.out.println(evszam[1]);
         for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
         {
             if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
@@ -2517,28 +2519,31 @@ public class SQL
         ArrayList<String> lejart_adatok = new ArrayList<String>();
         for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
         {
-            Date hatarido = formatter.parse(datatable.getRows().get(szamlalo).getString(1));
-            String hatarido2 = formatter.format(hatarido);
-            cstmt.setString(1, hatarido2);
-            cstmt.setString(2, maiido);
-            cstmt.execute();
-            resultSet3 = cstmt.getResultSet();           
-            if(resultSet3.next())
-            {              
-                if(Integer.parseInt(resultSet3.getString(1)) <= 5 && Integer.parseInt(resultSet3.getString(1)) >= 0)
-                {
-                    if(datatable.getRows().get(szamlalo).getString(5).equals("Nem"))
+            if(datatable.getRows().get(szamlalo).getString(1) != null)
+            {
+                Date hatarido = formatter.parse(datatable.getRows().get(szamlalo).getString(1));
+                String hatarido2 = formatter.format(hatarido);
+                cstmt.setString(1, hatarido2);
+                cstmt.setString(2, maiido);
+                cstmt.execute();
+                resultSet3 = cstmt.getResultSet();           
+                if(resultSet3.next())
+                {              
+                    if(Integer.parseInt(resultSet3.getString(1)) <= 5 && Integer.parseInt(resultSet3.getString(1)) >= 0)
                     {
-                        felelosok.add(datatable.getRows().get(szamlalo).getString(0));
-                        adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                        if(datatable.getRows().get(szamlalo).getString(5).equals("Nem"))
+                        {
+                            felelosok.add(datatable.getRows().get(szamlalo).getString(0));
+                            adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                        }
                     }
-                }
-                if(Integer.parseInt(resultSet3.getString(1)) < 0)
-                {
-                    if(datatable.getRows().get(szamlalo).getString(5).equals("Igen") && datatable.getRows().get(szamlalo).getString(7).equals("Nem"))
+                    if(Integer.parseInt(resultSet3.getString(1)) < 0)
                     {
-                        lejart_felelosok.add(datatable.getRows().get(szamlalo).getString(0));
-                        lejart_adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                        if(datatable.getRows().get(szamlalo).getString(5).equals("Igen") && datatable.getRows().get(szamlalo).getString(7).equals("Nem"))
+                        {
+                            lejart_felelosok.add(datatable.getRows().get(szamlalo).getString(0));
+                            lejart_adatok.add(datatable.getRows().get(szamlalo).getString(2)+ ","+ datatable.getRows().get(szamlalo).getString(3)+ ","+ datatable.getRows().get(szamlalo).getString(4)+ ","+datatable.getRows().get(szamlalo).getString(6));
+                        }
                     }
                 }
             }

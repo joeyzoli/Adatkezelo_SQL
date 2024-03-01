@@ -517,6 +517,9 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     {
                         iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), 0, hibaoka_mezo.getText(),                             
                                 String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), "", Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(),1,rma_mezo.getText());
+                        SQA_SQL kapcsolok = new SQA_SQL();
+                        String sql = "insert into qualitydb.Vevoireklamacio_felelosok (Datum,Cikkszam,Muszaki_doku,Termeles,Zarolt,Zarolt_db,Talalt_db,Felelos,Hatarido) Values('"+datum_mezo.getText()+"','"+ String.valueOf(tipus_box.getSelectedItem())+"','"+ muszaki +"','"+ termeles +"','-','0','0','','2099.12.31')";
+                        kapcsolok.mindenes(sql);
                     }
                     else
                     {
@@ -525,7 +528,11 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                             iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
                                     String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2,rma_mezo.getText());
                         }
+                        SQA_SQL kapcsolok = new SQA_SQL();
+                        String sql = "update qualitydb.Vevoireklamacio_felelosok set Muszaki_doku = '"+ muszaki +"', Termeles = '"+ termeles +"' where datum = '"+datum_mezo.getText()+"' and Cikkszam = '"+ String.valueOf(tipus_box.getSelectedItem()) +"'";
+                        kapcsolok.mindenes(sql);
                     }
+                    
                     for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                     {
                         iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString(), id_mezo.getText());

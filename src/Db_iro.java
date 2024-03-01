@@ -495,7 +495,7 @@ public class Db_iro
         stmt2 = (Statement) conn.createStatement();
         if(melyik == 1)
         {
-            String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo +"', Kiadott_rma = '" + rma +
+            String query2 = "update qualitydb.Vevoireklamacio_alapadat set  Tipus = '"+ cikkszam +"', Hiba_oka = '"+ gyokerok +"', Hiba_okozoja = '" + gyokerokozo +"', Kiadott_rma = '" + rma +
                     "', Hiba_oka2 = '"+ gyokerok2 +"', Hiba_okozoja2 = '" + gyokerokozo2 + "'"+ ", Rek_db = '"+ rekdb + "', Hibaleiras = '"+ hibaleiras +"'"
                     + " where ID = '" + id + "'";
             stmt2.executeUpdate(query2);

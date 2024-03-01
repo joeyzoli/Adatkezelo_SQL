@@ -573,7 +573,7 @@ public class Retour extends JPanel
                 
                     for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
                     {
-                        if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].contains(keresett))
+                        if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].toLowerCase().contains(keresett.toLowerCase()))
                         {
                             kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
                         }

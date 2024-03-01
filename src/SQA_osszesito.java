@@ -211,7 +211,7 @@ public class SQA_osszesito extends JPanel {
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                 SQA_SQL lekerdez = new SQA_SQL();
-                String sql = "select * from qualitydb.SQA_reklamaciok where 3=3";
+                String sql = "select *,if(lezaras_ido is null, DATEDIFF(now(), Datum), DATEDIFF(Lezaras_ido, Datum)) as nyitva from qualitydb.SQA_reklamaciok where 3=3";
                 lekerdez.minden_excel(sql, "SQA Reklamáció-k.xlsx");
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }

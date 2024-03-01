@@ -16,9 +16,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -428,21 +430,64 @@ public class Vevoireklamacio_d0 extends JPanel {
                 
                 String input = rs.getString(5);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                SimpleDateFormat rovid = new SimpleDateFormat("yyyy.MM.dd");
+                Date ma = new Date();
+                ma = rovid.parse(rovid.format(ma));
                 LocalDate date = LocalDate.parse(input, formatter);
                 // Increment the date by one day
                 LocalDate newDate = date.plusDays(1);
                 // Format the new date as a string
                 String output = newDate.format(formatter);
                 Vevoireklamacio_fejlec.qr_cimke.setText(output);
+                Date hatarido = rovid.parse(output);
+                if(hatarido.compareTo(ma) >= 0){}
+                else
+                {
+                    if(Vevoireklamacio_fejlec.qr.getRGB() == Color.GREEN.getRGB()) {}
+                    else
+                    {
+                        Vevoireklamacio_fejlec.qr = Color.RED;
+                    }                   
+                }
                 newDate = date.plusDays(2);
                 output = newDate.format(formatter);
                 Vevoireklamacio_fejlec.d3_cimke.setText(output);
+                hatarido = rovid.parse(output);
+                if(hatarido.compareTo(ma) >= 0){}
+                else
+                {
+                    if(Vevoireklamacio_fejlec.d3.getRGB() == Color.GREEN.getRGB()) {}
+                    else
+                    {
+                        Vevoireklamacio_fejlec.d3 = Color.RED;
+                    }
+                }
                 newDate = date.plusDays(10);
                 output = newDate.format(formatter);
                 Vevoireklamacio_fejlec.d5_cimke.setText(output);
+                hatarido = rovid.parse(output);
+                if(hatarido.compareTo(ma) >= 0){}
+                else
+                {
+                    if(Vevoireklamacio_fejlec.d5.getRGB() == Color.GREEN.getRGB()) {}
+                    else
+                    {
+                        Vevoireklamacio_fejlec.d5 = Color.RED;
+                    }
+                }
                 newDate = date.plusDays(30);
                 output = newDate.format(formatter);
                 Vevoireklamacio_fejlec.lezaras_cimke.setText(output);
+                hatarido = rovid.parse(output);
+                if(hatarido.compareTo(ma) >= 0){}
+                else
+                {
+                    if(Vevoireklamacio_fejlec.lezaras.getRGB() == Color.GREEN.getRGB()) {}
+                    else
+                    {
+                        Vevoireklamacio_fejlec.lezaras = Color.RED;
+                    }
+                }
             }                            
             vevorek_mezo.setText(rs.getString(6));
             veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
