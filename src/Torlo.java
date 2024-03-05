@@ -22,7 +22,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -81,7 +83,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_frissit());
+		feltolt.addActionListener(new Csomagolt_keres());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2530,6 +2532,91 @@ public class Torlo extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
              }
             
+         }
+    }
+	
+	class Csomagolt_keres implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {              
+               Class.forName("com.mysql.cj.jdbc.Driver");
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               stmt.execute("select panelszam, idopont from  qualitydb.Beolvasott_panelek where 3 = 3 ");
+               ResultSet rs = stmt.getResultSet();
+               String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+               Connection con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");
+               Statement stmt2 = con.createStatement();
+               ResultSet rs2 = null;
+               Workbook workbook = new Workbook();
+               Worksheet sheet = workbook.getWorksheets().get(0);
+               int cellaszam = 1;
+               while(rs.next())
+               {
+                   String sql = "select nev, videoton.fkov.*\n"
+                           + "from videoton.fkov\n"
+                           + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
+                           + "where 3=3\n"
+                           + "and panel = '"+ rs.getString(1) +"'\n"
+                           + "order by ido desc\n"
+                           + "limit 1 ";
+                   stmt2.execute(sql);
+                   rs2 = stmt2.getResultSet();
+                   if(rs2.next())
+                   {
+                       if(rs2.getString(1).contains("Csomagolás"))
+                       {
+                           SimpleDateFormat formazo = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                           String[] datum1 = rs.getString(2).split("-");
+                           //String[] datum2 = rs2.getString(4).split("-");
+                           Date beolvasas = formazo.parse(datum1[0]+"."+datum1[1]+"."+datum1[2]);
+                           Date csomagolas = formazo.parse(rs2.getString(4));
+                           if(beolvasas.compareTo(csomagolas) > 0)
+                           {
+                               sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                               cellaszam++;
+                               System.out.println("Találat");
+                           }
+                       }
+                   }
+                   
+               }
+               sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+               sheet.getAllocatedRange().autoFitColumns();
+               sheet.getAllocatedRange().autoFitRows();
+               sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+               String hova = System.getProperty("user.home") + "\\Desktop\\Csomagolás után javításra.xlsx";
+               workbook.saveToFile(hova, ExcelVersion.Version2016);
+               FileInputStream fileStream = new FileInputStream(hova);
+               try (XSSFWorkbook workbook5 = new XSSFWorkbook(fileStream)) 
+               {
+                   for(int i = workbook5.getNumberOfSheets()-1; i > 0 ;i--)
+                   {    
+                       workbook5.removeSheetAt(i); 
+                   }      
+                   FileOutputStream output = new FileOutputStream(hova);
+                   workbook5.write(output);
+                   output.close();
+               }
+                         
+               stmt.close();
+               conn.close(); 
+               Foablak.frame.setCursor(null);     
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
          }
     }
 }

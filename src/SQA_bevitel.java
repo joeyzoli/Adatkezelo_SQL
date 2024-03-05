@@ -1750,7 +1750,7 @@ public class SQA_bevitel extends JPanel {
                           modell.removeRow(i);
                         }
                         table.setModel(modell);
-                        
+                        visszatolt(id_mezo.getText());
                         Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
                     }
                 }

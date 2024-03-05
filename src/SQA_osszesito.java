@@ -10,20 +10,33 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
 public class SQA_osszesito extends JPanel {
     private JTable table;
     private DefaultTableModel modell;
+    private DefaultTableModel szukitett_modell;
+    private JComboBox<String> nev_box;
+    private JCheckBox csak_gomb;
+    private JComboBox<String> vagy_box;
+    private String beallitasok = System.getProperty("user.home") + "\\sqa_szures.txt";
 
     /**
      * Create the panel.
@@ -35,14 +48,17 @@ public class SQA_osszesito extends JPanel {
         JLabel lblNewLabel = new JLabel("SQA reklamációk");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
         lblNewLabel.setBackground(Color.BLUE);
-        lblNewLabel.setBounds(616, 52, 180, 14);
+        lblNewLabel.setBounds(616, 23, 180, 14);
         add(lblNewLabel);
         
         table = new JTable();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         modell = new DefaultTableModel();
+        szukitett_modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"ID", "Reklamáció száma", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
+        szukitett_modell.setColumnIdentifiers(new Object[]{"ID", "Reklamáció száma", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
         table.setModel(modell);
+        
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(68, 119, 1467, 356);
         add(gorgeto);
@@ -75,6 +91,23 @@ public class SQA_osszesito extends JPanel {
         JLabel lblNewLabel_3 = new JLabel("Excel export");
         lblNewLabel_3.setBounds(431, 622, 79, 14);
         add(lblNewLabel_3);
+        
+        String[] nevek = {"-","Schweighardt Róbert", "Tóth Zoltán","Horváth Balázs"};
+        nev_box = new JComboBox<String> (nevek);                                             //nevek
+        nev_box.addActionListener(new Inditotta());
+        nev_box.setBounds(183, 73, 197, 22);
+        add(nev_box);
+        
+        csak_gomb = new JCheckBox("Csak nyitottak");
+        csak_gomb.addActionListener(new Nyitva());
+        csak_gomb.setBounds(1160, 73, 115, 23);
+        add(csak_gomb);
+        
+        String[] jelleg ={"-","Reklamáció","Egyéb"};
+        vagy_box = new JComboBox<String>(jelleg);
+        vagy_box.addActionListener(new Jelleg());
+        vagy_box.setBounds(448, 73, 154, 22);
+        add(vagy_box);
         adatok();
         
     }
@@ -117,7 +150,7 @@ public class SQA_osszesito extends JPanel {
                 modell.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)});
             }                                     
         }
-        final TableColumnModel columnModel = table.getColumnModel();
+        TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
             int width = 15; // Min width
             for (int row = 0; row < table.getRowCount(); row++) {
@@ -130,7 +163,25 @@ public class SQA_osszesito extends JPanel {
             columnModel.getColumn(column).setPreferredWidth(width);
         }
         //table.setModel(modell);
-        
+        File letezik = new File(System.getProperty("user.home") + "\\sqa_szures.txt");
+        if(letezik.exists())
+        {
+            //FileReader fr = new FileReader(System.getProperty("user.home") + "\\sqa_szures.txt");
+            FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "\\sqa_szures.txt");
+            InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            try (BufferedReader br = new BufferedReader(isr)) 
+            {
+                String sor = br.readLine();
+                String[] adatok = sor.split(";");
+                nev_box.setSelectedItem(adatok[0]);
+                vagy_box.setSelectedItem(adatok[1]);
+                String igaz = "true";
+                Boolean valasztas = igaz.equals(adatok[2]);
+                csak_gomb.setSelected(valasztas);
+                csaknyitva();
+                
+            }
+        }
         }
         catch (Exception e1) 
         {
@@ -181,7 +232,10 @@ public class SQA_osszesito extends JPanel {
                 }
                 else
                 {
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre                
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                    PrintWriter writer = new PrintWriter(beallitasok, "UTF-8");
+                    writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected());
+                    writer.close();
                     String id = table.getValueAt(sor, 0).toString();
                     SQA_bevitel sqa_rek = new SQA_bevitel(id);
                     JScrollPane ablak = new JScrollPane(sqa_rek);
@@ -224,5 +278,973 @@ public class SQA_osszesito extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
+    }
+    
+    class Inditotta implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                if(csak_gomb.isSelected())
+                {
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                    {                        
+                        table.setModel(modell);
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb") )
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                }
+                else
+                {
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                    {
+                        table.setModel(modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                    if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                    {
+                        szukitett_modell.setRowCount(0);
+                        table.setModel(modell);
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                        }
+                        table.setModel(szukitett_modell);
+                    }
+                }
+                //String.valueOf(nev_box.getSelectedItem());
+                TableColumnModel columnModel = table.getColumnModel();
+                for (int column = 0; column < table.getColumnCount(); column++) {
+                    int width = 15; // Min width
+                    for (int row = 0; row < table.getRowCount(); row++) {
+                        TableCellRenderer renderer = table.getCellRenderer(row, column);
+                        Component comp = table.prepareRenderer(renderer, row, column);
+                        width = Math.max(comp.getPreferredSize().width +1 , width);
+                    }
+                    if(width > 300)
+                        width=300;
+                    columnModel.getColumn(column).setPreferredWidth(width);
+                }
+                try
+                {
+                    PrintWriter writer = new PrintWriter(beallitasok, "UTF-8");
+                    writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected());
+                    writer.close();
+                }
+                catch (IOException e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                }
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Nyitva implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                csaknyitva();
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Jelleg implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                {
+                    if(csak_gomb.isSelected())
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null)
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                    else
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                }
+                if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                {
+                    if(csak_gomb.isSelected())
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                    else
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                }
+                if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                {
+                    if(csak_gomb.isSelected())
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                    else
+                    {
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+                        {
+                            table.setModel(modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                        if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.setRowCount(0);
+                            table.setModel(modell);
+                            for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                            {
+                                if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                                {
+                                    szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                }
+                            }
+                            table.setModel(szukitett_modell);
+                        }
+                    }
+                }
+                //String.valueOf(nev_box.getSelectedItem());
+                TableColumnModel columnModel = table.getColumnModel();
+                for (int column = 0; column < table.getColumnCount(); column++) {
+                    int width = 15; // Min width
+                    for (int row = 0; row < table.getRowCount(); row++) {
+                        TableCellRenderer renderer = table.getCellRenderer(row, column);
+                        Component comp = table.prepareRenderer(renderer, row, column);
+                        width = Math.max(comp.getPreferredSize().width +1 , width);
+                    }
+                    if(width > 300)
+                        width=300;
+                    columnModel.getColumn(column).setPreferredWidth(width);
+                }
+                try
+                {
+                    PrintWriter writer = new PrintWriter(beallitasok, "UTF-8");
+                    writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected());
+                    writer.close();
+                }
+                catch (IOException e1) 
+                {
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                }
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    private void csaknyitva()
+    {
+        if(csak_gomb.isSelected())
+        {
+            if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+            {
+                table.setModel(modell);
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 6) == null)
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {                            
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null)
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null)
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null)
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+        }
+        else
+        {
+            if(String.valueOf(nev_box.getSelectedItem()).equals("-"))
+            {
+                table.setModel(modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Schweighardt Róbert"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {                          
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Tóth Zoltán"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+            if(String.valueOf(nev_box.getSelectedItem()).equals("Horváth Balázs"))
+            {
+                szukitett_modell.setRowCount(0);
+                table.setModel(modell);
+                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                {
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("-"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Reklamáció"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Reklamáció"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                    if(String.valueOf(vagy_box.getSelectedItem()).equals("Egyéb"))
+                    {
+                        if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && table.getValueAt(szamlalo, 3).equals("Egyéb"))
+                        {
+                            szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
+                                    table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                        }
+                    }
+                }
+                table.setModel(szukitett_modell);
+            }
+        }
+        //String.valueOf(nev_box.getSelectedItem());
+        TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            if(width > 300)
+                width=300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+        try
+        {
+            PrintWriter writer = new PrintWriter(beallitasok, "UTF-8");
+            writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected());
+            writer.close();
+        }
+        catch (IOException e1) 
+        {
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+        }
     }
 }
