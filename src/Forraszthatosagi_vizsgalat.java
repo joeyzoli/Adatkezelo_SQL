@@ -444,7 +444,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
         add(beerkezettdb_mezo);
         beerkezettdb_mezo.setColumns(10);
         
-        String[] vizsgalat = {"-","Vizsgálat1","Vizsgálat2","Vizsgálat3","Vizsgálat4","Vizsgálat5","Vizsgálat6"};
+        String[] vizsgalat = {"-","Mártó forrasztás","Pasztázott PAD-re helyezés","Alkatrész pasztázás","Normál gyártási folyamat"};
         vizsgalat_box = new JComboBox<String>(vizsgalat);                                //vizsgalat
         vizsgalat_box.setBounds(627, 336, 570, 22);
         add(vizsgalat_box);

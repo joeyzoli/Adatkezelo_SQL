@@ -1349,6 +1349,10 @@ public class SQA_bevitel extends JPanel {
                                 egysegar += table.getValueAt(szamlalo, 6).toString() +"\n";
                                 if(hibaleiras.length > 1)
                                 {
+                                    if(hibaleiras[szamlalo] == null)
+                                    {
+                                        hibaleiras[szamlalo] = "";
+                                    }
                                     hibaleir += hibaleiras[szamlalo]+"\n";
                                 }
                                 else
@@ -1357,6 +1361,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(belsointezkedes.length > 1)
                                 {
+                                    if(belsointezkedes[szamlalo] == null)
+                                    {
+                                        belsointezkedes[szamlalo] = "";
+                                    }
                                     intezked += belsointezkedes[szamlalo]+"\n";
                                 }
                                 else
@@ -1365,6 +1373,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(valasz.length > 1)
                                 {
+                                    if(valasz[szamlalo] == null)
+                                    {
+                                        valasz[szamlalo] = "";
+                                    }
                                     besz_valasz += valasz[szamlalo]+"\n";
                                 }
                                 else
@@ -1373,6 +1385,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(gyokerok.length > 1)
                                 {
+                                    if(gyokerok[szamlalo] == null)
+                                    {
+                                        gyokerok[szamlalo] = "";
+                                    }
                                     gyoker += gyokerok[szamlalo]+"\n";
                                 }
                                 else
@@ -1381,6 +1397,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(hibasdb.length > 1)
                                 {
+                                    if(hibasdb[szamlalo] == null)
+                                    {
+                                        hibasdb[szamlalo] = "";
+                                    }
                                     hibas += hibasdb[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1389,6 +1409,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(megjelenes.length > 1)
                                 {
+                                    if(megjelenes[szamlalo] == null)
+                                    {
+                                        megjelenes[szamlalo] = "";
+                                    }
                                     megjelen += megjelenes[szamlalo]+"\n";
                                 }
                                 else
@@ -1397,6 +1421,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(rekkezdet.length > 1)
                                 {
+                                    if(rekkezdet[szamlalo] == null)
+                                    {
+                                        rekkezdet[szamlalo] = "";
+                                    }
                                     kezdet += rekkezdet[szamlalo]+"\n";
                                 }
                                 else
@@ -1405,6 +1433,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(osszertek.length > 1)
                                 {
+                                    if(osszertek[szamlalo] == null)
+                                    {
+                                        osszertek[szamlalo] = "";
+                                    }
                                     ertek += osszertek[szamlalo]+"\n";
                                 }
                                 else
@@ -1413,6 +1445,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(karterites.length > 1)
                                 {
+                                    if(karterites[szamlalo] == null)
+                                    {
+                                        karterites[szamlalo] = "";
+                                    }
                                     terit += karterites[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1421,6 +1457,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(belsokoltseg.length > 1)
                                 {
+                                    if(belsokoltseg[szamlalo] == null)
+                                    {
+                                        belsokoltseg[szamlalo] = "";
+                                    }
                                     koltseg += belsokoltseg[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1429,6 +1469,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(veszteseg.length > 1)
                                 {
+                                    if(veszteseg[szamlalo] == null)
+                                    {
+                                        veszteseg[szamlalo] = "";
+                                    }
                                     veszt += veszteseg[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1437,6 +1481,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(deviza.length > 1)
                                 {
+                                    if(deviza[szamlalo] == null)
+                                    {
+                                        deviza[szamlalo] = "";
+                                    }
                                     dev += deviza[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1445,6 +1493,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(cseredatum.length > 1)
                                 {
+                                    if(cseredatum[szamlalo] == null)
+                                    {
+                                        cseredatum[szamlalo] = "";
+                                    }
                                     csere += cseredatum[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1547,6 +1599,10 @@ public class SQA_bevitel extends JPanel {
                                 */
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(hibaleiras[szamlalo] == null)
+                                    {
+                                        hibaleiras[szamlalo] = "";
+                                    }
                                     hibaleir += hibaleiras[szamlalo]+"\n";
                                 }
                                 else
@@ -1555,6 +1611,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(belsointezkedes[szamlalo] == null)
+                                    {
+                                        belsointezkedes[szamlalo] = "";
+                                    }
                                     intezked += belsointezkedes[szamlalo]+"\n";
                                 }
                                 else
@@ -1563,6 +1623,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(valasz[szamlalo] == null)
+                                    {
+                                        valasz[szamlalo] = "";
+                                    }
                                     besz_valasz += valasz[szamlalo]+"\n";
                                 }
                                 else
@@ -1571,6 +1635,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(gyokerok[szamlalo] == null)
+                                    {
+                                        gyokerok[szamlalo] = "";
+                                    }
                                     gyoker += gyokerok[szamlalo]+"\n";
                                 }
                                 else
@@ -1579,6 +1647,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(hibasdb[szamlalo] == null)
+                                    {
+                                        hibasdb[szamlalo] = "";
+                                    }
                                     hibas += hibasdb[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1587,6 +1659,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(megjelenes[szamlalo] == null)
+                                    {
+                                        megjelenes[szamlalo] = "";
+                                    }
                                     megjelen += megjelenes[szamlalo]+"\n";
                                 }
                                 else
@@ -1595,6 +1671,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(rekkezdet[szamlalo] == null)
+                                    {
+                                        rekkezdet[szamlalo] = "";
+                                    }
                                     kezdet += rekkezdet[szamlalo]+"\n";
                                 }
                                 else
@@ -1603,6 +1683,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(osszertek[szamlalo] == null)
+                                    {
+                                        osszertek[szamlalo] = "";
+                                    }
                                     ertek += osszertek[szamlalo]+"\n";
                                 }
                                 else
@@ -1611,6 +1695,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(karterites[szamlalo] == null)
+                                    {
+                                        karterites[szamlalo] = "";
+                                    }
                                     terit += karterites[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1619,6 +1707,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(belsokoltseg[szamlalo] == null)
+                                    {
+                                        belsokoltseg[szamlalo] = "";
+                                    }
                                     koltseg += belsokoltseg[szamlalo]+"\n"; 
                                 }
                                 else
@@ -1627,6 +1719,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(table.getRowCount() > 1)
                                 {
+                                    if(veszteseg[szamlalo] == null)
+                                    {
+                                        veszteseg[szamlalo] = "";
+                                    }
                                     veszt += veszteseg[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1635,6 +1731,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(deviza.length > 1)
                                 {
+                                    if(deviza[szamlalo] == null)
+                                    {
+                                        deviza[szamlalo] = "";
+                                    }
                                     dev += deviza[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1643,6 +1743,10 @@ public class SQA_bevitel extends JPanel {
                                 }
                                 if(cseredatum.length > 1)
                                 {
+                                    if(cseredatum[szamlalo] == null)
+                                    {
+                                        cseredatum[szamlalo] = "";
+                                    }
                                     csere += cseredatum[szamlalo]+"\n";
                                 }                                  
                                 else
@@ -1666,61 +1770,69 @@ public class SQA_bevitel extends JPanel {
                         String cikkek = "";
                         String hiba = "";
                         int bennevan = 0;
-                        for(int szamlalo = 0; szamlalo < cseredatum.length; szamlalo++)
+                        if(System.getProperty("user.name").equals("toth.zoltan")){}
+                        else
                         {
-                            if(cseredatum[szamlalo] != null) 
+                            for(int szamlalo = 0; szamlalo < cseredatum.length; szamlalo++)
                             {
-                                if(cseredatum[szamlalo].equals("")) {}
-                                else
+                                if(cseredatum[szamlalo] != null) 
                                 {
-                                    try
+                                    if(cseredatum[szamlalo].equals("")) {}
+                                    else
                                     {
-                                        
-                                        String formazott = cseredatum[szamlalo].replace("-", ".");
-                                        @SuppressWarnings("unused")
-                                        Date date = new SimpleDateFormat("yyyy.mm.dd").parse(formazott);
-                                        ertesiteni++;
-                                        cikkek += table.getValueAt(szamlalo, 0).toString() +";";
-                                        hiba += hibaleiras[szamlalo] +";";
-                                    }
-                                    catch (Exception e1) 
-                                    {
-                                        System.out.println("Nem dátum " +cseredatum[szamlalo]);
+                                        try
+                                        {
+                                            
+                                            String formazott = cseredatum[szamlalo].replace("-", ".");
+                                            @SuppressWarnings("unused")
+                                            Date date = new SimpleDateFormat("yyyy.MM.dd").parse(formazott);
+                                            ertesiteni++;
+                                            cikkek += table.getValueAt(szamlalo, 0).toString() +";";
+                                            hiba += hibaleiras[szamlalo] +";";
+                                        }
+                                        catch (Exception e1) 
+                                        {
+                                            System.out.println("Nem dátum " +cseredatum[szamlalo]);
+                                        }
                                     }
                                 }
+                                else
+                                {
+                                    cseredatum[szamlalo] = "";
+                                }
                             }
-                        }
-                        if(ertesiteni > 0)
-                        {
-                            sql = "select Ertesitve_2 from qualitydb.SQA_reklamaciok where id = "+ id_mezo.getText();
-                            String[] ertesitve = lekerdezes.tombvissza_sajat(sql);
-                            String[] cikkszamok = ertesitve[0].split(";");
-                            String[] keresett = cikkek.split(";");
-                            String[] hibak = hiba.split(";"); 
-                            for(int szamlalo = 0; szamlalo < keresett.length; szamlalo++)
+                            if(ertesiteni > 0)
                             {
-                                bennevan = 0;
-                                for(int szamlalo2 = 0; szamlalo2 < cikkszamok.length; szamlalo2++)
+                                sql = "select Ertesitve_2 from qualitydb.SQA_reklamaciok where id = "+ id_mezo.getText();
+                                String[] ertesitve = lekerdezes.tombvissza_sajat(sql);
+                                String[] cikkszamok = ertesitve[0].split(";");
+                                String[] keresett = cikkek.split(";");
+                                String[] hibak = hiba.split(";"); 
+                                for(int szamlalo = 0; szamlalo < keresett.length; szamlalo++)
                                 {
-                                    if(keresett[szamlalo].equals(cikkszamok[szamlalo2])) 
+                                    bennevan = 0;
+                                    for(int szamlalo2 = 0; szamlalo2 < cikkszamok.length; szamlalo2++)
                                     {
-                                        bennevan++;
+                                        if(keresett[szamlalo].equals(cikkszamok[szamlalo2])) 
+                                        {
+                                            bennevan++;
+                                        }
+                                    }                                                      
+                                    if(bennevan == 0)
+                                    {
+                                        Email email = new Email();          //schweighardt.robert@veas.videoton.hu,horvath.balazs@veas.videoton.hu,toth.zoltan@veas.videoton.hu
+                                        String targy = "Csere alkatrész érkezett a "+ id_mezo.getText() +" azonosítójú reklamáció esetén";
+                                        email.mindenes_email("veassqa@veas.videoton.hu",cimzettek, cc, targy, 
+                                                "Sziasztok! \n \nBeérkezett a cserealkatrész az alábbi rekalmációhoz: \n\n"
+                                                + "Reklamáció ID: "+ id_mezo.getText() +" \n"
+                                                + "Cikkszám: "+ keresett[szamlalo] +"\n"
+                                                + "Hibaleírás: "+ hibak[szamlalo] +" \n"
+                                                + "Beérkezés dátuma: "+ cseredatum_mezo.getText() +" \n \n"
+                                                + "Ha a csere alkatrésszel lokációzás előtt egyéb teendő szükséges (pl. mérnöki gyártás), akkor az email érkezése után egy napon belül keresd fel kérlek az SQA mérnökséget! \n \n"
+                                                + "Üdvözlettel: SQA");
+                                        sql = "Update qualitydb.SQA_reklamaciok set ertesitve_2 ='"+ ertesitve[0]+";"+ keresett[szamlalo] +"' where id = '"+ id_mezo.getText() +"'";
+                                        lekerdezes.mindenes(sql);
                                     }
-                                }                                                      
-                                if(bennevan == 0)
-                                {
-                                    Email email = new Email();          //schweighardt.robert@veas.videoton.hu,horvath.balazs@veas.videoton.hu,toth.zoltan@veas.videoton.hu
-                                    String targy = "Csere alkatrész érkezett a "+ id_mezo.getText() +" azonosítójú reklamáció esetén";
-                                    email.mindenes_email("veassqa@veas.videoton.hu",cimzettek, cc, targy, 
-                                            "Sziasztok! \n \nBeérkezett a cserealkatrész az alábbi rekalmációhoz: \n\n"
-                                            + "Reklamáció ID: "+ id_mezo.getText() +" \n"
-                                            + "Cikkszám: "+ keresett[szamlalo] +"\n"
-                                            + "Hibaleírás: "+ hibak[szamlalo] +" \n"
-                                            + "Beérkezés dátuma: "+ cseredatum_mezo.getText() +" \n \n"
-                                            + "Ha a csere alkatrésszel lokációzás előtt egyéb teendő szükséges (pl. mérnöki gyártás), akkor az email érkezése után egy napon belül keresd fel kérlek az SQA mérnökséget! \n \n"
-                                            + "Üdvözlettel: SQA");
-                                    sql = "Update qualitydb.SQA_reklamaciok set ertesitve_2 ='"+ ertesitve[0]+";"+ keresett[szamlalo] +"' where id = '"+ id_mezo.getText() +"'";
-                                    lekerdezes.mindenes(sql);
                                 }
                             }
                         }
@@ -2085,7 +2197,7 @@ public class SQA_bevitel extends JPanel {
                     String[] cseredatu = rs.getString(34).split("\n");
                     for(int szamlalo =0; szamlalo < cseredatu.length;szamlalo++)
                     {
-                        cseredatum[szamlalo] = cseredatu[szamlalo];
+                        cseredatum[szamlalo] += cseredatu[szamlalo];
                     }
                 }
                 if(hibasdb.length > 0)
