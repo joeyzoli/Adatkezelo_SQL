@@ -65,6 +65,8 @@ public class Proglove_kamera extends JPanel {
         fajl_gomb.addActionListener(new Excel());
         fajl_gomb.setBounds(543, 204, 106, 23);
         add(fajl_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

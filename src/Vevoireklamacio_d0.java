@@ -263,7 +263,14 @@ public class Vevoireklamacio_d0 extends JPanel {
         vevo_box.setBounds(270, 53, 215, 22);
         add(vevo_box);
         
-        tipus_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_cikk));                                    //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        SQA_SQL cikkszamok = new SQA_SQL();
+        String sql = "select part_no, ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no)\r\n"
+                + "from ifsapp.PART_REVISION\r\n"
+                + "where 3 = 3\r\n"
+                + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
+                + "group by part_no, ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no)\r\n"
+                + "ORDER by part_no";
+        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                                    //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
         add(tipus_box);
         
@@ -597,22 +604,23 @@ public class Vevoireklamacio_d0 extends JPanel {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                 DefaultComboBoxModel<String> model;
                 String keresett = String.valueOf(vevo_box.getSelectedItem());
+                for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
+                {
+                    if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].toUpperCase().contains(keresett.toUpperCase()))
+                    {
+                        kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
+                    }
+                }
                 
-                    for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
-                    {
-                        if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].toUpperCase().contains(keresett.toUpperCase()))
-                        {
-                            kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
-                        }
-                    }
+                String[] ujmodell = new String[kivalasztott.size()];
+                for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
+                {
+                    ujmodell[szamlalo] = kivalasztott.get(szamlalo);
+                }
+                model = new DefaultComboBoxModel<>(ujmodell);
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                
                     
-                    String[] ujmodell = new String[kivalasztott.size()];
-                    for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
-                    {
-                        ujmodell[szamlalo] = kivalasztott.get(szamlalo);
-                    }
-                    model = new DefaultComboBoxModel<>(ujmodell);
-                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 tipus_box.setModel(model);
                 kivalasztott.clear();
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása

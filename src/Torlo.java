@@ -83,7 +83,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Csomagolt_keres());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -107,7 +107,7 @@ public class Torlo extends JPanel
 			 {
 			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			    Db_iro atiras = new Db_iro();
-			    atiras.atir("nem", "NOK");
+			    atiras.atir("LEROY-SOMER", "Leroy-Somer");
 			    /*
 			    Workbook workbook = new Workbook();
 			    workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\Mappák\\Java projekt\\emerson felosztás.xlsx");
@@ -1632,11 +1632,14 @@ public class Torlo extends JPanel
                         + "                                               and hely in (20,21,22,23) and ido > '2023.01.01 00:00:00' group by panel) as tempTable\n"
                         + "inner join            videoton.fkov on fkov.panel = tempTable.panel and fkov.ido = tempTable.idopont\n"
                         + "where                  fkov.ok <> '-1';";       //utolso mérése hiba         */
-                String sql = "select  panel\n"
+                /*String sql = "select  panel\n"
                         + "from videoton.fkov\n"
                         + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
                         + "where 3=3\n"
-                        + "and nev = 'INSTAGRID FCT'";
+                        + "and nev = 'INSTAGRID FCT'";*/
+                String sql = "select *\n"
+                        + "from videoton.cikk\n"
+                        + "where 3 = 3";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,

@@ -1269,18 +1269,40 @@ public class SQA_bevitel extends JPanel {
                     }
                     else
                     {
+                        hibaleiras[valasztott] = hibaleiras_mezo.getText();
+                        belsointezkedes[valasztott] = intezkedes_mezo.getText();
+                        valasz[valasztott] = valasz_mezo.getText();
+                        gyokerok[valasztott] = gyokerok_mezo.getText();
+                        
+                        hibasdb[valasztott] = hibasdb_mezo.getText();                
+                        megjelenes[valasztott] = megjelenes_ido.getText();
+                        cseredatum[valasztott] = cseredatum_mezo.getText();
+                        if(reklamacio_ido.getText().equals("")) {}
+                        else
+                        {
+                            for(int szamlalo = 0; szamlalo < rekkezdet.length;szamlalo++)
+                            {
+                                rekkezdet[szamlalo] = reklamacio_ido.getText();
+                            }
+                        }
+                                        
+                        osszertek[valasztott] = osszertek_mezo.getText();               
+                        karterites[valasztott] = karterites_mezo.getText();               
+                        belsokoltseg[valasztott] = belsokoltseg_mezo.getText();              
+                        veszteseg[valasztott] = veszteseg_mezo.getText();
+                        String[] koztes = deviza_mezo.getText().split(" ");
+                        if(koztes.length> 1)
+                        {
+                            deviza[valasztott] = deviza_mezo.getText();      //+ " "+ String.valueOf(deviza_box.getSelectedItem());
+                        }
+                        else
+                        {
+                            deviza[valasztott] = deviza_mezo.getText()+ " "+ String.valueOf(deviza_box.getSelectedItem());
+                        }
                         Connection conn = null;
                         Statement stmt = null;        
-                        try 
-                        {
-                           Class.forName("com.mysql.cj.jdbc.Driver");
-                        } 
-                        catch (Exception e1) 
-                        {
-                           System.out.println(e);
-                           String hibauzenet2 = e.toString();
-                           JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                        }
+                        
+                        Class.forName("com.mysql.cj.jdbc.Driver");
                         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                         stmt = (Statement) conn.createStatement();
                         String SQL = "select * from qualitydb.SQA_reklamaciok where id = '"+ id_mezo.getText() +"'";
@@ -1775,8 +1797,9 @@ public class SQA_bevitel extends JPanel {
                         {
                             for(int szamlalo = 0; szamlalo < cseredatum.length; szamlalo++)
                             {
+                                //System.out.println(cseredatum.length);
                                 if(cseredatum[szamlalo] != null) 
-                                {
+                                {                                    
                                     if(cseredatum[szamlalo].equals("")) {}
                                     else
                                     {
@@ -1862,7 +1885,15 @@ public class SQA_bevitel extends JPanel {
                           modell.removeRow(i);
                         }
                         table.setModel(modell);
-                        visszatolt(id_mezo.getText());
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre                    
+                        String id = id_mezo.getText();
+                        SQA_bevitel sqa_rek = new SQA_bevitel(id);
+                        JScrollPane ablak = new JScrollPane(sqa_rek);
+                        ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                        ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                        Foablak.frame.setContentPane(ablak);
+                        Foablak.frame.pack();
+                        Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                         Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
                     }
                 }
@@ -2155,32 +2186,74 @@ public class SQA_bevitel extends JPanel {
                 String[] hibasd = rs.getString(14).split("\n");
                 for(int szamlalo =0; szamlalo < hibasd.length;szamlalo++)
                 {
-                    hibasdb[szamlalo] = hibasd[szamlalo];
+                    if(szamlalo > hibasdb.length)
+                    {
+                        hibasdb[szamlalo-1] += hibasd[szamlalo];
+                    }
+                    else
+                    {    
+                        hibasdb[szamlalo] = hibasd[szamlalo];
+                    }
                 }
                 String[] megjelene = rs.getString(15).split("\n");
                 for(int szamlalo =0; szamlalo < megjelene.length;szamlalo++)
                 {
-                    megjelenes[szamlalo] = megjelene[szamlalo];
+                    if(szamlalo > megjelenes.length)
+                    {
+                        megjelenes[szamlalo-1] += megjelene[szamlalo];
+                    }
+                    else
+                    {
+                        megjelenes[szamlalo] = megjelene[szamlalo];
+                    }
                 }
                 String[] rekkezde = rs.getString(16).split("\n");
                 for(int szamlalo =0; szamlalo < rekkezde.length;szamlalo++)
                 {
-                    rekkezdet[szamlalo] = rekkezde[szamlalo];
+                    if(szamlalo > rekkezdet.length)
+                    {
+                        rekkezdet[szamlalo-1] += rekkezde[szamlalo];
+                    }
+                    else
+                    {
+                        rekkezdet[szamlalo] = rekkezde[szamlalo];
+                    }
                 }
                 String[] osszerte = rs.getString(19).split("\n");
                 for(int szamlalo =0; szamlalo < osszerte.length;szamlalo++)
                 {
-                    osszertek[szamlalo] = osszerte[szamlalo];
+                    if(szamlalo > osszertek.length)
+                    {
+                        osszertek[szamlalo-1] += osszerte[szamlalo];
+                    }
+                    else
+                    {
+                        osszertek[szamlalo] = osszerte[szamlalo];
+                    }
                 }
                 String[] karterite = rs.getString(22).split("\n");
                 for(int szamlalo =0; szamlalo < karterite.length;szamlalo++)
                 {
-                    karterites[szamlalo] = karterite[szamlalo];
+                    if(szamlalo > karterites.length)
+                    {
+                        karterites[szamlalo-1] += karterite[szamlalo];
+                    }
+                    else
+                    {
+                        karterites[szamlalo] = karterite[szamlalo];
+                    }
                 }
                 String[] belsokoltse= rs.getString(23).split("\n");
                 for(int szamlalo =0; szamlalo < belsokoltse.length;szamlalo++)
                 {
-                    belsokoltseg[szamlalo] = belsokoltse[szamlalo];
+                    if(szamlalo > belsokoltseg.length)
+                    {
+                        belsokoltseg[szamlalo-1] += belsokoltse[szamlalo];
+                    }
+                    else
+                    {
+                        belsokoltseg[szamlalo] = belsokoltse[szamlalo];
+                    }
                 }
                 String[] vesztese = rs.getString(24).split("\n");
                 for(int szamlalo =0; szamlalo < vesztese.length;szamlalo++)
@@ -2199,7 +2272,7 @@ public class SQA_bevitel extends JPanel {
                     {
                         cseredatum[szamlalo] += cseredatu[szamlalo];
                     }
-                }
+                }                
                 if(hibasdb.length > 0)
                 {
                     hibasdb_mezo.setText(hibasdb[0]);
