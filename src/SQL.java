@@ -31,6 +31,7 @@ public class SQL
     ResultSet resultSet;
     static DefaultTableModel alapmodell;
     private final String emaillista = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\E-mail lista_ reklamáció.xlsx";
+    private final String emaillista2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
     
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
 	{
@@ -2650,14 +2651,114 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
+        }        
+        catch (Exception e) 
         {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
+           e.printStackTrace();
+           String hibauzenet = e.toString();
            Email hibakuldes = new Email();
            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
         } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+              se.printStackTrace();
+           }  
+        }
+    }
+	
+	public void vevoi_email2()
+    {
+        Connection conn = null;
+        Statement stmt = null;                
+        ResultSet rs;
+        //ResultSet rs2;
+        try 
+        {           
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 3";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();      
+            Workbook workbook = new Workbook();
+            workbook.loadFromFile(emaillista2);
+            Worksheet sheet = workbook.getWorksheets().get(0);
+            Email email = new Email();
+            String cimzett = "";
+            SQA_SQL modosit = new SQA_SQL();
+            while(rs.next())
+            {
+                String[] nevek = rs.getString(2).split(";");
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow(); szamlalo++)
+                {
+                    if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
+                    {
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText();
+                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                                "\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D3_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+            
+            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 15";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();
+            while(rs.next())
+            {
+                String[] nevek = rs.getString(2).split(";");
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow(); szamlalo++)
+                {
+                    if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
+                    {
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";
+                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                                "\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+            
+            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 21";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();
+            while(rs.next())
+            {
+                String[] nevek = rs.getString(2).split(";");
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow(); szamlalo++)
+                {
+                    if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
+                    {
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";
+                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                                "\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+
+            System.out.println("Lefutott az Email2 rész");
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();

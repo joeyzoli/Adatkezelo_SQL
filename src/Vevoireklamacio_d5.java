@@ -15,12 +15,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
 import javax.swing.JTable;
 import javax.swing.JButton;
 
@@ -167,6 +170,24 @@ public class Vevoireklamacio_d5 extends JPanel {
         d5zaras_gomb.addActionListener(new Mentes());
         d5zaras_gomb.setBounds(676, 673, 89, 23);
         add(d5zaras_gomb);
+        
+        JLabel lblNewLabel_7 = new JLabel("Sor törlés");
+        lblNewLabel_7.setBounds(1324, 214, 75, 14);
+        add(lblNewLabel_7);
+        
+        JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles1());
+        torles_gomb.setBounds(1306, 250, 89, 23);
+        add(torles_gomb);
+        
+        JLabel lblNewLabel_8 = new JLabel("Sor törlés");
+        lblNewLabel_8.setBounds(1324, 523, 75, 14);
+        add(lblNewLabel_8);
+        
+        JButton torles2_gomb = new JButton("Törlés");
+        torles2_gomb.addActionListener(new Torles2());
+        torles2_gomb.setBounds(1306, 562, 89, 23);
+        add(torles2_gomb);
 
     }
     
@@ -178,6 +199,12 @@ public class Vevoireklamacio_d5 extends JPanel {
             {
                 Vevoireklamacio_fejlec.d5 = Color.GREEN;
                 Vevoireklamacio_fejlec.lezaras = Color.YELLOW;
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();               
+                String maiido = formatter.format(date);
+                String sql = "update qualitydb.Vevoireklamacio_alap set D5 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                SQA_SQL beir = new  SQA_SQL();
+                beir.mindenes(sql);
             }
             catch (Exception e1) 
             {
@@ -260,7 +287,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 table2.setModel(modell2);
             }
             catch (Exception e1) 
-            {;
+            {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
@@ -400,5 +427,79 @@ public class Vevoireklamacio_d5 extends JPanel {
     {
         hatarido_mezo.setText(Vevoireklamacio_fejlec.d5_cimke.getText());
         hatarido2_mezo.setText(Vevoireklamacio_fejlec.d5_cimke.getText());       
+    }
+    
+    class Torles1 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                int sor = table.getSelectedRow();
+                if(sor< 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs kiválasztva feladat!!", "Hiba üzenet", 2);                                                     // hibaüzenetet kiratása
+                }
+                else
+                {
+                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    {
+                        modell.removeRow(sor);
+                    }
+                    else
+                    {
+                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table.getValueAt(sor, 4).toString() +"'";
+                        SQA_SQL torlo = new SQA_SQL();
+                        torlo.mindenes(sql);
+                        modell.removeRow(sor);
+                    }
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Torles2 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                int sor = table2.getSelectedRow();
+                if(sor< 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs kiválasztva feladat!!", "Hiba üzenet", 2);                                                     // hibaüzenetet kiratása
+                }
+                else
+                {
+                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    {
+                        modell2.removeRow(sor);
+                    }
+                    else
+                    {
+                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
+                        SQA_SQL torlo = new SQA_SQL();
+                        torlo.mindenes(sql);
+                        modell2.removeRow(sor);
+                    }
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }
+         }
     }
 }

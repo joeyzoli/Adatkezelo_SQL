@@ -37,6 +37,7 @@ import com.spire.xls.Worksheet;
 import javax.swing.JTable;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
+import javax.swing.JButton;
 
 public class Vevoireklamacio_d0 extends JPanel {
     private JTextField beszallito_mezo;
@@ -56,12 +57,15 @@ public class Vevoireklamacio_d0 extends JPanel {
     private JSeparator separator;
     static JComboBox<String> vevo_box;
     private ComboBox combobox_tomb = new ComboBox();
-    private ArrayList<String> kivalasztott;
     static JComboBox<String> tipus_box;
     private JComboBox<String> felelos_box;
     private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
+    private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
     private Kivalaszt valaszto = new Kivalaszt();
     private JTextField felelos_mezo;
+    private SQA_SQL cikkszamok = new SQA_SQL();
+    private String sql;
+    private Workbook workbook = new Workbook();
 
     /**
      * Create the panel.
@@ -263,15 +267,16 @@ public class Vevoireklamacio_d0 extends JPanel {
         vevo_box.setBounds(270, 53, 215, 22);
         add(vevo_box);
         
-        SQA_SQL cikkszamok = new SQA_SQL();
-        String sql = "select part_no, ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no)\r\n"
+        sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
                 + "from ifsapp.PART_REVISION\r\n"
                 + "where 3 = 3\r\n"
                 + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
-                + "group by part_no, ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no)\r\n"
+                + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
+                + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
                 + "ORDER by part_no";
-        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                                    //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                             //cikkszamok.tombvissza(sql)       //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
+        tipus_box.addActionListener(new Valtozas());
         add(tipus_box);
         
         String[] nevsor = {"-","Borbély Szilvia","Kicsák Boglárka","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina"};
@@ -285,7 +290,16 @@ public class Vevoireklamacio_d0 extends JPanel {
         felelos_mezo.setBounds(274, 160, 162, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
-        kivalasztott = new ArrayList<String>();
+        
+        JLabel lblNewLabel_16 = new JLabel("Kiválasztott fájl törlése");
+        lblNewLabel_16.setBounds(1012, 373, 155, 14);
+        add(lblNewLabel_16);
+        
+        JButton fajltorles_gomb = new JButton("Törlés");
+        fajltorles_gomb.addActionListener(new Fajl_torles());
+        fajltorles_gomb.setBounds(1022, 398, 89, 23);
+        add(fajltorles_gomb);
+        new ArrayList<String>();
 
     }
     
@@ -310,7 +324,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                     newDate = date.plusDays(2);
                     output = newDate.format(formatter);
                     Vevoireklamacio_fejlec.d3_cimke.setText(output);
-                    newDate = date.plusDays(10);
+                    newDate = date.plusDays(14);
                     output = newDate.format(formatter);
                     Vevoireklamacio_fejlec.d5_cimke.setText(output);
                     newDate = date.plusDays(30);
@@ -604,25 +618,36 @@ public class Vevoireklamacio_d0 extends JPanel {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                 DefaultComboBoxModel<String> model;
                 String keresett = String.valueOf(vevo_box.getSelectedItem());
-                for(int szamlalo = 0; szamlalo < combobox_tomb.getCombobox2(ComboBox.vevoi_cikk).length; szamlalo++)
+                String vevo = "";
+
+                workbook.loadFromFile(excelhelye2);
+                workbook.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow(); szamlalo++)
                 {
-                    if(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo].toUpperCase().contains(keresett.toUpperCase()))
+                    if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
                     {
-                        kivalasztott.add(combobox_tomb.getCombobox2(ComboBox.vevoi_cikk)[szamlalo]); 
+                        vevo =  sheet.getRange().get("A"+szamlalo).getText();
                     }
                 }
+                sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
+                        + "from ifsapp.PART_REVISION\r\n"
+                        + "where 3 = 3\r\n"
+                        + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
+                        + "and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = '"+ vevo +"'\r\n"
+                        + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
+                        + "ORDER by part_no";
                 
-                String[] ujmodell = new String[kivalasztott.size()];
-                for(int szamlalo = 0; szamlalo < kivalasztott.size(); szamlalo++)
+                String[] cikkek = cikkszamok.tombvissza(sql);                
+                String[] ujmodell = new String[cikkek.length];
+                for(int szamlalo = 0; szamlalo <cikkek.length; szamlalo++)
                 {
-                    ujmodell[szamlalo] = kivalasztott.get(szamlalo);
-                }
+                    ujmodell[szamlalo] = cikkek[szamlalo];
+                }               
                 model = new DefaultComboBoxModel<>(ujmodell);
-                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
-                
-                    
+                   
                 tipus_box.setModel(model);
-                kivalasztott.clear();
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true); 
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
             } 
             catch (Exception e1) 
@@ -643,7 +668,6 @@ public class Vevoireklamacio_d0 extends JPanel {
             try 
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                Workbook workbook = new Workbook();
                 workbook.loadFromFile(excelhelye);
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
@@ -659,6 +683,57 @@ public class Vevoireklamacio_d0 extends JPanel {
                 Vevoireklamacio_d1.vezeto_mezo.setText(String.valueOf(felelos_box.getSelectedItem()));
                 Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Fajl_torles implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                int sor = table.getSelectedRow();
+                if(sor< 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs kiválasztva fájl!!", "Hiba üzenet", 2);                                                     // hibaüzenetet kiratása
+                }
+                else
+                {
+                    sql = "delete from qualitydb.Vevoireklamacio_fajlok where Rek_ID ='"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and Fajl_neve = '"+ table.getValueAt(sor, 1).toString() +"'";
+                    cikkszamok.mindenes(sql);
+                    modell.removeRow(sor);
+                    Vevoireklamacio_d2.fajlok.remove(sor);
+                }
+                Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Valtozas implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
             } 
             catch (Exception e1) 
             {              

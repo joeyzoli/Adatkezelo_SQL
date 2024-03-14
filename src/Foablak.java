@@ -1167,6 +1167,7 @@ public class Foablak extends JFrame
         {
             SQL lekerdez = new SQL();
             lekerdez.vevoi_email();
+            lekerdez.vevoi_email2();
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             if(nap == 2)

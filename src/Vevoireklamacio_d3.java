@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 
@@ -247,6 +249,12 @@ public class Vevoireklamacio_d3 extends JPanel {
             {
                 Vevoireklamacio_fejlec.d3 = Color.GREEN;
                 Vevoireklamacio_fejlec.d5 = Color.YELLOW;
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();               
+                String maiido = formatter.format(date);
+                String sql = "update qualitydb.Vevoireklamacio_alap set D3 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                SQA_SQL beir = new  SQA_SQL();
+                beir.mindenes(sql);
             }
             catch (Exception e1) 
             {

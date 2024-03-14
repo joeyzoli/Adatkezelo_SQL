@@ -135,6 +135,24 @@ public class Vevoireklamacio_d7 extends JPanel {
         detektalas_gomb.addActionListener(new Hozzaad2());
         detektalas_gomb.setBounds(676, 465, 89, 23);
         add(detektalas_gomb);
+        
+        JLabel lblNewLabel_7 = new JLabel("Sor törlés");
+        lblNewLabel_7.setBounds(1324, 214, 75, 14);
+        add(lblNewLabel_7);
+        
+        JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles1());
+        torles_gomb.setBounds(1306, 250, 89, 23);
+        add(torles_gomb);
+        
+        JLabel lblNewLabel_8 = new JLabel("Sor törlés");
+        lblNewLabel_8.setBounds(1324, 523, 75, 14);
+        add(lblNewLabel_8);
+        
+        JButton torles2_gomb = new JButton("Törlés");
+        torles2_gomb.addActionListener(new Torles2());
+        torles2_gomb.setBounds(1306, 562, 89, 23);
+        add(torles2_gomb);
 
     }
     
@@ -319,6 +337,80 @@ public class Vevoireklamacio_d7 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    class Torles1 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                int sor = table.getSelectedRow();
+                if(sor< 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs kiválasztva feladat!!", "Hiba üzenet", 2);                                                     // hibaüzenetet kiratása
+                }
+                else
+                {
+                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    {
+                        modell.removeRow(sor);
+                    }
+                    else
+                    {
+                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table.getValueAt(sor, 4).toString() +"'";
+                        SQA_SQL torlo = new SQA_SQL();
+                        torlo.mindenes(sql);
+                        modell.removeRow(sor);
+                    }
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Torles2 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                int sor = table2.getSelectedRow();
+                if(sor< 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs kiválasztva feladat!!", "Hiba üzenet", 2);                                                     // hibaüzenetet kiratása
+                }
+                else
+                {
+                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    {
+                        modell2.removeRow(sor);
+                    }
+                    else
+                    {
+                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
+                        SQA_SQL torlo = new SQA_SQL();
+                        torlo.mindenes(sql);
+                        modell2.removeRow(sor);
+                    }
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }
+         }
     }
 }
 

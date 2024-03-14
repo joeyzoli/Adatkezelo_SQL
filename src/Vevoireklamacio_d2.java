@@ -365,8 +365,8 @@ public class Vevoireklamacio_d2 extends JPanel {
         fajl_gomb.setBounds(1327, 330, 89, 23);
         add(fajl_gomb);
         
-        JLabel lblNewLabel_11 = new JLabel("Csatolt fájok listája");
-        lblNewLabel_11.setBounds(1270, 397, 137, 14);
+        JLabel lblNewLabel_11 = new JLabel("Aktuálisan csatolt fájok listája");
+        lblNewLabel_11.setBounds(1197, 397, 210, 14);
         add(lblNewLabel_11);
         
         table = new JTable();
@@ -859,11 +859,11 @@ public class Vevoireklamacio_d2 extends JPanel {
                    // If the drop items are files
                     if (flavor.isFlavorJavaFileListType()) 
                     {
-                        System.out.println("A nok képhozzáadás fut");
+                        //System.out.println("A nok képhozzáadás fut");
                         // Get all of the dropped files
                         List<?> files = (List<?>) transferable.getTransferData(flavor);
-                        System.out.println(files.toString());
-                        System.out.println(files.toString().substring(1,files.toString().length()-1));
+                        //System.out.println(files.toString());
+                        //System.out.println(files.toString().substring(1,files.toString().length()-1));
                         File fajl = new File(files.toString().substring(1,files.toString().length()-1));
                         if(fajl != null)
                         {
@@ -906,8 +906,11 @@ public class Vevoireklamacio_d2 extends JPanel {
                 } 
                 catch (Exception e) 
                 {
-                    // Print out the error stack
                     e.printStackTrace();
+                    String hibauzenet = e.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
                 }
             }
             // Inform that the drop is complete
@@ -954,7 +957,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                    // If the drop items are files
                     if (flavor.isFlavorJavaFileListType()) 
                     {
-                        System.out.println("Az ok képhozzáadás fut");
+                        //System.out.println("Az ok képhozzáadás fut");
                         // Get all of the dropped files
                         List<?> files = (List<?>) transferable.getTransferData(flavor);
                         File fajl = new File(files.toString().substring(1,files.toString().length()-1));
@@ -999,8 +1002,11 @@ public class Vevoireklamacio_d2 extends JPanel {
                 } 
                 catch (Exception e) 
                 {
-                    // Print out the error stack
                     e.printStackTrace();
+                    String hibauzenet = e.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
                 }
             }
             // Inform that the drop is complete
