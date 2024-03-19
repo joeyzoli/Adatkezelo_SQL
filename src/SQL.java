@@ -346,6 +346,7 @@ public class SQL
 	    if(resultSet != null)
 	    {
             Workbook workbook = new Workbook();
+            workbook.setVersion(ExcelVersion.Version2016);
             JdbcAdapter jdbcAdapter = new JdbcAdapter();
             jdbcAdapter.fillDataTable(datatable, resultSet);
     
@@ -2682,14 +2683,17 @@ public class SQL
 	public void vevoi_email2()
     {
         Connection conn = null;
-        Statement stmt = null;                
+        Statement stmt = null;
+        Statement stmt2 = null;
         ResultSet rs;
+        ResultSet rs2;
         //ResultSet rs2;
         try 
         {           
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 3";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();      
@@ -2699,6 +2703,7 @@ public class SQL
             Email email = new Email();
             String cimzett = "";
             SQA_SQL modosit = new SQA_SQL();
+            //////Lejárt D3 keresése
             while(rs.next())
             {
                 String[] nevek = rs.getString(2).split(";");
@@ -2707,14 +2712,14 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText();
-                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
                                 "\nKérem minnél elöbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D3_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }
-            
+            ///// lejárt D5 keresése
             sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 15";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
@@ -2725,15 +2730,15 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
-                        cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";
-                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";       //+",reznyak.norbert@veas.videoton.hu"
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
                                 "\nKérem minnél elöbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }
-            
+            /// több mint 1 hete lejárt D5 keresése
             sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 21";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
@@ -2744,15 +2749,106 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
-                        cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";
-                        email.mindenes_email("automatauzenet@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)+
                                 "\nKérem minnél elöbb zárja le!!");
-                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ujraertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }
-
+            //// lejárt D8 keresése
+            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D8 is null and D8_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 31";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();
+            while(rs.next())
+            {
+                String[] nevek = rs.getString(2).split(";");
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow(); szamlalo++)
+                {
+                    if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
+                    {
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a reklamáció határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
+                                "\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D8_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+            /////Lejárt előfordulás keresése
+            sql = "select * from qualitydb.Vevoireklamacio_elo where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) <= 2 and Ertesitve = 'nem'";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();
+            workbook.loadFromFile(emaillista);
+            sheet = workbook.getWorksheets().get(0);
+            while(rs.next())
+            {
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
+                {
+                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    {
+                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        stmt2.execute(sql);    
+                        rs2 = stmt2.getResultSet();
+                        if(rs2.next());
+                        String[] felelos = rs2.getString(1).split(";");                        
+                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
+                        {
+                            if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
+                            {
+                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                            }
+                        }
+                        
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
+                                + "\nID: "+ rs.getString(2)
+                                + "\nFeladat: "+ rs.getString(3)
+                                + "\nHatárido: "+ rs.getString(5)
+                                +"\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+            //lejárt detektálhatóságra keresés
+            sql = "select * from qualitydb.Vevoireklamacio_det where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) <= 2 and Ertesitve = 'nem'";                                            
+            stmt.execute(sql);    
+            rs = stmt.getResultSet();
+            workbook.loadFromFile(emaillista);
+            sheet = workbook.getWorksheets().get(0);
+            while(rs.next())
+            {
+                for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
+                {
+                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    {
+                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        stmt2.execute(sql);    
+                        rs2 = stmt2.getResultSet();
+                        if(rs2.next());
+                        String[] felelos = rs2.getString(1).split(";");                        
+                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
+                        {
+                            if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
+                            {
+                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                            }
+                        }
+                        
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
+                                + "\nID: "+ rs.getString(2)
+                                + "\nFeladat: "+ rs.getString(3)
+                                + "\nHatárido: "+ rs.getString(5)
+                                +"\nKérem minnél elöbb zárja le!!");
+                        modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
+                        break;
+                    }
+                }                
+            }
+    
             System.out.println("Lefutott az Email2 rész");
             resultSet.close();
             stmt.close();

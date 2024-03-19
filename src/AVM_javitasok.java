@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +68,16 @@ public class AVM_javitasok extends JPanel {
         datumig_mezo.setBounds(569, 156, 86, 20);
         add(datumig_mezo);
         datumig_mezo.setColumns(10);
+        
+        Date date2 = new Date();
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy.MM.dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        LocalDate date = LocalDate.parse(formatter2.format(date2), formatter);
+        // Increment the date by one day
+        LocalDate newDate = date.minusDays(1);
+        // Format the new date as a string
+        datumtol_mezo.setText(newDate.format(formatter));
+        datumig_mezo.setText(newDate.format(formatter));
 
     }
     

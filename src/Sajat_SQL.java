@@ -38,7 +38,11 @@ public class Sajat_SQL extends JPanel
 		txtLehetsgVanSajt.setColumns(10);
 		
 		sql_mezo = new JTextArea();
-		sql_mezo.setText("select * \n from qualitydb.Gyartasi_adatok \n where 3 = 3");
+		sql_mezo.setText("select * \n"
+		        + "from qualitydb.Beolvasott_panelek\n"
+		        + "where 3 = 3\n"
+		        + "and Idopont >=  '2023.11.30 05:55:00'\n"
+		        + "and Idopont <=  '2024.03.28 05:55:00'");
 		
 		JButton futtat = new JButton("Futtatás");
 		futtat.addActionListener(new SQL_futtat());
