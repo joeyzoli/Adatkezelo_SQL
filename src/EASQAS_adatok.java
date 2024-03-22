@@ -8,13 +8,22 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -27,8 +36,8 @@ public class EASQAS_adatok extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField datum_tol;
-	private JTextField datum_ig;
+	//private JTextField datum_tol;
+	//private JTextField datum_ig;
 	private JComboBox<String> hiba_box;
 	private JComboBox<String> projekt_box;
 	private ComboBox combobox_tomb;
@@ -39,13 +48,39 @@ public class EASQAS_adatok extends JPanel
 	private String termek = System.getProperty("user.home") + "\\Desktop\\TermékPPM.xlsx";
 	private String hiba = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai.xlsx";
 	private int fajlszam = 1;
+	private JDatePickerImpl datum_tol;
+	private JDatePickerImpl datum_ig;
 
 	/**
 	 * Create the panel.
+	 * @throws ParseException 
 	 */
-	public EASQAS_adatok() 
+	public EASQAS_adatok()
 	{
 		this.setPreferredSize(new Dimension(1222, 650));
+		UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Ma");
+        p.put("text.month", "Hónap");
+        p.put("text.year", "Év");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        
+        UtilDateModel model2 = new UtilDateModel();
+        /////////dátum beállítása
+        /*String dateValue = "2024.03.23";  // must be in (yyyy- mm- dd ) format
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        model2.setValue(date);*/
+        Properties p2 = new Properties();
+        p2.put("text.today", "Ma");
+        p2.put("text.month", "Hónap");
+        p2.put("text.year", "Év");
+        JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);           
 		
 		JLabel lblNewLabel = new JLabel("EASQAS adatok lekérezése");
 		lblNewLabel.setBounds(497, 11, 184, 48);
@@ -64,16 +99,15 @@ public class EASQAS_adatok extends JPanel
 		JLabel lblNewLabel_2 = new JLabel("Időpont -tól");
 		lblNewLabel_2.setBounds(263, 121, 84, 14);
 		
-		datum_tol = new JTextField();
+		datum_tol = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		datum_tol.setBounds(497, 118, 146, 20);
-		datum_tol.setColumns(10);
+
 		
 		JLabel lblNewLabel_3 = new JLabel("Dátum -ig");
 		lblNewLabel_3.setBounds(263, 166, 72, 14);
 		
-		datum_ig = new JTextField();
+		datum_ig = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
 		datum_ig.setBounds(497, 163, 146, 20);
-		datum_ig.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Hibagyűtés helye");
 		lblNewLabel_4.setBounds(263, 211, 104, 14);
@@ -144,6 +178,28 @@ public class EASQAS_adatok extends JPanel
 
 	}
 	
+	 public class DateLabelFormatter extends AbstractFormatter {
+
+	        private String datePattern = "yyyy.MM.dd";
+	        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	        @Override
+	        public Object stringToValue(String text) throws ParseException {
+	            return dateFormatter.parseObject(text);
+	        }
+
+	        @Override
+	        public String valueToString(Object value) throws ParseException {
+	            if (value != null) {
+	                Calendar cal = (Calendar) value;
+	                return dateFormatter.format(cal.getTime());
+	            }
+	            //System.out.println(datePicker.getJFormattedTextField().getText());
+	            return "";
+	        }       
+
+	    }
+	
 	class Projekt_lekerdezo implements ActionListener																						//mentés gomb megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -160,22 +216,22 @@ public class EASQAS_adatok extends JPanel
 			    {
 			        if(hiba_box.getSelectedItem().equals("-"))
 	                {
-			            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt);	//függvénymeghívása a paraméterekkel
+			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt);	//függvénymeghívása a paraméterekkel
 	                }
 			        else
 	                {
-			            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
 	                }
 			    }
 			    else
 			    {
 			        if(hiba_box.getSelectedItem().equals("-"))
                     {
-			            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+			            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                     }
                                        
                     
@@ -192,22 +248,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
                     }
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                     }
                                        
                     
@@ -237,22 +293,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
                     }               
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
                     }
                     for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                     {
@@ -310,22 +366,22 @@ public class EASQAS_adatok extends JPanel
 	             {
 				     if(hiba_box.getSelectedItem().equals("-"))
 	                 {
-				        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+				        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
 	                 }
 	                 else
 	                 {
-	                    lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+	                    lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
 	                 }				     
 	             }
 				 else
 				 {
 				     if(hiba_box.getSelectedItem().equals("-"))
 				     {
-				         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+				         lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
 	                 }
 	                 else
 	                 {
-	                     lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+	                     lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
 	                 }       				     
 				 }
 				Foablak.frame.setCursor(null);
@@ -340,22 +396,22 @@ public class EASQAS_adatok extends JPanel
                  {
                      if(hiba_box.getSelectedItem().equals("-"))
                      {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
                      }
                      else
                      {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
                      }                   
                  }
                  else
                  {
                      if(hiba_box.getSelectedItem().equals("-"))
                      {
-                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                      }
                      else
                      {
-                         lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                         lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                      }                           
                  }
                  fajlszam++;
@@ -378,22 +434,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", "%");  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");  //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
                     }                   
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
                     }                           
                 }                 
                 Foablak.frame.setCursor(null);
@@ -425,22 +481,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
                     }                   
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                     }                           
                 }                 			    
 				Foablak.frame.setCursor(null);
@@ -456,22 +512,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
                     }                   
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                     }                           
                 }
                 fajlszam++;
@@ -494,22 +550,22 @@ public class EASQAS_adatok extends JPanel
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
                     }                   
                 }
                 else
                 {
                     if(hiba_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
                     }                           
                 }                   
                 if(projekt_box.getSelectedItem().equals("-"))
@@ -553,22 +609,22 @@ public class EASQAS_adatok extends JPanel
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
                         }
                     }
                     else
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                         }
                                            
                         
@@ -585,22 +641,22 @@ public class EASQAS_adatok extends JPanel
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
                         }
                     }
                     else
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
                         }
                                            
                         
@@ -644,22 +700,22 @@ public class EASQAS_adatok extends JPanel
                      {
                          if(hiba_box.getSelectedItem().equals("-"))
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
                          }
                          else
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
                          }                   
                      }
                      else
                      {
                          if(hiba_box.getSelectedItem().equals("-"))
                          {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                          }
                          else
                          {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                          }                           
                      }
                     Foablak.frame.setCursor(null);
@@ -674,22 +730,22 @@ public class EASQAS_adatok extends JPanel
                      {
                          if(hiba_box.getSelectedItem().equals("-"))
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
                          }
                          else
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
                          }                   
                      }
                      else
                      {
                          if(hiba_box.getSelectedItem().equals("-"))
                          {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                          }
                          else
                          {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
                          }                           
                      }
                      fajlszam++;
@@ -731,22 +787,22 @@ public class EASQAS_adatok extends JPanel
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
                         }                   
                     }
                     else
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                         }                           
                     }                               
                     Foablak.frame.setCursor(null);
@@ -762,22 +818,22 @@ public class EASQAS_adatok extends JPanel
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
                         }                   
                     }
                     else
                     {
                         if(hiba_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getText(), datum_ig.getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
                         }                           
                     }
                     fajlszam++;

@@ -13,26 +13,32 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.JTextField;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 
 public class AVM_javitasok extends JPanel {
-    private JTextField datumtol_mezo;
     private int fajlszam = 1;
-    private JTextField datumig_mezo;
+    private JDatePickerImpl datum_tol;
+    private JDatePickerImpl datum_ig;
 
     /**
      * Create the panel.
@@ -41,15 +47,45 @@ public class AVM_javitasok extends JPanel {
         setLayout(null);
         setBackground(Foablak.hatter_szine);
         
+        Date date2 = new Date();
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy.MM.dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        LocalDate date = LocalDate.parse(formatter2.format(date2), formatter);
+        // Increment the date by one day
+        LocalDate newDate = date.minusDays(1);
+        
+        Date date3 = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        /*String dateValue = "2024.03.23";  // must be in (yyyy- mm- dd ) format
+        try {
+            date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
+        UtilDateModel model = new UtilDateModel();
+        model.setValue(date3);
+        Properties p = new Properties();
+        p.put("text.today", "Ma");
+        p.put("text.month", "Hónap");
+        p.put("text.year", "Év");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);        
+        UtilDateModel model2 = new UtilDateModel();        
+        model2.setValue(date3);
+        Properties p2 = new Properties();
+        p2.put("text.today", "Ma");
+        p2.put("text.month", "Hónap");
+        p2.put("text.year", "Év");
+        JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2); 
+        
         JLabel lblNewLabel = new JLabel("AVM javítára került panelek adatai");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
         lblNewLabel.setBounds(463, 62, 270, 14);
         add(lblNewLabel);
         
-        datumtol_mezo = new JTextField();
-        datumtol_mezo.setBounds(569, 119, 86, 20);
-        add(datumtol_mezo);
-        datumtol_mezo.setColumns(10);
+        datum_tol = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        
+        datum_tol.setBounds(569, 119, 120, 20);
+        add(datum_tol);
         
         JLabel lblNewLabel_1 = new JLabel("Dátum -tól");
         lblNewLabel_1.setBounds(475, 122, 64, 14);
@@ -64,20 +100,39 @@ public class AVM_javitasok extends JPanel {
         lblNewLabel_2.setBounds(475, 159, 84, 14);
         add(lblNewLabel_2);
         
-        datumig_mezo = new JTextField();
-        datumig_mezo.setBounds(569, 156, 86, 20);
-        add(datumig_mezo);
-        datumig_mezo.setColumns(10);
-        
+        datum_ig = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+        datum_ig.setBounds(569, 156, 120, 20);
+        add(datum_ig);
+        /*
         Date date2 = new Date();
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy.MM.dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         LocalDate date = LocalDate.parse(formatter2.format(date2), formatter);
         // Increment the date by one day
         LocalDate newDate = date.minusDays(1);
-        // Format the new date as a string
-        datumtol_mezo.setText(newDate.format(formatter));
-        datumig_mezo.setText(newDate.format(formatter));
+        // Format the new date as a string             
+        */
+    }
+    
+    public class DateLabelFormatter extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }       
 
     }
     
@@ -99,7 +154,7 @@ public class AVM_javitasok extends JPanel {
                     stmt = (Statement) conn.createStatement();
                     conn2 = DriverManager.getConnection("jdbc:mysql://192.168.5.145/", "quality", "Qua25!");
                     stmt2 = conn2.createStatement();
-                    String sql = "select Panelszam, Idopont from qualitydb.Beolvasott_panelek where Idopont >= '"+ datumtol_mezo.getText() +" 00:00:00' and Idopont <= '"+ datumig_mezo.getText() +" 23:59:59'  and Projekt = 'AVM'";
+                    String sql = "select Panelszam, Idopont from qualitydb.Beolvasott_panelek where Idopont >= '"+ datum_tol.getJFormattedTextField().getText() +" 00:00:00' and Idopont <= '"+ datum_ig.getJFormattedTextField().getText() +" 23:59:59'  and Projekt = 'AVM'";
                     stmt.execute(sql);
                     ResultSet rs = stmt.getResultSet();
                     ResultSet rs2 = null;

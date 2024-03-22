@@ -22,10 +22,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
 import com.spire.pdf.FileFormat;
@@ -83,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Gyartoi_cikkek());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -999,7 +996,7 @@ public class Torlo extends JPanel
          }
     }
 	
-	class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
+	class Lekerdezes_IFS implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -1054,7 +1051,7 @@ public class Torlo extends JPanel
                           + "where raktar.part_no = alap.cikkszam) majdnem\n"
                           + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\n"
                           + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no");*/
-                  ResultSet rs = stmt.executeQuery("select kulso.part_no as cikkszam, to_char(kulso.DATE_TIME_CREATED,'YYYY.MM.DD') as mikor, belso.location_no as honnan, kulso.location_no as hova, kulso.quantity as mennyit \n"
+                  /*ResultSet rs = stmt.executeQuery("select kulso.part_no as cikkszam, to_char(kulso.DATE_TIME_CREATED,'YYYY.MM.DD') as mikor, belso.location_no as honnan, kulso.location_no as hova, kulso.quantity as mennyit \n"
                           + "from ifsapp.INVENTORY_TRANSACTION_HIST2 kulso,\n"
                           + "    (select *\n"
                           + "    from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
@@ -1067,7 +1064,11 @@ public class Torlo extends JPanel
                           + "and kulso.DATE_CREATED = belso.DATE_CREATED\n"
                           + "and belso.DATE_TIME_CREATED = kulso.DATE_TIME_CREATED\n"
                           + "and kulso.TRANSACTION_CODE = 'INVM-IN'\n"
-                          + "and kulso.location_no in('AEL00','AEL00-B','PRGL-K','UGYUJTO','UGYUJTO-B','UKEPRO','UPCB','UPRGL')");
+                          + "and kulso.location_no in('AEL00','AEL00-B','PRGL-K','UGYUJTO','UGYUJTO-B','UKEPRO','UPCB','UPRGL')");*/
+                  ResultSet rs = stmt.executeQuery("select part_no, manufacturer_no, manu_part_no\n"
+                          + "from ifsapp.PART_MANU_PART_NO\n"
+                          + "where 3 = 3\n"
+                          + "and preferred_manu_part_db = 'TRUE'");
                   Workbook workbook = new Workbook();
                   JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
@@ -2070,7 +2071,7 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\retour.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA1855_Zolinak.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
@@ -2538,58 +2539,43 @@ public class Torlo extends JPanel
          }
     }
 	
-	class Csomagolt_keres implements ActionListener                                                                                      //csv-t gyárt a gomb
+	class Gyartoi_cikkek implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
         public void actionPerformed(ActionEvent e)
          {
-            Connection conn = null;
-            Statement stmt = null;
-          
+  
             try 
-            {              
-               Class.forName("com.mysql.cj.jdbc.Driver");
-               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-               stmt = (Statement) conn.createStatement();                             
-               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
-               stmt.execute("select panelszam, idopont from  qualitydb.Beolvasott_panelek where 3 = 3 ");
-               ResultSet rs = stmt.getResultSet();
-               String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
-               Connection con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");
-               Statement stmt2 = con.createStatement();
-               ResultSet rs2 = null;
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+               Workbook workbook2 = new Workbook();
+               workbook2.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Rendelések.xlsx");
+               Worksheet sheet2 = workbook.getWorksheets().get(0);
+               
                Workbook workbook = new Workbook();
+               workbook.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Központi.xlsx");
                Worksheet sheet = workbook.getWorksheets().get(0);
-               int cellaszam = 1;
-               while(rs.next())
+               int cserelve = 0;
+               for(int szamlalo = 2; szamlalo < sheet.getLastRow()+1; szamlalo++)
                {
-                   String sql = "select nev, videoton.fkov.*\n"
-                           + "from videoton.fkov\n"
-                           + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
-                           + "where 3=3\n"
-                           + "and panel = '"+ rs.getString(1) +"'\n"
-                           + "order by ido desc\n"
-                           + "limit 1 ";
-                   stmt2.execute(sql);
-                   rs2 = stmt2.getResultSet();
-                   if(rs2.next())
+                   for(int szamlalo2 = 2; szamlalo2 < sheet2.getLastRow()+1; szamlalo2++)
                    {
-                       if(rs2.getString(1).contains("Csomagolás"))
+                       if(sheet.getRange().get("B"+szamlalo).getText().equals(sheet2.getRange().get("A"+szamlalo2).getText()) && sheet.getRange().get("E"+szamlalo).getText().equals(sheet2.getRange().get("B"+szamlalo2).getText()))
                        {
-                           SimpleDateFormat formazo = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                           String[] datum1 = rs.getString(2).split("-");
-                           //String[] datum2 = rs2.getString(4).split("-");
-                           Date beolvasas = formazo.parse(datum1[0]+"."+datum1[1]+"."+datum1[2]);
-                           Date csomagolas = formazo.parse(rs2.getString(4));
-                           if(beolvasas.compareTo(csomagolas) > 0)
+                           System.out.println("egyezik a cikk a két excelbe");
+                           if(sheet.getRange().get("A"+szamlalo).getText().equals(sheet2.getRange().get("C"+szamlalo2).getText())) {System.out.println("egyezik");}
+                           else
                            {
-                               sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                               cellaszam++;
-                               System.out.println("Találat");
+                               sheet.getRange().get("A"+szamlalo).setText(sheet2.getRange().get("C"+szamlalo2).getText().toString());
+                               cserelve++;
+                               System.out.println(sheet.getRange().get("B"+szamlalo).getText());
+                               System.out.println(cserelve);
                            }
+                           break;
                        }
                    }
                    
                }
+               /*
                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
                sheet.getAllocatedRange().autoFitColumns();
                sheet.getAllocatedRange().autoFitRows();
@@ -2607,9 +2593,7 @@ public class Torlo extends JPanel
                    workbook5.write(output);
                    output.close();
                }
-                         
-               stmt.close();
-               conn.close(); 
+                */
                Foablak.frame.setCursor(null);     
             }             
             catch (Exception e1) 

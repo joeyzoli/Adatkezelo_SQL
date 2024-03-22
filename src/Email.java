@@ -285,7 +285,7 @@ public class Email
         }        
     }
     
-    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki, String datum, String muszak)
+    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki, String datum, String muszak, String targy)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -299,7 +299,7 @@ public class Email
             message.setFrom(new InternetAddress(feladoemail));                          //feladó beállítása
             message.addRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(cimzettek));                                       //címzett beállítása
-            message.setSubject("Zárolás");                                            //tárgy beállítása
+            message.setSubject(targy);                                            //tárgy beállítása
            
             Multipart multipart = new MimeMultipart();                                      //csatoló osztály példányosítása
            
