@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Gyartoi_cikkek());
+		feltolt.addActionListener(new Lekerdezes_IFS());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1065,10 +1065,8 @@ public class Torlo extends JPanel
                           + "and belso.DATE_TIME_CREATED = kulso.DATE_TIME_CREATED\n"
                           + "and kulso.TRANSACTION_CODE = 'INVM-IN'\n"
                           + "and kulso.location_no in('AEL00','AEL00-B','PRGL-K','UGYUJTO','UGYUJTO-B','UKEPRO','UPCB','UPRGL')");*/
-                  ResultSet rs = stmt.executeQuery("select part_no, manufacturer_no, manu_part_no\n"
-                          + "from ifsapp.PART_MANU_PART_NO\n"
-                          + "where 3 = 3\n"
-                          + "and preferred_manu_part_db = 'TRUE'");
+                  ResultSet rs = stmt.executeQuery("select part_no, manufacturer_no, manu_part_no, user_changed\n"
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok");
                   Workbook workbook = new Workbook();
                   JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
@@ -2606,4 +2604,55 @@ public class Torlo extends JPanel
             }
          }
     }
+	
+	class Zarolt_frissit_2 implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Zarolasok_szukitett.xlsx";                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               Workbook workbook = new Workbook();
+               workbook.loadFromFile(excelfile1);
+               Worksheet sheet = workbook.getWorksheets().get(0);               
+               DataTable datatable = new DataTable();
+               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
+               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               {
+                   stmt.executeUpdate("update qualitydb.Zarolasok set  Valogatas_eredmenye = '" + datatable.getRows().get(szamlalo).getString(1) +"' "
+                           + "where ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                   System.out.println("Fut a For");
+               }              
+               Foablak.frame.setCursor(null);                        
+               stmt.close();
+               conn.close();                
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
+	
 }

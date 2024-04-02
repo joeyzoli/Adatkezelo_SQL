@@ -6,8 +6,6 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -16,11 +14,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -28,7 +29,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.table.DefaultTableModel;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
@@ -41,7 +47,6 @@ import javax.swing.JButton;
 
 public class Vevoireklamacio_d0 extends JPanel {
     private JTextField beszallito_mezo;
-    private JTextField ertesites_mezo;
     private JTextField vevorek_mezo;
     private JTextField veasrek_mezo;
     private JTextField frissites_mezo;
@@ -66,13 +71,23 @@ public class Vevoireklamacio_d0 extends JPanel {
     private SQA_SQL cikkszamok = new SQA_SQL();
     private String sql;
     private Workbook workbook = new Workbook();
+    private JDatePickerImpl ertesitve;
+    private UtilDateModel model;
 
     /**
      * Create the panel.
      */
     public Vevoireklamacio_d0() {
         setLayout(null);
-         
+        
+        model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Ma");
+        p.put("text.month", "Hónap");
+        p.put("text.year", "Év");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        ertesitve = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        
         JLabel lblNewLabel = new JLabel("Vevő");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel.setBounds(214, 57, 46, 14);
@@ -95,12 +110,9 @@ public class Vevoireklamacio_d0 extends JPanel {
         lblNewLabel_2.setBounds(900, 57, 102, 14);
         add(lblNewLabel_2);
         
-        ertesites_mezo = new JTextField();
-        ertesites_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        ertesites_mezo.addKeyListener(new Enter());
-        ertesites_mezo.setBounds(1012, 54, 86, 20);
-        add(ertesites_mezo);
-        ertesites_mezo.setColumns(10);
+
+        ertesitve.setBounds(1012, 54, 120, 20);
+        add(ertesitve);
         
         JLabel lblNewLabel_3 = new JLabel("Vevői reklamációs szám");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -303,6 +315,56 @@ public class Vevoireklamacio_d0 extends JPanel {
 
     }
     
+    public class DateLabelFormatter extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                Vevoireklamacio_fejlec.ertesites_cimke.setText(dateFormatter.format(cal.getTime()));                   
+                String input = dateFormatter.format(cal.getTime());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                LocalDate date = LocalDate.parse(input, formatter);
+                // Increment the date by one day
+                LocalDate newDate = date.plusDays(1);
+                // Format the new date as a string
+                String output = newDate.format(formatter);
+                Vevoireklamacio_fejlec.qr_cimke.setText(output);
+                newDate = date.plusDays(2);
+                output = newDate.format(formatter);
+                Vevoireklamacio_fejlec.d3_cimke.setText(output);
+                newDate = date.plusDays(14);
+                output = newDate.format(formatter);
+                Vevoireklamacio_fejlec.d5_cimke.setText(output);
+                newDate = date.plusDays(30);
+                output = newDate.format(formatter);
+                Vevoireklamacio_fejlec.lezaras_cimke.setText(output);                    
+                
+                Vevoireklamacio_fejlec.ertesitve = Color.GREEN;
+                Vevoireklamacio_fejlec.qr = Color.YELLOW;
+                Vevoireklamacio_fejlec.d3 = Color.gray;
+                Vevoireklamacio_fejlec.d5 = Color.gray;
+                Vevoireklamacio_fejlec.lezaras = Color.GRAY;
+                Vevoireklamacio_V2.d3.hatarido();
+                Vevoireklamacio_V2.d5.hatarido();
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                repaint();
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }
+
+    }
+    /*
     class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
         public void keyPressed (KeyEvent e) 
@@ -361,7 +423,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         {
             // TODO Auto-generated method stub           
         }    
-    }
+    }*/
     
     public void mentes()
     {
@@ -373,7 +435,7 @@ public class Vevoireklamacio_d0 extends JPanel {
             if(letezik.length > 0)
             {
                 sql = "update qualitydb.Vevoireklamacio_alap set mi = '"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"', Vevo = '"+ String.valueOf(vevo_box.getSelectedItem()) +"', "
-                        + "Beszallito = '"+ beszallito_mezo.getText() +"', Ertesites_datuma = '"+ ertesites_mezo.getText() +"', Vevoi_szam = '"+ vevorek_mezo.getText() +"',"
+                        + "Beszallito = '"+ beszallito_mezo.getText() +"', Ertesites_datuma = '"+ ertesitve.getJFormattedTextField().getText() +"', Vevoi_szam = '"+ vevorek_mezo.getText() +"',"
                         + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"', Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                         + "Email = '"+ email_mezo.getText() +";"+ email2_mezo.getText() +"', RMA_szam = '"+ rma_mezo.getText() +"', Telefon = '"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "Visszakuldes_datuma = '"+ visszakuldes_mezo.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";                
@@ -382,7 +444,7 @@ public class Vevoireklamacio_d0 extends JPanel {
             {
                 sql = "insert into qualitydb.Vevoireklamacio_alap (mi,Vevo,Beszallito,Ertesites_datuma,Vevoi_szam,Utolso_frissites,Felelos,Tipus,Email,RMA_szam,Telefon,Visszakuldes_datuma)  "
                         + "Values('"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"','"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
-                        + "'"+ beszallito_mezo.getText() +"','"+ ertesites_mezo.getText() +"','"+ vevorek_mezo.getText() +"',"
+                        + "'"+ beszallito_mezo.getText() +"','"+ ertesitve.getJFormattedTextField().getText() +"','"+ vevorek_mezo.getText() +"',"
                         + "'"+ frissites_mezo.getText() +"','"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                         + "'"+ email_mezo.getText() +";"+ email2_mezo.getText() +"','"+ rma_mezo.getText() +"','"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "'"+ visszakuldes_mezo.getText() +"')";
@@ -433,7 +495,16 @@ public class Vevoireklamacio_d0 extends JPanel {
             Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
             vevo_box.setSelectedItem(rs.getString(3));
             beszallito_mezo.setText(rs.getString(4));
-            ertesites_mezo.setText(rs.getString(5));
+            //ertesites_mezo.setText(rs.getString(5));
+            Date date3 = null;
+            String dateValue = rs.getString(5).replace("-", ".");
+            try {
+                date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            model.setValue(date3);
             if(rs.getString(5).equals("")){}
             else
             {

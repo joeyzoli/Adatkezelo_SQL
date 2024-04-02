@@ -23,5 +23,11 @@
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ucanload.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/ucanaccess-5.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/jdatepicker-1.3.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/jxdatepicker-support-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/commons-beanutils-core-1.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/databinding-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/filters-2.0.235.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/swing-worker-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/kovacs.zoltan/eclipse-workspace/Adat kezelo/swingx-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

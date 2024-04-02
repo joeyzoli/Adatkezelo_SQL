@@ -1375,11 +1375,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         hibaleiras[szamlalo] = "";
                                     }
-                                    hibaleir += hibaleiras[szamlalo]+"\n";
+                                    hibaleir += hibaleiras[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    hibaleir = hibaleiras_mezo.getText()+"\n";
+                                    hibaleir = hibaleiras_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(belsointezkedes.length > 1)
                                 {
@@ -1387,11 +1387,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         belsointezkedes[szamlalo] = "";
                                     }
-                                    intezked += belsointezkedes[szamlalo]+"\n";
+                                    intezked += belsointezkedes[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    intezked = intezkedes_mezo.getText()+"\n";
+                                    intezked = intezkedes_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(valasz.length > 1)
                                 {
@@ -1399,11 +1399,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         valasz[szamlalo] = "";
                                     }
-                                    besz_valasz += valasz[szamlalo]+"\n";
+                                    besz_valasz += valasz[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    besz_valasz = valasz_mezo.getText()+"\n";
+                                    besz_valasz = valasz_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(gyokerok.length > 1)
                                 {
@@ -1411,11 +1411,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         gyokerok[szamlalo] = "";
                                     }
-                                    gyoker += gyokerok[szamlalo]+"\n";
+                                    gyoker += gyokerok[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    gyoker = gyokerok_mezo.getText()+"\n";
+                                    gyoker = gyokerok_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(hibasdb.length > 1)
                                 {
@@ -1625,7 +1625,7 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         hibaleiras[szamlalo] = "";
                                     }
-                                    hibaleir += hibaleiras[szamlalo]+"\n";
+                                    hibaleir += hibaleiras[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
@@ -1637,7 +1637,7 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         belsointezkedes[szamlalo] = "";
                                     }
-                                    intezked += belsointezkedes[szamlalo]+"\n";
+                                    intezked += belsointezkedes[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
@@ -1649,11 +1649,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         valasz[szamlalo] = "";
                                     }
-                                    besz_valasz += valasz[szamlalo]+"\n";
+                                    besz_valasz += valasz[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    besz_valasz = valasz_mezo.getText()+"\n";
+                                    besz_valasz = valasz_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(table.getRowCount() > 1)
                                 {
@@ -1661,11 +1661,11 @@ public class SQA_bevitel extends JPanel {
                                     {
                                         gyokerok[szamlalo] = "";
                                     }
-                                    gyoker += gyokerok[szamlalo]+"\n";
+                                    gyoker += gyokerok[szamlalo].replace("\n", "\t\t")+"\n";
                                 }
                                 else
                                 {
-                                    gyoker = gyokerok_mezo.getText()+"\n";
+                                    gyoker = gyokerok_mezo.getText().replace("\n", "\t\t")+"\n";
                                 }
                                 if(table.getRowCount() > 1)
                                 {
@@ -2270,7 +2270,7 @@ public class SQA_bevitel extends JPanel {
                     String[] cseredatu = rs.getString(34).split("\n");
                     for(int szamlalo =0; szamlalo < cseredatu.length;szamlalo++)
                     {
-                        cseredatum[szamlalo] += cseredatu[szamlalo];
+                        cseredatum[szamlalo] = cseredatu[szamlalo];
                     }
                 }                
                 if(hibasdb.length > 0)

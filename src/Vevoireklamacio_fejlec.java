@@ -902,7 +902,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 conn.close();                
 
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-                JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevoireklamacio ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +" néven", "Info", 1);
             }
             catch (Exception e1) 
             {
