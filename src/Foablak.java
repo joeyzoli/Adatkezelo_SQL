@@ -91,6 +91,7 @@ public class Foablak extends JFrame
 	private Vevoireklamacio_V2 vevoirek;
 	private AVM_javitasok javellen;
 	private Jelenleti_osszesito jelenleti;
+	private Excel_kereso kereso;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -382,6 +383,11 @@ public class Foablak extends JFrame
 		JMenuItem jelenleti_osszesito = new JMenuItem("Jelenléti összesítő");
 		jelenleti_osszesito.addActionListener(new Panelcsere_Javitasok());
 		egyeb.add(jelenleti_osszesito);
+		
+		JMenuItem excel_kereso = new JMenuItem("Excel kereső");
+		egyeb.add(excel_kereso);
+		excel_kereso.addActionListener(new Panelcsere_Excel_kereso());
+		
 		ain.addActionListener(new Panelcsere_AIN());
 		JMenu beallitasok = new JMenu("Beállítások");
 		menuBar.add(beallitasok);
@@ -1049,6 +1055,17 @@ public class Foablak extends JFrame
          {
             jelenleti = new Jelenleti_osszesito();
             JScrollPane ablak = new JScrollPane(jelenleti);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Excel_kereso implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            kereso = new Excel_kereso();
+            JScrollPane ablak = new JScrollPane(kereso);
             setContentPane(ablak);
             pack();
          }

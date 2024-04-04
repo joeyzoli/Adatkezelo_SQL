@@ -323,7 +323,7 @@ public class EASQAS_adatok extends JPanel
                        sumhiba += Integer.parseInt(table.getValueAt(szamlalo, 5).toString());
                     }
                     ppm = ((float)sumhiba/(float)sumfelajanlott)* (float)1000000;
-                    String[] egesz = String.valueOf(ppm).split("\\.");
+                    //String[] egesz = String.valueOf(ppm).split("\\.");
                     Vector<Object> vector = new Vector<Object>();
                     vector.add("");
                     vector.add("");
@@ -332,7 +332,7 @@ public class EASQAS_adatok extends JPanel
                     vector.add(summinta);
                     vector.add(sumhiba);
                     vector.add(ppm);
-                    System.out.println(sumfelajanlott + " "+ summinta +" "+ sumhiba + " " + egesz[0]);
+                    //System.out.println(sumfelajanlott + " "+ summinta +" "+ sumhiba + " " + egesz[0]);
                     SQL.alapmodell.addRow(vector);
                     table.setModel(SQL.alapmodell);
                 }

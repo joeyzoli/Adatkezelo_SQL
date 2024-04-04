@@ -66,6 +66,8 @@ public class Jelenleti_osszesito extends JPanel {
         megnyit_gomb.addActionListener(new Mappa());
         megnyit_gomb.setBounds(569, 83, 125, 23);
         add(megnyit_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
