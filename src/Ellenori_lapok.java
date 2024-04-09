@@ -6,6 +6,12 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,6 +27,7 @@ import com.spire.xls.Worksheet;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 
 public class Ellenori_lapok extends JPanel {
     private JTextField datum_mezo;
@@ -57,9 +64,10 @@ public class Ellenori_lapok extends JPanel {
     private JCheckBox de11;
     private JCheckBox du11;
     private JCheckBox ej11;
-    private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Gyártási_minőség_követése\\Gyártási minőségbiztosítás\\Minőségellenőrzési csoport\\Beosztás MEO 250-es épület 2024.xlsx";
+    private String excelhelye = "";   //"\\\\10.1.0.11\\minosegbiztositas\\Gyártási_minőség_követése\\Gyártási minőségbiztosítás\\Minőségellenőrzési csoport\\Beosztás MEO 250-es épület 2024.xlsx";
     private Workbook excel;
     private Worksheet sheet;
+    private String fajlhelye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\jelenletifajlhelye.txt";
 
     /**
      * Create the panel.
@@ -275,6 +283,48 @@ public class Ellenori_lapok extends JPanel {
         add(ej11);
 
         setBackground(Foablak.hatter_szine);
+        
+        JButton csatol_gomb = new JButton("Csatol");
+        csatol_gomb.addActionListener(new Fajl_csatol());
+        csatol_gomb.setBounds(1085, 55, 89, 23);
+        add(csatol_gomb);
+        
+        JLabel lblNewLabel_16 = new JLabel("Jelenléti csatolása");
+        lblNewLabel_16.setBounds(968, 59, 107, 14);
+        add(lblNewLabel_16);
+        
+        try 
+        {
+            File letezik = new File(fajlhelye);
+            if(letezik.exists())
+            {
+                //FileReader fr = new FileReader(System.getProperty("user.home") + "\\sqa_szures.txt");
+                FileInputStream fis = new FileInputStream(fajlhelye);
+                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                try (BufferedReader br = new BufferedReader(isr)) 
+                {
+                    String sor = br.readLine();
+                    excelhelye = sor;
+                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                }       
+                catch (Exception e1) 
+                {
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                    e1.printStackTrace();
+                }
+            }
+        }       
+        catch (Exception e1) 
+        {
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }
 
     }
     
@@ -616,7 +666,7 @@ public class Ellenori_lapok extends JPanel {
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             }
          }
     }
@@ -1046,7 +1096,7 @@ public class Ellenori_lapok extends JPanel {
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
         } finally 
         {
            try 
@@ -1066,8 +1116,37 @@ public class Ellenori_lapok extends JPanel {
                String hibauzenet = se.toString();
                Email hibakuldes = new Email();
                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+               JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
            }  
         }       
+    }
+    
+    class Fajl_csatol implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                PrintWriter writer = new PrintWriter(fajlhelye, "UTF-8");
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File("\\\\10.1.0.11\\minosegbiztositas\\Gyártási_minőség_követése\\Gyártási minőségbiztosítás\\Minőségellenőrzési csoport\\"));
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                if(fajl != null)
+                {
+                    writer.print(fajl.getAbsolutePath());
+                    writer.close();
+                }
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null,getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
     }
 }

@@ -13,14 +13,19 @@ import com.spire.xls.charts.ChartSerie;
 import com.spire.xls.charts.ChartSeries;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,8 +39,9 @@ public class Kiszallitasi_minoseg extends JPanel {
     private JComboBox<String> projekt_box ;
     private String menteshelye = System.getProperty("user.home") + "\\Desktop\\Kiszállítási minőség.xlsx";
     //private String hely2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Reznyák_N\\Minőségi mutatószámok 2023.xlsx";
-    private String hely = "\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\KPI_Quality\\2023\\Minőségi mutatószámok 2023.xlsx";
+    private String hely = "";    //"\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\KPI_Quality\\2024\\Minőségi mutatószámok 2024_ szerkesztés alatt.xlsx";
     private ComboBox combobox_tomb = new ComboBox();
+    private String fajlhelye = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\kpifajlhelye.txt";
 
     /**
      * Create the panel.
@@ -75,6 +81,47 @@ public class Kiszallitasi_minoseg extends JPanel {
         add(lblNewLabel_1);
         
         setBackground(Foablak.hatter_szine);
+        
+        JButton csatol_gomb = new JButton("Csatol");
+        csatol_gomb.addActionListener(new Fajl_csatol());
+        csatol_gomb.setBounds(942, 71, 89, 23);
+        add(csatol_gomb);
+        
+        JLabel lblNewLabel_2 = new JLabel("Fájl csatolása");
+        lblNewLabel_2.setBounds(840, 75, 92, 14);
+        add(lblNewLabel_2);
+        try 
+        {
+            File letezik = new File(fajlhelye);
+            if(letezik.exists())
+            {
+                //FileReader fr = new FileReader(System.getProperty("user.home") + "\\sqa_szures.txt");
+                FileInputStream fis = new FileInputStream(fajlhelye);
+                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                try (BufferedReader br = new BufferedReader(isr)) 
+                {
+                    String sor = br.readLine();
+                    hely = sor;
+                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                }       
+                catch (Exception e1) 
+                {
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                    e1.printStackTrace();
+                }
+            }
+        }       
+        catch (Exception e1) 
+        {
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }
 
     }
     
@@ -85,7 +132,7 @@ public class Kiszallitasi_minoseg extends JPanel {
             try
             {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                int honap = 16;                              
+                int honap = 17;                              
                 File excel = new File(hely);
                 Workbook workbook = new Workbook();             
                 workbook.loadFromFile(excel.getAbsolutePath());
@@ -106,7 +153,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                 sheet2.getRange().get("A3").setText("Kiesett db");
                 sheet2.getRange().get("A4").setText("PPM");
                 sheet2.getRange().get("A5").setText("Cél");
-                for(int szamlalo = 6; szamlalo < 102;szamlalo+=3)
+                for(int szamlalo = 6; szamlalo < 70;szamlalo+=3)
                 {
                     CellRange cell = sheet.getCellRange(szamlalo, honap);        //honap                  
                     if(cell.hasFormula()) {
@@ -116,7 +163,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                         else {
                             if(Float.parseFloat( String.valueOf(cell.getFormulaValue())) > 0) {
                                 
-                                sheet2.getRange().get(1, oszlop).setText(sheet.getRange().get("B"+(szamlalo-2)).getText().toString());
+                                sheet2.getRange().get(1, oszlop).setText(sheet.getRange().get("C"+(szamlalo-2)).getText().toString());
                                 CellRange cell2 = sheet.getCellRange(szamlalo-2, honap);
                                 cell2.convertToNumber();
                                 sheet2.getCellRange(2, oszlop).setValue(cell2.getFormulaValue().toString());
@@ -125,7 +172,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                                 sheet2.getRange().get(3, oszlop).setValue(cell2.getFormulaValue().toString());
                                 String[] ppm = cell.getFormulaValue().toString().split("\\.");
                                 sheet2.getRange().get(4, oszlop).setValue(ppm[0]);                                
-                                cell2 = sheet.getCellRange(szamlalo-2, 18);
+                                cell2 = sheet.getCellRange(szamlalo-2, 19);
                                 System.out.println(cell2.getValue().toString());
                                 sheet2.getRange().get(5, oszlop).setValue(cell2.getValue().toString()); 
                                 oszlop++;
@@ -224,78 +271,78 @@ public class Kiszallitasi_minoseg extends JPanel {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 int honaptol = 0;
                 if(honaptol_box.getSelectedItem().equals("Január")){              
-                    honaptol = 4;
-                }
-                else if(honaptol_box.getSelectedItem().equals("Február")){              
                     honaptol = 5;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Március")){              
+                else if(honaptol_box.getSelectedItem().equals("Február")){              
                     honaptol = 6;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Április")){              
+                else if(honaptol_box.getSelectedItem().equals("Március")){              
                     honaptol = 7;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Május")){              
+                else if(honaptol_box.getSelectedItem().equals("Április")){              
                     honaptol = 8;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Június")){              
+                else if(honaptol_box.getSelectedItem().equals("Május")){              
                     honaptol = 9;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Július")){              
+                else if(honaptol_box.getSelectedItem().equals("Június")){              
                     honaptol = 10;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Augusztus")){              
+                else if(honaptol_box.getSelectedItem().equals("Július")){              
                     honaptol = 11;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Szeptember")){              
+                else if(honaptol_box.getSelectedItem().equals("Augusztus")){              
                     honaptol = 12;
                 }
-                else if(honaptol_box.getSelectedItem().equals("Október")){              
+                else if(honaptol_box.getSelectedItem().equals("Szeptember")){              
                     honaptol = 13;
                 }
-                else if(honaptol_box.getSelectedItem().equals("November")){              
+                else if(honaptol_box.getSelectedItem().equals("Október")){              
                     honaptol = 14;
                 }
-                else if(honaptol_box.getSelectedItem().equals("December")){              
+                else if(honaptol_box.getSelectedItem().equals("November")){              
                     honaptol = 15;
+                }
+                else if(honaptol_box.getSelectedItem().equals("December")){              
+                    honaptol = 16;
                 }
                 
                 int honapig = 0;
                 if(honapig_box.getSelectedItem().equals("Január")){              
-                    honapig = 4;
-                }
-                else if(honapig_box.getSelectedItem().equals("Február")){              
                     honapig = 5;
                 }
-                else if(honapig_box.getSelectedItem().equals("Március")){              
+                else if(honapig_box.getSelectedItem().equals("Február")){              
                     honapig = 6;
                 }
-                else if(honapig_box.getSelectedItem().equals("Április")){              
+                else if(honapig_box.getSelectedItem().equals("Március")){              
                     honapig = 7;
                 }
-                else if(honapig_box.getSelectedItem().equals("Május")){              
+                else if(honapig_box.getSelectedItem().equals("Április")){              
                     honapig = 8;
                 }
-                else if(honapig_box.getSelectedItem().equals("Június")){              
+                else if(honapig_box.getSelectedItem().equals("Május")){              
                     honapig = 9;
                 }
-                else if(honapig_box.getSelectedItem().equals("Július")){              
+                else if(honapig_box.getSelectedItem().equals("Június")){              
                     honapig = 10;
                 }
-                else if(honapig_box.getSelectedItem().equals("Augusztus")){              
+                else if(honapig_box.getSelectedItem().equals("Július")){              
                     honapig = 11;
                 }
-                else if(honapig_box.getSelectedItem().equals("Szeptember")){              
+                else if(honapig_box.getSelectedItem().equals("Augusztus")){              
                     honapig = 12;
                 }
-                else if(honapig_box.getSelectedItem().equals("Október")){              
+                else if(honapig_box.getSelectedItem().equals("Szeptember")){              
                     honapig = 13;
                 }
-                else if(honapig_box.getSelectedItem().equals("November")){              
+                else if(honapig_box.getSelectedItem().equals("Október")){              
                     honapig = 14;
                 }
-                else if(honapig_box.getSelectedItem().equals("December")){              
+                else if(honapig_box.getSelectedItem().equals("November")){              
                     honapig = 15;
+                }
+                else if(honapig_box.getSelectedItem().equals("December")){              
+                    honapig = 16;
                 }
                 
                 File excel = new File(hely);
@@ -319,9 +366,9 @@ public class Kiszallitasi_minoseg extends JPanel {
                 sheet2.getRange().get("A4").setText("PPM");
                 //System.out.println(sheet.getRange().get("B4").getText().toString());
                 
-                for(int szamlalo2 = 4; szamlalo2 < 102;szamlalo2 +=3)
+                for(int szamlalo2 = 4; szamlalo2 < 70;szamlalo2 +=3)
                 {
-                    if(String.valueOf(projekt_box.getSelectedItem()).toLowerCase().contains(sheet.getRange().get("B"+szamlalo2).getText().toString().toLowerCase())) 
+                    if(String.valueOf(projekt_box.getSelectedItem()).toLowerCase().contains(sheet.getRange().get("C"+szamlalo2).getText().toString().toLowerCase())) 
                     {
                         for(int szamlalo = honaptol; szamlalo < (honapig+1);szamlalo++)        //(honapig+1)
                         {
@@ -407,7 +454,9 @@ public class Kiszallitasi_minoseg extends JPanel {
                 sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:Z1"));
                 sheet2.getAllocatedRange().autoFitColumns();
                 sheet2.getAllocatedRange().autoFitRows();                
-                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás           
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                
+                menteshelye = System.getProperty("user.home") + "\\Desktop\\Kiszállítási minőség "+ String.valueOf(projekt_box.getSelectedItem()) +".xlsx";
                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);            
                 FileInputStream fileStream = new FileInputStream(menteshelye);
                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
@@ -421,7 +470,7 @@ public class Kiszallitasi_minoseg extends JPanel {
                     output.close();
                 }
                 setCursor(null);
-                JOptionPane.showMessageDialog(null, "Mentve az asztalra Kiszállítási minőség.xlsx", "Info", 1);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Kiszállítási minőség "+ String.valueOf(projekt_box.getSelectedItem()) +".xlsx", "Info", 1);
             }
             catch (Exception e1) 
             {
@@ -430,6 +479,35 @@ public class Kiszallitasi_minoseg extends JPanel {
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Fajl_csatol implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                PrintWriter writer = new PrintWriter(fajlhelye, "UTF-8");
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\KPI_Quality\\"));
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                if(fajl != null)
+                {
+                    writer.print(fajl.getAbsolutePath());
+                    writer.close();
+                }
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }

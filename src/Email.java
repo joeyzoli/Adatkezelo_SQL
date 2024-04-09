@@ -55,7 +55,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }
      
@@ -103,7 +103,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }
      
@@ -149,7 +149,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }        
     }
@@ -191,7 +191,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }        
     }
@@ -234,7 +234,7 @@ public class Email
                 String hibauzenet2 = e1.toString();
                 //Email hibakuldes = new Email();
                 //hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
-                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
                 e1.printStackTrace();
                 Foablak.frame.setCursor(null);          //egér mutató alaphelyzetbe állítása
             }
@@ -280,7 +280,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }        
     }
@@ -329,7 +329,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }        
     }
@@ -372,7 +372,7 @@ public class Email
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
             e1.printStackTrace();
         }        
     }

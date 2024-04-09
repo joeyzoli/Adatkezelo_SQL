@@ -514,7 +514,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
             }
          }
@@ -550,7 +550,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
             }
          }
@@ -584,7 +584,7 @@ public class Vevoireklamacio_d2 extends JPanel {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
     }
@@ -763,7 +763,7 @@ public class Vevoireklamacio_d2 extends JPanel {
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
         } finally 
         {
@@ -783,7 +783,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                se.printStackTrace();
                String hibauzenet = se.toString();
                Email hibakuldes = new Email();
-               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
            }  
         }
@@ -814,7 +814,7 @@ public class Vevoireklamacio_d2 extends JPanel {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
@@ -909,7 +909,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                     e.printStackTrace();
                     String hibauzenet = e.toString();
                     Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                     JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
                 }
             }
@@ -1005,7 +1005,7 @@ public class Vevoireklamacio_d2 extends JPanel {
                     e.printStackTrace();
                     String hibauzenet = e.toString();
                     Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                     JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
                 }
             }
