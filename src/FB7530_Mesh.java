@@ -71,7 +71,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_1);
         
         ComboBox combobox_tomb = new ComboBox();
-        ellenor_box = new JComboBox<String>(combobox_tomb.getCombobox2(ComboBox.ellenorok));                                                  //combobox_tomb.getCombobox2(ComboBox.ellenorok)
+        ellenor_box = new JComboBox<String>();                                                  //combobox_tomb.getCombobox2(ComboBox.ellenorok)
         ellenor_box.setSelectedIndex(1);
         ellenor_box.setBounds(125, 75, 208, 22);
         add(ellenor_box);
@@ -90,7 +90,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_3);
         
         String[] tipus = {"FB7530_2","FB7530 INTER_2","FB7530AX_2","FB7530AX INTER_2"};
-        tipus_box = new JComboBox<String> (tipus);                                                   //tipus
+        tipus_box = new JComboBox<String> ();                                                   //tipus
         tipus_box.setBounds(639, 75, 150, 22);
         add(tipus_box);
         
@@ -99,7 +99,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_4);
         
         String[] teszttipus = {"F","V"};
-        teszttipus_box = new JComboBox<String> (teszttipus);                                              //teszttipus
+        teszttipus_box = new JComboBox<String> ();                                              //teszttipus
         teszttipus_box.setBounds(975, 75, 52, 22);
         add(teszttipus_box);
         
@@ -148,6 +148,7 @@ public class FB7530_Mesh extends JPanel {
         
         firmware_mezo = new JTextField();
         firmware_mezo.setBounds(188, 344, 288, 20);
+        firmware_mezo.addKeyListener(new Enter3());
         add(firmware_mezo);
         firmware_mezo.setColumns(10);
         
@@ -260,7 +261,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_19);
         
         String[] hibacsoport = {"","Címke","Funkció","Papír","Tartozék","Termék","Szerelés"};
-        hibacsoport_box = new JComboBox<String>(hibacsoport);                                              //hibacsoport
+        hibacsoport_box = new JComboBox<String>();                                              //hibacsoport
         hibacsoport_box.setBounds(188, 484, 215, 22);
         add(hibacsoport_box);
         
@@ -268,7 +269,7 @@ public class FB7530_Mesh extends JPanel {
         lblNewLabel_20.setBounds(47, 521, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hiba_box = new JComboBox<String>();                //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(188, 517, 215, 22);
         add(hiba_box);
         
@@ -277,7 +278,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_21);
         
         String[] kategoria = {"","Kritikus hiba","Súlyos hiba","Enyhe hiba"};
-        hibakategoria_box = new JComboBox<String>(kategoria);                                    //kategoria
+        hibakategoria_box = new JComboBox<String>();                                    //kategoria
         hibakategoria_box.setBounds(188, 553, 215, 22);
         add(hibakategoria_box);
         
@@ -515,7 +516,7 @@ public class FB7530_Mesh extends JPanel {
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String sql = "INSERT INTO qualitydb.OQC_FB7530 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
+                    String sql = "INSERT INTO qualitydb.OQC_FB7530_MESH (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
                             + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
                             + "Megjegyzes,Kritikus_hiba, Sulyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
                             + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ "" +"',"
@@ -624,6 +625,25 @@ public class FB7530_Mesh extends JPanel {
             {
                 measureTime(true);
                 System.out.println("Elindult a mérés");
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+    }
+    
+    class Enter3 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                egyezes_repeater.setText("OK");
+                egyezes_repeater.setBackground(Color.GREEN);
             }       
         }
         @Override

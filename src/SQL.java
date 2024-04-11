@@ -2768,7 +2768,7 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
-                        cimzett = sheet.getRange().get("C" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
+                        cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
                         email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a reklamáció határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
                                 "\nKérem minnél elöbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D8_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");

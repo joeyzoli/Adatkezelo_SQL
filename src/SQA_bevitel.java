@@ -497,6 +497,19 @@ public class SQA_bevitel extends JPanel {
        
         beszallitok.clear();
         gyartok.clear();
+        
+        SQA_SQL ment = new SQA_SQL();
+        String sql = "insert into qualitydb.SQA_reklamaciok (ID,Futo_ID,Datum,Inditotta,Vagy,Cikkszam, Fajta,Gyarto,Beszallito,Projekt,Kontakt,"
+                + "Hibaleiras,Belso_intezkedes,Hibasdb,Megjelenesido,Reklamacioido,Deviza,Egysegar,Osszertek,Beszallitoi_valasz,Gyokerok,"
+                + "Beszallitoi_karterites,Belso_koltseg,VEszteseg,Mappa_helye,8D,Credit_note, Megnevezes, Rek_ertek, Csere_datum) "
+                + "Value('"+ id_mezo.getText()+"','"+id_mezo.getText()+"','"+"2099.12.31"+"','"+ String.valueOf(indito_box.getSelectedItem())
+                +"','"+ String.valueOf(intezkedes_box.getSelectedItem())+"','"+ ""+"','"+ String.valueOf(fajta_box.getSelectedItem())
+                +"','"+""+"','"+""+"','"+""+"','"+""+"','"+""
+                +"','"+""+"','"+""+"','"+""+"','"+""
+                +"','"+""+"','"+""+"','"+""
+                +"','"+""+"','"+""+"','"+""+"','"+""+"','"+""
+                +"','"+""+"','"+ "" +"','"+ "" +"','"+ "" +"','"+ "" +"','"+ "" +"')";
+        ment.mindenes(sql);
     }
     
     public SQA_bevitel(String id) {
@@ -1192,7 +1205,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -1212,7 +1225,7 @@ public class SQA_bevitel extends JPanel {
                 Foablak.frame.setCursor(null);
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
@@ -1243,7 +1256,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -1903,7 +1916,7 @@ public class SQA_bevitel extends JPanel {
                     e1.printStackTrace();
                     String hibauzenet = e1.toString();
                     Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                     JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
                 }
             
@@ -1936,7 +1949,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          
@@ -1969,7 +1982,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -1991,7 +2004,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2013,7 +2026,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2039,7 +2052,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2365,7 +2378,7 @@ public class SQA_bevitel extends JPanel {
                e1.printStackTrace();
                String hibauzenet = e1.toString();
                Email hibakuldes = new Email();
-               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             } finally 
             {
@@ -2392,7 +2405,7 @@ public class SQA_bevitel extends JPanel {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }    
     }
@@ -2414,7 +2427,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2442,7 +2455,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2471,7 +2484,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -2584,7 +2597,7 @@ public class SQA_bevitel extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
             }
         }

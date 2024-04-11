@@ -291,7 +291,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         tipus_box.addActionListener(new Valtozas());
         add(tipus_box);
         
-        String[] nevsor = {"-","Borbély Szilvia","Kicsák Boglárka","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina"};
+        String[] nevsor = {"-","Borbély Szilvia","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina"};
         
         felelos_box = new JComboBox<String>(nevsor);                                                                                                         //nevsor
         felelos_box.setBounds(618, 159, 162, 22);
@@ -554,7 +554,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                         Vevoireklamacio_fejlec.d3 = Color.RED;
                     }
                 }
-                newDate = date.plusDays(10);
+                newDate = date.plusDays(14);
                 output = newDate.format(formatter);
                 Vevoireklamacio_fejlec.d5_cimke.setText(output);
                 hatarido = rovid.parse(output);
@@ -743,11 +743,12 @@ public class Vevoireklamacio_d0 extends JPanel {
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
                 String nev = String.valueOf(felelos_box.getSelectedItem());
-                for(int szamlalo = 2; szamlalo < sheet.getLastRow();szamlalo++)
+                for(int szamlalo = 2; szamlalo < sheet.getLastRow()+1;szamlalo++)
                 {
-                    if(sheet.getRange().get("B"+szamlalo).getText().equals(nev))
+                    if(sheet.getRange().get("B"+szamlalo).getText().toLowerCase().equals(nev.toLowerCase()))
                     {
                         email2_mezo.setText(sheet.getRange().get("C"+szamlalo).getText());
+                        break;
                     }
                         
                 }

@@ -1205,6 +1205,8 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            //Utolso_sor sorszam = new Utolso_sor();
+            //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
             //Email email = new Email();
             /*for(int szamlalo = 0; szamlalo < 100; szamlalo++)

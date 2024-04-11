@@ -89,9 +89,12 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel);
         
         miaproblema_mezo = new JTextArea();
+        miaproblema_mezo.setLineWrap(true);
+        miaproblema_mezo.setWrapStyleWord(true);
         miaproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        miaproblema_mezo.setBounds(340, 59, 260, 64);
-        add(miaproblema_mezo);
+        JScrollPane gorgeto1 = new JScrollPane(miaproblema_mezo);
+        gorgeto1.setBounds(340, 59, 260, 64);
+        add(gorgeto1);
         
         JLabel lblNewLabel_1 = new JLabel("Hol detektálta");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -99,9 +102,12 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_1);
         
         holdetektalta_mezo = new JTextArea();
+        holdetektalta_mezo.setLineWrap(true);
+        holdetektalta_mezo.setWrapStyleWord(true);
         holdetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        holdetektalta_mezo.setBounds(827, 59, 260, 64);
-        add(holdetektalta_mezo);
+        JScrollPane gorgeto2 = new JScrollPane(holdetektalta_mezo);
+        gorgeto2.setBounds(827, 59, 260, 64);
+        add(gorgeto2);
         
         JLabel lblNewLabel_2 = new JLabel("Miért probléma?");
         lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -109,9 +115,12 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_2);
         
         miertproblema_mezo = new JTextArea();
+        miertproblema_mezo.setLineWrap(true);
+        miertproblema_mezo.setWrapStyleWord(true);
         miertproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        miertproblema_mezo.setBounds(340, 140, 260, 64);
-        add(miertproblema_mezo);
+        JScrollPane gorgeto3 = new JScrollPane(miertproblema_mezo);
+        gorgeto3.setBounds(340, 140, 260, 64);
+        add(gorgeto3);
         
         JLabel lblNewLabel_3 = new JLabel("Hogyan detektálta?");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -119,9 +128,12 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_3);
         
         hogyandetektalta_mezo = new JTextArea();
+        hogyandetektalta_mezo.setLineWrap(true);
+        hogyandetektalta_mezo.setWrapStyleWord(true);
         hogyandetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        hogyandetektalta_mezo.setBounds(827, 140, 260, 64);
-        add(hogyandetektalta_mezo);
+        JScrollPane gorgeto4 = new JScrollPane(hogyandetektalta_mezo);
+        gorgeto4.setBounds(827, 140, 260, 64);
+        add(gorgeto4);
         
         datum_mezo = new JTextField();
         datum_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
@@ -595,168 +607,158 @@ public class Vevoireklamacio_d2 extends JPanel {
         Statement stmt = null;
         PreparedStatement ps = null;
         try 
-        {
-           try 
-           {
-              Class.forName("com.mysql.cj.jdbc.Driver");
-           } 
-           catch (Exception e) 
-           {
-              System.out.println(e);
-              String hibauzenet2 = e.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        stmt = (Statement) conn.createStatement();
-        String sql = "select miaproblema,holaproblema,Miertproblema,hogydetektalta,mikordetektalta,hanydb,kidetektalta,mivanakepen from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-        stmt.execute(sql);
-        ResultSet rs = stmt.getResultSet();
-        if(rs.next())
-        {
-            miaproblema_mezo.setText(rs.getString(1));
-            holdetektalta_mezo.setText(rs.getString(2));
-            miertproblema_mezo.setText(rs.getString(3));
-            hogyandetektalta_mezo.setText(rs.getString(4));
-            datum_mezo.setText(rs.getString(5));
-            db_mezo.setText(rs.getString(6));
-            ki_mezo.setText(rs.getString(7));
-            kepleiras_mezo.setText(rs.getString(8));           
-        }
+        {          
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = (Statement) conn.createStatement();
+            String sql = "select miaproblema,holaproblema,Miertproblema,hogydetektalta,mikordetektalta,hanydb,kidetektalta,mivanakepen from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+            if(rs.next())
+            {
+                miaproblema_mezo.setText(rs.getString(1));
+                holdetektalta_mezo.setText(rs.getString(2));
+                miertproblema_mezo.setText(rs.getString(3));
+                hogyandetektalta_mezo.setText(rs.getString(4));
+                datum_mezo.setText(rs.getString(5));
+                db_mezo.setText(rs.getString(6));
+                ki_mezo.setText(rs.getString(7));
+                kepleiras_mezo.setText(rs.getString(8));           
+            }       
         
-        
-        File fajl = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\");
-        if(fajl.exists()) {}
-        else
-        {
-            fajl.mkdir();
-        }
-        File[] torlendofajlok = fajl.listFiles();
-        for(int szamlalo = 0; szamlalo < torlendofajlok.length; szamlalo++)
-        {
-            torlendofajlok[szamlalo].delete();
-        }
-        ps= conn.prepareStatement("SELECT Fajl_neve, Fajl,Tipus FROM qualitydb.Vevoireklamacio_fajlok WHERE Rek_ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
-        ResultSet rset = ps.executeQuery();         
-        Blob blob;
-        byte b[];
-        FileOutputStream fs=null;
-        ok_kep.setIcon(null);
-        nok_kep.setIcon(null);
-        while(rset.next())
-        {        
-            File f = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\"+ rset.getString(1));
-            f.getParentFile().mkdirs(); 
-            f.createNewFile();  
-            fs = new FileOutputStream(f);
-            blob = rset.getBlob("Fajl");
-            b = blob.getBytes(1, (int)blob.length());
-            fs.write(b);
-            fs.close();
-            String tipus = "*";
-            if(rset.getString(3).equals("ok"))
+            File fajl = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\");
+            if(fajl.exists()) {}
+            else
             {
-                ImageIcon icon2 = null;
-                icon2 = new ImageIcon(f.getAbsolutePath());
-                Image icon = icon2.getImage();
-                int szelesseg = 0;
-                int magassag = 0;
-                if(icon2.getIconWidth() > icon2.getIconHeight())
+                fajl.mkdir();
+            }
+            File[] torlendofajlok = fajl.listFiles();
+            for(int szamlalo = 0; szamlalo < torlendofajlok.length; szamlalo++)
+            {
+                torlendofajlok[szamlalo].delete();
+            }
+            ps= conn.prepareStatement("SELECT Fajl_neve, Fajl,Tipus FROM qualitydb.Vevoireklamacio_fajlok WHERE Rek_ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'");        //Datum = '"+ datum +"' and Cikkszam = '"+ cikkszam +"'"
+            ResultSet rset = ps.executeQuery();         
+            Blob blob;
+            byte b[];
+            FileOutputStream fs=null;
+            ok_kep.setIcon(null);
+            nok_kep.setIcon(null);
+            while(rset.next())
+            {        
+                File f = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\"+ rset.getString(1));
+                f.getParentFile().mkdirs(); 
+                f.createNewFile();  
+                fs = new FileOutputStream(f);
+                blob = rset.getBlob("Fajl");
+                b = blob.getBytes(1, (int)blob.length());
+                fs.write(b);
+                fs.close();
+                String tipus = "*";
+                if(rset.getString(3).equals("ok"))
                 {
-                    float egyszazalek = icon2.getIconWidth() /100;
-                    float szazalek = 458/egyszazalek;
-                    //float szeles = icon2.getIconHeight()/100*szazalek;
-                    float magas = icon2.getIconHeight()/100*szazalek;
-                    szelesseg = 458;
-                    magassag = (int) magas;
+                    ImageIcon icon2 = null;
+                    icon2 = new ImageIcon(f.getAbsolutePath());
+                    Image icon = icon2.getImage();
+                    int szelesseg = 0;
+                    int magassag = 0;
+                    if(icon2.getIconWidth() > icon2.getIconHeight())
+                    {
+                        float egyszazalek = icon2.getIconWidth() /100;
+                        float szazalek = 458/egyszazalek;
+                        //float szeles = icon2.getIconHeight()/100*szazalek;
+                        float magas = icon2.getIconHeight()/100*szazalek;
+                        szelesseg = 458;
+                        magassag = (int) magas;
+                    }
+                    else
+                    {
+                        float egyszazalek = icon2.getIconHeight() /100;
+                        float szazalek = 397/egyszazalek;
+                        float szeles = icon2.getIconWidth()/100*szazalek;
+                        //float magas = icon2.getIconHeight()/100*szazalek;
+                        szelesseg = (int) szeles;
+                        magassag = 397;
+                    }
+                    Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                    ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                    ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                    //ok_kep.setBounds(676, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
+                    tipus = "ok";
                 }
-                else
+                if(rset.getString(3).equals("nok"))
                 {
-                    float egyszazalek = icon2.getIconHeight() /100;
-                    float szazalek = 397/egyszazalek;
-                    float szeles = icon2.getIconWidth()/100*szazalek;
-                    //float magas = icon2.getIconHeight()/100*szazalek;
-                    szelesseg = (int) szeles;
-                    magassag = 397;
+                    ImageIcon icon2 = null;
+                    icon2 = new ImageIcon(f.getAbsolutePath());
+                    Image icon = icon2.getImage();  
+                    int szelesseg = 0;
+                    int magassag = 0;
+                    if(icon2.getIconWidth() > icon2.getIconHeight())
+                    {
+                        float egyszazalek = icon2.getIconWidth() /100;
+                        float szazalek = 458/egyszazalek;
+                        //float szeles = icon2.getIconHeight()/100*szazalek;
+                        float magas = icon2.getIconHeight()/100*szazalek;
+                        szelesseg = 458;
+                        magassag = (int) magas;
+                    }
+                    else
+                    {
+                        float egyszazalek = icon2.getIconHeight() /100;
+                        float szazalek = 397/egyszazalek;
+                        float szeles = icon2.getIconWidth()/100*szazalek;
+                        //float magas = icon2.getIconHeight()/100*szazalek;
+                        szelesseg = (int) szeles;
+                        magassag = 397;
+                    }
+                    Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
+                    ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
+                    nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
+                    //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
+                    tipus = "nok";
                 }
-                Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                ok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                //ok_kep.setBounds(676, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
-                tipus = "ok";
-            }
-            if(rset.getString(3).equals("nok"))
-            {
-                ImageIcon icon2 = null;
-                icon2 = new ImageIcon(f.getAbsolutePath());
-                Image icon = icon2.getImage();  
-                int szelesseg = 0;
-                int magassag = 0;
-                if(icon2.getIconWidth() > icon2.getIconHeight())
+                
+                ImageIcon icon = null;
+                String[] fajltipus = rset.getString(1).split("\\.");
+                if(fajltipus[1].equals("msg"))
                 {
-                    float egyszazalek = icon2.getIconWidth() /100;
-                    float szazalek = 458/egyszazalek;
-                    //float szeles = icon2.getIconHeight()/100*szazalek;
-                    float magas = icon2.getIconHeight()/100*szazalek;
-                    szelesseg = 458;
-                    magassag = (int) magas;
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.outlook_kep);
+                    tipus = "email";
                 }
-                else
+                else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
                 {
-                    float egyszazalek = icon2.getIconHeight() /100;
-                    float szazalek = 397/egyszazalek;
-                    float szeles = icon2.getIconWidth()/100*szazalek;
-                    //float magas = icon2.getIconHeight()/100*szazalek;
-                    szelesseg = (int) szeles;
-                    magassag = 397;
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.excel_kep);
                 }
-                Image resizedImage = icon.getScaledInstance(szelesseg, magassag,  java.awt.Image.SCALE_SMOOTH);                            //betöltendő kép méretezés
-                ImageIcon meretezett = new ImageIcon(resizedImage);                                                             //kép képldányosítása
-                nok_kep.setIcon(meretezett);                                                                                   //kép hozzáadása a képernyőhöz
-                //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
-                tipus = "nok";
-            }
-            
-            ImageIcon icon = null;
-            String[] fajltipus = rset.getString(1).split("\\.");
-            if(fajltipus[1].equals("msg"))
-            {
-                icon = new ImageIcon(Vevoireklamacio_fejlec.outlook_kep);
-                tipus = "email";
-            }
-            else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
-            {
-                icon = new ImageIcon(Vevoireklamacio_fejlec.excel_kep);
-            }
-            else if(fajltipus[1].equals("pdf"))
-            {
-                icon = new ImageIcon(Vevoireklamacio_fejlec.pdf_kep);
-            }
-            else if(fajltipus[1].equals("jpg"))
-            {
-                icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
-            }
-            else if(fajltipus[1].equals("png"))
-            {
-                icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
-            }
-            fajlok.add(rset.getString(1)+";"+f.getAbsolutePath()+";"+tipus);
-            Vevoireklamacio_d0.modell.addRow(new Object[]{icon,rset.getString(1)});
-            TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
-            for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
-                int width = 15; // Min width
-                for (int row = 0; row < Vevoireklamacio_d0.table.getRowCount(); row++) {
-                    TableCellRenderer renderer = Vevoireklamacio_d0.table.getCellRenderer(row, column);
-                    Component comp = Vevoireklamacio_d0.table.prepareRenderer(renderer, row, column);
-                    width = Math.max(comp.getPreferredSize().width +1 , width);
+                else if(fajltipus[1].equals("pdf"))
+                {
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.pdf_kep);
                 }
-                if(width > 300)
-                    width=300;
-                columnModel.getColumn(column).setPreferredWidth(width);
+                else if(fajltipus[1].equals("jpg"))
+                {
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
+                }
+                else if(fajltipus[1].equals("png"))
+                {
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
+                }
+                fajlok.add(rset.getString(1)+";"+f.getAbsolutePath()+";"+tipus);
+                Vevoireklamacio_d0.modell.addRow(new Object[]{icon,rset.getString(1)});
+                TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
+                for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {
+                    int width = 15; // Min width
+                    for (int row = 0; row < Vevoireklamacio_d0.table.getRowCount(); row++) {
+                        TableCellRenderer renderer = Vevoireklamacio_d0.table.getCellRenderer(row, column);
+                        Component comp = Vevoireklamacio_d0.table.prepareRenderer(renderer, row, column);
+                        width = Math.max(comp.getPreferredSize().width +1 , width);
+                    }
+                    if(width > 300)
+                        width=300;
+                    columnModel.getColumn(column).setPreferredWidth(width);
+                }
+                Vevoireklamacio_d0.table.setModel(Vevoireklamacio_d0.modell);              
             }
-            Vevoireklamacio_d0.table.setModel(Vevoireklamacio_d0.modell);              
-        }
-        stmt.close();
-        conn.close();        
+            stmt.close();
+            conn.close();        
         }          
         catch (Exception e) 
         {
