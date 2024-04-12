@@ -1208,18 +1208,14 @@ public class Foablak extends JFrame
             //Utolso_sor sorszam = new Utolso_sor();
             //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
-            //Email email = new Email();
-            /*for(int szamlalo = 0; szamlalo < 100; szamlalo++)
+            /*Email email = new Email();
+            for(int szamlalo = 0; szamlalo < 100; szamlalo++)
             {                
-                email.mindenes_email(System.getProperty("user.name")+"@veas.videoton.hu", "koszegi.csaba@veas.videoton.hu","", "ODBC Driver", "Szia Csabi!\n"
-                        + "\n"
-                        + "Feltennéd az ODBC drivert a Egyedné Adrinak?\n"
-                        + "Előre is köszi!\n"
-                        + "\n"
-                        + "ÜdV:  Z\n"
-                        + "\n"
-                        + "");
+                
             }
+            //email.mindenes_email("rabine.anita@veas.videoton.hu", "nagy.balint@veas.videoton.hu","", "Infó", "Szia Bálint!\n"
+                    + "\n"
+                    + "BUZI VAGY!!!!!");
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";

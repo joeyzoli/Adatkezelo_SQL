@@ -23,7 +23,7 @@ public class FB7530_Mesh extends JPanel {
     private JTextField doboz_mezo;
     private JTextField termek_mezo;
     private JTextField egyezes_router;
-    private JTextField firmware_mezo;
+    private JTextField repeater_sn;
     private JTextField jel2_mezo;
     private JTextField jel5;
     private JTextField tx_gui2;
@@ -48,7 +48,7 @@ public class FB7530_Mesh extends JPanel {
     private JTextArea megjegyzes_mezo;
     private JLabel mennyiseg_label;
     private static Long timer_start;
-    private JTextField textField;
+    private JTextField termek2_mezo;
     private JTextField egyezes_repeater;
     private JTextField router_firmware;
     private JTextField repeater_firmware;
@@ -146,11 +146,11 @@ public class FB7530_Mesh extends JPanel {
         lblNewLabel_10.setBounds(47, 347, 115, 14);
         add(lblNewLabel_10);
         
-        firmware_mezo = new JTextField();
-        firmware_mezo.setBounds(188, 344, 288, 20);
-        firmware_mezo.addKeyListener(new Enter3());
-        add(firmware_mezo);
-        firmware_mezo.setColumns(10);
+        repeater_sn = new JTextField();
+        repeater_sn.setBounds(188, 344, 288, 20);
+        repeater_sn.addKeyListener(new Enter3());
+        add(repeater_sn);
+        repeater_sn.setColumns(10);
         
         JLabel lblNewLabel_11 = new JLabel("Jelerősség %");
         lblNewLabel_11.setBounds(583, 175, 103, 14);
@@ -344,10 +344,10 @@ public class FB7530_Mesh extends JPanel {
         lblNewLabel_27.setBounds(47, 305, 129, 14);
         add(lblNewLabel_27);
         
-        textField = new JTextField();
-        textField.setBounds(230, 302, 144, 20);
-        add(textField);
-        textField.setColumns(10);
+        termek2_mezo = new JTextField();
+        termek2_mezo.setBounds(230, 302, 144, 20);
+        add(termek2_mezo);
+        termek2_mezo.setColumns(10);
         
         JLabel lblNewLabel_28 = new JLabel("Firmware verzio");
         lblNewLabel_28.setBounds(47, 458, 129, 14);
@@ -422,7 +422,7 @@ public class FB7530_Mesh extends JPanel {
                 {
                     JOptionPane.showMessageDialog(null, "Nincs megadva a szériaszám termék!", "Hiba üzenet", 2);
                 }                
-                else if(firmware_mezo.getText().equals(""))
+                else if(repeater_sn.getText().equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "Nincs megadva a firmware verzió!", "Hiba üzenet", 2);
                 }
@@ -516,13 +516,13 @@ public class FB7530_Mesh extends JPanel {
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String sql = "INSERT INTO qualitydb.OQC_FB7530_MESH (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Egyezes,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
+                    String sql = "INSERT INTO qualitydb.OQC_FB7530_MESH (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Szeriaszam_termek,Szeriaszam_quick,Router,Repeater,Egyezes,Egyezes2,Teszt_tipusa,Jelerosseg,Wlan_tx_gui,Wlan_rx_gui,"
                             + "Wlan_tx_iperf,Wlan_rx_iperf,Wlan_Bandwith,Jelerosseg_5,Wlan_tx_gui_5,Wlan_rx_gui_5,Wlan_tx_iperf_5,Wlan_rx_iperf_5,Wlan_Bandwith_5,Firmware,Phone,Download,Upload,Hiba,Hibacsoport,"
                             + "Megjegyzes,Kritikus_hiba, Sulyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ datum_mezo.getText() +"','"+ String.valueOf(ellenor_box.getSelectedItem()) +"',"
-                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ "" +"',"
+                            + "'"+ String.valueOf(tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"','"+ termek_mezo.getText() +"','"+ termek2_mezo.getText() +"',"+ repeater_sn.getText() +"',"
                             + "'"+ egyezes_router.getText() +"','"+ String.valueOf(teszttipus_box.getSelectedItem()) +"','"+ jel2_mezo.getText() +"','"+ tx_gui2.getText() +"','"+ rx_gui2.getText() +"',"
                             + "'"+ tx_iperf2.getText() +"','"+ rx_iperf2.getText() +"','"+ bandwith2.getText() +"','"+ jel5.getText()+"','"+ tx_gui5.getText() +"','"+ rx_gui5.getText() +"',"
-                            + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ firmware_mezo.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
+                            + "'"+ tx_iperf5.getText() +"','"+ rx_iperf5.getText() +"','"+ bandwith5.getText() +"','"+ repeater_sn.getText() +"','"+ phone_mezo.getText() +"','"+ download_mezo.getText() +"',"
                             + "'"+ upload_mezo.getText() +"','"+ String.valueOf(hiba_box.getSelectedItem()) +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ megjegyzes_mezo.getText() +"',"
                             + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
                     SQA_SQL ment = new SQA_SQL();
@@ -577,7 +577,7 @@ public class FB7530_Mesh extends JPanel {
         rx_iperf5.setBackground(Color.WHITE);
         bandwith5.setText("");
         bandwith5.setBackground(Color.WHITE);
-        firmware_mezo.setText("");
+        repeater_sn.setText("");
         phone_mezo.setText("");
         download_mezo.setText("");
         download_mezo.setBackground(Color.WHITE);

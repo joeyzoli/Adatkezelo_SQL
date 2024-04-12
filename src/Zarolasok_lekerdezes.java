@@ -13,10 +13,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
 
-import javax.swing.JTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -31,9 +38,9 @@ import com.spire.xls.charts.ChartSeries;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
-public class Zarolasok_lekerdezes extends JPanel {
-    private JTextField datumtol_mezo;
-    private JTextField datumig_mezo;
+public class Zarolasok_lekerdezes extends JPanel {    
+    private JDatePickerImpl datum_tol;
+    private JDatePickerImpl datum_ig;
 
     /**
      * Create the panel.
@@ -50,19 +57,30 @@ public class Zarolasok_lekerdezes extends JPanel {
         lblNewLabel_1.setBounds(448, 105, 82, 14);
         add(lblNewLabel_1);
         
-        datumtol_mezo = new JTextField();
-        datumtol_mezo.setBounds(540, 102, 86, 20);
-        add(datumtol_mezo);
-        datumtol_mezo.setColumns(10);
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Ma");
+        p.put("text.month", "Hónap");
+        p.put("text.year", "Év");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);        
+        UtilDateModel model2 = new UtilDateModel();        
+        Properties p2 = new Properties();
+        p2.put("text.today", "Ma");
+        p2.put("text.month", "Hónap");
+        p2.put("text.year", "Év");
+        JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);
+        
+        datum_tol = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datum_tol.setBounds(540, 102, 110, 20);
+        add(datum_tol);
         
         JLabel lblNewLabel_2 = new JLabel("Dátum -ig");
         lblNewLabel_2.setBounds(448, 145, 82, 14);
         add(lblNewLabel_2);
         
-        datumig_mezo = new JTextField();
-        datumig_mezo.setBounds(540, 142, 86, 20);
-        add(datumig_mezo);
-        datumig_mezo.setColumns(10);
+        datum_ig = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+        datum_ig.setBounds(540, 142, 110, 20);
+        add(datum_ig);
         
         JButton start_gomb = new JButton("Start");
         start_gomb.addActionListener(new Start());
@@ -70,6 +88,28 @@ public class Zarolasok_lekerdezes extends JPanel {
         add(start_gomb);
         
         setBackground(Foablak.hatter_szine);
+
+    }
+    
+    private class DateLabelFormatter extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }       
 
     }
     
@@ -95,7 +135,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 String sql = "select projekt, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
                         + "group by projekt order by sum(zarolt_db) desc \r\n";
                
                 stmt.execute(sql);
@@ -160,7 +200,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 String sql2 = "select zarolas_oka, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
                         + "group by zarolas_oka order by sum(zarolt_db) desc limit 10 \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
@@ -210,7 +250,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 sql2 = "select sum(ellenorzes_ido)/60, sum(ellenorzes_ido)/60*7 from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3\r\n"
-                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n";
+                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
                 sheet.getRange().get("K" + 1).setText("");
@@ -227,7 +267,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 ///////////////////////////////////////////////// minden adat
                 sql = "select * from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
                         + "order by zarolas_datuma asc \r\n";
                 
                 /********************************************Harmadik diagramm*************************************************/
@@ -235,7 +275,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 sql2 = "select sum(ellenorzes_ido), zarolas_oka \r\n"
                         + "from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3\r\n"
-                        + "and Zarolas_datuma >= '"+ datumtol_mezo.getText() +"' and Zarolas_datuma <= '"+ datumig_mezo.getText() +"'\r\n"
+                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"'\r\n"
                         + "group by zarolas_oka order by sum(ellenorzes_ido) desc limit 10";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
@@ -294,22 +334,41 @@ public class Zarolasok_lekerdezes extends JPanel {
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
                 //System.out.println(fajl.getAbsolutePath());
-                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);          
-                
-                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                if(fajl.getName().contains(".xlsx"))
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }
+                        workbook2.setActiveSheet(0);
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
                     }
-                    workbook2.setActiveSheet(0);
-                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                    workbook2.write(output);
-                    output.close();
+                    JOptionPane.showMessageDialog(null, "Mentve az alábbi helyre: "+ fajl.getAbsolutePath() +"  \n"+ fajl.getName() +" néven!", "Info", 1);
                 }
-                JOptionPane.showMessageDialog(null, "Mentve az asztalra Zárolási kimutatás.xlsx néven!", "Info", 1);
-                          
+                else
+                {
+                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i > 1 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }
+                        workbook2.setActiveSheet(0);
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                        workbook2.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Mentve az alábbi helyre: "+ fajl.getAbsolutePath() +".xlsx  \n"+ fajl.getName() +".xslx néven!", "Info", 1);
+                }                
+                    
                 resultSet.close();
                 stmt.close();
                 connection.close();
