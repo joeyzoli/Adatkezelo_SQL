@@ -43,6 +43,7 @@ public class OQC_valaszto extends JPanel {
         add(fb7530);
         
         JButton fd302 = new JButton("FD302");
+        fd302.addActionListener(new FD302_());
         fd302.setBounds(536, 368, 89, 23);
         add(fd302);
         
@@ -159,6 +160,30 @@ public class OQC_valaszto extends JPanel {
             {               
                 FB7530_Mesh mesh = new FB7530_Mesh();
                 JScrollPane ablak = new JScrollPane(mesh);
+                ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                Foablak.frame.setContentPane(ablak);
+                Foablak.frame.pack();
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class FD302_ implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {               
+                FD302 fd302 = new FD302();
+                JScrollPane ablak = new JScrollPane(fd302);
                 ablak.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 ablak.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                 Foablak.frame.setContentPane(ablak);

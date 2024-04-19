@@ -75,13 +75,26 @@ public class SQL
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                menteshelye = fajl.getAbsolutePath();
+                if(fajl.exists())
+                {
+                    menteshelye = fajl.getAbsolutePath();
+                    
+                    if(menteshelye.contains(".xlsx")){}
+                    else
+                    {
+                        menteshelye = menteshelye + ".xlsx";
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
-            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
             resultSet.close();
             statement.close();
             connection.close();
             
+            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
             FileInputStream fileStream = new FileInputStream(menteshelye);
             try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
             {
@@ -93,21 +106,13 @@ public class SQL
                 workbook2.write(output);
                 output.close();
             }                       
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-			JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
-        } 
+        }         
         catch (Exception e1) 
         {
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
 			JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
         } 
 	}
@@ -198,21 +203,13 @@ public class SQL
             }
             
             //JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
-        } 
+        }        
         catch (Exception e1) 
         {
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
             JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
         }
  
@@ -244,21 +241,13 @@ public class SQL
             cstmt.close();
             connection.close();
             
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
-        } 
+        }        
         catch (Exception e1) 
         {
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
             JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
         }
  
@@ -300,21 +289,13 @@ public class SQL
             resultSet.close();
             statement.close();
             connection.close();          
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
-        } 
+        }         
         catch (Exception e1) 
         {
             e1.printStackTrace();
             String hibauzenet2 = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
             JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
         }
  
@@ -404,20 +385,13 @@ public class SQL
 	    {
 	        JOptionPane.showMessageDialog(null, "SQL lefutott", "Info", 1);
 	    }
-	    } 
-	    catch (SQLException e1) 
-	    {
-	       e1.printStackTrace();
-	       String hibauzenet = e1.toString();
-	       Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-	    } 
+	    }	    
 	    catch (Exception e) 
 	    {
 	       e.printStackTrace();
 	       String hibauzenet = e.toString();
 	       Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
 	    } finally 
 	    {
 	       try 
@@ -483,20 +457,13 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }         
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -547,20 +514,13 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -740,20 +700,13 @@ public class SQL
         stmt3.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -834,20 +787,13 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -925,20 +871,13 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -1002,21 +941,13 @@ public class SQL
         {
             JOptionPane.showMessageDialog(null, "Nincsen csatolt kép", "Info", 1);
         }
-        } 
-        catch (SQLException e1)                                                     //kivétel esetén történik
-        {
-           e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
-        } 
+        }
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet2 = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
@@ -1082,21 +1013,13 @@ public class SQL
             JOptionPane.showMessageDialog(null, "Nincsen csatolt excel", "Info", 1);
         }
         
-        } 
-        catch (SQLException e1)                                                     //kivétel esetén történik
-        {
-           e1.printStackTrace();
-           String hibauzenet2 = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
-           JOptionPane.showMessageDialog(null, hibauzenet2 + "\n \n A Mentés sikertelen!!", "Hiba üzenet", 2);
-        } 
+        }
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet2 = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         finally                                                                     //finally rész mindenképpen lefut, hogy hiba esetén is lezárja a kacsolatot
@@ -1256,14 +1179,14 @@ public class SQL
            e1.printStackTrace();
            String hibauzenet = e1.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -2440,7 +2363,7 @@ public class SQL
            e1.printStackTrace();
            String hibauzenet2 = e1.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         catch (Exception e) 
@@ -2448,7 +2371,7 @@ public class SQL
            e.printStackTrace();
            String hibauzenet2 = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         finally 
@@ -2675,7 +2598,7 @@ public class SQL
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -2711,7 +2634,7 @@ public class SQL
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 3";                                            
+            String sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 3";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();      
             Workbook workbook = new Workbook();
@@ -2729,15 +2652,19 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText();
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
-                                "\nKérem minnél elöbb zárja le!!");
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
+                                + "\nVevő: "+ rs.getString(3) 
+                                + "\nTípus: "+ rs.getString(4) +"\t" 
+                                + "\nMi a probléma: "+ rs.getString(5)
+                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D3_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }            
             ///// lejárt D5 keresése
-            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 15";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 15";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())
@@ -2748,15 +2675,19 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";       //+",reznyak.norbert@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
-                                "\nKérem minnél elöbb zárja le!!");
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
+                                + "\nVevő: "+ rs.getString(3) 
+                                + "\nTípus: "+ rs.getString(4) +"\t" 
+                                + "\nMi a probléma: "+ rs.getString(5)
+                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }
             /// több mint 1 hete lejárt D5 keresése
-            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 21";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 21";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())
@@ -2767,15 +2698,19 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)+
-                                "\nKérem minnél elöbb zárja le!!");
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)
+                                + "\nVevő: "+ rs.getString(3) 
+                                + "\nTípus: "+ rs.getString(4) +"\t" 
+                                + "\nMi a probléma: "+ rs.getString(5)
+                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ujraertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
                 }                
             }
             //// lejárt D8 keresése
-            sql = "SELECT ID, Felelos FROM  qualitydb.Vevoireklamacio_alap where D8 is null and D8_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 31";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D8 is null and D8_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 31";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())
@@ -2786,8 +2721,12 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a reklamáció határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+
-                                "\nKérem minnél elöbb zárja le!!");
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a reklamáció határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
+                                + "\nVevő: "+ rs.getString(3) 
+                                + "\nTípus: "+ rs.getString(4) +"\t" 
+                                + "\nMi a probléma: "+ rs.getString(5)
+                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D8_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2823,7 +2762,7 @@ public class SQL
                                 + "\nID: "+ rs.getString(2)
                                 + "\nFeladat: "+ rs.getString(3)
                                 + "\nHatárido: "+ rs.getString(5)
-                                +"\nKérem minnél elöbb zárja le!!");
+                                +"\n\nKérem minél előbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2859,7 +2798,7 @@ public class SQL
                                 + "\nID: "+ rs.getString(2)
                                 + "\nFeladat: "+ rs.getString(3)
                                 + "\nHatárido: "+ rs.getString(5)
-                                +"\nKérem minnél elöbb zárja le!!");
+                                +"\n\nKérem minél előbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2895,7 +2834,7 @@ public class SQL
                                 + "\nID: "+ rs.getString(2)
                                 + "\nFeladat: "+ rs.getString(3)
                                 + "\nHatárido: "+ rs.getString(5)
-                                +"\nKérem minnél elöbb zárja le!!");
+                                +"\n\nKérem minél előbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2931,7 +2870,7 @@ public class SQL
                                 + "\nID: "+ rs.getString(2)
                                 + "\nFeladat: "+ rs.getString(3)
                                 + "\nHatárido: "+ rs.getString(5)
-                                +"\nKérem minnél elöbb zárja le!!");
+                                +"\n\nKérem minél előbb zárja le!!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2949,7 +2888,7 @@ public class SQL
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -3078,19 +3017,12 @@ public class SQL
         conn.close();
         
         } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -3177,20 +3109,13 @@ public class SQL
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         finally 
         {
@@ -3293,7 +3218,7 @@ public class SQL
             e.printStackTrace();
             String hibauzenet2 = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
             JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         }
         finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
@@ -3369,7 +3294,7 @@ public class SQL
             e.printStackTrace();
             String hibauzenet2 = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet2);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
             JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
         } 
         catch (Exception e1) 
@@ -3377,7 +3302,7 @@ public class SQL
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
  
@@ -3547,7 +3472,7 @@ public class SQL
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         catch (Exception e1) 
@@ -3555,7 +3480,7 @@ public class SQL
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
  
@@ -3686,7 +3611,7 @@ public class SQL
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         catch (Exception e1) 
@@ -3694,7 +3619,7 @@ public class SQL
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
  
@@ -3772,7 +3697,7 @@ public class SQL
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         catch (Exception e1) 
@@ -3780,7 +3705,7 @@ public class SQL
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         }
  
@@ -3846,14 +3771,14 @@ public class SQL
            e1.printStackTrace();
            String hibauzenet = e1.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } 
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } finally 
         {
            try 

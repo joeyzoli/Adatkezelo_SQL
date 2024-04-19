@@ -25,8 +25,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.spire.data.table.DataTable;
-import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -51,6 +49,8 @@ public class OQC_adatok extends JPanel {
     private ArrayList<String[]> adatok = new ArrayList<String[]>();
     private ArrayList<String> raklapok = new ArrayList<String>();
     private ArrayList<String[]> adatok2 = new ArrayList<String[]>();
+    private String FB7530_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FB7530_201X XX XX_DN_XXXXX - SABLON.xlsx";
+    private String FR1200_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FR1200_201X XX XX_DN_XXXXX - SABLON.xlsx";
     
     /**
      * Create the panel.
@@ -477,36 +477,29 @@ public class OQC_adatok extends JPanel {
     {
         public void actionPerformed(ActionEvent e)
          {
+            Connection conn = null;
+            Statement stmt = null;
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                Connection conn = null;
-                Statement stmt = null;
-                DataTable datatable = new DataTable();
-                try 
-                {
-                   try 
-                   {
-                      Class.forName("com.mysql.cj.jdbc.Driver");
-                   } 
-                   catch (Exception e1) 
-                   {
-                      System.out.println(e1);
-                      String hibauzenet2 = e1.toString();
-                      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }
+                
+                //DataTable datatable = new DataTable();
+               
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                 stmt = (Statement) conn.createStatement();
-                ResultSet resultSet = null;
+                ResultSet rs = null;
                 Workbook workbook = new Workbook();
-                Worksheet sheet = workbook.getWorksheets().get(0);
-                sheet.getRange().get("A" + 1).setText("ID");
-                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                
+                //JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                String article_number = "";
                 String tipus = "";
                 String[] koztes2 = raklapok.get(0).split(";");
+                String excel = "";
                 if(koztes2[0].contains("FB7530"))
                 {
                     tipus = "FB7530";
+                    excel = FB7530_excel;
                 }
                 else if(koztes2[0].contains("FD301"))
                 {
@@ -517,8 +510,9 @@ public class OQC_adatok extends JPanel {
                     tipus = "FD302";
                 }
                 else if(koztes2[0].contains("FR1200"))
-                {
+                {                   
                     tipus = "FR1200";
+                    excel = FR1200_excel;
                 }
                 else if(koztes2[0].contains("FR2400"))
                 {
@@ -533,88 +527,254 @@ public class OQC_adatok extends JPanel {
                 {
                     String[] koztes = raklapok.get(szamlalo).split(";");
                     raklapszamok.add(koztes[1]);
+                    String[] koztes3 = koztes[0].split(" ");
+                    article_number = koztes3[koztes3.length-1].substring(1,koztes3[koztes3.length-1].length()-1);
                 }
-                for(int szamlalo = 0; szamlalo < raklapszamok.size();szamlalo++)
-                {                              
-                    String sajat = "select * from qualitydb.OQC_"+ tipus +" where raklapszam = '"+ raklapszamok.get(szamlalo) +"'";
-                    stmt.execute(sajat);
-                    resultSet = stmt.getResultSet();                                
-                    jdbcAdapter.fillDataTable(datatable, resultSet);                               
-                    sheet.insertDataTable(datatable, false, sheet.getLastRow()+1, 1);
+                workbook.loadFromFile(excel);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                int cellaszam = 3;
+                int sorszam  = 1;
+                if(tipus.equals("FB7530"))
+                {
+                    for(int szamlalo = 0; szamlalo < raklapszamok.size();szamlalo++)
+                    {                              
+                        String sajat = "select * from qualitydb.OQC_"+ tipus +" where raklapszam = '"+ raklapszamok.get(szamlalo) +"'";
+                        stmt.execute(sajat);
+                        rs = stmt.getResultSet();                                
+                        //jdbcAdapter.fillDataTable(datatable, rs);                               
+                        //sheet.insertDataTable(datatable, false, 3, 1);
+                        while(rs.next())
+                        {
+                            sheet.getRange().get("A" + cellaszam).setText("PSI szám");
+                            sheet.getRange().get("B" + cellaszam).setText(String.valueOf(sorszam));
+                            String[] datum = rs.getString(2).split(" ");
+                            sheet.getRange().get("C" + cellaszam).setText(datum[0].replace("-", "."));
+                            sheet.getRange().get("D" + cellaszam).setText("Melyik hét");
+                            sheet.getRange().get("E" + cellaszam).setText(rs.getString(3));
+                            sheet.getRange().get("F" + cellaszam).setText(rs.getString(4));
+                            
+                            sheet.getRange().get("G" + cellaszam).setText(article_number);
+                            sheet.getRange().get("H" + cellaszam).setText(rs.getString(5));
+                            sheet.getRange().get("I" + cellaszam).setText(rs.getString(6));
+                            sheet.getRange().get("J" + cellaszam).setText(rs.getString(7));
+                            sheet.getRange().get("K" + cellaszam).setText(rs.getString(8));
+                            sheet.getRange().get("L" + cellaszam).setText(rs.getString(9));
+                            sheet.getRange().get("M" + cellaszam).setText(rs.getString(10));
+                            sheet.getRange().get("N" + cellaszam).setText(rs.getString(11));
+                            sheet.getRange().get("O" + cellaszam).setText(rs.getString(12));
+                            sheet.getRange().get("P" + cellaszam).setText(rs.getString(13));
+                            sheet.getRange().get("Q" + cellaszam).setText(rs.getString(14));
+                            sheet.getRange().get("R" + cellaszam).setText(rs.getString(15));
+                            sheet.getRange().get("S" + cellaszam).setText(rs.getString(16));
+                            sheet.getRange().get("T" + cellaszam).setText(rs.getString(17));
+                            sheet.getRange().get("U" + cellaszam).setText(rs.getString(18));
+                            sheet.getRange().get("V" + cellaszam).setText(rs.getString(19));
+                            sheet.getRange().get("W" + cellaszam).setText(rs.getString(20));
+                            sheet.getRange().get("X" + cellaszam).setText(rs.getString(21));
+                            sheet.getRange().get("Y" + cellaszam).setText(rs.getString(22));
+                            sheet.getRange().get("Z" + cellaszam).setText(rs.getString(23));
+                            sheet.getRange().get("AA" + cellaszam).setText(rs.getString(24));
+                            sheet.getRange().get("AB" + cellaszam).setText(rs.getString(25));
+                            sheet.getRange().get("AC" + cellaszam).setText(rs.getString(26));
+                            sheet.getRange().get("AD" + cellaszam).setText(rs.getString(27));
+                            sheet.getRange().get("AE" + cellaszam).setText(rs.getString(30));
+                            sheet.getRange().get("AF" + cellaszam).setText(rs.getString(31));
+                            sheet.getRange().get("AG" + cellaszam).setText(rs.getString(32));
+                            sheet.getRange().get("AH" + cellaszam).setText("1 x volt OQC-n");
+                            sheet.getRange().get("AJ" + cellaszam).setText("OK");
+                            cellaszam++;
+                            sorszam++;
+                        }
+                    }
                 }
-                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
-                sheet.getAllocatedRange().autoFitColumns();
-                sheet.getAllocatedRange().autoFitRows();
+                if(tipus.equals("FR2400"))
+                {
+                    for(int szamlalo = 0; szamlalo < raklapszamok.size();szamlalo++)
+                    {                              
+                        String sajat = "select * from qualitydb.OQC_"+ tipus +" where raklapszam = '"+ raklapszamok.get(szamlalo) +"'";
+                        stmt.execute(sajat);
+                        rs = stmt.getResultSet();                                
+                        //jdbcAdapter.fillDataTable(datatable, rs);                               
+                        //sheet.insertDataTable(datatable, false, 3, 1);
+                        while(rs.next())
+                        {
+                            sheet.getRange().get("A" + cellaszam).setText("PSI szám");
+                            sheet.getRange().get("B" + cellaszam).setText(String.valueOf(sorszam));
+                            String[] datum = rs.getString(2).split(" ");
+                            sheet.getRange().get("C" + cellaszam).setText(datum[0].replace("-", "."));
+                            sheet.getRange().get("D" + cellaszam).setText("Melyik hét");
+                            sheet.getRange().get("E" + cellaszam).setText(rs.getString(3));
+                            sheet.getRange().get("F" + cellaszam).setText(rs.getString(4));
+                            
+                            sheet.getRange().get("G" + cellaszam).setText(article_number);
+                            sheet.getRange().get("H" + cellaszam).setText(rs.getString(5));
+                            sheet.getRange().get("I" + cellaszam).setText(rs.getString(6));
+                            sheet.getRange().get("J" + cellaszam).setText(rs.getString(7));
+                            sheet.getRange().get("K" + cellaszam).setText(rs.getString(8));
+                            sheet.getRange().get("L" + cellaszam).setText(rs.getString(9));
+                            sheet.getRange().get("M" + cellaszam).setText(rs.getString(10));
+                            sheet.getRange().get("N" + cellaszam).setText(rs.getString(11));
+                            sheet.getRange().get("O" + cellaszam).setText(rs.getString(12));
+                            sheet.getRange().get("P" + cellaszam).setText(rs.getString(13));
+                            sheet.getRange().get("Q" + cellaszam).setText(rs.getString(14));
+                            sheet.getRange().get("R" + cellaszam).setText(rs.getString(15));
+                            sheet.getRange().get("S" + cellaszam).setText(rs.getString(16));
+                            sheet.getRange().get("T" + cellaszam).setText(rs.getString(17));
+                            sheet.getRange().get("U" + cellaszam).setText(rs.getString(18));
+                            sheet.getRange().get("V" + cellaszam).setText(rs.getString(19));
+                            sheet.getRange().get("W" + cellaszam).setText(rs.getString(20));
+                            sheet.getRange().get("X" + cellaszam).setText(rs.getString(21));
+                            sheet.getRange().get("Y" + cellaszam).setText(rs.getString(22));
+                            sheet.getRange().get("Z" + cellaszam).setText(rs.getString(23));
+                            sheet.getRange().get("AA" + cellaszam).setText(rs.getString(24));
+                            sheet.getRange().get("AB" + cellaszam).setText(rs.getString(25));
+                            sheet.getRange().get("AC" + cellaszam).setText(rs.getString(26));
+                            sheet.getRange().get("AD" + cellaszam).setText(rs.getString(27));
+                            sheet.getRange().get("AE" + cellaszam).setText(rs.getString(30));
+                            sheet.getRange().get("AF" + cellaszam).setText(rs.getString(31));
+                            sheet.getRange().get("AG" + cellaszam).setText(rs.getString(32));
+                            sheet.getRange().get("AH" + cellaszam).setText("1 x volt OQC-n");
+                            sheet.getRange().get("AJ" + cellaszam).setText("OK");
+                            cellaszam++;
+                            sorszam++;
+                        }
+                    }
+                }
+                if(tipus.equals("FR1200"))
+                {
+                    cellaszam = 2;
+                    for(int szamlalo = 0; szamlalo < raklapszamok.size();szamlalo++)
+                    {                              
+                        String sajat = "select * from qualitydb.OQC_"+ tipus +" where raklapszam = '"+ raklapszamok.get(szamlalo) +"'";
+                        stmt.execute(sajat);
+                        rs = stmt.getResultSet();                                
+                        //jdbcAdapter.fillDataTable(datatable, rs);                               
+                        //sheet.insertDataTable(datatable, false, 3, 1);
+                        while(rs.next())
+                        {
+                            sheet.getRange().get("A" + cellaszam).setText("PSI szám");
+                            sheet.getRange().get("B" + cellaszam).setText(String.valueOf(sorszam));
+                            String[] datum = rs.getString(2).split(" ");
+                            sheet.getRange().get("C" + cellaszam).setText(datum[0].replace("-", "."));
+                            sheet.getRange().get("D" + cellaszam).setText("Melyik hét");
+                            sheet.getRange().get("E" + cellaszam).setText(rs.getString(3));
+                            sheet.getRange().get("F" + cellaszam).setText(rs.getString(4));
+                            
+                            sheet.getRange().get("G" + cellaszam).setText(article_number);
+                            sheet.getRange().get("H" + cellaszam).setText(rs.getString(6));
+                            sheet.getRange().get("I" + cellaszam).setText(rs.getString(7));
+                            sheet.getRange().get("J" + cellaszam).setText(rs.getString(8));
+                            sheet.getRange().get("K" + cellaszam).setText(rs.getString(9));
+                            sheet.getRange().get("L" + cellaszam).setText(rs.getString(10));
+                            sheet.getRange().get("M" + cellaszam).setText(rs.getString(11));
+                            sheet.getRange().get("N" + cellaszam).setText(rs.getString(12));
+                            sheet.getRange().get("O" + cellaszam).setText(rs.getString(13));
+                            sheet.getRange().get("P" + cellaszam).setText(rs.getString(14));
+                            sheet.getRange().get("Q" + cellaszam).setText(rs.getString(15));
+                            sheet.getRange().get("R" + cellaszam).setText(rs.getString(16));
+                            sheet.getRange().get("S" + cellaszam).setText(rs.getString(17));
+                            sheet.getRange().get("T" + cellaszam).setText(rs.getString(18));
+                            sheet.getRange().get("U" + cellaszam).setText(rs.getString(19));
+                            sheet.getRange().get("V" + cellaszam).setText(rs.getString(20));
+                            sheet.getRange().get("W" + cellaszam).setText(rs.getString(21));
+                            sheet.getRange().get("X" + cellaszam).setText(rs.getString(22));
+                            sheet.getRange().get("Y" + cellaszam).setText(rs.getString(23));
+                            sheet.getRange().get("Z" + cellaszam).setText(rs.getString(24));
+                            sheet.getRange().get("AA" + cellaszam).setText(rs.getString(25));
+                            sheet.getRange().get("AB" + cellaszam).setText(rs.getString(26));
+                            sheet.getRange().get("AC" + cellaszam).setText(rs.getString(27));
+                            sheet.getRange().get("AD" + cellaszam).setText(rs.getString(28));
+                            sheet.getRange().get("AE" + cellaszam).setText(rs.getString(31));
+                            sheet.getRange().get("AF" + cellaszam).setText(rs.getString(32));
+                            sheet.getRange().get("AG" + cellaszam).setText(rs.getString(33));
+                            sheet.getRange().get("AH" + cellaszam).setText("1 x volt OQC-n");
+                            sheet.getRange().get("AJ" + cellaszam).setText("OK");
+                            cellaszam++;
+                            sorszam++;
+                        }
+                    }
+                }
+                //sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                //sheet.getAllocatedRange().autoFitColumns();
+                //sheet.getAllocatedRange().autoFitRows();
                 
-                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                //sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                //System.out.println(fajl.getAbsolutePath());
-                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-                resultSet.close();
-                stmt.close();
-                conn.close();
-                
-                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                if(fajl.getName().endsWith(".xlsx"))
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                    workbook2.write(output);
-                    output.close();
+                    //System.out.println(fajl.getAbsolutePath());
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                    
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
+                    }
+                }
+                else
+                {
+                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                    
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                        workbook2.write(output);
+                        output.close();
+                    }
                 }
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
-                } 
-                catch (SQLException e1) 
-                {
-                   e1.printStackTrace();
-                   String hibauzenet = e1.toString();
-                   Email hibakuldes = new Email();
-                   hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                   JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-                } 
-                catch (Exception e1) 
-                {
-                   e1.printStackTrace();
-                   String hibauzenet = e1.toString();
-                   Email hibakuldes = new Email();
-                   hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                   JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-                } finally 
-                {
-                   try 
-                   {
-                      if (stmt != null)
-                         conn.close();
-                   } 
-                   catch (SQLException se) {se.printStackTrace();}
-                   try 
-                   {
-                      if (conn != null)
-                         conn.close();
-                   } 
-                   catch (SQLException se) 
-                   {
-                      se.printStackTrace();
-                   }  
-                }
-                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-            }
+             } 
             catch (Exception e1) 
             {
-                e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
-            }
+               e1.printStackTrace();
+               String hibauzenet = e1.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+            } finally 
+            {
+               try 
+               {
+                  if (stmt != null)
+                     conn.close();
+               } 
+               catch (SQLException se) {se.printStackTrace();}
+               try 
+               {
+                  if (conn != null)
+                     conn.close();
+               } 
+               catch (SQLException se) 
+               {
+                  se.printStackTrace();
+               }  
+            }   
+               
+            Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            
+            
          }
     }
     

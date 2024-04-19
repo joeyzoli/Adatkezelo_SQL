@@ -53,7 +53,7 @@ public class SQA_SQL {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
         return cikkbox;  
@@ -85,7 +85,7 @@ public class SQA_SQL {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }
         return cikkbox;  
@@ -118,7 +118,7 @@ public class SQA_SQL {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }
         String[] cikkbox = adatok.toArray(new String[adatok.size()]);
@@ -152,7 +152,7 @@ public class SQA_SQL {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }
         String[] cikkbox = adatok.toArray(new String[adatok.size()]);
@@ -189,7 +189,7 @@ public class SQA_SQL {
             e.printStackTrace();
             String hibauzenet = e.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
         } finally 
         {
@@ -209,7 +209,7 @@ public class SQA_SQL {
                se.printStackTrace();
                String hibauzenet = se.toString();
                Email hibakuldes = new Email();
-               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
            }  
         }
@@ -297,7 +297,7 @@ public class SQA_SQL {
            e1.printStackTrace();
            String hibauzenet = e1.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         catch (Exception e) 
@@ -305,7 +305,7 @@ public class SQA_SQL {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally 
@@ -679,21 +679,13 @@ public class SQA_SQL {
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-           JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-        } 
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
         } 
         finally 
@@ -775,20 +767,13 @@ public class SQA_SQL {
             output.close();
         }
         JOptionPane.showMessageDialog(null, "Mentve az asztalra "+ fajlneve +" néven", "Info", 1);
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
-        } 
+        }         
         catch (Exception e) 
         {
            e.printStackTrace();
            String hibauzenet = e.toString();
            Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
         } finally 
         {
            try 

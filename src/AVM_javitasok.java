@@ -6,6 +6,8 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -27,6 +29,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+import org.jdesktop.swingx.JXDatePicker;
+
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -110,7 +114,7 @@ public class AVM_javitasok extends JPanel {
         // Increment the date by one day
         LocalDate newDate = date.minusDays(1);
         // Format the new date as a string             
-        
+        */
         JXDatePicker picker = new JXDatePicker();
         picker.setBounds(100, 100, 120, 20);
         picker.getEditor().addFocusListener(new FocusAdapter() {
@@ -119,7 +123,7 @@ public class AVM_javitasok extends JPanel {
                 System.out.println("You have foucs");
             }
         });
-        add(picker);*/
+        add(picker);
     }
     
     public class DateLabelFormatter extends AbstractFormatter {

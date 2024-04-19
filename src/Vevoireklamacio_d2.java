@@ -413,7 +413,19 @@ public class Vevoireklamacio_d2 extends JPanel {
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
                 sheet.getRange().get("B5").setText(String.valueOf(Vevoireklamacio_d0.vevo_box.getSelectedItem()));
-                sheet.getRange().get("J5").setText(String.valueOf(Vevoireklamacio_d0.tipus_box.getSelectedItem()));
+                String cikkszamok = "";
+                for(int szamlalo = 0; szamlalo < Vevoireklamacio_d0.table_1.getRowCount();szamlalo++)
+                {
+                    if(szamlalo == Vevoireklamacio_d0.table_1.getRowCount() - 1)
+                    {
+                        cikkszamok += Vevoireklamacio_d0.table_1.getValueAt(szamlalo, 0).toString();
+                    }
+                    else
+                    {
+                        cikkszamok += Vevoireklamacio_d0.table_1.getValueAt(szamlalo, 0).toString() +"\n";
+                    }
+                }
+                sheet.getRange().get("J5").setText(cikkszamok);
                 sheet.getRange().get("B10").setText(miaproblema_mezo.getText());
                 sheet.getRange().get("B12").setText(miertproblema_mezo.getText());
                 sheet.getRange().get("J12").setText(holdetektalta_mezo.getText());

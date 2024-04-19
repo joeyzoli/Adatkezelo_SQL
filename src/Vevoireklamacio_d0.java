@@ -73,6 +73,8 @@ public class Vevoireklamacio_d0 extends JPanel {
     private Workbook workbook = new Workbook();
     private JDatePickerImpl ertesitve;
     private UtilDateModel model;
+    static JTable table_1;
+    private DefaultTableModel modell2;
 
     /**
      * Create the panel.
@@ -289,6 +291,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                             //cikkszamok.tombvissza(sql)       //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
         tipus_box.addActionListener(new Valtozas());
+        tipus_box.addActionListener(new Hozzaad());
         add(tipus_box);
         
         String[] nevsor = {"-","Borbély Szilvia","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina"};
@@ -311,6 +314,38 @@ public class Vevoireklamacio_d0 extends JPanel {
         fajltorles_gomb.addActionListener(new Fajl_torles());
         fajltorles_gomb.setBounds(1022, 398, 89, 23);
         add(fajltorles_gomb);
+        
+        modell2 = new DefaultTableModel();
+        modell2.setColumnIdentifiers(new Object[]{"Cikkszám"});
+        table_1 = new JTable(){
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+          };;
+        table_1.setModel(modell2);
+        table_1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 2) {     // to detect doble click events
+                   JTable target = (JTable)me.getSource();
+                   int row = target.getSelectedRow(); // select a row 
+                   try
+                   {
+                       modell2.removeRow(row);
+                   }
+                   catch (Exception e1) 
+                   {              
+                       e1.printStackTrace();
+                       String hibauzenet = e1.toString();
+                       Email hibakuldes = new Email();
+                       hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                   }
+                }    
+             }
+          });
+        JScrollPane gorgeto2 = new JScrollPane(table_1);
+        gorgeto2.setBounds(1120, 208, 245, 95);
+        add(gorgeto2);
         new ArrayList<String>();
 
     }
@@ -432,11 +467,16 @@ public class Vevoireklamacio_d0 extends JPanel {
             SQA_SQL ment = new SQA_SQL();
             String sql = "select * from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             String[] letezik = ment.tombvissza_sajat(sql);
+            String cikkszamok = "";
+            for(int szamlalo = 0; szamlalo < table_1.getRowCount();szamlalo++)
+            {
+                cikkszamok += table_1.getValueAt(szamlalo, 0).toString() +";";
+            }
             if(letezik.length > 0)
             {
                 sql = "update qualitydb.Vevoireklamacio_alap set mi = '"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"', Vevo = '"+ String.valueOf(vevo_box.getSelectedItem()) +"', "
                         + "Beszallito = '"+ beszallito_mezo.getText() +"', Ertesites_datuma = '"+ ertesitve.getJFormattedTextField().getText() +"', Vevoi_szam = '"+ vevorek_mezo.getText() +"',"
-                        + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"', Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
+                        + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"', Tipus = '"+ cikkszamok +"',"
                         + "Email = '"+ email_mezo.getText() +";"+ email2_mezo.getText() +"', RMA_szam = '"+ rma_mezo.getText() +"', Telefon = '"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "Visszakuldes_datuma = '"+ visszakuldes_mezo.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";                
             }
@@ -445,7 +485,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 sql = "insert into qualitydb.Vevoireklamacio_alap (mi,Vevo,Beszallito,Ertesites_datuma,Vevoi_szam,Utolso_frissites,Felelos,Tipus,Email,RMA_szam,Telefon,Visszakuldes_datuma)  "
                         + "Values('"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"','"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
                         + "'"+ beszallito_mezo.getText() +"','"+ ertesitve.getJFormattedTextField().getText() +"','"+ vevorek_mezo.getText() +"',"
-                        + "'"+ frissites_mezo.getText() +"','"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
+                        + "'"+ frissites_mezo.getText() +"','"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"','"+ cikkszamok +"',"       //String.valueOf(tipus_box.getSelectedItem())
                         + "'"+ email_mezo.getText() +";"+ email2_mezo.getText() +"','"+ rma_mezo.getText() +"','"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "'"+ visszakuldes_mezo.getText() +"')";
             }
@@ -455,6 +495,11 @@ public class Vevoireklamacio_d0 extends JPanel {
             String szin3 = String.valueOf(Vevoireklamacio_fejlec.d3.getRGB());
             String szin4 = String.valueOf(Vevoireklamacio_fejlec.d5.getRGB());
             String szin5 = String.valueOf(Vevoireklamacio_fejlec.lezaras.getRGB());
+            int rowCount = modell2.getRowCount();           
+            for (int i = rowCount - 1; i > -1; i--) 
+            {
+              modell2.removeRow(i);
+            }
             sql = "update qualitydb.Vevoireklamacio_alap set Szinek = '"+ szin1+";"+ szin2+";"+ szin3+";"+ szin4+";"+ szin5+"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
         } 
@@ -474,179 +519,190 @@ public class Vevoireklamacio_d0 extends JPanel {
         Statement stmt = null;        
         try 
         {
-           try 
-           {
-              Class.forName("com.mysql.cj.jdbc.Driver");
-           } 
-           catch (Exception e) 
-           {
-              System.out.println(e);
-              String hibauzenet2 = e.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        stmt = (Statement) conn.createStatement();
-        String sql = "select * from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-        stmt.execute(sql);
-        ResultSet rs = stmt.getResultSet();
-        if(rs.next())
-        {
-            vevo_box.removeActionListener(valaszto);
-            Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
-            vevo_box.setSelectedItem(rs.getString(3));
-            beszallito_mezo.setText(rs.getString(4));
-            //ertesites_mezo.setText(rs.getString(5));
-            Date date3 = null;
-            String dateValue = rs.getString(5).replace("-", ".");
-            try {
-                date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            model.setValue(date3);
-            if(rs.getString(5).equals("")){}
-            else
+            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = (Statement) conn.createStatement();
+            String sql = "select * from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+            if(rs.next())
             {
-                Vevoireklamacio_fejlec.ertesites_cimke.setText(rs.getString(5));
-                Vevoireklamacio_fejlec.ertesitve = Color.GREEN;
-                String[] szinek = rs.getString(49).split(";");
-                Color szin2 = new Color(Integer.parseInt(szinek[1]));
-                Color szin3 = new Color(Integer.parseInt(szinek[2]));
-                Color szin4 = new Color(Integer.parseInt(szinek[3]));
-                Color szin5 = new Color(Integer.parseInt(szinek[4]));
-                Vevoireklamacio_fejlec.qr = szin2;
-                Vevoireklamacio_fejlec.d3 = szin3;
-                Vevoireklamacio_fejlec.d5 = szin4;
-                Vevoireklamacio_fejlec.lezaras = szin5;
-                
-                String input = rs.getString(5);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-                SimpleDateFormat rovid = new SimpleDateFormat("yyyy.MM.dd");
-                Date ma = new Date();
-                ma = rovid.parse(rovid.format(ma));
-                LocalDate date = LocalDate.parse(input, formatter);
-                // Increment the date by one day
-                LocalDate newDate = date.plusDays(1);
-                // Format the new date as a string
-                String output = newDate.format(formatter);
-                Vevoireklamacio_fejlec.qr_cimke.setText(output);
-                Date hatarido = rovid.parse(output);
-                if(hatarido.compareTo(ma) >= 0){}
-                else
+                int rowCount = modell2.getRowCount();           
+                for (int i = rowCount - 1; i > -1; i--) 
                 {
-                    if(Vevoireklamacio_fejlec.qr.getRGB() == Color.GREEN.getRGB()) {}
-                    else
-                    {
-                        Vevoireklamacio_fejlec.qr = Color.RED;
-                    }                   
+                  modell2.removeRow(i);
                 }
-                newDate = date.plusDays(2);
-                output = newDate.format(formatter);
-                Vevoireklamacio_fejlec.d3_cimke.setText(output);
-                hatarido = rovid.parse(output);
-                if(hatarido.compareTo(ma) >= 0){}
+                vevo_box.removeActionListener(valaszto);
+                Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
+                vevo_box.setSelectedItem(rs.getString(3));
+                beszallito_mezo.setText(rs.getString(4));
+                //ertesites_mezo.setText(rs.getString(5));
+                Date date3 = null;
+                String dateValue = rs.getString(5).replace("-", ".");
+                try {
+                    date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                model.setValue(date3);
+                if(rs.getString(5).equals("")){}
                 else
                 {
-                    if(Vevoireklamacio_fejlec.d3.getRGB() == Color.GREEN.getRGB()) {}
+                    Vevoireklamacio_fejlec.ertesites_cimke.setText(rs.getString(5));
+                    Vevoireklamacio_fejlec.ertesitve = Color.GREEN;
+                    String[] szinek = rs.getString(49).split(";");
+                    Color szin2 = new Color(Integer.parseInt(szinek[1]));
+                    Color szin3 = new Color(Integer.parseInt(szinek[2]));
+                    Color szin4 = new Color(Integer.parseInt(szinek[3]));
+                    Color szin5 = new Color(Integer.parseInt(szinek[4]));
+                    Vevoireklamacio_fejlec.qr = szin2;
+                    Vevoireklamacio_fejlec.d3 = szin3;
+                    Vevoireklamacio_fejlec.d5 = szin4;
+                    Vevoireklamacio_fejlec.lezaras = szin5;
+                    
+                    String input = rs.getString(5);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                    SimpleDateFormat rovid = new SimpleDateFormat("yyyy.MM.dd");
+                    Date ma = new Date();
+                    ma = rovid.parse(rovid.format(ma));
+                    LocalDate date = LocalDate.parse(input, formatter);
+                    // Increment the date by one day
+                    LocalDate newDate = date.plusDays(1);
+                    // Format the new date as a string
+                    String output = newDate.format(formatter);
+                    Vevoireklamacio_fejlec.qr_cimke.setText(output);
+                    Date hatarido = rovid.parse(output);
+                    if(hatarido.compareTo(ma) >= 0){}
                     else
                     {
-                        Vevoireklamacio_fejlec.d3 = Color.RED;
+                        if(Vevoireklamacio_fejlec.qr.getRGB() == Color.GREEN.getRGB()) {}
+                        else
+                        {
+                            Vevoireklamacio_fejlec.qr = Color.RED;
+                        }                   
                     }
-                }
-                newDate = date.plusDays(14);
-                output = newDate.format(formatter);
-                Vevoireklamacio_fejlec.d5_cimke.setText(output);
-                hatarido = rovid.parse(output);
-                if(hatarido.compareTo(ma) >= 0){}
-                else
-                {
-                    if(Vevoireklamacio_fejlec.d5.getRGB() == Color.GREEN.getRGB()) {}
+                    newDate = date.plusDays(2);
+                    output = newDate.format(formatter);
+                    Vevoireklamacio_fejlec.d3_cimke.setText(output);
+                    hatarido = rovid.parse(output);
+                    if(hatarido.compareTo(ma) >= 0){}
                     else
                     {
-                        Vevoireklamacio_fejlec.d5 = Color.RED;
+                        if(Vevoireklamacio_fejlec.d3.getRGB() == Color.GREEN.getRGB()) {}
+                        else
+                        {
+                            Vevoireklamacio_fejlec.d3 = Color.RED;
+                        }
                     }
-                }
-                newDate = date.plusDays(30);
-                output = newDate.format(formatter);
-                Vevoireklamacio_fejlec.lezaras_cimke.setText(output);
-                hatarido = rovid.parse(output);
-                if(hatarido.compareTo(ma) >= 0){}
-                else
-                {
-                    if(Vevoireklamacio_fejlec.lezaras.getRGB() == Color.GREEN.getRGB()) {}
+                    newDate = date.plusDays(14);
+                    output = newDate.format(formatter);
+                    Vevoireklamacio_fejlec.d5_cimke.setText(output);
+                    hatarido = rovid.parse(output);
+                    if(hatarido.compareTo(ma) >= 0){}
                     else
                     {
-                        Vevoireklamacio_fejlec.lezaras = Color.RED;
+                        if(Vevoireklamacio_fejlec.d5.getRGB() == Color.GREEN.getRGB()) {}
+                        else
+                        {
+                            Vevoireklamacio_fejlec.d5 = Color.RED;
+                        }
                     }
+                    newDate = date.plusDays(30);
+                    output = newDate.format(formatter);
+                    Vevoireklamacio_fejlec.lezaras_cimke.setText(output);
+                    hatarido = rovid.parse(output);
+                    if(hatarido.compareTo(ma) >= 0){}
+                    else
+                    {
+                        if(Vevoireklamacio_fejlec.lezaras.getRGB() == Color.GREEN.getRGB()) {}
+                        else
+                        {
+                            Vevoireklamacio_fejlec.lezaras = Color.RED;
+                        }
+                    }
+                }                            
+                vevorek_mezo.setText(rs.getString(6));
+                veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
+                frissites_mezo.setText(rs.getString(7));
+                String[] felelos = rs.getString(8).split(";");
+                if(felelos.length > 1)
+                {
+                    felelos_mezo.setText(felelos[0]);
+                    felelos_box.setSelectedItem(felelos[1]); 
                 }
-            }                            
-            vevorek_mezo.setText(rs.getString(6));
-            veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
-            frissites_mezo.setText(rs.getString(7));
-            String[] felelos = rs.getString(8).split(";");
-            if(felelos.length > 1)
-            {
-                felelos_mezo.setText(felelos[0]);
-                felelos_box.setSelectedItem(felelos[1]); 
+                else if(felelos.length == 1)
+                {
+                    felelos_mezo.setText("");
+                    felelos_box.setSelectedItem(felelos[0]); 
+                }
+                else
+                {
+                    felelos_mezo.setText("");
+                    felelos_box.setSelectedItem(""); 
+                }
+                String[] cikkszamok = rs.getString(9).split(";");
+                if(cikkszamok.length == 1)
+                {
+                    modell2.addRow(new Object[]{cikkszamok[0]});
+                }
+                else
+                {
+                    for(int szamlalo = 0; szamlalo < cikkszamok.length;szamlalo++)
+                    {
+                        modell2.addRow(new Object[]{cikkszamok[szamlalo]});                       
+                    }                    
+                }
+                tipus_box.setSelectedItem(cikkszamok[0]);
+                table_1.setModel(modell2);
+                String[] email = rs.getString(10).split(";");
+                if(email.length > 1)
+                {
+                    email_mezo.setText(email[0]);
+                    email2_mezo.setText(email[1]); 
+                }
+                else if(email.length == 1)
+                {
+                    email_mezo.setText(email[0]);
+                    email2_mezo.setText("");
+                }
+                else
+                {
+                    email_mezo.setText("");
+                    email2_mezo.setText("");
+                }            
+                rma_mezo.setText(rs.getString(11));
+                String[] telefon = rs.getString(12).split(";");
+                if(telefon.length > 1)
+                {
+                    telefonszam_mezo.setText(telefon[0]);
+                    telefonszam2_mezo.setText(telefon[1]); 
+                }
+                else if(telefon.length == 1)
+                {
+                    telefonszam_mezo.setText(telefon[0]);
+                    telefonszam2_mezo.setText("");
+                }
+                else
+                {
+                    telefonszam_mezo.setText("");
+                    telefonszam2_mezo.setText("");
+                }        
+                visszakuldes_mezo.setText(rs.getString(13));
             }
-            else if(felelos.length == 1)
+            int rowCount = modell.getRowCount();
+            
+            for (int i = rowCount - 1; i > -1; i--) 
             {
-                felelos_mezo.setText("");
-                felelos_box.setSelectedItem(felelos[0]); 
+              modell.removeRow(i);
             }
-            else
-            {
-                felelos_mezo.setText("");
-                felelos_box.setSelectedItem(""); 
-            }
-            tipus_box.setSelectedItem(rs.getString(9));
-            String[] email = rs.getString(10).split(";");
-            if(email.length > 1)
-            {
-                email_mezo.setText(email[0]);
-                email2_mezo.setText(email[1]); 
-            }
-            else if(email.length == 1)
-            {
-                email_mezo.setText(email[0]);
-                email2_mezo.setText("");
-            }
-            else
-            {
-                email_mezo.setText("");
-                email2_mezo.setText("");
-            }            
-            rma_mezo.setText(rs.getString(11));
-            String[] telefon = rs.getString(12).split(";");
-            if(telefon.length > 1)
-            {
-                telefonszam_mezo.setText(telefon[0]);
-                telefonszam2_mezo.setText(telefon[1]); 
-            }
-            else if(telefon.length == 1)
-            {
-                telefonszam_mezo.setText(telefon[0]);
-                telefonszam2_mezo.setText("");
-            }
-            else
-            {
-                telefonszam_mezo.setText("");
-                telefonszam2_mezo.setText("");
-            }        
-            visszakuldes_mezo.setText(rs.getString(13));
-        }
-        int rowCount = modell.getRowCount();
-        
-        for (int i = rowCount - 1; i > -1; i--) 
-        {
-          modell.removeRow(i);
-        }
-        table.setModel(modell);
-        Vevoireklamacio_V2.d5.hatarido();
-        vevo_box.addActionListener(valaszto);
-        stmt.close();
-        conn.close();        
+            table.setModel(modell);
+            Vevoireklamacio_V2.d5.hatarido();
+            vevo_box.addActionListener(valaszto);
+            stmt.close();
+            conn.close();
+            Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
         }          
         catch (Exception e) 
         {
@@ -806,6 +862,28 @@ public class Vevoireklamacio_d0 extends JPanel {
             try 
             {
                 Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Hozzaad implements ActionListener                                                                                             //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                modell2.addRow(new Object[]{String.valueOf(tipus_box.getSelectedItem())});
+                table_1.setModel(modell2);
+                Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             } 
             catch (Exception e1) 
             {              

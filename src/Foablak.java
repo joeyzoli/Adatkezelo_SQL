@@ -92,6 +92,7 @@ public class Foablak extends JFrame
 	private AVM_javitasok javellen;
 	private Jelenleti_osszesito jelenleti;
 	private Excel_kereso kereso;
+	private OQC_tesztadatok teszadatok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -313,6 +314,10 @@ public class Foablak extends JFrame
 		JMenuItem oqc_adatok = new JMenuItem("OQC adatok");
 		oqc_adatok.addActionListener(new PanelCsere_oqcadatok());
 		oqc_menu.add(oqc_adatok);
+		
+		JMenuItem oqc_tesztadatok = new JMenuItem("OQC teszt adatok");
+		oqc_tesztadatok.addActionListener(new Panelcsere_OQC_teszadatok());
+		oqc_menu.add(oqc_tesztadatok);
 		
 		JMenu sqa = new JMenu("SQA");
 		sqa.setForeground(new Color(0, 0, 255));
@@ -1071,6 +1076,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_OQC_teszadatok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            teszadatok = new OQC_tesztadatok();
+            JScrollPane ablak = new JScrollPane(teszadatok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1205,17 +1221,18 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            //System.out.println(this.getClass().getSimpleName());
             //Utolso_sor sorszam = new Utolso_sor();
             //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
             /*Email email = new Email();
-            for(int szamlalo = 0; szamlalo < 100; szamlalo++)
+            for(int szamlalo = 0; szamlalo < 1111; szamlalo++)
             {                
-                
+                email.mindenes_email("easqas@veas.videoton.hu", "keszte.zsolt@veas.videoton.hu","", "Kérdés", "Szia Zsolti!\n"
+                        + "\n"
+                        + "Miért nem válaszolt a Kovács Zoli leveleire?");
             }
-            //email.mindenes_email("rabine.anita@veas.videoton.hu", "nagy.balint@veas.videoton.hu","", "Infó", "Szia Bálint!\n"
-                    + "\n"
-                    + "BUZI VAGY!!!!!");
+            
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";

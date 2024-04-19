@@ -483,7 +483,27 @@ public class Vevoireklamacio_fejlec extends JPanel {
                         sheet.getRange().get("C6").setText("");
                         sheet.getRange().get("F6").setText("");
                     }
-                    sheet.getRange().get("K6").setText(rs.getString(9));
+                    String[] cikkszamok = rs.getString(9).split(";");
+                    if(cikkszamok.length == 1)
+                    {
+                        sheet.getRange().get("K6").setText(rs.getString(9));
+                    }
+                    else
+                    {
+                        String cikkek = "";
+                        for(int szamlalo = 0; szamlalo < cikkszamok.length;szamlalo++)
+                        {
+                            if(szamlalo == cikkszamok.length-1)
+                            {
+                                cikkek += cikkszamok[szamlalo];
+                            }
+                            else
+                            {
+                                cikkek += cikkszamok[szamlalo] +"\n";
+                            }
+                        }
+                        sheet.getRange().get("K6").setText(cikkek);
+                    }
                     String[] email = rs.getString(10).split(";");
                     if(email.length > 1)
                     {
