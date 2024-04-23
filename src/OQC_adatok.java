@@ -58,6 +58,7 @@ public class OQC_adatok extends JPanel {
     public OQC_adatok() {
         setLayout(null);
         setPreferredSize(new Dimension(1156, 850));
+        setBackground(Foablak.hatter_szine);
         JLabel lblNewLabel = new JLabel("OQC riport készítés");
         lblNewLabel.setFont(new Font("Arial", Font.BOLD, 13));
         lblNewLabel.setBounds(535, 11, 218, 23);

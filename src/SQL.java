@@ -67,45 +67,53 @@ public class SQL
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
-            
-            if(System.getProperty("user.name").equals("csader.zsolt"))
+            if(System.getProperty("user.name").equals("csader.zsolt") || System.getProperty("user.name").equals("kovacs.zoltan"))
             {
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                if(fajl.exists())
-                {
-                    menteshelye = fajl.getAbsolutePath();
-                    
-                    if(menteshelye.contains(".xlsx")){}
-                    else
-                    {
-                        menteshelye = menteshelye + ".xlsx";
-                    }
-                }
+                String menteshelye2 = fajl.getAbsolutePath();
+                System.out.println(menteshelye2);
+                if(menteshelye2.contains(".xlsx")){}
                 else
                 {
-                    return;
+                    menteshelye2 = menteshelye2 + ".xlsx";
+                }                
+                System.out.println(menteshelye2);
+                workbook.saveToFile(menteshelye2, ExcelVersion.Version2016);          
+                FileInputStream fileStream = new FileInputStream(menteshelye2);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(menteshelye2);
+                    workbook2.write(output);
+                    output.close();
                 }
+            }
+            else
+            {
+                System.out.println("Ez a szál is fut");
+                workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
+                FileInputStream fileStream = new FileInputStream(menteshelye);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(menteshelye);
+                    workbook2.write(output);
+                    output.close();
+                }               
             }
             resultSet.close();
             statement.close();
             connection.close();
-            
-            workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
-            FileInputStream fileStream = new FileInputStream(menteshelye);
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-            {
-                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(menteshelye);
-                workbook2.write(output);
-                output.close();
-            }                       
         }         
         catch (Exception e1) 
         {
@@ -2744,7 +2752,7 @@ public class SQL
                 {
                     if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
                     {
-                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
@@ -2758,11 +2766,13 @@ public class SQL
                             }
                         }
                         
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon bellül lejár a feladat határideje az alábbi reklamációnál: "
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon belül lejár a feladat határideje az alábbi reklamációnál: "
                                 + "\nID: "+ rs.getString(2)
+                                + "\nVevő: "+ rs2.getString(2)
+                                + "\nTípus: "+ rs2.getString(3)
                                 + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatárido: "+ rs.getString(5)
-                                +"\n\nKérem minél előbb zárja le!!");
+                                + "\nHatáridő: "+ rs.getString(5)
+                                +"\n\nKérem, minél előbb zárja le!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2780,7 +2790,7 @@ public class SQL
                 {
                     if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
                     {
-                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
@@ -2796,9 +2806,11 @@ public class SQL
                         
                         email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt feladat", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
                                 + "\nID: "+ rs.getString(2)
+                                + "\nVevő: "+ rs2.getString(2)
+                                + "\nTípus: "+ rs2.getString(3)
                                 + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatárido: "+ rs.getString(5)
-                                +"\n\nKérem minél előbb zárja le!!");
+                                + "\nHatáridő: "+ rs.getString(5)
+                                +"\n\nKérem, minél előbb zárja le!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2816,7 +2828,7 @@ public class SQL
                 {
                     if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
                     {
-                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
@@ -2830,11 +2842,13 @@ public class SQL
                             }
                         }
                         
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon bellül lejár a feladat határideje az alábbi reklamációnál: "
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon belül lejár a feladat határideje az alábbi reklamációnál: "
                                 + "\nID: "+ rs.getString(2)
+                                + "\nVevő: "+ rs2.getString(2)
+                                + "\nTípus: "+ rs2.getString(3)
                                 + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatárido: "+ rs.getString(5)
-                                +"\n\nKérem minél előbb zárja le!!");
+                                + "\nHatáridő: "+ rs.getString(5)
+                                +"\n\nKérem, minél előbb zárja le!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2852,7 +2866,7 @@ public class SQL
                 {
                     if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
                     {
-                        sql = "select felelos from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
+                        sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
@@ -2868,9 +2882,11 @@ public class SQL
                         
                         email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt feladat", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
                                 + "\nID: "+ rs.getString(2)
+                                + "\nVevő: "+ rs2.getString(2)
+                                + "\nTípus: "+ rs2.getString(3)
                                 + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatárido: "+ rs.getString(5)
-                                +"\n\nKérem minél előbb zárja le!!");
+                                + "\nHatáridő: "+ rs.getString(5)
+                                +"\n\nKérem, minél előbb zárja le!");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }

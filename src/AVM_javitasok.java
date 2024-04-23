@@ -302,7 +302,7 @@ public class AVM_javitasok extends JPanel {
                     e1.printStackTrace();
                     String hibauzenet = e1.toString();
                     Email hibakuldes = new Email();
-                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                     JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
                 } finally 
                 {
