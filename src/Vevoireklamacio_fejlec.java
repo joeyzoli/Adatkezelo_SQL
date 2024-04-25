@@ -68,6 +68,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
     static String excel_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\excel.jpg";
     static String pdf_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\pdf.jpg";
     static String kep_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\kep.jpg";
+    static String word_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\word.jpg";
     private String d8 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Q-JK-003 8D report.xlsx";
     static JButton mentes_gomb;
 
@@ -271,6 +272,14 @@ public class Vevoireklamacio_fejlec extends JPanel {
         {
             icon = new ImageIcon(kep_kep);
         }
+        else if(fajltipus[1].equals("doc"))
+        {
+            icon = new ImageIcon(word_kep);
+        }
+        else if(fajltipus[1].equals("docx"))
+        {
+            icon = new ImageIcon(word_kep);
+        }
         
         Vevoireklamacio_d0.modell.addRow(new Object[]{icon,fajlnev});
         TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
@@ -325,18 +334,45 @@ public class Vevoireklamacio_fejlec extends JPanel {
         public void actionPerformed(ActionEvent e)
          {
             try
-            {                
-                Vevoireklamacio_V2.d0.mentes();
-                Vevoireklamacio_V2.d1.mentes();
-                Vevoireklamacio_V2.d2.mentes();
-                Vevoireklamacio_V2.d3.mentes();
-                Vevoireklamacio_V2.d4.mentes();
-                Vevoireklamacio_V2.d5.mentes();
-                Vevoireklamacio_V2.d6.mentes();
-                Vevoireklamacio_V2.d7.mentes();
-                Vevoireklamacio_V2.d8.mentes();
-                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-                JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+            {
+                if(Vevoireklamacio_V2.d8.lezaras_datuma.getText().equals(""))
+                {
+                    Vevoireklamacio_V2.d0.mentes();
+                    Vevoireklamacio_V2.d1.mentes();
+                    Vevoireklamacio_V2.d2.mentes();
+                    Vevoireklamacio_V2.d3.mentes();
+                    Vevoireklamacio_V2.d4.mentes();
+                    Vevoireklamacio_V2.d5.mentes();
+                    Vevoireklamacio_V2.d6.mentes();
+                    Vevoireklamacio_V2.d7.mentes();
+                    Vevoireklamacio_V2.d8.mentes();
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+                    JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+                }
+                else
+                {
+                    SQA_SQL ment = new SQA_SQL();
+                    String sql = "select D3 from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    ment.tombvissza_sajat(sql);
+                    if(ment.tombvissza_sajat(sql)[0] == null)
+                    {
+                        JOptionPane.showMessageDialog(null, "A D3 lezárása nélkül nem lehet lezárni a reklamációt!", "Hiba üzenet", 2);
+                    }
+                    else
+                    {
+                        Vevoireklamacio_V2.d0.mentes();
+                        Vevoireklamacio_V2.d1.mentes();
+                        Vevoireklamacio_V2.d2.mentes();
+                        Vevoireklamacio_V2.d3.mentes();
+                        Vevoireklamacio_V2.d4.mentes();
+                        Vevoireklamacio_V2.d5.mentes();
+                        Vevoireklamacio_V2.d6.mentes();
+                        Vevoireklamacio_V2.d7.mentes();
+                        Vevoireklamacio_V2.d8.mentes();
+                        Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+                        JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+                    }
+                }
             }
             catch (Exception e1) 
             {

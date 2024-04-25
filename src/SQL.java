@@ -2664,7 +2664,7 @@ public class SQL
                                 + "\nVevő: "+ rs.getString(3) 
                                 + "\nTípus: "+ rs.getString(4) +"\t" 
                                 + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nKérem, minél előbb zárja le!"
                                 + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D3_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
@@ -2687,7 +2687,7 @@ public class SQL
                                 + "\nVevő: "+ rs.getString(3) 
                                 + "\nTípus: "+ rs.getString(4) +"\t" 
                                 + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nKérem, minél előbb zárja le!"
                                 + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
@@ -2706,11 +2706,11 @@ public class SQL
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje már több mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)
+                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje több, mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)
                                 + "\nVevő: "+ rs.getString(3) 
                                 + "\nTípus: "+ rs.getString(4) +"\t" 
                                 + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nKérem, minél előbb zárja le!"
                                 + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ujraertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
@@ -2733,7 +2733,7 @@ public class SQL
                                 + "\nVevő: "+ rs.getString(3) 
                                 + "\nTípus: "+ rs.getString(4) +"\t" 
                                 + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem minél előbb zárja le!!"
+                                + "\n\nKérem, minél előbb zárja le!"
                                 + "\n\nÜdvözlettel: EASQAS program");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D8_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;

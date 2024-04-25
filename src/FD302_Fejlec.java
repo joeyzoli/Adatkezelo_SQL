@@ -13,10 +13,10 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 public class FD302_Fejlec extends JPanel {
-    private JTextField datum_mezo;
-    private JComboBox<String> ellenor_box;
-    private JComboBox<String> teszttipus_box;
-    private JComboBox<String> tipus_box;
+    static JTextField datum_mezo;
+    static JComboBox<String> ellenor_box;
+    static JComboBox<String> teszttipus_box;
+    static JComboBox<String> tipus_box;
 
     /**
      * Create the panel.

@@ -227,6 +227,8 @@ public class FD302_OQC extends JPanel {
         add(lblNewLabel_22);
         
         JTextArea megjegyzes_mezo = new JTextArea();
+        megjegyzes_mezo.setLineWrap(true);
+        megjegyzes_mezo.setWrapStyleWord(true);
         megjegyzes_mezo.setBounds(592, 356, 198, 111);
         add(megjegyzes_mezo);
         
@@ -246,7 +248,8 @@ public class FD302_OQC extends JPanel {
         torles_gomb.setBounds(82, 525, 89, 23);
         add(torles_gomb);
         
-        fehler_box = new JComboBox<String> ();
+        String[] eredmeny = {"-", "OK", "NOK"};
+        fehler_box = new JComboBox<String> (eredmeny);
         fehler_box.setBounds(167, 122, 136, 22);
         add(fehler_box);
 

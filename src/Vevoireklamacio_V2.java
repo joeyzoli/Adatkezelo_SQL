@@ -65,6 +65,7 @@ public class Vevoireklamacio_V2 extends JPanel {
         Utolso_sor sorszam = new Utolso_sor();
         int kovetkezo = Integer.parseInt(sorszam.utolso("qualitydb.Vevoireklamacio_alap"));
         Vevoireklamacio_fejlec.id_mezo.setText(String.valueOf(kovetkezo + 1));
+        d0.veasid();
         
     }
 }

@@ -1,5 +1,4 @@
 import javax.swing.JPanel;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Font;
@@ -22,7 +21,7 @@ public class FD302_Kalibralas extends JPanel {
      */
     public FD302_Kalibralas() {
         setLayout(null);
-        ComboBox combobox_tomb = new ComboBox();
+        new ComboBox();
         
         JLabel lblNewLabel = new JLabel("Gyűjtődoboz");
         lblNewLabel.setBounds(38, 35, 93, 14);
@@ -67,10 +66,6 @@ public class FD302_Kalibralas extends JPanel {
         add(textField_1);
         textField_1.setColumns(10);
         
-        String[] hibacsoport = {"","Címke","Funkció","Papír","Tartozék","Termék","Szerelés"};
-        
-        String[] kategoria = {"","Kritikus hiba","Súlyos hiba","Enyhe hiba"};
-        
         JLabel lblNewLabel_7 = new JLabel("DM érték - Max fűtés");
         lblNewLabel_7.setBounds(38, 261, 117, 14);
         add(lblNewLabel_7);
@@ -114,7 +109,9 @@ public class FD302_Kalibralas extends JPanel {
         textField_5.setColumns(10);
         
         JTextArea megjegyzes_mezo = new JTextArea();
-        megjegyzes_mezo.setBounds(592, 356, 198, 111);
+        megjegyzes_mezo.setLineWrap(true);
+        megjegyzes_mezo.setWrapStyleWord(true);
+        megjegyzes_mezo.setBounds(592, 356, 308, 111);
         add(megjegyzes_mezo);
         
         JButton mentes_gomb = new JButton("Mentés");

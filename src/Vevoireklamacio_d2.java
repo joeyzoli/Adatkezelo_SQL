@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -365,8 +366,10 @@ public class Vevoireklamacio_d2 extends JPanel {
         
         MyDragDropListener myDragDropListener = new MyDragDropListener();
         MyDragDropListener2 myDragDropListener2 = new MyDragDropListener2();
+        MyDragDropListener3 myDragDropListener3 = new MyDragDropListener3();
         new DropTarget(nok_kep, myDragDropListener);
         new DropTarget(ok_kep, myDragDropListener2);
+        
         
         JLabel lblNewLabel_10 = new JLabel("Egyéb fájl hozzáadása");
         lblNewLabel_10.setBounds(1175, 334, 142, 14);
@@ -382,10 +385,23 @@ public class Vevoireklamacio_d2 extends JPanel {
         add(lblNewLabel_11);
         
         table = new JTable();
-        
+        table.setDragEnabled(true);
+        table.setDropMode(DropMode.INSERT_ROWS);
+        table.addMouseMotionListener((MouseMotionListener) new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                JTable lbl = (JTable) e.getSource();
+                TransferHandler handle = lbl.getTransferHandler();
+                handle.exportAsDrag(lbl, e, TransferHandler.COPY);
+                System.out.println("Katt!");
+            }
+        });
+        //table.setTransferHandler(new TableRowTransferHandler(table)); 
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"Fájl neve"});  
+        modell.setColumnIdentifiers(new Object[]{"Fájl neve"});
+        modell.addRow(new Object[]{"Ide húzd a fájlokat"});
         table.setModel(modell);
+        new DropTarget(table, myDragDropListener3);
         JScrollPane gorgeto = new JScrollPane(table);        
         gorgeto.setBounds(1172, 422, 244, 146);
         add(gorgeto);
@@ -637,7 +653,13 @@ public class Vevoireklamacio_d2 extends JPanel {
                 ki_mezo.setText(rs.getString(7));
                 kepleiras_mezo.setText(rs.getString(8));           
             }       
-        
+            int rowCount = modell.getRowCount();           
+            for (int i = rowCount - 1; i > -1; i--) 
+            {
+              modell.removeRow(i);
+            }
+            modell.addRow(new Object[]{"Ide húzd a fájlokat"});
+            table.setModel(modell);
             File fajl = new File(System.getProperty("user.home") + "\\Ideiglenes Fájlok\\");
             if(fajl.exists()) {}
             else
@@ -1010,6 +1032,75 @@ public class Vevoireklamacio_d2 extends JPanel {
                             Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
                             //nok_kep.setBounds(135, 334, icon2.getIconWidth()/3, icon2.getIconHeight()/3);
                             //nok_kep.setBounds(135, 334, 465, 338);
+                        }
+                     }
+
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                    String hibauzenet = e.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                }
+            }
+            // Inform that the drop is complete
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {
+        }
+
+    }
+    
+    class MyDragDropListener3 implements DropTargetListener {
+
+        @Override
+        public void drop(DropTargetDropEvent event) {
+
+            // Accept copy drops
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+
+            // Get the transfer which can provide the dropped item data
+            Transferable transferable = event.getTransferable();
+
+            // Get the data formats of the dropped item
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+
+            // Loop through the flavors
+            for (DataFlavor flavor : flavors) 
+            {
+                try 
+                {
+                   // If the drop items are files
+                    if (flavor.isFlavorJavaFileListType()) 
+                    {
+                        //System.out.println("Az ok képhozzáadás fut");
+                        // Get all of the dropped files
+                        List<?> files = (List<?>) transferable.getTransferData(flavor);
+                        File fajl = new File(files.toString().substring(1,files.toString().length()-1));
+                        if(fajl != null)
+                        {
+                            fajlok.add(fajl.getName() +";"+fajl.getAbsolutePath()+";*");
+                            modell.addRow(new Object[]{fajl.getName()});
+                            table.setModel(modell);
+                            Vevoireklamacio_V2.fejlec.hozzaad(fajl.getName());
+                            System.out.println(fajl.getName());
+                            System.out.println(fajl.getAbsolutePath());
                         }
                      }
 

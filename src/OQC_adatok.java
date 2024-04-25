@@ -51,6 +51,10 @@ public class OQC_adatok extends JPanel {
     private ArrayList<String[]> adatok2 = new ArrayList<String[]>();
     private String FB7530_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FB7530_201X XX XX_DN_XXXXX - SABLON.xlsx";
     private String FR1200_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FR1200_201X XX XX_DN_XXXXX - SABLON.xlsx";
+    private String FR2400_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FR2400_201X XX XX_DN_XXXXX - SABLON_1.xlsx";
+    private String FR600_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_FR600_201X XX XX_DN_XXXXX - SABLON.xlsx";
+    private String FD302_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_Dect302_201X XX XX - SABLON.xlsx";
+    private String MESH_excel = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\OQC\\PSI_XXX_AVM AQL REPORT_MESH_SET_201X XX XX_DN_XXXXX - SABLON.xlsx";
     
     /**
      * Create the panel.
@@ -374,7 +378,7 @@ public class OQC_adatok extends JPanel {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }  
     }
@@ -431,7 +435,7 @@ public class OQC_adatok extends JPanel {
             e1.printStackTrace();
             String hibauzenet = e1.toString();
             Email hibakuldes = new Email();
-            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
         }  
     }
@@ -468,7 +472,7 @@ public class OQC_adatok extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }
@@ -502,13 +506,15 @@ public class OQC_adatok extends JPanel {
                     tipus = "FB7530";
                     excel = FB7530_excel;
                 }
-                else if(koztes2[0].contains("FD301"))
+                else if(koztes2[0].contains("MESH"))
                 {
-                    tipus = "FD301";
+                    tipus = "FB7530_MESH";
+                    excel = MESH_excel;
                 }
                 else if(koztes2[0].contains("FD302"))
                 {
                     tipus = "FD302";
+                    excel = FD302_excel;
                 }
                 else if(koztes2[0].contains("FR1200"))
                 {                   
@@ -518,10 +524,12 @@ public class OQC_adatok extends JPanel {
                 else if(koztes2[0].contains("FR2400"))
                 {
                     tipus = "FR2400";
+                    excel = FR2400_excel;
                 }
                 else
                 {
                     tipus = "FR600";
+                    excel = FR600_excel;
                 }
                 ArrayList<String> raklapszamok = new ArrayList<String>();               
                 for(int szamlalo = 0; szamlalo < raklapok.size();szamlalo++)
@@ -752,7 +760,7 @@ public class OQC_adatok extends JPanel {
                e1.printStackTrace();
                String hibauzenet = e1.toString();
                Email hibakuldes = new Email();
-               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             } finally 
             {
@@ -771,11 +779,8 @@ public class OQC_adatok extends JPanel {
                {
                   se.printStackTrace();
                }  
-            }   
-               
-            Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-            
-            
+            }                  
+            Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása         
          }
     }
     
@@ -825,7 +830,7 @@ public class OQC_adatok extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
             }
          }

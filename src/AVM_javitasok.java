@@ -6,8 +6,6 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -29,8 +27,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-import org.jdesktop.swingx.JXDatePicker;
-
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -114,16 +110,21 @@ public class AVM_javitasok extends JPanel {
         // Increment the date by one day
         LocalDate newDate = date.minusDays(1);
         // Format the new date as a string             
-        */
-        JXDatePicker picker = new JXDatePicker();
+        
+        JXDatePicker picker = new JXDatePicker();      
         picker.setBounds(100, 100, 120, 20);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        picker.setFormats(dateFormat);
         picker.getEditor().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 System.out.println("You have foucs");
+                System.out.println(picker.getDate().toString());
+                System.out.println(dateFormat.format(picker.getDate()));
             }
         });
-        add(picker);
+        picker.getMonthView().setZoomable(true);
+        add(picker);*/
     }
     
     public class DateLabelFormatter extends AbstractFormatter {

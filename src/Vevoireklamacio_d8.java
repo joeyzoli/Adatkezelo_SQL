@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Vevoireklamacio_d8 extends JPanel {
-    private JTextField lezaras_datuma;
+    JTextField lezaras_datuma;
     private JTextArea megelozo_mezo;
     /**
      * Create the panel.
@@ -66,29 +66,20 @@ public class Vevoireklamacio_d8 extends JPanel {
         Connection conn = null;
         Statement stmt = null;        
         try 
-        {
-           try 
-           {
-              Class.forName("com.mysql.cj.jdbc.Driver");
-           } 
-           catch (Exception e) 
-           {
-              System.out.println(e);
-              String hibauzenet2 = e.toString();
-              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-        stmt = (Statement) conn.createStatement();
-        String sql = "select Megelozointezkedes, lezaras_datuma from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-        stmt.execute(sql);
-        ResultSet rs = stmt.getResultSet();
-        if(rs.next())
-        {
-            megelozo_mezo.setText(rs.getString(1));
-            lezaras_datuma.setText(rs.getString(2));
-        }
-        stmt.close();
-        conn.close();                
+        {           
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+            stmt = (Statement) conn.createStatement();
+            String sql = "select Megelozointezkedes, lezaras_datuma from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+            if(rs.next())
+            {
+                megelozo_mezo.setText(rs.getString(1));
+                lezaras_datuma.setText(rs.getString(2));
+            }
+            stmt.close();
+            conn.close();                
         }          
         catch (Exception e) 
         {

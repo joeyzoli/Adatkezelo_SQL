@@ -92,7 +92,7 @@ public class Zarolasok_osszesito extends JPanel {
         String sql = "select id, projekt, tipus, eszleles_helye,zarolt_db,hol_van, zarolas_oka,\r\n"
                 + "zarolas_datuma\r\n"
                 + "from qualitydb.Zarolasok\r\n"
-                + "where 3 = 3";                                        
+                + "where 3 = 3 order by ID desc";                                        
         stmt.execute(sql);      
         rs = stmt.getResultSet();
         while(rs.next())

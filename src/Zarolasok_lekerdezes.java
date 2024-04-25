@@ -13,17 +13,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Properties;
-
-import javax.swing.JFormattedTextField.AbstractFormatter;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import org.jdesktop.swingx.JXDatePicker;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -39,8 +31,8 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 public class Zarolasok_lekerdezes extends JPanel {    
-    private JDatePickerImpl datum_tol;
-    private JDatePickerImpl datum_ig;
+    private JXDatePicker datum_tol;
+    private JXDatePicker datum_ig;
 
     /**
      * Create the panel.
@@ -55,22 +47,9 @@ public class Zarolasok_lekerdezes extends JPanel {
         
         JLabel lblNewLabel_1 = new JLabel("Dátum -tól");
         lblNewLabel_1.setBounds(448, 105, 82, 14);
-        add(lblNewLabel_1);
+        add(lblNewLabel_1);               
         
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Ma");
-        p.put("text.month", "Hónap");
-        p.put("text.year", "Év");
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);        
-        UtilDateModel model2 = new UtilDateModel();        
-        Properties p2 = new Properties();
-        p2.put("text.today", "Ma");
-        p2.put("text.month", "Hónap");
-        p2.put("text.year", "Év");
-        JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);
-        
-        datum_tol = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datum_tol = new JXDatePicker();
         datum_tol.setBounds(540, 102, 110, 20);
         add(datum_tol);
         
@@ -78,7 +57,7 @@ public class Zarolasok_lekerdezes extends JPanel {
         lblNewLabel_2.setBounds(448, 145, 82, 14);
         add(lblNewLabel_2);
         
-        datum_ig = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+        datum_ig = new JXDatePicker();
         datum_ig.setBounds(540, 142, 110, 20);
         add(datum_ig);
         
@@ -89,29 +68,7 @@ public class Zarolasok_lekerdezes extends JPanel {
         
         setBackground(Foablak.hatter_szine);
 
-    }
-    
-    private class DateLabelFormatter extends AbstractFormatter {
-
-        private String datePattern = "yyyy.MM.dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-            //System.out.println(datePicker.getJFormattedTextField().getText());
-            return "";
-        }       
-
-    }
+    }      
     
     class Start implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
@@ -132,10 +89,11 @@ public class Zarolasok_lekerdezes extends JPanel {
                 Class.forName(driverName);
                 Connection connection = DriverManager.getConnection(url, userName, password);                           //csatlakozás a szerverhez
                 stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
                 
                 String sql = "select projekt, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "group by projekt order by sum(zarolt_db) desc \r\n";
                
                 stmt.execute(sql);
@@ -200,7 +158,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 String sql2 = "select zarolas_oka, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "group by zarolas_oka order by sum(zarolt_db) desc limit 10 \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
@@ -250,7 +208,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 sql2 = "select sum(ellenorzes_ido)/60, sum(ellenorzes_ido)/60*7 from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3\r\n"
-                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n";
+                        + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
                 sheet.getRange().get("K" + 1).setText("");
@@ -267,7 +225,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 ///////////////////////////////////////////////// minden adat
                 sql = "select * from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3 \r\n"
-                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"' \r\n"
+                        + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "order by zarolas_datuma asc \r\n";
                 
                 /********************************************Harmadik diagramm*************************************************/
@@ -275,7 +233,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 sql2 = "select sum(ellenorzes_ido), zarolas_oka \r\n"
                         + "from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3\r\n"
-                        + "and Zarolas_datuma >= '"+ datum_tol.getJFormattedTextField().getText() +"' and Zarolas_datuma <= '"+ datum_ig.getJFormattedTextField().getText() +"'\r\n"
+                        + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"'\r\n"
                         + "group by zarolas_oka order by sum(ellenorzes_ido) desc limit 10";
                 stmt.execute(sql2);
                 resultset = stmt.getResultSet();
@@ -379,7 +337,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet                 
             }

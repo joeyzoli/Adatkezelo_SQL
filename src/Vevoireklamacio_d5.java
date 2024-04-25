@@ -197,14 +197,24 @@ public class Vevoireklamacio_d5 extends JPanel {
          {
             try
             {
-                Vevoireklamacio_fejlec.d5 = Color.GREEN;
-                Vevoireklamacio_fejlec.lezaras = Color.YELLOW;
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();               
-                String maiido = formatter.format(date);
-                String sql = "update qualitydb.Vevoireklamacio_alap set D5 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-                SQA_SQL beir = new  SQA_SQL();
-                beir.mindenes(sql);
+                SQA_SQL ment = new SQA_SQL();
+                String sql = "select D3 from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                ment.tombvissza_sajat(sql);
+                if(ment.tombvissza_sajat(sql)[0] == null)
+                {
+                    JOptionPane.showMessageDialog(null, "A D3 lezárása nélkül nem lehet lezárni a D5-öt!", "Hiba üzenet", 2);
+                }
+                else
+                {             
+                    Vevoireklamacio_fejlec.d5 = Color.GREEN;
+                    Vevoireklamacio_fejlec.lezaras = Color.YELLOW;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date();               
+                    String maiido = formatter.format(date);
+                    sql = "update qualitydb.Vevoireklamacio_alap set D5 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    SQA_SQL beir = new  SQA_SQL();
+                    beir.mindenes(sql);
+                }
             }
             catch (Exception e1) 
             {
