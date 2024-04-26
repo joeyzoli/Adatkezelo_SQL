@@ -1,7 +1,15 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 
@@ -15,6 +23,8 @@ public class FD302_Kalibralas extends JPanel {
     private JTextField textField_3;
     private JTextField textField_4;
     private JTextField textField_5;
+    private JLabel mennyiseg_label;
+    private JTextArea megjegyzes_mezo;
 
     /**
      * Create the panel.
@@ -108,7 +118,7 @@ public class FD302_Kalibralas extends JPanel {
         add(textField_5);
         textField_5.setColumns(10);
         
-        JTextArea megjegyzes_mezo = new JTextArea();
+        megjegyzes_mezo = new JTextArea();
         megjegyzes_mezo.setLineWrap(true);
         megjegyzes_mezo.setWrapStyleWord(true);
         megjegyzes_mezo.setBounds(592, 356, 308, 111);
@@ -122,7 +132,7 @@ public class FD302_Kalibralas extends JPanel {
         lblNewLabel_23.setBounds(346, 529, 143, 14);
         add(lblNewLabel_23);
         
-        JLabel mennyiseg_label = new JLabel("0");
+        mennyiseg_label = new JLabel("0");
         mennyiseg_label.setBounds(499, 529, 46, 14);
         add(mennyiseg_label);
         
@@ -170,6 +180,92 @@ public class FD302_Kalibralas extends JPanel {
             long elapsed_time = current_time - timer_start;         //ha false lesz az érték
             return (elapsed_time);                                  //visszatér a különbséggel
         }
+    }
+    
+    class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                if(raklap_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a gyűjtődoboz!", "Hiba üzenet", 2);
+                }
+                else if(doboz_mezo.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nincs megadva a szériaszám doboz!", "Hiba üzenet", 2);
+                }               
+                else
+                {
+                    /*end = System.currentTimeMillis();
+                    long millis = end - start;                    
+                    int seconds = (int) (millis / 1000) % 60 ;
+                    int minutes = (int) ((millis / (1000*60)) % 60);
+                    int hours   = (int) ((millis / (1000*60*60)) % 24);                    
+                    System.out.println(hours +":"+ minutes +":"+ seconds); */                   
+                    int petifele = (int) (measureTime(false) / 1000000);
+                    //System.out.println("Azzal számolva: "+ (petifele/ (1000*60*60) % 24)+" óra "+ ((petifele / (1000*60)) % 60) +" perc "+ (petifele / 1000) % 60  +" másodperc");
+                    String tesztido = String.valueOf( (petifele/ (1000*60*60) % 24))+":"+ String.valueOf(((petifele / (1000*60)) % 60)) +":"+ String.valueOf((petifele / 1000) % 60);
+                    System.out.println(tesztido);
+                    
+                    String formazo = raklap_mezo.getText().replace(" ","");
+                    SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String sql = "INSERT INTO qualitydb.OQC_FD302 (Datum, Tesztelo,Tipus,Raklapszam,Szeriaszam_doboz,Hiba,Hibacsoport,"
+                            + "Megjegyzes,Kritikus_hiba, Sulyos_hiba,Enyhe_hiba,Rogzites_ido, Teszt_ido) VALUES('"+ FD302_Fejlec.datum_mezo.getText() +"','"+ String.valueOf(FD302_Fejlec.ellenor_box.getSelectedItem()) +"',"
+                            + "'"+ String.valueOf(FD302_Fejlec.tipus_box.getSelectedItem()) +"','"+ formazo +"','"+ doboz_mezo.getText() +"'," 
+                            +"'"+ megjegyzes_mezo.getText() +"',"
+                            + "'"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
+                    SQA_SQL ment = new SQA_SQL();
+                    ment.mindenes(sql);
+                    visszaallit();
+                    int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
+                    mennyiseg++;
+                    mennyiseg_label.setText(String.valueOf(mennyiseg));
+                    visszaallit();
+                }
+                
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    private void visszaallit()
+    {
+        raklap_mezo.setText("");
+        doboz_mezo.setText("");
+        /*tipus_mezo.setText("");        
+        hiba_box.setSelectedIndex(0);
+        hibacsoport_box.setSelectedIndex(0);
+        hibakategoria_box.setSelectedIndex(0);
+        megjegyzes_mezo.setText("");*/
+    }
+    
+    class Enter1 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                measureTime(true);
+                System.out.println("Elindult a mérés");
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
     }
 }
 

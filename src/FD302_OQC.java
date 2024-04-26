@@ -96,7 +96,7 @@ public class FD302_OQC extends JPanel {
         add(lblNewLabel_19);
         
         String[] hibacsoport = {"","Címke","Funkció","Papír","Tartozék","Termék","Szerelés"};
-        hibacsoport_box = new JComboBox<String>();                                              //hibacsoport
+        hibacsoport_box = new JComboBox<String>(hibacsoport);                                              //hibacsoport
         hibacsoport_box.setBounds(167, 357, 215, 22);
         add(hibacsoport_box);
         
@@ -104,7 +104,7 @@ public class FD302_OQC extends JPanel {
         lblNewLabel_20.setBounds(38, 406, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>();                //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(167, 402, 215, 22);
         add(hiba_box);
         
@@ -113,7 +113,7 @@ public class FD302_OQC extends JPanel {
         add(lblNewLabel_21);
         
         String[] kategoria = {"","Kritikus hiba","Súlyos hiba","Enyhe hiba"};
-        hibakategoria_box = new JComboBox<String>();                                    //kategoria
+        hibakategoria_box = new JComboBox<String>(kategoria);                                    //kategoria
         hibakategoria_box.setBounds(167, 449, 215, 22);
         add(hibakategoria_box);
         

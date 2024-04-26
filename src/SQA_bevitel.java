@@ -1859,7 +1859,7 @@ public class SQA_bevitel extends JPanel {
                                         Email email = new Email();          //schweighardt.robert@veas.videoton.hu,horvath.balazs@veas.videoton.hu,toth.zoltan@veas.videoton.hu
                                         String targy = "Csere alkatrész érkezett a "+ id_mezo.getText() +" azonosítójú reklamáció esetén";
                                         email.mindenes_email("veassqa@veas.videoton.hu",cimzettek, cc, targy, 
-                                                "Sziasztok! \n \nBeérkezett a cserealkatrész az alábbi rekalmációhoz: \n\n"
+                                                "Sziasztok! \n \nBeérkezett a cserealkatrész az alábbi reklamációhoz: \n\n"
                                                 + "Reklamáció ID: "+ id_mezo.getText() +" \n"
                                                 + "Cikkszám: "+ keresett[szamlalo] +"\n"
                                                 + "Hibaleírás: "+ hibak[szamlalo] +" \n"
