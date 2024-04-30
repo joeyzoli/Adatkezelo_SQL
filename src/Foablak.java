@@ -93,6 +93,7 @@ public class Foablak extends JFrame
 	private Jelenleti_osszesito jelenleti;
 	private Excel_kereso kereso;
 	private OQC_tesztadatok teszadatok;
+	private Beepules_kereso beepules;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -283,6 +284,10 @@ public class Foablak extends JFrame
 		JMenuItem avmjavitasok = new JMenuItem("AVM javítási adatok");
 		avmjavitasok.addActionListener(new Panelcsere_AVM_javitasok());
 		lekerdezes.add(avmjavitasok);
+		
+		JMenuItem beepulesek = new JMenuItem("IFS beépülési adatok");
+		beepulesek.addActionListener(new Panelcsere_IFS_beepulesek());
+		lekerdezes.add(beepulesek);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1082,6 +1087,17 @@ public class Foablak extends JFrame
          {
             teszadatok = new OQC_tesztadatok();
             JScrollPane ablak = new JScrollPane(teszadatok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_IFS_beepulesek implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            beepules = new Beepules_kereso();
+            JScrollPane ablak = new JScrollPane(beepules);
             setContentPane(ablak);
             pack();
          }
