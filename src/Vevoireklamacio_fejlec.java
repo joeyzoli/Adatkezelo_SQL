@@ -206,7 +206,8 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 {                  
                     Vevoireklamacio_fejlec.d3 = Color.YELLOW;
                     Vevoireklamacio_fejlec.qr = Color.GREEN;
-                    Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+hozzaad(fajl.getName()));                                      
+                    Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+hozzaad(fajl.getName()));
+                    mentes_gomb.setEnabled(true);
                     JOptionPane.showMessageDialog(null, "Email csatolva!", "Info", 1);
                 }
             }
@@ -280,7 +281,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         {
             icon = new ImageIcon(word_kep);
         }
-        
+        mentes_gomb.setEnabled(true);
         Vevoireklamacio_d0.modell.addRow(new Object[]{icon,fajlnev});
         TableColumnModel columnModel = Vevoireklamacio_d0.table.getColumnModel();
         for (int column = 0; column < Vevoireklamacio_d0.table.getColumnCount(); column++) {

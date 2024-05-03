@@ -214,6 +214,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                     sql = "update qualitydb.Vevoireklamacio_alap set D5 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
                     SQA_SQL beir = new  SQA_SQL();
                     beir.mindenes(sql);
+                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
                 }
             }
             catch (Exception e1) 

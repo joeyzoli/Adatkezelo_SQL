@@ -11,7 +11,13 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -142,6 +148,18 @@ public class Foablak extends JFrame
 		Emailszal beolvasas = new Emailszal();
         Thread szal1 = new Thread(beolvasas);
         szal1.start();
+        
+        Timer timer = new Timer ();
+        TimerTask hourlyTask = new TimerTask () {
+            @Override
+            public void run () {
+                System.out.println("Fut az ellenorző szál");
+                //oqc_ellenorzo();
+            }
+        };
+
+        // schedule the task to run starting now and then every hour...
+        timer.schedule (hourlyTask, 0l, 1000*60*10);                  //1000*60*60
 	}
 
 	/**
@@ -1295,6 +1313,243 @@ public class Foablak extends JFrame
                 }                              
             }*/
             
+        }
+    }
+	
+	static float fb7530 = (float) 0.00;
+	static float fb7530ax = (float) 0.00;
+	static float fb7530ax_int = (float) 0.00;
+	static float fd302 = (float) 0.00;
+	static float fr1200ax = (float) 0.00;
+	static float fr1200ax_int = (float) 0.00;
+	static float fr2400 = (float) 0.00;
+	static float fr600 = (float) 0.00;
+	static float mesh = (float) 0.00;
+	private static void oqc_ellenorzo()
+    {
+	    try
+        {
+	        int FB7530 = 20002845;
+	        int FB7530AX = 20002930;
+	        int FB7530AX_Int = 20002944;
+	        int FD302 = 20002961;
+	        int FR1200AX = 20002974;
+	        int FR1200AX_Int = 20002973;
+	        int FR2400 = 20002855;
+	        int FR600 = 20002853;
+	        int Mesh = 20003049;
+            DriverManager.registerDriver(new oracle.jdbc.OracleDriver());                                  
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+            Statement stmt = con.createStatement();              
+            ResultSet rs = stmt.executeQuery("select \n"
+                    + "    ip.description Cikk_megnevezes\n"
+                    + "    ,sum(ipis.qty_onhand-ipis.qty_reserved) Elerh_menny\n"
+                    + "    -- ,ipis.availability_control_id Hasznalatvezerles_az\n"
+                    + "from ifsapp.inventory_part ip, ifsapp.INVENTORY_PART_IN_STOCK ipis, ifsapp.INVENTORY_PART_BARCODE cpb \n"
+                    + "where\n"
+                    + "    3=3\n"
+                    + "    and ipis.contract=ip.contract\n"
+                    + "    and ipis.part_no=ip.part_no\n"
+                    + "    and cpb.part_no = ipis.part_no\n"
+                    + "    and to_char( cpb.barcode_id) = ipis.waiv_dev_rej_no \n"
+                    + "    and cpb.lot_batch_no = ipis.lot_batch_no\n"
+                    + "    and cpb.eng_chg_level = ipis.eng_chg_level\n"
+                    + "    and cpb.configuration_id = ipis.configuration_id\n"
+                    + "    and cpb.serial_no = ipis.serial_no\n"
+                    + "    and cpb.activity_seq = ipis.activity_seq\n"
+                    + "    and ip.contract = 'VEAS'\n"
+                    + "    and ip.second_commodity = 'VAVM'\n"
+                    + "    and ip.part_product_code = '1'\n"
+                    + "    and ipis.qty_onhand>0 and not ipis.location_no = 'OQC-BE' and not ipis.location_no = 'OQC-KI'\n"
+                    + "    and not ip.description = 'FRITZ!REPEATER 600 (20002853)'\n"
+                    + "group by ip.description\n"
+                    + "order by ip.description asc");
+            Email email = new Email();
+            while(rs.next())
+            {
+                if(rs.getString(1).contains(String.valueOf(FB7530)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 3000;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fb7530).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fb7530 = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fb7530 = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FB7530AX)))                
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 3000;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fb7530ax).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fb7530ax = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fb7530ax = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FB7530AX_Int)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 3000;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fb7530ax_int).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fb7530ax_int = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fb7530ax_int = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FD302)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 3000;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fd302).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fd302 = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fd302 = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FR1200AX)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 5760;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fr1200ax).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fr1200ax = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fr1200ax = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FR1200AX_Int)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 5760;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fr1200ax_int).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fr1200ax_int = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fr1200ax_int = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FR2400)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 3000;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fr2400).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fr2400 = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fr2400 = szam;
+                    }
+                    else {}
+                }
+                if(rs.getString(1).contains(String.valueOf(FR600)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 2880;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(fr600).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        fr600 = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        fr600 = szam;
+                    }
+                    else {System.out.println("Egyenlő, nem történiksemmi");}
+                }
+                if(rs.getString(1).contains(String.valueOf(Mesh)))
+                {
+                    float szam = Float.valueOf(rs.getString(2)) / 1630;
+                    String[] van = String.valueOf(szam).split("\\.");
+                    String[] volt = String.valueOf(mesh).split("\\.");
+                    if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
+                    {
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                                "Sziasztok!"               
+                        + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
+                        + "\n\nÜdvözlettel: EASQAS program");
+                        mesh = szam;
+                    }
+                    else if(Integer.valueOf(van[0]) < Integer.valueOf(volt[0]))
+                    {
+                        mesh = szam;
+                    }
+                    else {}
+                }
+            }
+            
+            con.close();         
+        }           
+        catch(Exception e1)
+        { 
+            System.out.println(e1);
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
     }
 	/*

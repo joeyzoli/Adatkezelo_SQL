@@ -1641,18 +1641,19 @@ public class SQL
         LocalDate start_date = LocalDate.of(Integer.parseInt(datum_tol[0]),Integer.parseInt(datum_tol[1]),Integer.parseInt(datum_tol[2]));
         LocalDate end_date = LocalDate.of(Integer.parseInt(datum_ig[0]),Integer.parseInt(datum_ig[1]),Integer.parseInt(datum_ig[2]));
         Period diff = Period.between(start_date,end_date);
-        System.out.println(diff.getMonths());
-        Float atlagrek = null;
-        Float atlagvissza = null;
+        System.out.println("Eltelt hónapok száma: "+diff.getMonths());
+        System.out.println("SUM rek: "+diff.getMonths());
+        int atlagrek = 0;
+        int atlagvissza = 0;
         if(diff.getMonths() == 0)
         {
-            atlagrek = (float) sumrek;
-            atlagvissza = (float) sumvissza;
+            atlagrek =  sumrek;
+            atlagvissza =  sumvissza;
         }
         else
         {
-            atlagrek = (float) (sumrek / diff.getMonths());           //month
-            atlagvissza = (float) (sumvissza / diff.getMonths());       //month
+            atlagrek = (sumrek / diff.getMonths());           //month
+            atlagvissza = (sumvissza / diff.getMonths());       //month
         }
         sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
         sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);
