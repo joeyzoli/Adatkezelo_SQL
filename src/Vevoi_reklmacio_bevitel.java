@@ -559,7 +559,8 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     
                     Urlap_torlo torles = new Urlap_torlo();
                     torles.urlaptorles_veoi(datum_mezo, reklamalt_db, hibaleiras_mezo, gyartasidopontja_mezo, rma_mezo, hibaoka_mezo, hibaoka2_mezo);
-                    
+                    hibaoka_mezo.setText("");
+                    hibaoka2_mezo.setText("");
                     int rowCount = modell.getRowCount();
                     int rowCount2 = modell2.getRowCount();
                     int rowCount3 = modell3.getRowCount();

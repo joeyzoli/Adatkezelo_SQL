@@ -2069,20 +2069,20 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\242SN_összes.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA1998.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
                Worksheet sheet = workbook.getWorksheets().get(0);               
                DataTable datatable = new DataTable();
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
-               for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                   stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
                            + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
-                   */ System.out.println("Fut a For");
-                   stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Retour_id,RMA) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "', '" + datatable.getRows().get(szamlalo).getString(2) + "')");
+                   System.out.println("Fut a For");
+                   /* stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Retour_id,RMA) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "', '" + datatable.getRows().get(szamlalo).getString(2) + "')");*/
                }              
                Foablak.frame.setCursor(null);                        
                stmt.close();

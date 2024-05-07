@@ -90,6 +90,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         
         String[] fajtak = {"Reklamáció","Visszajelzés","Törölt"};
         fajta_box = new JComboBox<String>(fajtak);                                  //fajtak
+        fajta_box.addActionListener(new Mentesgomb_aktival());
         fajta_box.setBounds(72, 64, 199, 22);
         add(fajta_box);
         
@@ -960,6 +961,25 @@ public class Vevoireklamacio_fejlec extends JPanel {
 
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 JOptionPane.showMessageDialog(null, "Mentve az asztalra Vevoireklamacio ID "+ Vevoireklamacio_fejlec.id_mezo.getText() +" néven", "Info", 1);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Mentesgomb_aktival implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                mentes_gomb.setEnabled(true);
             }
             catch (Exception e1) 
             {

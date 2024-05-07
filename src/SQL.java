@@ -669,26 +669,20 @@ public class SQL
         Vevoi_reklmacio_bevitel.zarolt_tabla.setModel(Vevoi_reklmacio_bevitel.modell2);             
         
         String sql3 = "SELECT hiba_oka, hiba_okozoja, hiba_oka2, hiba_okozoja2 FROM  qualitydb.Vevoireklamacio_alapadat "
-                + "where Datum = '"+ datatable.getRows().get(0).getString(0) +"' and Tipus = '"+ datatable.getRows().get(0).getString(2) +"' "; 
+                + "where ID = '"+ id +"' "; 
         stmt3.execute(sql3);
         resultSet3 = stmt3.getResultSet();            
         jdbcAdapter3.fillDataTable(datatable3, resultSet3);
+        Vevoi_reklmacio_bevitel.hibaoka_mezo.setText("");
+        Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText("");
         String[] hibaoka = {datatable3.getRows().get(0).getString(1)};
         String[] hibaoka2 = {datatable3.getRows().get(0).getString(3)};
         DefaultComboBoxModel<String> hiba = new DefaultComboBoxModel<>(hibaoka);
         DefaultComboBoxModel<String> hiba2 = new DefaultComboBoxModel<>(hibaoka2);
-        if(datatable3.getRows().get(0).getString(0).equals(""))
-        {
-            
-        }
-        else
-        {
-            Vevoi_reklmacio_bevitel.hibaokozoja_box.setModel(hiba);
-            Vevoi_reklmacio_bevitel.hibaokozoja2_box.setModel(hiba2);
-            Vevoi_reklmacio_bevitel.hibaoka_mezo.setText(datatable3.getRows().get(0).getString(0));
-            Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText(datatable3.getRows().get(0).getString(2));
-            
-        }
+        Vevoi_reklmacio_bevitel.hibaokozoja_box.setModel(hiba);
+        Vevoi_reklmacio_bevitel.hibaokozoja2_box.setModel(hiba2);
+        Vevoi_reklmacio_bevitel.hibaoka_mezo.setText(datatable3.getRows().get(0).getString(0));
+        Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText(datatable3.getRows().get(0).getString(2));
         sql = "SELECT intezkedes, felelos, hatarido FROM qualitydb.Vevoireklamacio_detekt where ID = '"+ id +"'";
         
         stmt.execute(sql);       
@@ -1294,8 +1288,8 @@ public class SQL
         
         sql3 = "select DATE_FORMAT(Datum,'%Y%m') as 'Hónap',\n"
                 + "              Projekt, \n"
-                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"1\", \"0\")) as 'Reklamáció', \n"
-                + "              sum(if(rek_vagy in ('Reklamáció', 'Visszjelzés'), \"0\", \"1\")) as 'Visszajelzés'\n"
+                + "              sum(if(rek_vagy = 'Reklamáció', 1, 0)) as 'Reklamáció', \n"
+                + "              sum(if(rek_vagy = 'Visszajelzés', 1, 0)) as 'Visszajelzés'\n"
                 + "            from qualitydb.Vevoireklamacio_alapadat\n"
                 + "                where 3=3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"'  \n"
                 + "                group by Projekt, Hónap order by Hónap asc";
@@ -1450,6 +1444,19 @@ public class SQL
         int reklamacio_dec = 0;
         int visszajelzes_dec = 0;
         
+        int oszto1 = 0;
+        int oszto2 = 0;
+        int oszto3 = 0;
+        int oszto4 = 0;
+        int oszto5 = 0;
+        int oszto6 = 0;
+        int oszto7 = 0;
+        int oszto8 = 0;
+        int oszto9 = 0;
+        int oszto10 = 0;
+        int oszto11 = 0;
+        int oszto12 = 0;
+        
         sheet.getRange().get("A" + 1).setText("Hónap");
         sheet.getRange().get("B" + 1).setText("Reklamáció");
         sheet.getRange().get("C" + 1).setText("Visszajelzés");
@@ -1466,6 +1473,7 @@ public class SQL
                 {
                     visszajelzes_jan++;
                 }
+                oszto1 = 1;
             }          
             else if(adatok.get(szamlalo)[0].contains("03"))
             {            
@@ -1477,6 +1485,7 @@ public class SQL
                 {
                     visszajelzes_mar++;
                 }
+                oszto3 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("04"))
             {            
@@ -1488,6 +1497,7 @@ public class SQL
                 {
                     visszajelzes_apr++;
                 }
+                oszto4 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("05"))
             {            
@@ -1499,6 +1509,7 @@ public class SQL
                 {
                     visszajelzes_maj++;
                 }
+                oszto5 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("06"))
             {            
@@ -1510,6 +1521,7 @@ public class SQL
                 {
                     visszajelzes_jun++;
                 }
+                oszto6 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("07"))
             {            
@@ -1521,6 +1533,7 @@ public class SQL
                 {
                     visszajelzes_jul++;
                 }
+                oszto7 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("08"))
             {            
@@ -1532,6 +1545,7 @@ public class SQL
                 {
                     visszajelzes_aug++;
                 }
+                oszto8 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("09"))
             {            
@@ -1543,6 +1557,7 @@ public class SQL
                 {
                     visszajelzes_sze++;
                 }
+                oszto9 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("10"))
             {            
@@ -1554,6 +1569,7 @@ public class SQL
                 {
                     visszajelzes_okt++;
                 }
+                oszto11 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("11"))
             {            
@@ -1565,6 +1581,7 @@ public class SQL
                 {
                     visszajelzes_nov++;
                 }
+                oszto11 = 1;
             }
             else if(adatok.get(szamlalo)[0].contains("12"))
             {            
@@ -1576,6 +1593,7 @@ public class SQL
                 {
                     visszajelzes_dec++;
                 }
+                oszto12 = 1;
             }///idáig kell           
             else if(adatok.get(szamlalo)[0].contains("02"))
             {            
@@ -1587,6 +1605,7 @@ public class SQL
                 {
                     visszajelzes_feb++;
                 }
+                oszto2 = 1;
             } 
         }   
         sheet.getRange().get("A" + 2).setText("Január");
@@ -1652,8 +1671,8 @@ public class SQL
         }
         else
         {
-            atlagrek = (sumrek / diff.getMonths());           //month
-            atlagvissza = (sumvissza / diff.getMonths());       //month
+            atlagrek = (sumrek / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));           //month
+            atlagvissza = (sumvissza / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));       //month
         }
         sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
         sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);

@@ -11,14 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -149,7 +142,7 @@ public class Foablak extends JFrame
         Thread szal1 = new Thread(beolvasas);
         szal1.start();
         
-        Timer timer = new Timer ();
+        /*Timer timer = new Timer ();
         TimerTask hourlyTask = new TimerTask () {
             @Override
             public void run () {
@@ -159,7 +152,7 @@ public class Foablak extends JFrame
         };
 
         // schedule the task to run starting now and then every hour...
-        timer.schedule (hourlyTask, 0l, 1000*60*10);                  //1000*60*60
+        timer.schedule (hourlyTask, 0l, 1000*60*10);        */          //1000*60*60
 	}
 
 	/**
@@ -532,6 +525,9 @@ public class Foablak extends JFrame
 		pack();
         setLocationRelativeTo(null);
         //sorszamol();
+        
+        ImageIcon icon = new ImageIcon("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\easqas.jpg");
+        setIconImage(icon.getImage());
 
 	}
 	
@@ -1315,7 +1311,7 @@ public class Foablak extends JFrame
             
         }
     }
-	
+	/*
 	static float fb7530 = (float) 0.00;
 	static float fb7530ax = (float) 0.00;
 	static float fb7530ax_int = (float) 0.00;
@@ -1330,14 +1326,14 @@ public class Foablak extends JFrame
 	    try
         {
 	        int FB7530 = 20002845;
-	        int FB7530AX = 20002930;
-	        int FB7530AX_Int = 20002944;
-	        int FD302 = 20002961;
-	        int FR1200AX = 20002974;
-	        int FR1200AX_Int = 20002973;
-	        int FR2400 = 20002855;
-	        int FR600 = 20002853;
-	        int Mesh = 20003049;
+            int FB7530AX = 20002930;
+            int FB7530AX_Int = 20002944;
+            int FD302 = 20002961;
+            int FR1200AX = 20002974;
+            int FR1200AX_Int = 20002973;
+            int FR2400 = 20002855;
+            int FR600 = 20002853;
+            int Mesh = 20003049;
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());                                  
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
             Statement stmt = con.createStatement();              
@@ -1360,7 +1356,7 @@ public class Foablak extends JFrame
                     + "    and ip.contract = 'VEAS'\n"
                     + "    and ip.second_commodity = 'VAVM'\n"
                     + "    and ip.part_product_code = '1'\n"
-                    + "    and ipis.qty_onhand>0 and not ipis.location_no = 'OQC-BE' and not ipis.location_no = 'OQC-KI'\n"
+                    + "    and ipis.qty_onhand>0 and not ipis.location_no = 'OQC-BE' and not ipis.location_no = 'OQC-KI'  and not ipis.location_no like 'U%' \n"
                     + "    and not ip.description = 'FRITZ!REPEATER 600 (20002853)'\n"
                     + "group by ip.description\n"
                     + "order by ip.description asc");
@@ -1374,7 +1370,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fb7530).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "",  "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1393,7 +1389,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fb7530ax).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "",  "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1412,7 +1408,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fb7530ax_int).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "",  "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1431,7 +1427,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fd302).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "",  "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1450,7 +1446,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fr1200ax).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "", "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1469,7 +1465,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fr1200ax_int).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "", "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1488,7 +1484,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fr2400).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "",  "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1507,7 +1503,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(fr600).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "", "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1526,7 +1522,7 @@ public class Foablak extends JFrame
                     String[] volt = String.valueOf(mesh).split("\\.");
                     if(Integer.valueOf(van[0]) > Integer.valueOf(volt[0]))
                     {
-                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu", "", "Új elérhető Batch", 
+                        email.mindenes_email("easqas@veas.videoton.hu", "makk.aron@veas.videoton.hu,rabine.anita@veas.videoton.hu,serebrianska.kateryna@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", "", "Új elérhető Batch "+ rs.getString(1), 
                                 "Sziasztok!"               
                         + "\n\nElkészült egy újabb Batch méret amit ki lehet ajánlani a következő cikkszámnál: "+ rs.getString(1)
                         + "\n\nÜdvözlettel: EASQAS program");
@@ -1551,7 +1547,7 @@ public class Foablak extends JFrame
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
-    }
+    }*/
 	/*
 	public void sorszamol()
 	{
