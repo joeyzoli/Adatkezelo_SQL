@@ -359,8 +359,9 @@ public class Email
             //textPart.setText(tartalom);                                                     //levél tartalmának csatolása
             //multipart.addBodyPart(textPart);                                                //csatolmány osztály           
                    
-            //message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
-            message.setText(tartalom);
+            //message.setContent(multipart, "text/html");                                                  //message üzenethez mindent hozzáad
+
+            message.setText(tartalom,"UTF-8", "html");
             
             Transport.send(message);                                                        //levél küldése
 

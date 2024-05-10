@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_frissit());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1636,9 +1636,21 @@ public class Torlo extends JPanel
                         + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
                         + "where 3=3\n"
                         + "and nev = 'INSTAGRID FCT'";*/
-                String sql = "select *\n"
-                        + "from videoton.cikk\n"
-                        + "where 3 = 3";
+                String sql = "select      (select videoton.fkovsor.nev from videoton.fkovsor where videoton.fkov.hely = videoton.fkovsor.azon) as 'Folyamat',\n"
+                        + "                videoton.fkov.alsor as 'Teszter szám',\n"
+                        + "                videoton.fkov.panel as 'Panel',\n"
+                        + "                videoton.fkov.ido as 'Időpont',\n"
+                        + "                videoton.fkov.szeriaszam as 'Szériaszám',\n"
+                        + "                videoton.fkov.kod2 as 'Másodlago kód',\n"
+                        + "                if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as 'eredmény',\n"
+                        + "                videoton.fkov.tesztszam as 'Teszt sorszám',\n"
+                        + "                videoton.fkov.teststarttime as 'Teszt kezdete',\n"
+                        + "                videoton.fkov.testfinishtime as 'Teszt vége',\n"
+                        + "                videoton.fkov.failtestnames as 'Hibás tesztek'\n"
+                        + "    from        videoton.fkov\n"
+                        + "    where        \n"
+                        + "                videoton.fkov.hely in (125,126,127,128,129,130)\n"
+                        + "    order by    videoton.fkov.ido asc;";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -2069,7 +2081,7 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA1998.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);

@@ -472,12 +472,12 @@ public class SQA_SQL {
                     {
                         if(datatable.getRows().get(szamlalo2).getString(0).toLowerCase().contains(datatable2.getRows().get(szamlalo).getString(2).toLowerCase()) )
                         {
-                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu";
+                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu, reznyak.norbert@veas.videoton.hu";
                         }
                     }
                     //emailcim = "kovacs.zoltan@veas.videoton.hu";
                     File excel = new File(System.getProperty("user.home") + "\\"+datatable2.getRows().get(szamlalo).getString(2)+".xlsx");
-                    emailkuldes.retour_emailkuldes("automatauzenet@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
+                    emailkuldes.retour_emailkuldes("easqas@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
                     id = id.substring(0, id.length() - 1);
                     String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID in ("+ id  +")";
                     stmt.executeUpdate(modosit);
@@ -536,12 +536,12 @@ public class SQA_SQL {
                     {
                         if(datatable.getRows().get(szamlalo2).getString(0).toLowerCase().contains(datatable2.getRows().get(szamlalo).getString(2).toLowerCase()) )
                         {
-                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu";
+                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu, reznyak.norbert@veas.videoton.hu";
                         }
                     }
                     //emailcim = "kovacs.zoltan@veas.videoton.hu";
                     File excel = new File(System.getProperty("user.home") + "\\"+datatable2.getRows().get(szamlalo).getString(2)+".xlsx");
-                    emailkuldes.retour_emailkuldes("automatauzenet@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
+                    emailkuldes.retour_emailkuldes("easqas@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
                     id = datatable2.getRows().get(szamlalo).getString(0);
                     String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID in ("+ id  +")";
                     stmt.executeUpdate(modosit);
@@ -597,12 +597,12 @@ public class SQA_SQL {
                     {
                         if(datatable.getRows().get(szamlalo2).getString(0).toLowerCase().contains(datatable2.getRows().get(szamlalo).getString(2).toLowerCase()) )
                         {
-                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu";
+                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu, reznyak.norbert@veas.videoton.hu";
                         }
                     }
                     //emailcim = "kovacs.zoltan@veas.videoton.hu";
                     File excel = new File(System.getProperty("user.home") + "\\"+datatable2.getRows().get(szamlalo).getString(2)+".xlsx");
-                    emailkuldes.retour_emailkuldes("automatauzenet@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
+                    emailkuldes.retour_emailkuldes("easqas@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
                     id = id.substring(0, id.length() - 1);
                     String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID in ("+ id  +")";
                     stmt.executeUpdate(modosit);
@@ -658,12 +658,12 @@ public class SQA_SQL {
                     {
                         if(datatable.getRows().get(szamlalo2).getString(0).toLowerCase().contains(datatable2.getRows().get(szamlalo).getString(2).toLowerCase()) )
                         {
-                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu";
+                            emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu, reznyak.norbert@veas.videoton.hu";
                         }
                     }
                     //emailcim = "kovacs.zoltan@veas.videoton.hu";
                     File excel = new File(System.getProperty("user.home") + "\\"+datatable2.getRows().get(szamlalo).getString(2)+".xlsx");
-                    emailkuldes.retour_emailkuldes("automatauzenet@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
+                    emailkuldes.retour_emailkuldes("easqas@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);
                     id = id.substring(0, id.length() - 1);
                     String modosit = "update qualitydb.Retour set  Ertesitve = 'Igen' where ID in ("+ id  +")";
                     stmt.executeUpdate(modosit);

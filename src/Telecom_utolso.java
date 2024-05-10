@@ -188,6 +188,7 @@ public class Telecom_utolso extends JPanel {
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();                
                 Workbook workbook = new Workbook();
+                workbook.setVersion(ExcelVersion.Version2016);
                 if(fajl != null)
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -197,57 +198,13 @@ public class Telecom_utolso extends JPanel {
                     DataTable datatable2 = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );                
                     Workbook workbook2 = new Workbook();
+                    workbook2.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet2 = workbook2.getWorksheets().get(0);
-                    
-                    String osszefuzott = "";
-                    for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
-                    {
-                        osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
-                    }
-                    osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
-                    
                     DriverManager.registerDriver(new oracle.jdbc.OracleDriver());                
                     Class.forName("oracle.jdbc.OracleDriver");  //.driver                                    
                     Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
-                    Statement stmt = con.createStatement();                                    
-                    
-                    ResultSet rs = stmt.executeQuery("select ot.contract,\r\n"
-                            + "       ct.part_no,\r\n"
-                            + "       ot.tracy_id,\r\n"
-                            + "       ot.TRACY_SERIAL_NO,\r\n"
-                            + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
-                            + "       ot.manuf_date,\r\n"
-                            + "       ot.work_center_no,\r\n"
-                            + "       ot.resource_id,\r\n"
-                            + "       ot.scan_loc,\r\n"
-                            + "       ot.operation_no,\r\n"
-                            + "       ot.operation_description,\r\n"
-                            + "       ot.pass,\r\n"
-                            + "       ot.repetitions,\r\n"
-                            + "       ot.REPET_LAST_REPAIR,\r\n"
-                            + "       so.comments,\r\n"
-                            + "       so.tracy_spec_code,\r\n"
-                            + "       so.alfa_num_value,\r\n"
-                            + "       ct.package_id\r\n"
-                            + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
-                            + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
-                            + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
-                            + " where 3 = 3\r\n"
-                            + "   and ot.TRACY_SERIAL_NO in("+ osszefuzott +")\r\n"
-                            + "   and ot.contract = so.contract(+)\r\n"
-                            + "   and ot.tracy_id = so.tracy_id(+)\r\n"
-                            + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
-                            + "      --and ot.tracy_id = '35903860'\r\n"
-                            + "   and so.COMMENTS(+) is not null\r\n"
-                            + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
-                            + "   and ot.history_id = ct.history_id\r\n"
-                            + "   and ot.tracy_id = ct.tracy_id\r\n"
-                            + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
-                            + " order by ot.manuf_date asc ");
-                    
-                    JdbcAdapter jdbcAdapter = new JdbcAdapter();
-                    jdbcAdapter.fillDataTable(datatable2, rs);
-                    //sheet2.insertDataTable(datatable2, true, 1, 1);
+                    Statement stmt = con.createStatement();
+                    String osszefuzott = "";
                     int cellaszam = 1;
                     sheet2.getRange().get("A" + cellaszam).setText("Contract");
                     sheet2.getRange().get("B" + cellaszam).setText("Part no");
@@ -269,28 +226,74 @@ public class Telecom_utolso extends JPanel {
                     sheet2.getRange().get("R" + cellaszam).setText("Package ID");
                     
                     cellaszam++;
-                    for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+                    ResultSet rs = null;
+                    for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                     {
-                        sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
-                        sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
-                        sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(2));
-                        sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(3));
-                        sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(4));
-                        sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(5));
-                        sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(6));
-                        sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(7));
-                        sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(8));
-                        sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(9));
-                        sheet2.getRange().get("K" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(10));
-                        sheet2.getRange().get("L" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(11));
-                        sheet2.getRange().get("M" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(12));
-                        sheet2.getRange().get("N" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(13));
-                        sheet2.getRange().get("O" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(14));
-                        sheet2.getRange().get("P" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(15));
-                        sheet2.getRange().get("Q" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(16));
-                        sheet2.getRange().get("R" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(17));
-                        cellaszam++;
+                        osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
                     }
+                        osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                        rs = stmt.executeQuery("select ot.contract,\r\n"
+                                + "       ct.part_no,\r\n"
+                                + "       ot.tracy_id,\r\n"
+                                + "       ot.TRACY_SERIAL_NO,\r\n"
+                                + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                + "       ot.manuf_date,\r\n"
+                                + "       ot.work_center_no,\r\n"
+                                + "       ot.resource_id,\r\n"
+                                + "       ot.scan_loc,\r\n"
+                                + "       ot.operation_no,\r\n"
+                                + "       ot.operation_description,\r\n"
+                                + "       ot.pass,\r\n"
+                                + "       ot.repetitions,\r\n"
+                                + "       ot.REPET_LAST_REPAIR,\r\n"
+                                + "       so.comments,\r\n"
+                                + "       so.tracy_spec_code,\r\n"
+                                + "       so.alfa_num_value,\r\n"
+                                + "       ct.package_id\r\n"
+                                + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                + " where 3 = 3\r\n"
+                                + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott +")\r\n"
+                                + "   and ot.contract = so.contract(+)\r\n"
+                                + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                + "      --and ot.tracy_id = '35903860'\r\n"
+                                + "   and so.COMMENTS(+) is not null \r\n"
+                                + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                + "   and ot.history_id = ct.history_id\r\n"
+                                + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                + " order by ot.manuf_date asc ");
+                        
+                        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                        jdbcAdapter.fillDataTable(datatable2, rs);
+                        //sheet2.insertDataTable(datatable2, true, 1, 1);
+                        
+                        for(int szamlalo2 = 0; szamlalo2 < datatable2.getRows().size(); szamlalo2++)
+                        {                           
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
+                            sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
+                            sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
+                            sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
+                            sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
+                            sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
+                            sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
+                            sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
+                            sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
+                            sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
+                            sheet2.getRange().get("K" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(10));
+                            sheet2.getRange().get("L" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(11));
+                            sheet2.getRange().get("M" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(12));
+                            sheet2.getRange().get("N" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(13));
+                            sheet2.getRange().get("O" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(14));
+                            sheet2.getRange().get("P" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(15));
+                            sheet2.getRange().get("Q" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(16));
+                            sheet2.getRange().get("R" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(17));
+                            cellaszam++;
+                            
+                        }
+                    
                     //sheet2.insertDataTable(datatable2, true, 1, 1);
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
                     sheet2.getAllocatedRange().autoFitColumns();

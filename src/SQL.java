@@ -399,6 +399,7 @@ public class SQL
 	       e.printStackTrace();
 	       String hibauzenet = e.toString();
 	       Email hibakuldes = new Email();
+	       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba", 2);
            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
 	    } finally 
 	    {

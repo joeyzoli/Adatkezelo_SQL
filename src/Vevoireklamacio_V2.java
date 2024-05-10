@@ -20,6 +20,7 @@ public class Vevoireklamacio_V2 extends JPanel {
     static Vevoireklamacio_d6 d6;
     static Vevoireklamacio_d7 d7;
     static Vevoireklamacio_d8 d8;
+    static Vevoireklamacio_koltsegek koltseg;
     static CardLayout cardLayout;
     static JSeparator separator;
     
@@ -42,6 +43,7 @@ public class Vevoireklamacio_V2 extends JPanel {
         d6 = new Vevoireklamacio_d6();
         d7 = new Vevoireklamacio_d7();
         d8 = new Vevoireklamacio_d8();
+        koltseg = new Vevoireklamacio_koltsegek();
         
         kartyak.add(d0, "d0");
         kartyak.add(d1, "d1");
@@ -52,6 +54,7 @@ public class Vevoireklamacio_V2 extends JPanel {
         kartyak.add(d6, "d6");
         kartyak.add(d7, "d7");
         kartyak.add(d8, "d8");
+        kartyak.add(koltseg, "koltseg");
         fejlec = new Vevoireklamacio_fejlec();
         fejlec.setBounds(0, 0, 1500, 150);
         kartyak.setBounds(0, 152, 1500, 750);

@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -26,6 +27,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+
 
 public class Foablak extends JFrame 
 {
@@ -87,7 +89,7 @@ public class Foablak extends JFrame
 	private Kockazatimatrix_ertekeles ertekeles;
 	private Kockazatimatrix_osszesites osszesites;
 	private Forraszthatosagi_osszesito vizsgalat;
-	private Vevoireklamacio_V2 vevoirek;
+	static Vevoireklamacio_V2 vevoirek;
 	private AVM_javitasok javellen;
 	private Jelenleti_osszesito jelenleti;
 	private Excel_kereso kereso;
@@ -101,8 +103,6 @@ public class Foablak extends JFrame
 	private static final String jelszavam = "polip13";
 	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
 	static Dimension meretek = new Dimension(1200, 850);
-	
-
 	/**
 	 * Launch the application.
 	 */
@@ -116,7 +116,7 @@ public class Foablak extends JFrame
 				{
 					frame = new Foablak();
 					File mentes = new File(System.getProperty("user.home") + "\\hatterszin.txt");
-					if(mentes.exists())
+					if(mentes.exists())       //mentes.exists()
 					{
     					FileReader fr = new FileReader(System.getProperty("user.home") + "\\hatterszin.txt");
     			        try (BufferedReader br = new BufferedReader(fr)) 
@@ -131,6 +131,31 @@ public class Foablak extends JFrame
 					{
 					    frame.setVisible(true);
 					}
+					System.out.println(args[0]);
+					if(args[0].equals("Vevoi"))
+					{
+					    vevoirek = new Vevoireklamacio_V2();
+			            JScrollPane ablak = new JScrollPane(vevoirek);
+			            frame.setContentPane(ablak);
+			            frame.pack();
+			            Vevoireklamacio_fejlec.id_mezo.setText(args[1]);
+			            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+			            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+	                    Vevoireklamacio_d2.fajlok.clear();
+	                    Vevoireklamacio_V2.d0.visszatolt();
+	                    Vevoireklamacio_V2.d1.visszatolt();
+	                    Vevoireklamacio_V2.d2.visszatolt();
+	                    Vevoireklamacio_V2.d3.visszatolt();
+	                    Vevoireklamacio_V2.d4.visszatolt();
+	                    Vevoireklamacio_V2.d5.visszatolt();
+	                    Vevoireklamacio_V2.d6.visszatolt();
+	                    Vevoireklamacio_V2.d7.visszatolt();
+	                    Vevoireklamacio_V2.d8.visszatolt();
+	                    Vevoireklamacio_V2.koltseg.visszatolt();
+	                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+	                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+					}
+					
 				} 
 				catch (Exception e) 
 				{
@@ -528,6 +553,7 @@ public class Foablak extends JFrame
         
         ImageIcon icon = new ImageIcon("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\easqas.jpg");
         setIconImage(icon.getImage());
+        
 
 	}
 	
@@ -1251,16 +1277,23 @@ public class Foablak extends JFrame
                 System.out.println("Ma nem fut le az SQA email rész");
                 System.out.println("A hét napja:" + nap);
             }
+            
+            
             //System.out.println(this.getClass().getSimpleName());
             //Utolso_sor sorszam = new Utolso_sor();
             //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
-            /*Email email = new Email();
-            for(int szamlalo = 0; szamlalo < 1111; szamlalo++)
+            Email email = new Email();
+            for(int szamlalo = 0; szamlalo < 1; szamlalo++)
             {                
-                email.mindenes_email("easqas@veas.videoton.hu", "keszte.zsolt@veas.videoton.hu","", "Kérdés", "Szia Zsolti!\n"
-                        + "\n"
-                        + "Miért nem válaszolt a Kovács Zoli leveleire?");
+                email.mindenes_email("easqas@veas.videoton.hu", "reznyak.norbert.zoltan@veas.videoton.hu", "", "Lejárt D3", "<br>Tisztelt Reznyák Norbert!</br> "
+                        + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: 1</br>"
+                + "<br>Vevő:</br>" 
+                + "<br>Típus: "+"</br>" 
+                + "<br>Mi a probléma: </br>"
+                + "<br>Kérem, minél előbb zárja le!</br>"
+                + "<br>Link: <a href='\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito1.bat'>Reklamáció link</a> </br>"
+                + "<br>Üdvözlettel: EASQAS program</br>");
             }
             
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
@@ -1311,6 +1344,10 @@ public class Foablak extends JFrame
             
         }
     }
+	
+	
+	
+	
 	/*
 	static float fb7530 = (float) 0.00;
 	static float fb7530ax = (float) 0.00;

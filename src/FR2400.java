@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
@@ -107,6 +108,7 @@ public class FR2400 extends JPanel {
         add(lblNewLabel_5);
         
         raklap_mezo = new JTextField();
+        raklap_mezo.addKeyListener(new Hany_tesztelve());
         raklap_mezo.setBounds(188, 172, 288, 20);
         add(raklap_mezo);
         raklap_mezo.setColumns(10);
@@ -934,6 +936,28 @@ public class FR2400 extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Hany_tesztelve implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                SQA_SQL leker = new SQA_SQL();
+                String sql = "select count(raklapszam)from qualitydb.OQC_FB7530 where raklapszam = '"+ raklap_mezo.getText() +"'";
+                mennyiseg_label.setText(leker.tombvissza_sajat(sql)[0]);;
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+            
+            
     }
 }
 

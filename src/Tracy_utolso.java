@@ -116,7 +116,7 @@ public class Tracy_utolso extends JPanel {
                                   + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                                   + "videoton.fkov.dolgozo \n"
                                   + "from (select videoton.fkov.panel, max(ido) as 'Datum' from videoton.fkov "
-                                  + "     where videoton.fkov.panel = '"+ datatable.getRows().get(szamlalo).getString(0) +"' group by videoton.fkov.panel) belso, videoton.fkov \n"
+                                  + "     where videoton.fkov.panel like '"+ datatable.getRows().get(szamlalo).getString(0) +"%' group by videoton.fkov.panel) belso, videoton.fkov \n"
                                   + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
                                   + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum");
                           if(rs.next())

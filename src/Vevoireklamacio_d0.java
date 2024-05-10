@@ -71,7 +71,7 @@ public class Vevoireklamacio_d0 extends JPanel {
     private SQA_SQL cikkszamok = new SQA_SQL();
     private String sql;
     private Workbook workbook = new Workbook();
-    private JDatePickerImpl ertesitve;
+    static JDatePickerImpl ertesitve;
     private UtilDateModel model;
     static JTable table_1;
     private DefaultTableModel modell2;
@@ -289,7 +289,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
                 + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
                 + "ORDER by part_no";
-        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                             //cikkszamok.tombvissza(sql)       //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql) );                             //cikkszamok.tombvissza(sql)      //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
         tipus_box.addActionListener(new Valtozas());
         tipus_box.addActionListener(new Hozzaad());
@@ -553,7 +553,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 {
                     Vevoireklamacio_fejlec.ertesites_cimke.setText(rs.getString(5));
                     Vevoireklamacio_fejlec.ertesitve = Color.GREEN;
-                    String[] szinek = rs.getString(49).split(";");
+                    String[] szinek = rs.getString(50).split(";");
                     Color szin2 = new Color(Integer.parseInt(szinek[1]));
                     Color szin3 = new Color(Integer.parseInt(szinek[2]));
                     Color szin4 = new Color(Integer.parseInt(szinek[3]));

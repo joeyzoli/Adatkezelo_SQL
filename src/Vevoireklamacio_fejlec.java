@@ -71,6 +71,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
     static String word_kep = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Ikonok\\word.jpg";
     private String d8 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Q-JK-003 8D report.xlsx";
     static JButton mentes_gomb;
+    static JRadioButton koltseg_gomb;
 
     /**
      * Create the panel.
@@ -155,6 +156,11 @@ public class Vevoireklamacio_fejlec extends JPanel {
         d8_gomb.setBounds(1118, 117, 51, 23);
         add(d8_gomb);
         
+        koltseg_gomb = new JRadioButton("Költségek");
+        koltseg_gomb.addActionListener(e -> Vevoireklamacio_V2.cardLayout.show(Vevoireklamacio_V2.kartyak, "koltseg"));
+        koltseg_gomb.setBounds(1215, 117, 91, 23);
+        add(koltseg_gomb);
+        
         
         
         ButtonGroup csoport = new ButtonGroup();
@@ -167,6 +173,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         csoport.add(d6_gomb);
         csoport.add(d7_gomb);
         csoport.add(d8_gomb);
+        csoport.add(koltseg_gomb);
         
         mentes_gomb = new JButton("Mentés");
         mentes_gomb.setEnabled(false);
@@ -245,7 +252,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         JLabel lblNewLabel_5 = new JLabel("D5 állapot");
         lblNewLabel_5.setBounds(929, 24, 87, 14);
         add(lblNewLabel_5);
-        
+  
     }
     
     public String hozzaad(String fajlnev)
@@ -371,6 +378,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                         Vevoireklamacio_V2.d6.mentes();
                         Vevoireklamacio_V2.d7.mentes();
                         Vevoireklamacio_V2.d8.mentes();
+                        Vevoireklamacio_V2.koltseg.mentes();
                         Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
                         JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
                     }
@@ -408,6 +416,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     Vevoireklamacio_V2.d6.visszatolt();
                     Vevoireklamacio_V2.d7.visszatolt();
                     Vevoireklamacio_V2.d8.visszatolt();
+                    Vevoireklamacio_V2.koltseg.visszatolt();
                     Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
                     Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 }
@@ -991,5 +1000,4 @@ public class Vevoireklamacio_fejlec extends JPanel {
             }
          }
     }
-    
 }
