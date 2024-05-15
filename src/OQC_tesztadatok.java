@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JFormattedTextField.AbstractFormatter;
@@ -263,9 +264,36 @@ public class OQC_tesztadatok extends JPanel {
                         + "";
                 stmt.execute(sql);
                 ResultSet rs = stmt.getResultSet();
+                SQA_SQL mikor = new SQA_SQL();
+                String rogzites = "";
                 while(rs.next())
                 {
-                    modell.addRow(new Object[]{"",rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
+                    if(rs.getString(2) != null)
+                    {
+                        sql = "select rogzites_ido from qualitydb.OQC_FB7530 where datum = '"+ datum.getJFormattedTextField().getText() +"' and tesztelo = '"+ rs.getString(1) +"' ";
+                        rogzites = mikor.tombvissza_sajat(sql)[0];
+                    }
+                    else if(rs.getString(3) != null)
+                    {
+                        sql = "select rogzites_ido from qualitydb.OQC_FR2400 where datum = '"+ datum.getJFormattedTextField().getText() +"' and tesztelo = '"+ rs.getString(1) +"' ";
+                        rogzites = mikor.tombvissza_sajat(sql)[0];
+                    }
+                    else if(rs.getString(4) != null)
+                    {
+                        sql = "select rogzites_ido from qualitydb.OQC_FR1200 where datum = '"+ datum.getJFormattedTextField().getText() +"' and tesztelo = '"+ rs.getString(1) +"' ";
+                        rogzites = mikor.tombvissza_sajat(sql)[0];
+                    }
+                    else if(rs.getString(5) != null)
+                    {
+                        sql = "select rogzites_ido from qualitydb.OQC_FR600 where datum = '"+ datum.getJFormattedTextField().getText() +"' and tesztelo = '"+ rs.getString(1) +"' ";
+                        rogzites = mikor.tombvissza_sajat(sql)[0];
+                    }
+                    else if(rs.getString(6) != null)
+                    {
+                        sql = "select rogzites_ido from qualitydb.OQC_FD302 where datum = '"+ datum.getJFormattedTextField().getText() +"' and tesztelo = '"+ rs.getString(1) +"' ";
+                        rogzites = mikor.tombvissza_sajat(sql)[0];
+                    }
+                    modell.addRow(new Object[]{muszak(datum.getJFormattedTextField().getText(), rogzites),rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
                 }
                 TableColumnModel columnModel = table.getColumnModel();
                 for (int column = 0; column < table.getColumnCount(); column++) {
@@ -293,6 +321,51 @@ public class OQC_tesztadatok extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
             }
          }
+    }
+    
+    public String muszak(String datum, String ellenorzesideje)
+    {
+        String melyikmuszak = "";
+        try
+        {             
+            SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            String maiido = datum.replace("-", ".");
+            Date reggelvege = hosszu.parse(maiido+" 13:55:00");
+            Date reggelkezd = hosszu.parse(maiido + " 05:55:00");
+            Date delutanvege = hosszu.parse(maiido+" 21:55:00");
+            Date d3 = hosszu.parse(ellenorzesideje.replace("-", "."));          //hosszu.parse(maihosszu);
+            
+            if(reggelvege.compareTo(d3) > 0) 
+            {
+               melyikmuszak = "De";
+            }
+            if(reggelkezd.compareTo(d3) < 0) 
+            {
+               melyikmuszak = "De";
+            }
+            else 
+            {
+                melyikmuszak = "Éj";
+            }
+            if(reggelvege.compareTo(d3) < 0) 
+            {;
+               melyikmuszak = "Du";
+            }
+            if(delutanvege.compareTo(d3) < 0) 
+            {
+                melyikmuszak = "Éj";
+            }
+        }           
+        catch(Exception e1)
+        { 
+            System.out.println(e1);
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
+        }
+        return melyikmuszak;    
     }
     
     class Ellenorszerint implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

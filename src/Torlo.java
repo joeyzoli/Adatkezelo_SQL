@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Beolvasott_torles());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2090,11 +2090,11 @@ public class Torlo extends JPanel
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                   /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");*/
                    System.out.println("Fut a For");
-                   /* stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Retour_id,RMA) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "', '" + datatable.getRows().get(szamlalo).getString(2) + "')");*/
+                   stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (Retour_ID,VEAS_ID) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "')");
                }              
                Foablak.frame.setCursor(null);                        
                stmt.close();
@@ -2668,5 +2668,53 @@ public class Torlo extends JPanel
          }
     }
 	
+	class Beolvasott_torles implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Munkafüzet1.xlsx";                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               Workbook workbook = new Workbook();
+               workbook.loadFromFile(excelfile1);
+               Worksheet sheet = workbook.getWorksheets().get(0);               
+               DataTable datatable = new DataTable();
+               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
+               for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+               {
+                   stmt.executeUpdate("delete from qualitydb.Beolvasott_panelek where  Panelszam like '" + datatable.getRows().get(szamlalo).getString(0) +"%' "
+                           + "and Idopont > '2024.05.14 00:01:00'");
+                   System.out.println("Fut a For");
+               }              
+               Foablak.frame.setCursor(null);                        
+               stmt.close();
+               conn.close();                
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
 	
 }

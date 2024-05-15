@@ -1283,7 +1283,7 @@ public class Foablak extends JFrame
             //Utolso_sor sorszam = new Utolso_sor();
             //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
-            Email email = new Email();
+            /*Email email = new Email();
             for(int szamlalo = 0; szamlalo < 1; szamlalo++)
             {                
                 email.mindenes_email("easqas@veas.videoton.hu", "reznyak.norbert.zoltan@veas.videoton.hu", "", "Lejárt D3", "<br>Tisztelt Reznyák Norbert!</br> "
@@ -1294,7 +1294,7 @@ public class Foablak extends JFrame
                 + "<br>Kérem, minél előbb zárja le!</br>"
                 + "<br>Link: <a href='\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito1.bat'>Reklamáció link</a> </br>"
                 + "<br>Üdvözlettel: EASQAS program</br>");
-            }
+            }*/
             
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");

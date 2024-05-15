@@ -25,6 +25,8 @@ public class CSV extends JPanel {
         csv_gomb.addActionListener(new CSV_gyart());
         csv_gomb.setBounds(539, 154, 89, 23);
         add(csv_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

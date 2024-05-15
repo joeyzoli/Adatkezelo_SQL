@@ -3,6 +3,7 @@ import java.nio.charset.Charset;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -32,6 +33,7 @@ public class CSV_gyarto
     		Worksheet sheet = workbook.getWorksheets().get(0);																		//excel tábla létrehozása
     			 
     		//Save the document to CSV
+    		UIManager.put("FileChooser.openButtonText","Mentés");
     		mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     		mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\"));
             mentes_helye.showOpenDialog(mentes_helye);

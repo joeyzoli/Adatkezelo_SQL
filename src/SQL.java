@@ -23,6 +23,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  
@@ -69,6 +70,7 @@ public class SQL
             
             if(System.getProperty("user.name").equals("csader.zsolt") || System.getProperty("user.name").equals("kovacs.zoltan"))
             {
+                UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -348,6 +350,7 @@ public class SQL
             
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
             
+            UIManager.put("FileChooser.openButtonText","Mentés");
             JFileChooser mentes_helye = new JFileChooser();
             mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
             mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

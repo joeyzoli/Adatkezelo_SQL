@@ -389,7 +389,7 @@ public class OQC_adatok extends JPanel {
         {
             Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-            Class.forName("oracle.jdbc.OracleDriver");  //.driver
+            //Class.forName("oracle.jdbc.OracleDriver");  //.driver
                                 
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
             Statement stmt = con.createStatement();   

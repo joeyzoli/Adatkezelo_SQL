@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -184,7 +185,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 //Set position of the chart
                 chart5.setLeftColumn(1);
                 chart5.setTopRow(31);
-                chart5.setRightColumn(18);
+                chart5.setRightColumn(30);
                 chart5.setBottomRow(51);
                 chart5.getPrimaryCategoryAxis().getTitleArea().setTextRotationAngle(90);
                 chart5.getPrimaryValueAxis().hasMajorGridLines(false);
@@ -286,6 +287,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
                 //String hova = System.getProperty("user.home") + "\\Desktop\\Zárolási kimutatás.xlsx";
+                UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
