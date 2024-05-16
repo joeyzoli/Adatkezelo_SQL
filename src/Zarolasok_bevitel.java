@@ -812,19 +812,19 @@ public class Zarolasok_bevitel extends JPanel {
                             {
                                 uzenet.zarolas_email("easqas@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                         zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
-                                        zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText()) ;
+                                        zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText()) ;
                             }
                             else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                             {
                                 uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                         zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
-                                                zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText());
+                                                zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                             }
                             else
                             {
                                 uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                         zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
-                                                zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText());
+                                                zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                             }                                               
                         }
                         sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"

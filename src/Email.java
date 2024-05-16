@@ -285,7 +285,7 @@ public class Email
         }        
     }
     
-    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki, String datum, String muszak, String targy)
+    public void zarolas_email(String feladoemail, String cimzettek, String projekt, String cikk, String db, String ok, String ki, String datum, String muszak, String targy, String meszam)
     {
         Properties props = new Properties(); //new Properties();     System.getProperties();
         
@@ -314,6 +314,7 @@ public class Email
                     + "Zárolta: "+ ki +"\n"
                     + "Dátum: "+ datum +"\n"
                     + "Műszak: "+ muszak+"\n"
+                    + "Raklap ME száma: "+ meszam+"\n"
                     + "A zárolás technikusi beavatkozást igényel!");                                          //levél tartalmának csatolása
             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                    
