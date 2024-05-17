@@ -12,6 +12,7 @@ import com.spire.xls.charts.ChartSeries;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -2683,13 +2684,30 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(1) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(1));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText();
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
-                                + "\nVevő: "+ rs.getString(3) 
-                                + "\nTípus: "+ rs.getString(4) +"\t" 
-                                + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem, minél előbb zárja le!"
-                                + "\n\nÜdvözlettel: EASQAS program");
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                                + "<br>Vevő: "+ rs.getString(3) +"</br>"
+                                + "<br>Típus: "+ rs.getString(4) +"</br>" 
+                                + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
+                                + "<br>Kérem, minél előbb zárja le!" +"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D3_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2706,13 +2724,30 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(1) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(1));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";       //+",reznyak.norbert@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
-                                + "\nVevő: "+ rs.getString(3) 
-                                + "\nTípus: "+ rs.getString(4) +"\t" 
-                                + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem, minél előbb zárja le!"
-                                + "\n\nÜdvözlettel: EASQAS program");
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                                + "<br>Vevő: "+ rs.getString(3) +"</br>"
+                                + "<br>Típus: "+ rs.getString(4) +"</br>" 
+                                + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
+                                + "<br>Kérem, minél előbb zárja le!" +"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2729,13 +2764,30 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(1) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(1));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a D5 határideje több, mint 1 hete az alábbi reklamációnál: \nID: "+ rs.getString(1)
-                                + "\nVevő: "+ rs.getString(3) 
-                                + "\nTípus: "+ rs.getString(4) +"\t" 
-                                + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem, minél előbb zárja le!"
-                                + "\n\nÜdvözlettel: EASQAS program");
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                                + "<br>Vevő: "+ rs.getString(3) +"</br>"
+                                + "<br>Típus: "+ rs.getString(4) +"</br>" 
+                                + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
+                                + "<br>Kérem, minél előbb zárja le!" +"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D5_ujraertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2752,13 +2804,30 @@ public class SQL
                 {
                     if(nevek[nevek.length-1].equals(sheet.getRange().get("B" + szamlalo).getText()))
                     {
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(1) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(1));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt reklamáció", "Tisztelt "+nevek[nevek.length-1] +"! \n\nLejárt a reklamáció határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)
-                                + "\nVevő: "+ rs.getString(3) 
-                                + "\nTípus: "+ rs.getString(4) +"\t" 
-                                + "\nMi a probléma: "+ rs.getString(5)
-                                + "\n\nKérem, minél előbb zárja le!"
-                                + "\n\nÜdvözlettel: EASQAS program");
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                                + "<br>Vevő: "+ rs.getString(3) +"</br>"
+                                + "<br>Típus: "+ rs.getString(4) +"</br>" 
+                                + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
+                                + "<br>Kérem, minél előbb zárja le!" +"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_alap set D8_ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2789,14 +2858,30 @@ public class SQL
                                 cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
                             }
                         }
-                        
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon belül lejár a feladat határideje az alábbi reklamációnál: "
-                                + "\nID: "+ rs.getString(2)
-                                + "\nVevő: "+ rs2.getString(2)
-                                + "\nTípus: "+ rs2.getString(3)
-                                + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatáridő: "+ rs.getString(5)
-                                +"\n\nKérem, minél előbb zárja le!");
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(2));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "<br>Tisztelt "+rs.getString(4) +"!</br> <br>2 napon belül lejár a feladat határideje az alábbi reklamációnál: </br>"
+                                + "<br>ID: "+ rs.getString(2) +"</br>"
+                                + "<br>Vevő: "+ rs2.getString(2) +"</br>"
+                                + "<br>Típus: "+ rs2.getString(3) +"</br>"
+                                + "<br>Feladat: "+ rs.getString(3) +"</br>"
+                                + "<br>Határidő: "+ rs.getString(5) +"</br>"
+                                +"<br>Kérem, minél előbb zárja le!"+"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2827,14 +2912,30 @@ public class SQL
                                 cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
                             }
                         }
-                        
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt feladat", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
-                                + "\nID: "+ rs.getString(2)
-                                + "\nVevő: "+ rs2.getString(2)
-                                + "\nTípus: "+ rs2.getString(3)
-                                + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatáridő: "+ rs.getString(5)
-                                +"\n\nKérem, minél előbb zárja le!");
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(2));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "<br>Tisztelt "+rs.getString(4) +"!</br> <br>Lejárt a feladat határideje az alábbi reklamációnál: </br>"
+                                + "<br>ID: "+ rs.getString(2) +"</br>"
+                                + "<br>Vevő: "+ rs2.getString(2) +"</br>"
+                                + "<br>Típus: "+ rs2.getString(3) +"</br>"
+                                + "<br>Feladat: "+ rs.getString(3) +"</br>"
+                                + "<br>Határidő: "+ rs.getString(5) +"</br>"
+                                +"<br>Kérem, minél előbb zárja le!"+"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_elo set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2865,14 +2966,30 @@ public class SQL
                                 cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
                             }
                         }
-                        
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "Tisztelt "+rs.getString(4) +"! \n\n2 napon belül lejár a feladat határideje az alábbi reklamációnál: "
-                                + "\nID: "+ rs.getString(2)
-                                + "\nVevő: "+ rs2.getString(2)
-                                + "\nTípus: "+ rs2.getString(3)
-                                + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatáridő: "+ rs.getString(5)
-                                +"\n\nKérem, minél előbb zárja le!");
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(2));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "<br>Tisztelt "+rs.getString(4) +"!</br> <br>2 napon belül lejár a feladat határideje az alábbi reklamációnál: </br>"
+                                + "<br>ID: "+ rs.getString(2) +"</br>"
+                                + "<br>Vevő: "+ rs2.getString(2) +"</br>"
+                                + "<br>Típus: "+ rs2.getString(3) +"</br>"
+                                + "<br>Feladat: "+ rs.getString(3) +"</br>"
+                                + "<br>Határidő: "+ rs.getString(5) +"</br>"
+                                +"<br>Kérem, minél előbb zárja le!"+"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }
@@ -2903,14 +3020,30 @@ public class SQL
                                 cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
                             }
                         }
-                        
-                        email.mindenes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt feladat", "Tisztelt "+rs.getString(4) +"! \n\nLejárt a feladat határideje az alábbi reklamációnál: "
-                                + "\nID: "+ rs.getString(2)
-                                + "\nVevő: "+ rs2.getString(2)
-                                + "\nTípus: "+ rs2.getString(3)
-                                + "\nFeladat: "+ rs.getString(3)
-                                + "\nHatáridő: "+ rs.getString(5)
-                                +"\n\nKérem, minél előbb zárja le!");
+                        String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
+                        try
+                        {
+                            PrintWriter writer = new PrintWriter(bathelye, "UTF-8");
+                            writer.print("java -jar \\\\172.20.22.7\\kozos\\Jar-ok\\EASQAS.jar Vevoi "+rs.getString(2));
+                            writer.close();
+                        }
+                        catch (Exception e1) 
+                        {
+                            e1.printStackTrace();
+                            String hibauzenet = e1.toString();
+                            Email hibakuldes = new Email();
+                            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+                        }
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejáró feladat", "<br>Tisztelt "+rs.getString(4) +"!</br> <br>Lejárt a feladat határideje az alábbi reklamációnál: </br>"
+                                + "<br>ID: "+ rs.getString(2) +"</br>"
+                                + "<br>Vevő: "+ rs2.getString(2) +"</br>"
+                                + "<br>Típus: "+ rs2.getString(3) +"</br>"
+                                + "<br>Feladat: "+ rs.getString(3) +"</br>"
+                                + "<br>Határidő: "+ rs.getString(5) +"</br>"
+                                +"<br>Kérem, minél előbb zárja le!"+"</br>"
+                                + "<br>Link: <a href='"+ bathelye +"'>Reklamáció link</a> </br>"
+                                + "<br>Üdvözlettel: EASQAS program"+"</br>");
                         modosit.mindenes("Update qualitydb.Vevoireklamacio_det set Ertesitve2 = 'igen' where id = '"+ rs.getString(1) +"'");
                         break;
                     }

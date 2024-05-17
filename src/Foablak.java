@@ -1274,8 +1274,8 @@ public class Foablak extends JFrame
                 sqa.mindenes(modosit);
                 modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
                 sqa.mindenes(modosit);
-                System.out.println("Ma nem fut le az SQA email rész");
-                System.out.println("A hét napja:" + nap);
+                //System.out.println("Ma nem fut le az SQA email rész");
+                //System.out.println("A hét napja:" + nap);
             }
             
             

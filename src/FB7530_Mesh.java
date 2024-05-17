@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
@@ -108,6 +109,7 @@ public class FB7530_Mesh extends JPanel {
         add(lblNewLabel_5);
         
         raklap_mezo = new JTextField();
+        raklap_mezo.addKeyListener(new Hany_tesztelve());
         raklap_mezo.setBounds(188, 172, 288, 20);
         add(raklap_mezo);
         raklap_mezo.setColumns(10);
@@ -501,17 +503,21 @@ public class FB7530_Mesh extends JPanel {
                     String kritikus = "";
                     String sulyos = "";
                     String enyhe = "";
+                    String hibakategoria = "";
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
                     {
                         kritikus = "X";
+                        hibakategoria = "kritikus";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
                     {
                         sulyos = "X";
+                        hibakategoria = "sulyos";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
                     {
                         enyhe = "X";
+                        hibakategoria = "enyhe";
                     }
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
@@ -527,7 +533,19 @@ public class FB7530_Mesh extends JPanel {
                             + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
-                    
+                    if(hiba_box.getSelectedIndex() > 0)
+                    {
+                        Email email = new Email();
+                        email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "OQC hiba", "Szia Mitya! \n\n"
+                                + "Hibát rögzítettek: \n"
+                                + "\nHibacsoport: " + String.valueOf(hibacsoport_box.getSelectedItem()) +"\t"
+                                + "\nHiba: "+ String.valueOf(hiba_box.getSelectedItem()) +"\t"
+                                + "\nHiba kategória: "+ hibakategoria +"\t"
+                                + "\nTípus: " + String.valueOf(tipus_box.getSelectedItem()) +"\t"
+                                + "\nEllenőr: "+ String.valueOf(ellenor_box.getSelectedItem()) +"\t"
+                                + "\nMegjegyzés: " + megjegyzes_mezo.getText() +"\t"
+                                + "\n\nÜdvözlettel: EASQAS program");
+                    }
                     visszaallit();
                     int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
                     mennyiseg++;
@@ -1039,5 +1057,27 @@ public class FB7530_Mesh extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    private class Hany_tesztelve implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+            {
+                SQA_SQL leker = new SQA_SQL();
+                String sql = "select count(raklapszam)from qualitydb.OQC_FB7530_MESH where raklapszam = '"+ raklap_mezo.getText() +"'";
+                mennyiseg_label.setText(leker.tombvissza_sajat(sql)[0]);;
+            }       
+        }
+        @Override
+        public void keyTyped(KeyEvent e){                                                 //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom         
+        }
+        @Override
+        public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
+        }    
+            
+            
     }
 }

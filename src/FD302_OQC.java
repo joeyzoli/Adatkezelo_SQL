@@ -349,20 +349,21 @@ public class FD302_OQC extends JPanel {
                     String sulyos = "";
                     String enyhe = "";
                     String eredmeny = "OK";
+                    String hibakategoria = "";
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
                     {
                         kritikus = "X";
-                        eredmeny = "NOK";
+                        hibakategoria = "kritikus";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
                     {
                         sulyos = "X";
-                        eredmeny = "NOK";
+                        hibakategoria = "sulyos";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
                     {
                         enyhe = "X";
-                        eredmeny = "NOK";
+                        hibakategoria = "enyhe";
                     }
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
@@ -377,8 +378,20 @@ public class FD302_OQC extends JPanel {
                             + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ egyezes_mezo.getText() +"','"+ eredmeny +"','"+ megjegyzes_mezo.getText() +"','"+ tesztido +"','"+ rogzites.format(timestamp) +"')";
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
-                    
-                    //visszaallit();
+                    if(hiba_box.getSelectedIndex() > 0)
+                    {
+                        Email email = new Email();
+                        email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "OQC hiba", "Szia Mitya! \n\n"
+                                + "Hibát rögzítettek: \n"
+                                + "\nHibacsoport: " + String.valueOf(hibacsoport_box.getSelectedItem()) +"\t"
+                                + "\nHiba: "+ String.valueOf(hiba_box.getSelectedItem()) +"\t"
+                                + "\nHiba kategória: "+ hibakategoria +"\t"
+                                + "\nTípus: " + String.valueOf(FD302_Fejlec.tipus_box.getSelectedItem()) +"\t"
+                                + "\nEllenőr: "+ String.valueOf(FD302_Fejlec.ellenor_box.getSelectedItem()) +"\t"
+                                + "\nMegjegyzés: " + megjegyzes_mezo.getText() +"\t"
+                                + "\n\nÜdvözlettel: EASQAS program");
+                    }
+                    visszaallit();
                     int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
                     mennyiseg++;
                     mennyiseg_label.setText(String.valueOf(mennyiseg));
@@ -394,6 +407,38 @@ public class FD302_OQC extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    private void visszaallit()
+    {
+        raklap_mezo.setText("");
+        doboz_mezo.setText("");
+        kod_mezo.setText("");
+        dm_telepitett.setText("");
+        egyezes_mezo.setText("");
+        egyezes_mezo.setBackground(Color.WHITE);
+        dm_ok1.setText("");
+        dm_ok1.setBackground(Color.WHITE);
+        dm_ok2.setText("");
+        dm_ok2.setBackground(Color.WHITE);
+        dm_ok3.setText("");
+        dm_ok3.setBackground(Color.WHITE);
+        dm_max.setText("");
+        dm_hopihe.setText("");
+        kod2_mezo.setText("");
+        kod2_mezo.setBackground(Color.WHITE);
+        egyezes_mezo.setText("");
+        egyezes_mezo.setBackground(Color.WHITE);
+        ipei_mezo.setText("");
+        ipei_mezo.setBackground(Color.WHITE);
+        homerseklet_mezo.setText("");
+        akku_mezo.setText("");        
+        fehler_box.setSelectedIndex(0);
+        firmware_mezo.setText("");        
+        hiba_box.setSelectedIndex(0);
+        hibacsoport_box.setSelectedIndex(0);
+        hibakategoria_box.setSelectedIndex(0);
+        megjegyzes_mezo.setText("");
     }
     
     class DM1 implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
@@ -531,9 +576,7 @@ public class FD302_OQC extends JPanel {
         }
         @Override
         public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
-        }    
-            
-            
+        }            
     }
     
     class Hany_tesztelve implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
@@ -553,8 +596,7 @@ public class FD302_OQC extends JPanel {
         }
         @Override
         public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
-        }    
-            
-            
+        }              
     }
+    
 }

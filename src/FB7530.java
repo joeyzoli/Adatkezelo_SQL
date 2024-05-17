@@ -474,17 +474,21 @@ public class FB7530 extends JPanel {
                     String kritikus = "";
                     String sulyos = "";
                     String enyhe = "";
+                    String hibakategoria = "";
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
                     {
                         kritikus = "X";
+                        hibakategoria = "kritikus";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
                     {
                         sulyos = "X";
+                        hibakategoria = "sulyos";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
                     {
                         enyhe = "X";
+                        hibakategoria = "enyhe";
                     }
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
@@ -500,7 +504,19 @@ public class FB7530 extends JPanel {
                             + "'"+ kritikus +"','"+ sulyos +"','"+ enyhe +"','"+ rogzites.format(timestamp) +"','"+ tesztido +"')";
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
-                    
+                    if(hiba_box.getSelectedIndex() > 0)
+                    {
+                        Email email = new Email();
+                        email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "OQC hiba", "Szia Mitya! \n\n"
+                                + "Hibát rögzítettek: \n"
+                                + "\nHibacsoport: " + String.valueOf(hibacsoport_box.getSelectedItem()) +"\t"
+                                + "\nHiba: "+ String.valueOf(hiba_box.getSelectedItem()) +"\t"
+                                + "\nHiba kategória: "+ hibakategoria +"\t"
+                                + "\nTípus: " + String.valueOf(tipus_box.getSelectedItem()) +"\t"
+                                + "\nEllenőr: "+ String.valueOf(ellenor_box.getSelectedItem()) +"\t"
+                                + "\nMegjegyzés: " + megjegyzes_mezo.getText() +"\t"
+                                + "\n\nÜdvözlettel: EASQAS program");
+                    }
                     visszaallit();
                     int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
                     mennyiseg++;
@@ -992,7 +1008,7 @@ public class FB7530 extends JPanel {
          }
     }
     
-    class Hany_tesztelve implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    private class Hany_tesztelve implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
         public void keyPressed (KeyEvent e) 
         {    

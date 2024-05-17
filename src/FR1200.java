@@ -108,6 +108,7 @@ public class FR1200 extends JPanel {
         add(lblNewLabel_5);
         
         raklap_mezo = new JTextField();
+        raklap_mezo.addKeyListener(new Hany_tesztelve());
         raklap_mezo.setBounds(188, 172, 288, 20);
         raklap_mezo.addKeyListener(new Hany_tesztelve());
         add(raklap_mezo);
@@ -467,17 +468,21 @@ public class FR1200 extends JPanel {
                     String kritikus = "";
                     String sulyos = "";
                     String enyhe = "";
+                    String hibakategoria = "";
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Kritikus hiba"))
                     {
                         kritikus = "X";
+                        hibakategoria = "kritikus";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Súlyos hiba"))
                     {
                         sulyos = "X";
+                        hibakategoria = "sulyos";
                     }
                     if(String.valueOf(hibakategoria_box.getSelectedItem()).equals("Enyhe hiba"))
                     {
                         enyhe = "X";
+                        hibakategoria = "enyhe";
                     }
                     String formazo = raklap_mezo.getText().replace(" ","");
                     SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
@@ -497,7 +502,19 @@ public class FR1200 extends JPanel {
                     
                     SQA_SQL ment = new SQA_SQL();
                     ment.mindenes(sql);
-                    
+                    if(hiba_box.getSelectedIndex() > 0)
+                    {
+                        Email email = new Email();
+                        email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "OQC hiba", "Szia Mitya! \n\n"
+                                + "Hibát rögzítettek: \n"
+                                + "\nHibacsoport: " + String.valueOf(hibacsoport_box.getSelectedItem()) +"\t"
+                                + "\nHiba: "+ String.valueOf(hiba_box.getSelectedItem()) +"\t"
+                                + "\nHiba kategória: "+ hibakategoria +"\t"
+                                + "\nTípus: " + String.valueOf(tipus_box.getSelectedItem()) +"\t"
+                                + "\nEllenőr: "+ String.valueOf(ellenor_box.getSelectedItem()) +"\t"
+                                + "\nMegjegyzés: " + megjegyzes_mezo.getText() +"\t"
+                                + "\n\nÜdvözlettel: EASQAS program");
+                    }
                     visszaallit();
                     int mennyiseg = Integer.valueOf(mennyiseg_label.getText());
                     mennyiseg++;
@@ -946,7 +963,7 @@ public class FR1200 extends JPanel {
             if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
             {
                 SQA_SQL leker = new SQA_SQL();
-                String sql = "select count(raklapszam)from qualitydb.OQC_FB7530 where raklapszam = '"+ raklap_mezo.getText() +"'";
+                String sql = "select count(raklapszam)from qualitydb.OQC_FR1200 where raklapszam = '"+ raklap_mezo.getText() +"'";
                 mennyiseg_label.setText(leker.tombvissza_sajat(sql)[0]);;
             }       
         }
