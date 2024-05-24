@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Beolvasott_torles());
+		feltolt.addActionListener(new IFS_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2059,8 +2059,8 @@ public class Torlo extends JPanel
             }                                         
          }
     }
-	
-	class Retour_frissit implements ActionListener                                                                                      //csv-t gyárt a gomb
+	//////////////////////////////////////////////////////////////////////////////////////////////REtour frissít//////////////////////////////////////////////////////////////////////////
+	class Retour_frissit implements ActionListener                                                                                      
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -2090,11 +2090,11 @@ public class Torlo extends JPanel
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");*/
+                   stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
                    System.out.println("Fut a For");
-                   stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (Retour_ID,VEAS_ID) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "')");
+                   /*stmt.executeUpdate("insert into qualitydb.Retour_szeriaszamok (Retour_ID,VEAS_ID) Values('" + datatable.getRows().get(szamlalo).getString(0) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "', '" + datatable.getRows().get(szamlalo).getString(1) + "')");*/
                }              
                Foablak.frame.setCursor(null);                        
                stmt.close();
@@ -2714,6 +2714,87 @@ public class Torlo extends JPanel
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
+         }
+    }
+	
+	class IFS_kereses implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\IFS.xlsx";
+
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                  
+                  String excelfile1 = System.getProperty("user.home") + "\\Desktop\\NEDAP.xlsx";                             
+                  Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                  Workbook workbook = new Workbook();
+                  Workbook workbook2 = new Workbook();
+                  workbook.loadFromFile(excelfile1);
+                  Worksheet sheet = workbook.getWorksheets().get(0);               
+                  DataTable datatable = new DataTable();
+                  datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                  Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                  for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                  {
+                      ResultSet rs = stmt.executeQuery("select SCAN_LOC\n"
+                              + "from ifsapp.C_OPER_TRACY_OVW\n"
+                              + "where 3 = 3\n"
+                              + "        and OPERATION_NO = 130 \n"
+                              + "        and TRACY_SERIAL_NO = '" + datatable.getRows().get(szamlalo).getString(0) +"'");
+                      if(rs.next())
+                      {
+                          sheet2.getRange().get("A"+szamlalo).setText(datatable.getRows().get(szamlalo).getString(0));
+                          sheet2.getRange().get("B"+szamlalo).setText(rs.getString(1));
+                      }
+                      else
+                      {
+                          sheet2.getRange().get("A"+szamlalo).setText(datatable.getRows().get(szamlalo).getString(0));
+                      }
+                      System.out.println("Fut a for");
+                      System.out.println(szamlalo);
+                  }
+                  
+                  sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet2.getAllocatedRange().autoFitColumns();
+                  sheet2.getAllocatedRange().autoFitRows();
+                  
+                  sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  stmt.close();
+                  con.close();
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook3.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook3.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                  con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+            }  
+                               
          }
     }
 	

@@ -318,7 +318,7 @@ public class Retour_lekerdez extends JPanel
                         }
                         else
                         {
-                            sql = "select * from qualitydb.Retour_szeriaszamok where RMA = '"+ rma_mezo.getText() +"'";
+                            sql = "select * from qualitydb.Retour_szeriaszamok where RMA = '"+ rma_mezo.getText() +"' or Vevoi_RMA = '"+ rma_mezo.getText() +"'";
                             excel.minden_excel(sql, "Retour szériaszámok.xlsx");
                         }                                      
                     }

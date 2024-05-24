@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,14 +20,10 @@ import com.spire.data.table.DataTable;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JTable;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 
 public class Retour extends JPanel 
 {
@@ -52,18 +49,10 @@ public class Retour extends JPanel
     static JTextField selejt_mezo;
     private ArrayList<String> kivalasztott;
     static JTextField vevoirma_mezo;
-    static JTextField hibaleiras_mezo;
-    private JTextField szeriaszam_mezo;
-    static JTable table;
-    private JRadioButton veas_gomb;
-    private JRadioButton vevoi_gomb;
     static DefaultTableModel modell;
     private File fajl;
     private Workbook workbook;
     private Worksheet sheet;
-    private int excel = 0;
-    private JLabel dbszam_szoveg;
-
     /**
      * Create the panel.
      */
@@ -164,102 +153,102 @@ public class Retour extends JPanel
         
         JButton mentesgomb = new JButton("Mentés");
         mentesgomb.addActionListener(new Mentes());
-        mentesgomb.setBounds(501, 395, 89, 23);
+        mentesgomb.setBounds(464, 273, 89, 23);
         add(mentesgomb);
         
         JLabel lblNewLabel_9 = new JLabel("Gépes/Kézi/Analízis");
-        lblNewLabel_9.setBounds(29, 486, 112, 14);
+        lblNewLabel_9.setBounds(29, 361, 112, 14);
         add(lblNewLabel_9);
         
         hova_mezo = new JTextField();
-        hova_mezo.setBounds(151, 483, 86, 20);
+        hova_mezo.setBounds(141, 358, 86, 20);
         add(hova_mezo);
         hova_mezo.setColumns(10);
         
         JLabel lblNewLabel_10 = new JLabel("Kiadás dátuma");
-        lblNewLabel_10.setBounds(278, 486, 89, 14);
+        lblNewLabel_10.setBounds(294, 361, 89, 14);
         add(lblNewLabel_10);
         
         kiadas_mezo = new JTextField();
-        kiadas_mezo.setBounds(377, 483, 86, 20);
+        kiadas_mezo.setBounds(393, 358, 86, 20);
         add(kiadas_mezo);
         kiadas_mezo.setColumns(10);
         
         JLabel lblNewLabel_11 = new JLabel("Felelős");
-        lblNewLabel_11.setBounds(501, 486, 46, 14);
+        lblNewLabel_11.setBounds(528, 361, 46, 14);
         add(lblNewLabel_11);
         
         felelos_mezo = new JTextField();
-        felelos_mezo.setBounds(557, 483, 143, 20);
+        felelos_mezo.setBounds(584, 358, 143, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
         
         JLabel lblNewLabel_12 = new JLabel("Tesztre átadva dátuma");
-        lblNewLabel_12.setBounds(29, 535, 132, 14);
+        lblNewLabel_12.setBounds(29, 418, 132, 14);
         add(lblNewLabel_12);
         
         teszt_mezo = new JTextField();
-        teszt_mezo.setBounds(166, 532, 86, 20);
+        teszt_mezo.setBounds(171, 415, 86, 20);
         add(teszt_mezo);
         teszt_mezo.setColumns(10);
         
         JLabel lblNewLabel_13 = new JLabel("Felelős");
-        lblNewLabel_13.setBounds(294, 535, 46, 14);
+        lblNewLabel_13.setBounds(302, 418, 46, 14);
         add(lblNewLabel_13);
         
         felelos2_mezo = new JTextField();
-        felelos2_mezo.setBounds(377, 532, 132, 20);
+        felelos2_mezo.setBounds(399, 415, 132, 20);
         add(felelos2_mezo);
         felelos2_mezo.setColumns(10);
         
         JLabel lblNewLabel_14 = new JLabel("Végellenőrzésre átadva dátuma");
-        lblNewLabel_14.setBounds(29, 590, 183, 14);
+        lblNewLabel_14.setBounds(29, 477, 183, 14);
         add(lblNewLabel_14);
         
         veg_mezo = new JTextField();
-        veg_mezo.setBounds(222, 587, 86, 20);
+        veg_mezo.setBounds(238, 474, 86, 20);
         add(veg_mezo);
         veg_mezo.setColumns(10);
         
         JLabel lblNewLabel_15 = new JLabel("Felelős");
-        lblNewLabel_15.setBounds(377, 590, 46, 14);
+        lblNewLabel_15.setBounds(366, 477, 46, 14);
         add(lblNewLabel_15);
         
         felelos3_mezo = new JTextField();
-        felelos3_mezo.setBounds(433, 587, 132, 20);
+        felelos3_mezo.setBounds(444, 474, 132, 20);
         add(felelos3_mezo);
         felelos3_mezo.setColumns(10);
         
         JLabel lblNewLabel_16 = new JLabel("Ratárra adás dátuma");
-        lblNewLabel_16.setBounds(29, 636, 118, 14);
+        lblNewLabel_16.setBounds(29, 542, 118, 14);
         add(lblNewLabel_16);
         
         raktarra_mezo = new JTextField();
-        raktarra_mezo.setBounds(151, 633, 86, 20);
+        raktarra_mezo.setBounds(166, 539, 86, 20);
         add(raktarra_mezo);
         raktarra_mezo.setColumns(10);
         
         JLabel lblNewLabel_17 = new JLabel("Raktárra adott db szám");
-        lblNewLabel_17.setBounds(271, 636, 145, 14);
+        lblNewLabel_17.setBounds(278, 542, 145, 14);
         add(lblNewLabel_17);
         
         raktarradb_mezo = new JTextField();
-        raktarradb_mezo.setBounds(402, 633, 46, 20);
+        raktarradb_mezo.setBounds(433, 539, 46, 20);
         add(raktarradb_mezo);
         raktarradb_mezo.setColumns(10);
         
         JLabel lblNewLabel_18 = new JLabel("Selejt");
-        lblNewLabel_18.setBounds(501, 636, 46, 14);
+        lblNewLabel_18.setBounds(528, 542, 46, 14);
         add(lblNewLabel_18);
         
         selejt_mezo = new JTextField();
-        selejt_mezo.setBounds(557, 633, 46, 20);
+        selejt_mezo.setBounds(584, 539, 46, 20);
         add(selejt_mezo);
         selejt_mezo.setColumns(10);
         
         JButton folyamat_gomb = new JButton("Folyamat felvisz");
         folyamat_gomb.addActionListener(new Folyamatok());
-        folyamat_gomb.setBounds(501, 696, 119, 23);
+        folyamat_gomb.setBounds(431, 625, 143, 23);
         add(folyamat_gomb);
         
         setBackground(Foablak.hatter_szine);
@@ -272,62 +261,15 @@ public class Retour extends JPanel
         vevoirma_mezo.setBounds(271, 182, 145, 20);
         add(vevoirma_mezo);
         vevoirma_mezo.setColumns(10);
-        
-        JLabel lblNewLabel_20 = new JLabel("Vevői hibaleírás");
-        lblNewLabel_20.setBounds(420, 185, 112, 14);
-        add(lblNewLabel_20);
-        
-        hibaleiras_mezo = new JTextField();
-        hibaleiras_mezo.setBounds(521, 182, 632, 20);
-        add(hibaleiras_mezo);
-        hibaleiras_mezo.setColumns(10);
-        
-        JLabel lblNewLabel_21 = new JLabel("Szériaszám hozzáadása");
-        lblNewLabel_21.setBounds(29, 234, 143, 14);
-        add(lblNewLabel_21);
-        
-        szeriaszam_mezo = new JTextField();
-        szeriaszam_mezo.addKeyListener(new Szriaszam_hozzaad());
-        szeriaszam_mezo.setBounds(195, 231, 255, 20);
-        add(szeriaszam_mezo);
-        szeriaszam_mezo.setColumns(10);
-        
-        table = new JTable();
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"VEAS Szériaszám", "Vevői Szériaszám"});
-        table.setModel(modell);
-        JScrollPane gorgeto = new JScrollPane(table);
-        gorgeto.setBounds(521, 234, 559, 138);
-        add(gorgeto);
-        
-        veas_gomb = new JRadioButton("VEAS szériaszám");
-        veas_gomb.setSelected(true);
-        veas_gomb.setBounds(195, 273, 145, 23);
-        add(veas_gomb);
-        
-        vevoi_gomb = new JRadioButton("Vevői szériaszám");
-        vevoi_gomb.setBounds(195, 299, 145, 23);
-        add(vevoi_gomb);
-        
-        ButtonGroup csoport = new ButtonGroup();
-        csoport.add(vevoi_gomb);
-        csoport.add(veas_gomb);
+        modell.setColumnIdentifiers(new Object[]{"VEAS Szériaszám", "Vevői Szériaszám"});        
         
         setBackground(Foablak.hatter_szine);
         
         JButton excel_gomb = new JButton("Excel");
         excel_gomb.addActionListener(new Excel());
-        excel_gomb.setBounds(848, 395, 89, 23);
+        excel_gomb.setBounds(783, 273, 89, 23);
         add(excel_gomb);
-        
-        JLabel lblNewLabel_22 = new JLabel("Beolvasott szériaszámok száma:");
-        lblNewLabel_22.setBounds(195, 358, 194, 14);
-        add(lblNewLabel_22);
-        
-        dbszam_szoveg = new JLabel("0");
-        dbszam_szoveg.setBounds(402, 358, 46, 14);
-        add(dbszam_szoveg);
         kivalasztott = new ArrayList<String>();
         
         workbook = new Workbook();
@@ -342,48 +284,15 @@ public class Retour extends JPanel
             {
                 Db_iro iras = new Db_iro();
                 iras.iro_retour(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(cikk_box.getSelectedItem()), String.valueOf(javagy_box.getSelectedItem()), Integer.parseInt(beerkezett_mezo.getText()),
-                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText(), hibaleiras_mezo.getText());
+                        Integer.parseInt(elteres_mezo.getText()), rma_mezo.getText(), megjegyzes_mezo.getText(), vevoirma_mezo.getText());
                 SQA_SQL modositas = new SQA_SQL();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
                 Date date = new Date();
                 modositas.mindenes("update qualitydb.Retour set Modositas_Datuma = '"+ formatter.format(date) +"' where id = '"+ id_mezo.getText() +"'");
                 Urlap_torlo torles = new Urlap_torlo();
                 torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo, teszt_mezo, felelos2_mezo, veg_mezo,
-                        felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
-                String id = id_mezo.getText();
-                SQA_SQL iro = new SQA_SQL();
-                DataTable datatable = new DataTable();
-                
-                sheet = workbook.getWorksheets().get(0);
-                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
-                for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                {
-                    System.out.println(datatable.getRows().size());
-                    if(excel > 0)
-                    {
-                        for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size(); szamlalo2++)
-                        {
-                            if(table.getValueAt(szamlalo, 0).toString().equals(datatable.getRows().get(szamlalo2).getString(0)) || table.getValueAt(szamlalo, 1).toString().equals(datatable.getRows().get(szamlalo2).getString(0)))
-                            {
-                                String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, Hiba_leirasa, RMA) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                        + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ datatable.getRows().get(szamlalo2).getString(1) +"','"+ rma_mezo.getText() +"')";
-                                iro.mindenes(sql);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA) Values('"+ table.getValueAt(szamlalo, 0).toString() +"',"
-                                + "'"+ table.getValueAt(szamlalo, 1).toString() +"','"+ id +"','"+ rma_mezo.getText() +"')";
-                        iro.mindenes(sql);
-                    }
-                }
-                int rowCount = modell.getRowCount();                               
-                for (int i = rowCount - 1; i > -1; i--) 
-                {
-                  modell.removeRow(i);
-                }
-                dbszam_szoveg.setText(String.valueOf("0"));
+                        felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo);
+                               
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
             }
             catch (Exception e1) 
@@ -447,7 +356,7 @@ public class Retour extends JPanel
                 modositas.mindenes("update qualitydb.Retour set Modositas_Datuma = '"+ formatter.format(date) +"' where id = '"+ id_mezo.getText() +"'");
                 Urlap_torlo torles = new Urlap_torlo();
                 torles.urlaptorles_retour(datum_mezo, beerkezett_mezo, elteres_mezo, rma_mezo, megjegyzes_mezo, hova_mezo, kiadas_mezo, felelos_mezo,
-                        teszt_mezo, felelos2_mezo, veg_mezo, felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo, hibaleiras_mezo);
+                        teszt_mezo, felelos2_mezo, veg_mezo, felelos3_mezo, raktarra_mezo, raktarradb_mezo, selejt_mezo, vevoirma_mezo);
             }
             catch (Exception e1) 
             {              
@@ -491,53 +400,6 @@ public class Retour extends JPanel
                 {
                     SQL visszair = new SQL();
                     visszair.retour_vissza(id_mezo.getText());
-                    excel = 0;
-                }
-            } 
-            catch (Exception e1) 
-            {              
-                e1.printStackTrace();
-                String hibauzenet = e1.toString();
-                Email hibakuldes = new Email();
-                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-            }
-         
-        }
-        @Override
-        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            // TODO Auto-generated method stub           
-        }
-        @Override
-        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
-        {
-            // TODO Auto-generated method stub           
-        }    
-    }
-    
-    class Szriaszam_hozzaad implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, ID alapján vissztölti az adatokat
-    {
-        public void keyPressed (KeyEvent e) 
-        {    
-            try 
-            {
-                int key = e.getKeyCode();
-                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
-                {
-                    if(veas_gomb.isSelected())                                                                                               //ha az entert nyomják le akkor hívódik meg
-                    {
-                        modell.addRow(new Object[]{szeriaszam_mezo.getText(),""});
-                        table.setModel(modell);
-                    }
-                    else
-                    {
-                        modell.addRow(new Object[]{"",szeriaszam_mezo.getText()});
-                        table.setModel(modell);
-                    }
-                    szeriaszam_mezo.setText("");
-                    int sorokszama = table.getRowCount();
-                    dbszam_szoveg.setText(String.valueOf(sorokszama));
                 }
             } 
             catch (Exception e1) 
@@ -612,8 +474,23 @@ public class Retour extends JPanel
                 fajl = mentes_helye.getSelectedFile();
                 if(fajl.exists())
                 {
-                    excel = 1;
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                     workbook.loadFromFile(fajl.getAbsolutePath());
+                
+                    SQA_SQL iro = new SQA_SQL();
+                    DataTable datatable = new DataTable();
+                    
+                    sheet = workbook.getWorksheets().get(0);
+                    datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                    for(int szamlalo2 = 1; szamlalo2 < datatable.getRows().size(); szamlalo2++)
+                    {
+                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA, Vevoi_rma, Hiba_leirasa) Values('"+ datatable.getRows().get(szamlalo2).getString(0) +"',"
+                                + "'"+ datatable.getRows().get(szamlalo2).getString(1) +"','"+ datatable.getRows().get(szamlalo2).getString(2) +"','"+ datatable.getRows().get(szamlalo2).getString(3) +"',"
+                                + "'"+ datatable.getRows().get(szamlalo2).getString(4) +"', '"+ datatable.getRows().get(szamlalo2).getString(5) +"')";
+                        iro.mindenes(sql);
+                    }
+                    JOptionPane.showMessageDialog(null, "Feltöltés kész", "Info", 1);
+                    Foablak.frame.setCursor(null);                                                //egér mutató változtatása munka a háttérbenre
                 }
             }
             catch (Exception e1) 

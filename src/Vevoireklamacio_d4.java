@@ -11,6 +11,7 @@ import java.sql.Statement;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
+import javax.swing.JCheckBox;
 
 public class Vevoireklamacio_d4 extends JPanel {
 
@@ -26,6 +27,14 @@ public class Vevoireklamacio_d4 extends JPanel {
     private JTextArea gep_det;
     private JTextArea ember_det;
     private JTextArea mod_det;
+    private JCheckBox elo_anayg;
+    private JCheckBox elo_gep;    
+    private JCheckBox elo_ember;
+    private JCheckBox elo_mod;
+    private JCheckBox detekt_anyag;
+    private JCheckBox detekt_gep;
+    private JCheckBox detekt_ember;
+    private JCheckBox detekt_mod;
     
     public Vevoireklamacio_d4() {
         setLayout(null);
@@ -39,7 +48,7 @@ public class Vevoireklamacio_d4 extends JPanel {
         
         JLabel lblNewLabel_1 = new JLabel("Anyag");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_1.setBounds(415, 81, 86, 14);
+        lblNewLabel_1.setBounds(445, 81, 56, 14);
         add(lblNewLabel_1);
         
         JLabel lblNewLabel_2 = new JLabel("Gép");
@@ -138,6 +147,38 @@ public class Vevoireklamacio_d4 extends JPanel {
         mod_det.setWrapStyleWord(true);
         mod_det.setBounds(523, 504, 720, 39);
         add(mod_det);
+        
+        elo_anayg = new JCheckBox("");
+        elo_anayg.setBounds(415, 77, 26, 23);
+        add(elo_anayg);
+        
+        elo_gep = new JCheckBox("");
+        elo_gep.setBounds(415, 135, 26, 23);
+        add(elo_gep);
+        
+        elo_ember = new JCheckBox("");
+        elo_ember.setBounds(415, 188, 26, 23);
+        add(elo_ember);
+        
+        elo_mod = new JCheckBox("");
+        elo_mod.setBounds(415, 243, 26, 23);
+        add(elo_mod);
+        
+        detekt_anyag = new JCheckBox("");
+        detekt_anyag.setBounds(415, 331, 26, 23);
+        add(detekt_anyag);
+        
+        detekt_gep = new JCheckBox("");
+        detekt_gep.setBounds(415, 392, 26, 23);
+        add(detekt_gep);
+        
+        detekt_ember = new JCheckBox("");
+        detekt_ember.setBounds(415, 449, 26, 23);
+        add(detekt_ember);
+        
+        detekt_mod = new JCheckBox("");
+        detekt_mod.setBounds(415, 505, 26, 23);
+        add(detekt_mod);
 
     }
     

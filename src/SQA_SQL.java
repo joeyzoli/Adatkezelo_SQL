@@ -7,11 +7,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -792,6 +804,200 @@ public class SQA_SQL {
               se.printStackTrace();
            }  
         }
+    }
+    
+    public void uj_rendelesek()
+    {
+        try
+        {
+            //Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            SQA_SQL ellenorzo = new SQA_SQL();
+            String sql = "select Ertesitve from qualitydb.Uj_rendelesek where id = 1";
+            if(ellenorzo.tombvissza_sajat(sql)[0].equals("nem"))
+            { 
+                Date date2 = new Date();
+                JDatePickerImpl datum_tol;
+                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy.MM.dd");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                LocalDate date = LocalDate.parse(formatter2.format(date2), formatter);
+                // Increment the date by one day
+                LocalDate newDate = date.minusDays(7);
+                
+                Date date3 = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                /*String dateValue = "2024.03.23";
+                try {
+                    date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }*/
+                UtilDateModel model = new UtilDateModel();
+                model.setValue(date3);
+                Properties p = new Properties();
+                p.put("text.today", "Ma");
+                p.put("text.month", "Hónap");
+                p.put("text.year", "Év");
+                JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+                datum_tol = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Új Rendelések.xlsx";
+    
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                  
+                  String[] datum = datum_tol.getJFormattedTextField().getText().split("\\.");
+                  //System.out.println(datum_tol.getJFormattedTextField().getText());
+                  
+                  ResultSet rs = stmt.executeQuery("select majdnem.*,\r\n"
+                          + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
+                          + "nyilatkozatok.CF$_reach as Reach,\r\n"
+                          + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
+                          + "(select alap.*,\r\n"
+                          + "raktar.SECOND_COMMODITY as Projekt\r\n"
+                          + "from ifsapp.INVENTORY_PART raktar,\r\n"
+                          + "(select belso.Cikkszam, \r\n"
+                          + "belso.Megnevezes,\r\n"
+                          + "belso.Szallito,\r\n"
+                          + "belso.Gyarto_szama,\r\n"
+                          + "ifsapp.MANUFACTURER_INFO_API.Get_Name(kulso.MANUFACTURER_NO) as Gyarto,\r\n"
+                          + "belso.Gyartoi_cikkszam,\r\n"
+                          + "belso.Utolso_rendeles\r\n"
+                          + "from ifsapp.PART_MANUFACTURER kulso,\r\n"
+                          + "(select PART_NO as Cikkszam,\r\n"
+                          + "DESCRIPTION as Megnevezes, \r\n"
+                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam,\r\n"
+                          + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                          + "where\r\n"
+                          + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) and DATE_ENTERED > to_date( '"+ datum[0]+datum[1]+ datum[2]+"', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\r\n"
+                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\r\n"
+                          + "DESCRIPTION, \r\n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \r\n"
+                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \r\n"
+                          + "PROJECT_ID, \r\n"
+                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \r\n"
+                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)) belso\r\n"
+                          + "Where 3 = 3\r\n"
+                          + "and belso.Gyarto_szama = kulso.MANUFACTURER_NO\r\n"
+                          + "and belso.Cikkszam = kulso.part_no) alap\r\n"
+                          + "where raktar.part_no = alap.cikkszam) majdnem\r\n"
+                          + "where 3 = 3 and majdnem.cikkszam = nyilatkozatok.part_no\r\n"
+                          + "and majdnem.Gyartoi_cikkszam = nyilatkozatok.manu_part_no\r\n"
+                          + "and nyilatkozatok.CF$_cmrt is null\r\n"
+                          + "and nyilatkozatok.CF$_reach is null\r\n"
+                          + "and nyilatkozatok.CF$_Rohs is null");
+                  
+                  Workbook workbook = new Workbook();
+                  //JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                  //jdbcAdapter.fillDataTable(datatable, rs);      
+                  //Get the first worksheet
+                  Worksheet sheet = workbook.getWorksheets().get(0);
+                  //sheet.insertDataTable(datatable, true, 1, 1);
+                  int cellaszam = 1;
+                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
+                  sheet.getRange().get("C" + cellaszam).setText("Szállító");
+                  sheet.getRange().get("D" + cellaszam).setText("Gyártó száma");
+                  sheet.getRange().get("E" + cellaszam).setText("Gyártó");
+                  sheet.getRange().get("F" + cellaszam).setText("Gyártói Cikkszám");
+                  sheet.getRange().get("G" + cellaszam).setText("Utolsó rendelés");
+                  sheet.getRange().get("H" + cellaszam).setText("Projekt");
+                  sheet.getRange().get("I" + cellaszam).setText("CMRT");
+                  sheet.getRange().get("J" + cellaszam).setText("REACH");
+                  sheet.getRange().get("K" + cellaszam).setText("ROHS");
+                  
+                  cellaszam++;
+                  while(rs.next())
+                  {
+                      sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                      sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                      sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                      sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                      sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                      sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                      sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                      sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                      sheet.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                      cellaszam++;
+                  }
+                  
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet.getAllocatedRange().autoFitColumns();
+                  sheet.getAllocatedRange().autoFitRows();
+                  
+                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  rs.close();
+                  stmt.close();
+                  con.close();
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook2.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook2.write(output);
+                      output.close();
+                  }
+                  Email email = new Email();              
+                  File fajl = new File(menteshelye);
+                  email.ujanyag_emailkuldes("easqas@veas.videoton.hu", "jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu", fajl);
+                  
+                  fajl.delete();
+                  String modosit = "update qualitydb.Uj_rendelesek set  Ertesitve = 'igen' where id = 1";
+                  ellenorzo.mindenes(modosit);
+                  //JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Rendelések.xlsx néven!", "Info", 1); 
+                  con.close();
+            }
+             
+        }           
+        catch(Exception e1)
+        { 
+            System.out.println(e1);
+            e1.printStackTrace();
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+        }  
+        Foablak.frame.setCursor(null);       
+    }
+    
+    public class DateLabelFormatter extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }       
+
     }
 
 }

@@ -3168,21 +3168,8 @@ public class SQL
             Retour.raktarradb_mezo.setText(resultSet.getString(18));
             Retour.selejt_mezo.setText(resultSet.getString(19));
             Retour.vevoirma_mezo.setText(resultSet.getString(20));
-            Retour.hibaleiras_mezo.setText(resultSet.getString(21));
             
-            sajat = "SELECT VEAS_ID, Vevoi_ID FROM  qualitydb.Retour_szeriaszamok where Retour_ID = '"+ id +"'";         
-            stmt.execute(sajat);
-            resultSet = stmt.getResultSet();
-            int rowCount = Retour.modell.getRowCount();                               
-            for (int i = rowCount - 1; i > -1; i--) 
-            {
-                Retour.modell.removeRow(i);
-            }
-            while(resultSet.next())
-            {
-                Retour.modell.addRow(new Object[]{resultSet.getString(1),resultSet.getString(2)});
-            }
-            Retour.table.setModel(Retour.modell);
+            
         }
        
         resultSet.close();

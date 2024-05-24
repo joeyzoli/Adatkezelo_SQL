@@ -548,7 +548,7 @@ public class Db_iro
         }
     }
 	
-	void iro_retour(String datum, String vevo, String tipus, String vagy, int beerkezett, int elteres, String rma, String megjegyzes, String vevoirma, String vevoi_hiba)
+	void iro_retour(String datum, String vevo, String tipus, String vagy, int beerkezett, int elteres, String rma, String megjegyzes, String vevoirma)
     {   
         String[] koztes = tipus.split(",");                                          //bejövő Stringet darabolni kell
         Connection conn = null;
@@ -570,7 +570,7 @@ public class Db_iro
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
         String query1 = "INSERT INTO qualitydb.Retour (Datum, Vevo, Tipus, Vagy, Beerkezett, Elteres, RMA, Megjegyzes,Vevoi_rma,Vevoi_hibaleiras)" + 
                         "VALUES ('" + datum +"', '"+ vevo +"', '"+koztes[0]+"', '" + vagy + "', '" + beerkezett +"', '" + elteres +"', '" + rma +"', '" + megjegyzes +"'"
-                                + ", '" + vevoirma +"', '" + vevoi_hiba +"')"; 
+                                + ", '" + vevoirma +"')"; 
         stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása
         
         String sql = "select id from qualitydb.Retour where Datum = '" + datum + "' and Tipus = '" + koztes[0] + "'";

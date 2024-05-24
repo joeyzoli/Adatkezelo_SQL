@@ -95,6 +95,7 @@ public class Foablak extends JFrame
 	private Excel_kereso kereso;
 	private OQC_tesztadatok teszadatok;
 	private Beepules_kereso beepules;
+	private Elokeszitett_anyagkereso elokeszit; 
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -324,6 +325,10 @@ public class Foablak extends JFrame
 		JMenuItem beepulesek = new JMenuItem("IFS beépülési adatok");
 		beepulesek.addActionListener(new Panelcsere_IFS_beepulesek());
 		lekerdezes.add(beepulesek);
+		
+		JMenuItem elokeszitett = new JMenuItem("Előkészített anyagok adatai");
+		elokeszitett.addActionListener(new Panelcsere_Elokeszitett_anyagok());
+		lekerdezes.add(elokeszitett);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1143,6 +1148,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Elokeszitett_anyagok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            elokeszit = new Elokeszitett_anyagkereso();
+            JScrollPane ablak = new JScrollPane(elokeszit);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1256,7 +1272,7 @@ public class Foablak extends JFrame
         {
             SQL lekerdez = new SQL();
             lekerdez.vevoi_email();
-            lekerdez.vevoi_email2();
+            lekerdez.vevoi_email2();            
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             if(nap == 2)
@@ -1264,6 +1280,7 @@ public class Foablak extends JFrame
                 SQA_SQL sqa = new SQA_SQL();
                 sqa.sqa_email();
                 sqa.retour_email();
+                sqa.uj_rendelesek();
                 System.out.println("Lefutott az SQA email");
             }
             else
@@ -1272,8 +1289,11 @@ public class Foablak extends JFrame
                 //sqa.retour_email();
                 String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Nem' where Lezaras_ido is null";
                 sqa.mindenes(modosit);
+                //sqa.uj_rendelesek();
                 modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
                 sqa.mindenes(modosit);
+                //modosit = "update qualitydb.Uj_rendelesek set  Ertesitve = 'nem' where id = 1";
+                //sqa.mindenes(modosit);
                 //System.out.println("Ma nem fut le az SQA email rész");
                 //System.out.println("A hét napja:" + nap);
             }

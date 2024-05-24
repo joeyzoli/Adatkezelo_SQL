@@ -102,25 +102,26 @@ public class Beepules_kereso extends JPanel {
                       sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
                       sheet2.getRange().get("B" + cellaszam).setText("Komponens cikkszám");
                       sheet2.getRange().get("C" + cellaszam).setText("Beépült ME szám");
-                      sheet2.getRange().get("D" + cellaszam).setText("Felhasznált mennyiség");
-                      sheet2.getRange().get("E" + cellaszam).setText("Gyártás ideje");
-                      sheet2.getRange().get("F" + cellaszam).setText("Gyártó azonosító");
-                      sheet2.getRange().get("G" + cellaszam).setText("Gyártó neve");
-                      sheet2.getRange().get("H" + cellaszam).setText("Gyártói cikkszám 1");
-                      sheet2.getRange().get("I" + cellaszam).setText("Gyártói cikkszám 2");
-                      sheet2.getRange().get("J" + cellaszam).setText("Gyártói lot 1");
-                      sheet2.getRange().get("K" + cellaszam).setText("Beérkezés dátuma");
+                      sheet2.getRange().get("D" + cellaszam).setText("Sarzs");
+                      sheet2.getRange().get("E" + cellaszam).setText("Felhasznált mennyiség");
+                      sheet2.getRange().get("F" + cellaszam).setText("Gyártás ideje");
+                      sheet2.getRange().get("G" + cellaszam).setText("Gyártó azonosító");
+                      sheet2.getRange().get("H" + cellaszam).setText("Gyártó neve");
+                      sheet2.getRange().get("I" + cellaszam).setText("Gyártói cikkszám 1");
+                      sheet2.getRange().get("J" + cellaszam).setText("Gyártói cikkszám 2");
+                      sheet2.getRange().get("K" + cellaszam).setText("Gyártói lot 1");
+                      sheet2.getRange().get("L" + cellaszam).setText("Beérkezés dátuma");
                       cellaszam++;
                       rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
                               + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
                               + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
-                              + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                              + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
                               + "    from ifsapp.C_MTRL_TRACY_OVW\r\n"
                               + "    where TRACY_SERIAL_NO  in ("+ osszefuzott +")\r\n"
                               + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
                               + " where 3 = 3\r\n"
                               + " and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
-                              + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                              + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
                               + "gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
                               + "order by beepulesek.szeriaszam asc");
                       while(rs.next())
@@ -136,6 +137,7 @@ public class Beepules_kereso extends JPanel {
                           sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                           sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                           sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                          sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
                           cellaszam++;
                       }
                       if(osszefuzott2.equals("")){ }
@@ -144,13 +146,13 @@ public class Beepules_kereso extends JPanel {
                           rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
                                   + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
-                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
                                   + "    from ifsapp.C_MTRL_TRACY_OVW\r\n"
                                   + "    where TRACY_SERIAL_NO  in ("+ osszefuzott2 +")\r\n"
                                   + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
                                   + " where 3 = 3\r\n"
                                   + " and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
-                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
                                   + "order by beepulesek.szeriaszam asc");
                           while(rs.next())
@@ -166,6 +168,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -175,13 +178,13 @@ public class Beepules_kereso extends JPanel {
                           rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
                                   + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
-                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
                                   + "    from ifsapp.C_MTRL_TRACY_OVW\r\n"
                                   + "    where TRACY_SERIAL_NO  in ("+ osszefuzott3 +")\r\n"
                                   + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
                                   + " where 3 = 3\r\n"
                                   + " and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
-                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
                                   + "order by beepulesek.szeriaszam asc");
                           while(rs.next())
@@ -197,6 +200,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -206,13 +210,13 @@ public class Beepules_kereso extends JPanel {
                           rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
                                   + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
-                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
                                   + "    from ifsapp.C_MTRL_TRACY_OVW\r\n"
                                   + "    where TRACY_SERIAL_NO  in ("+ osszefuzott4 +")\r\n"
                                   + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
                                   + " where 3 = 3\r\n"
                                   + " and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
-                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
                                   + "order by beepulesek.szeriaszam asc");
                           while(rs.next())
@@ -228,6 +232,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -237,13 +242,13 @@ public class Beepules_kereso extends JPanel {
                           rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
                                   + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
-                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                                  + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
                                   + "    from ifsapp.C_MTRL_TRACY_OVW\r\n"
                                   + "    where TRACY_SERIAL_NO  in ("+ osszefuzott5 +")\r\n"
                                   + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
                                   + " where 3 = 3\r\n"
                                   + " and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
-                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                                  + " group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
                                   + "gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
                                   + "order by beepulesek.szeriaszam asc");
                           while(rs.next())
@@ -259,6 +264,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }

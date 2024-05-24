@@ -422,5 +422,47 @@ public class Email
             e1.printStackTrace();
         }        
     }
+    
+    public void ujanyag_emailkuldes(String feladoemail, String cimzett, File excel)
+    {
+        Properties props = new Properties(); //new Properties();     System.getProperties();
+        
+        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+        try 
+        {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(feladoemail));                                  //feladó beállítása
+            message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(cimzett));                                                //címzett beállítása
+            message.setSubject("Új rendelések");                                              //tárgy beállítása
+           
+            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+           
+            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(excel);
+            multipart.addBodyPart(attachmentPart);
+            textPart.setText("Sziasztok! \n  \n"
+                    + "Csatolva az új rendelések, amiknek még nincsenek Reach, Rohs, CMRT adatai. \n  \n Üdvözlettel: EASQAS program");                                          //levél tartalmának csatolása
+            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                   
+            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+            
+            Transport.send(message);                                                        //levél küldése
+
+            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+        
+        }
+        catch (Exception e1) 
+        {
+            String hibauzenet = e1.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+            JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
+            e1.printStackTrace();
+        }        
+    }
 
 }

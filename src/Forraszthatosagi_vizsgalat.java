@@ -552,6 +552,7 @@ public class Forraszthatosagi_vizsgalat extends JPanel {
                             + "'"+ zarolando_mezo.getText() +"','"+ kekcimke_mezo.getText() +"','"+ beerkezettdb_mezo.getText() +"')";
                 }
                 ment.mindenes(sql);
+                JOptionPane.showMessageDialog(null, "Fasza", "Info", 1);                                                //kiírja a hibaüzenetet
             }
             catch (Exception e1) 
             {
