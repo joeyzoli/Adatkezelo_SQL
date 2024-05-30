@@ -344,7 +344,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
          {
             try
             {
-                if(Vevoireklamacio_V2.d8.lezaras_datuma.getText().equals(""))
+                if(Vevoireklamacio_d8.lezaras_datuma.getText().equals(""))
                 {
                     Vevoireklamacio_V2.d0.mentes();
                     Vevoireklamacio_V2.d1.mentes();
@@ -369,6 +369,9 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     }
                     else
                     {
+                        sql = "update qualitydb.Vevoireklamacio_alap set D8 = '"+ Vevoireklamacio_d8.lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                        ment.mindenes(sql);
+                        Vevoireklamacio_fejlec.lezaras = Color.GREEN;
                         Vevoireklamacio_V2.d0.mentes();
                         Vevoireklamacio_V2.d1.mentes();
                         Vevoireklamacio_V2.d2.mentes();

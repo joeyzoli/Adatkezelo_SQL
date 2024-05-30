@@ -95,7 +95,8 @@ public class Foablak extends JFrame
 	private Excel_kereso kereso;
 	private OQC_tesztadatok teszadatok;
 	private Beepules_kereso beepules;
-	private Elokeszitett_anyagkereso elokeszit; 
+	private Elokeszitett_anyagkereso elokeszit;
+	private Raktarban_anyag rakiban;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -104,6 +105,7 @@ public class Foablak extends JFrame
 	private static final String jelszavam = "polip13";
 	static Color hatter_szine = UIManager.getColor ( "Panel.background" );
 	static Dimension meretek = new Dimension(1200, 850);
+	private JMenuItem raki;
 	/**
 	 * Launch the application.
 	 */
@@ -132,29 +134,32 @@ public class Foablak extends JFrame
 					{
 					    frame.setVisible(true);
 					}
-					System.out.println(args[0]);
-					if(args[0].equals("Vevoi"))
+					if( args.length > 0)
 					{
-					    vevoirek = new Vevoireklamacio_V2();
-			            JScrollPane ablak = new JScrollPane(vevoirek);
-			            frame.setContentPane(ablak);
-			            frame.pack();
-			            Vevoireklamacio_fejlec.id_mezo.setText(args[1]);
-			            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-			            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-	                    Vevoireklamacio_d2.fajlok.clear();
-	                    Vevoireklamacio_V2.d0.visszatolt();
-	                    Vevoireklamacio_V2.d1.visszatolt();
-	                    Vevoireklamacio_V2.d2.visszatolt();
-	                    Vevoireklamacio_V2.d3.visszatolt();
-	                    Vevoireklamacio_V2.d4.visszatolt();
-	                    Vevoireklamacio_V2.d5.visszatolt();
-	                    Vevoireklamacio_V2.d6.visszatolt();
-	                    Vevoireklamacio_V2.d7.visszatolt();
-	                    Vevoireklamacio_V2.d8.visszatolt();
-	                    Vevoireklamacio_V2.koltseg.visszatolt();
-	                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-	                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+					    System.out.println(args[0]);
+    					if(args[0].equals("Vevoi"))
+    					{
+    					    vevoirek = new Vevoireklamacio_V2();
+    			            JScrollPane ablak = new JScrollPane(vevoirek);
+    			            frame.setContentPane(ablak);
+    			            frame.pack();
+    			            Vevoireklamacio_fejlec.id_mezo.setText(args[1]);
+    			            Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+    			            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+    	                    Vevoireklamacio_d2.fajlok.clear();
+    	                    Vevoireklamacio_V2.d0.visszatolt();
+    	                    Vevoireklamacio_V2.d1.visszatolt();
+    	                    Vevoireklamacio_V2.d2.visszatolt();
+    	                    Vevoireklamacio_V2.d3.visszatolt();
+    	                    Vevoireklamacio_V2.d4.visszatolt();
+    	                    Vevoireklamacio_V2.d5.visszatolt();
+    	                    Vevoireklamacio_V2.d6.visszatolt();
+    	                    Vevoireklamacio_V2.d7.visszatolt();
+    	                    Vevoireklamacio_V2.d8.visszatolt();
+    	                    Vevoireklamacio_V2.koltseg.visszatolt();
+    	                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+    	                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+    					}
 					}
 					
 				} 
@@ -329,6 +334,10 @@ public class Foablak extends JFrame
 		JMenuItem elokeszitett = new JMenuItem("Előkészített anyagok adatai");
 		elokeszitett.addActionListener(new Panelcsere_Elokeszitett_anyagok());
 		lekerdezes.add(elokeszitett);
+		
+		raki = new JMenuItem("Raktárban levő gyártói adatokkal");
+		raki.addActionListener(new Panelcsere_Raktarban());
+		lekerdezes.add(raki);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1159,6 +1168,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Raktarban implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            rakiban = new Raktarban_anyag();
+            JScrollPane ablak = new JScrollPane(rakiban);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1272,9 +1292,10 @@ public class Foablak extends JFrame
         {
             SQL lekerdez = new SQL();
             lekerdez.vevoi_email();
-            lekerdez.vevoi_email2();            
+            //lekerdez.vevoi_email2();            
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
+
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();
@@ -1282,6 +1303,7 @@ public class Foablak extends JFrame
                 sqa.retour_email();
                 sqa.uj_rendelesek();
                 System.out.println("Lefutott az SQA email");
+                sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
             }
             else
             {
@@ -1292,6 +1314,25 @@ public class Foablak extends JFrame
                 //sqa.uj_rendelesek();
                 modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
                 sqa.mindenes(modosit);
+                
+                if(nap == 3)
+                {
+                    if(sqa.tombvissza_sajat("select Lefutott from qualitydb.Hetfo where id = '1'")[0].equals("igen")) { }
+                    else
+                    {
+                        sqa.sqa_email();
+                        sqa.retour_email();
+                        sqa.uj_rendelesek();
+                        System.out.println("Lefutott az SQA email");
+                        sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
+                    }
+                }
+                
+                if(nap == 4)
+                {
+                    sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'nem' where ID = '1'");
+                }
+                
                 //modosit = "update qualitydb.Uj_rendelesek set  Ertesitve = 'nem' where id = 1";
                 //sqa.mindenes(modosit);
                 //System.out.println("Ma nem fut le az SQA email rész");

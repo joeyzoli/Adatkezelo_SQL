@@ -34,6 +34,7 @@ public class SQL
     static DefaultTableModel alapmodell;
     private final String emaillista = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\E-mail lista_ reklamáció.xlsx";
     private final String emaillista2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
+    private final String emaillista3 = "\\\\172.20.22.7\\kozos\\telefonkönyv\\Telefonlista_VEAS_új.xls";
     
 	public void lekerdez_projekt(String querry, String datum_tol, String datum_ig, String hiba_helye, String projekt, String menteshelye)
 	{
@@ -2672,6 +2673,7 @@ public class SQL
             rs = stmt.getResultSet();      
             Workbook workbook = new Workbook();
             workbook.loadFromFile(emaillista2);
+            //workbook.loadFromFile(emaillista3);
             Worksheet sheet = workbook.getWorksheets().get(0);
             Email email = new Email();
             String cimzett = "";
@@ -2740,8 +2742,8 @@ public class SQL
                             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
                         }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText()+",reznyak.norbert@veas.videoton.hu";       //+",reznyak.norbert@veas.videoton.hu"
-                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
-                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
                                 + "<br>Vevő: "+ rs.getString(3) +"</br>"
                                 + "<br>Típus: "+ rs.getString(4) +"</br>" 
                                 + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
@@ -2780,8 +2782,8 @@ public class SQL
                             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
                         }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
-                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D5", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D5 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
                                 + "<br>Vevő: "+ rs.getString(3) +"</br>"
                                 + "<br>Típus: "+ rs.getString(4) +"</br>" 
                                 + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
@@ -2820,8 +2822,8 @@ public class SQL
                             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
                         }
                         cimzett = sheet.getRange().get("C" + szamlalo).getText() +",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu";      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"
-                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D3", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
-                                + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
+                        email.linkes_email("easqas@veas.videoton.hu", cimzett, "", "Lejárt D8", "<br>Tisztelt "+nevek[nevek.length-1] +"! <br>"
+                                + "<br>Lejárt a D8 határideje az alábbi reklamációnál: \nID: "+ rs.getString(1)+"</br>"
                                 + "<br>Vevő: "+ rs.getString(3) +"</br>"
                                 + "<br>Típus: "+ rs.getString(4) +"</br>" 
                                 + "<br>Mi a probléma: "+ rs.getString(5) +"</br>"
@@ -2837,25 +2839,25 @@ public class SQL
             sql = "select * from qualitydb.Vevoireklamacio_elo where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) <= 2 and DATEDIFF(Hatarido,now()) >= 0 and Ertesitve = 'nem'";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
-            workbook.loadFromFile(emaillista);
+            workbook.loadFromFile(emaillista3);
             sheet = workbook.getWorksheets().get(0);
             while(rs.next())
             {
                 for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
                 {
-                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    if(sheet.getRange().get("C" + szamlalo).getText().equals(rs.getString(4)))
                     {
                         sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
                         String[] felelos = rs2.getString(1).split(";");                        
-                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        cimzett = sheet.getRange().get("I" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
                         for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
                         {
                             if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
                             {
-                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                                cimzett += ","+sheet.getRange().get("I" + szamlalo2).getText();
                             }
                         }
                         String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
@@ -2891,25 +2893,25 @@ public class SQL
             sql = "select * from qualitydb.Vevoireklamacio_elo where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) < 0 and Ertesitve2 = 'nem'";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
-            workbook.loadFromFile(emaillista);
+            workbook.loadFromFile(emaillista3);
             sheet = workbook.getWorksheets().get(0);
             while(rs.next())
             {
                 for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
                 {
-                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    if(sheet.getRange().get("C" + szamlalo).getText().equals(rs.getString(4)))
                     {
                         sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
                         String[] felelos = rs2.getString(1).split(";");                        
-                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        cimzett = sheet.getRange().get("I" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
                         for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
                         {
-                            if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
+                            if(sheet.getRange().get("C" + szamlalo2).getText().equals(felelos[felelos.length-1]))
                             {
-                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                                cimzett += ","+sheet.getRange().get("I" + szamlalo2).getText();
                             }
                         }
                         String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
@@ -2945,25 +2947,25 @@ public class SQL
             sql = "select * from qualitydb.Vevoireklamacio_det where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) <= 2 and DATEDIFF(Hatarido,now()) >= 0 and Ertesitve = 'nem'";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
-            workbook.loadFromFile(emaillista);
+            workbook.loadFromFile(emaillista3);
             sheet = workbook.getWorksheets().get(0);
             while(rs.next())
             {
                 for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
                 {
-                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    if(sheet.getRange().get("C" + szamlalo).getText().equals(rs.getString(4)))
                     {
                         sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
                         String[] felelos = rs2.getString(1).split(";");                        
-                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        cimzett = sheet.getRange().get("I" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
                         for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
                         {
-                            if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
+                            if(sheet.getRange().get("C" + szamlalo2).getText().equals(felelos[felelos.length-1]))
                             {
-                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                                cimzett += ","+sheet.getRange().get("I" + szamlalo2).getText();
                             }
                         }
                         String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";
@@ -2999,25 +3001,25 @@ public class SQL
             sql = "select * from qualitydb.Vevoireklamacio_det where Lezaras_datuma =  '' and DATEDIFF(Hatarido,now()) < 0 and Ertesitve2 = 'nem'";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
-            workbook.loadFromFile(emaillista);
+            workbook.loadFromFile(emaillista3);
             sheet = workbook.getWorksheets().get(0);
             while(rs.next())
             {
                 for(int szamlalo = 1; szamlalo < sheet.getLastRow()+1; szamlalo++)
                 {
-                    if(sheet.getRange().get("A" + szamlalo).getText().equals(rs.getString(4)))
+                    if(sheet.getRange().get("C" + szamlalo).getText().equals(rs.getString(4)))
                     {
                         sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
                         String[] felelos = rs2.getString(1).split(";");                        
-                        cimzett = sheet.getRange().get("B" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
+                        cimzett = sheet.getRange().get("I" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
                         for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
                         {
-                            if(sheet.getRange().get("A" + szamlalo2).getText().equals(felelos[felelos.length-1]))
+                            if(sheet.getRange().get("C" + szamlalo2).getText().equals(felelos[felelos.length-1]))
                             {
-                                cimzett += ","+sheet.getRange().get("B" + szamlalo2).getText();
+                                cimzett += ","+sheet.getRange().get("I" + szamlalo2).getText();
                             }
                         }
                         String bathelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito"+ rs.getString(2) +".bat";

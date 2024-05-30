@@ -763,6 +763,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                     if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
                     {
                         vevo =  sheet.getRange().get("A"+szamlalo).getText();
+                        System.out.println(vevo);
                     }
                 }
                 sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"

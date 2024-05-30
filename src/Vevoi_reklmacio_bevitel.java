@@ -472,44 +472,50 @@ public class Vevoi_reklmacio_bevitel extends JPanel
        
                 if(id_mezo.getText().equals(""))
                 {
-                    iras.iro_vevoi_alap(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()), String.valueOf(vagy_vagy.getSelectedItem()),
-                                       Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), 
-                                       String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()));
-                        
-                    for(int szamlalo = 0; szamlalo < felelos_tabla.getRowCount(); szamlalo++)
+                    if(datum_mezo.getText().equals(""))
                     {
-                        for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
-                        {
-                            iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
-                                         Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());                            
-                        }
-                        iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
-                    }
-                    iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
-                    /*if(zarolt_tabla.getRowCount() == 0)
-                    {
-                        iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), 0, hibaoka_mezo.getText(),                             
-                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), "", Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(),1);
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátumot!", "Hiba üzenet", 2);
                     }
                     else
                     {
-                        for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
-                        {
-                            iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
-                                    String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2);
-                        }
-                    } */  
-                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                    {
-                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString(),"1");
+                        iras.iro_vevoi_alap(datum_mezo.getText(), String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()), String.valueOf(vagy_vagy.getSelectedItem()),
+                                Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), gyartasidopontja_mezo.getText(), rma_mezo.getText(), hibaoka_mezo.getText(), 
+                                String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()));
+                 
+                         for(int szamlalo = 0; szamlalo < felelos_tabla.getRowCount(); szamlalo++)
+                         {
+                             for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                             {
+                                 iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
+                                              Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());                            
+                             }
+                             iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                         }
+                         iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                         /*if(zarolt_tabla.getRowCount() == 0)
+                         {
+                             iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), 0, hibaoka_mezo.getText(),                             
+                                     String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), "", Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(),1);
+                         }
+                         else
+                         {
+                             for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                             {
+                                 iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
+                                         String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2);
+                             }
+                         } */  
+                         for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                         {
+                             iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), table.getValueAt(szamlalo, 0).toString(), table.getValueAt(szamlalo, 1).toString(), table.getValueAt(szamlalo, 2).toString(),"1");
+                         }
+                         
+                         for(int szamlalo = 0; szamlalo < helyesbito_tabla.getRowCount(); szamlalo++)
+                         {
+                             iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), helyesbito_tabla.getValueAt(szamlalo, 0).toString(), helyesbito_tabla.getValueAt(szamlalo, 1).toString(), helyesbito_tabla.getValueAt(szamlalo, 2).toString(),"1");
+                         }
+                         iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
                     }
-                    
-                    for(int szamlalo = 0; szamlalo < helyesbito_tabla.getRowCount(); szamlalo++)
-                    {
-                        iras.iro_vevoi_intezkedes(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), helyesbito_tabla.getValueAt(szamlalo, 0).toString(), helyesbito_tabla.getValueAt(szamlalo, 1).toString(), helyesbito_tabla.getValueAt(szamlalo, 2).toString(),"1");
-                    }
-                    iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
-                    
                 }
                 else
                 {                  
@@ -599,7 +605,7 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
-                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }

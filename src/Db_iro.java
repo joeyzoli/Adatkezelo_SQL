@@ -568,7 +568,7 @@ public class Db_iro
            
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
         stmt = (Statement) conn.createStatement();                                                                                                  //csatlakozás
-        String query1 = "INSERT INTO qualitydb.Retour (Datum, Vevo, Tipus, Vagy, Beerkezett, Elteres, RMA, Megjegyzes,Vevoi_rma,Vevoi_hibaleiras)" + 
+        String query1 = "INSERT INTO qualitydb.Retour (Datum, Vevo, Tipus, Vagy, Beerkezett, Elteres, RMA, Megjegyzes,Vevoi_rma)" + 
                         "VALUES ('" + datum +"', '"+ vevo +"', '"+koztes[0]+"', '" + vagy + "', '" + beerkezett +"', '" + elteres +"', '" + rma +"', '" + megjegyzes +"'"
                                 + ", '" + vevoirma +"')"; 
         stmt.executeUpdate(query1);                                                                                                                 //sql utasítás végrehajtása

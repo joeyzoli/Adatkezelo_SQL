@@ -3,6 +3,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.SwingConstants;
+
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
 
@@ -27,14 +30,10 @@ public class Vevoireklamacio_d4 extends JPanel {
     private JTextArea gep_det;
     private JTextArea ember_det;
     private JTextArea mod_det;
-    private JCheckBox elo_anayg;
-    private JCheckBox elo_gep;    
-    private JCheckBox elo_ember;
-    private JCheckBox elo_mod;
-    private JCheckBox detekt_anyag;
-    private JCheckBox detekt_gep;
-    private JCheckBox detekt_ember;
-    private JCheckBox detekt_mod;
+    private JCheckBox anyag_gomb;
+    private JCheckBox gep_gomb;    
+    private JCheckBox ember_gomb;
+    private JCheckBox mod_gomb;
     
     public Vevoireklamacio_d4() {
         setLayout(null);
@@ -148,37 +147,25 @@ public class Vevoireklamacio_d4 extends JPanel {
         mod_det.setBounds(523, 504, 720, 39);
         add(mod_det);
         
-        elo_anayg = new JCheckBox("");
-        elo_anayg.setBounds(415, 77, 26, 23);
-        add(elo_anayg);
+        anyag_gomb = new JCheckBox("");
+        anyag_gomb.addActionListener(new Mentesgomb_aktival());
+        anyag_gomb.setBounds(415, 77, 26, 23);
+        add(anyag_gomb);
         
-        elo_gep = new JCheckBox("");
-        elo_gep.setBounds(415, 135, 26, 23);
-        add(elo_gep);
+        gep_gomb = new JCheckBox("");
+        gep_gomb.addActionListener(new Mentesgomb_aktival());
+        gep_gomb.setBounds(415, 135, 26, 23);
+        add(gep_gomb);
         
-        elo_ember = new JCheckBox("");
-        elo_ember.setBounds(415, 188, 26, 23);
-        add(elo_ember);
+        ember_gomb = new JCheckBox("");
+        ember_gomb.addActionListener(new Mentesgomb_aktival());
+        ember_gomb.setBounds(415, 188, 26, 23);
+        add(ember_gomb);
         
-        elo_mod = new JCheckBox("");
-        elo_mod.setBounds(415, 243, 26, 23);
-        add(elo_mod);
-        
-        detekt_anyag = new JCheckBox("");
-        detekt_anyag.setBounds(415, 331, 26, 23);
-        add(detekt_anyag);
-        
-        detekt_gep = new JCheckBox("");
-        detekt_gep.setBounds(415, 392, 26, 23);
-        add(detekt_gep);
-        
-        detekt_ember = new JCheckBox("");
-        detekt_ember.setBounds(415, 449, 26, 23);
-        add(detekt_ember);
-        
-        detekt_mod = new JCheckBox("");
-        detekt_mod.setBounds(415, 505, 26, 23);
-        add(detekt_mod);
+        mod_gomb = new JCheckBox("");
+        mod_gomb.addActionListener(new Mentesgomb_aktival());
+        mod_gomb.setBounds(415, 243, 26, 23);
+        add(mod_gomb);
 
     }
     
@@ -191,6 +178,29 @@ public class Vevoireklamacio_d4 extends JPanel {
                     + "Ember = '"+ ember_elo.getText()+";"+ember_det.getText() +"', Mod_ = '"+mod_elo.getText()+";"+ mod_det.getText() +"' "                   
                     + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
+            
+            String gyokerok = ";";
+            if(anyag_gomb.isSelected())
+            {
+                gyokerok += "anyag;";
+            }
+            if(gep_gomb.isSelected())
+            {
+                gyokerok += "gep;";
+            }
+            if(ember_gomb.isSelected())
+            {
+                gyokerok += "ember;";
+            }
+            if(mod_gomb.isSelected())
+            {
+                gyokerok += "mod;";
+            }
+            
+            sql = "update qualitydb.Vevoireklamacio_alap set Gyokerok = '"+ gyokerok +"' "                   
+                    + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            ment.mindenes(sql);
+            
         } 
         catch (Exception e1) 
         {              
@@ -220,11 +230,16 @@ public class Vevoireklamacio_d4 extends JPanel {
         }
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = (Statement) conn.createStatement();
-        String sql = "select anyag, gep, ember, mod_ from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        String sql = "select anyag, gep, ember, mod_, Gyokerok from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
         stmt.execute(sql);
         ResultSet rs = stmt.getResultSet();
         if(rs.next())
         {
+            anyag_gomb.setSelected(false);
+            gep_gomb.setSelected(false);
+            ember_gomb.setSelected(false);
+            mod_gomb.setSelected(false);
+            
             if(rs.getString(1) != null)
             {                
                 String[] anyag = rs.getString(1).split(";");
@@ -291,6 +306,27 @@ public class Vevoireklamacio_d4 extends JPanel {
                     mod_elo.setText("");
                     mod_det.setText("");
                 }
+                
+                String[] gyokerok = rs.getString(5).split(";");
+                for(int szamlalo = 0; szamlalo < gyokerok.length; szamlalo++)
+                {
+                    if(gyokerok[szamlalo].equals("anyag"))
+                    {
+                        anyag_gomb.setSelected(true); 
+                    }
+                    else if(gyokerok[szamlalo].equals("gep"))
+                    {
+                        gep_gomb.setSelected(true);
+                    }
+                    else if(gyokerok[szamlalo].equals("ember"))
+                    {
+                        ember_gomb.setSelected(true);
+                    }
+                    else
+                    {
+                        mod_gomb.setSelected(true);
+                    }
+                }
             }
         }        
         stmt.close();
@@ -326,5 +362,24 @@ public class Vevoireklamacio_d4 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    class Mentesgomb_aktival implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
 }

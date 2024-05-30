@@ -202,35 +202,46 @@ public class EASQAS_adatok extends JPanel
 		 {
 			try
 			{
-			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
-                SQL lekerdezo = new SQL();                                                                                                  //példányosítás                
-			    if(projekt_box.getSelectedItem().equals("-"))
+			    if(datum_tol.getJFormattedTextField().getText().equals(""))
 			    {
-			        if(hiba_box.getSelectedItem().equals("-"))
-	                {
-			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt);	//függvénymeghívása a paraméterekkel
-	                }
-			        else
-	                {
-			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
-	                }
+			        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
 			    }
+			    else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+			        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
+                }
 			    else
-			    {
-			        if(hiba_box.getSelectedItem().equals("-"))
-                    {
-			            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
-                    }
-                    else
-                    {
-                        lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
-                    }
-                                       
-                    
-			    }
-			    Foablak.frame.setCursor(null);
-			    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
+                {    
+    			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    			    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás                
+    			    if(projekt_box.getSelectedItem().equals("-"))
+    			    {
+    			        if(hiba_box.getSelectedItem().equals("-"))
+    	                {
+    			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt);	//függvénymeghívása a paraméterekkel
+    	                }
+    			        else
+    	                {
+    			            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+    	                }
+    			    }
+    			    else
+    			    {
+    			        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+    			            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                        }
+                                           
+                        
+    			    }
+    			    Foablak.frame.setCursor(null);
+    			    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
+                }
 			}
 			catch (Exception e1) 
 	        {
@@ -250,61 +261,72 @@ public class EASQAS_adatok extends JPanel
          {
             try
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
-                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                int sumfelajanlott = 0;
-                int summinta = 0;
-                int sumhiba = 0;
-                float ppm = 0;
-                if(projekt_box.getSelectedItem().equals("-"))
+                if(datum_tol.getJFormattedTextField().getText().equals(""))
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
-                    {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
-                    }
-                    else
-                    {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
-                    }               
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }
+                else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
                 }
                 else
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    int sumfelajanlott = 0;
+                    int summinta = 0;
+                    int sumhiba = 0;
+                    float ppm = 0;
+                    if(projekt_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        }               
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));    //függvénymeghívása a paraméterekkel
+                        }
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                           sumfelajanlott += Integer.parseInt(table.getValueAt(szamlalo, 3).toString());
+                        }
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                           summinta += Integer.parseInt(table.getValueAt(szamlalo, 4).toString());
+                        }
+                        for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
+                        {
+                           sumhiba += Integer.parseInt(table.getValueAt(szamlalo, 5).toString());
+                        }
+                        ppm = ((float)sumhiba/(float)sumfelajanlott)* (float)1000000;
+                        //String[] egesz = String.valueOf(ppm).split("\\.");
+                        Vector<Object> vector = new Vector<Object>();
+                        vector.add("");
+                        vector.add("");
+                        vector.add("Sum:");
+                        vector.add(sumfelajanlott);
+                        vector.add(summinta);
+                        vector.add(sumhiba);
+                        vector.add(ppm);
+                        //System.out.println(sumfelajanlott + " "+ summinta +" "+ sumhiba + " " + egesz[0]);
+                        SQL.alapmodell.addRow(vector);
+                        table.setModel(SQL.alapmodell);
                     }
-                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                    {
-                       sumfelajanlott += Integer.parseInt(table.getValueAt(szamlalo, 3).toString());
-                    }
-                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                    {
-                       summinta += Integer.parseInt(table.getValueAt(szamlalo, 4).toString());
-                    }
-                    for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
-                    {
-                       sumhiba += Integer.parseInt(table.getValueAt(szamlalo, 5).toString());
-                    }
-                    ppm = ((float)sumhiba/(float)sumfelajanlott)* (float)1000000;
-                    //String[] egesz = String.valueOf(ppm).split("\\.");
-                    Vector<Object> vector = new Vector<Object>();
-                    vector.add("");
-                    vector.add("");
-                    vector.add("Sum:");
-                    vector.add(sumfelajanlott);
-                    vector.add(summinta);
-                    vector.add(sumhiba);
-                    vector.add(ppm);
-                    //System.out.println(sumfelajanlott + " "+ summinta +" "+ sumhiba + " " + egesz[0]);
-                    SQL.alapmodell.addRow(vector);
-                    table.setModel(SQL.alapmodell);
+                    Foablak.frame.setCursor(null);
                 }
-                Foablak.frame.setCursor(null);
             }
             catch (Exception e1) 
             {
@@ -324,33 +346,44 @@ public class EASQAS_adatok extends JPanel
 		 {
 			try
 			{
-			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));			    
-				String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";																	//tárolt eljárás Stringje
-				SQL lekerdezo = new SQL();																									//példányosítás
-				 if(projekt_box.getSelectedItem().equals("-"))
-	             {
-				     if(hiba_box.getSelectedItem().equals("-"))
-	                 {
-				        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
-	                 }
-	                 else
-	                 {
-	                    lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
-	                 }				     
-	             }
-				 else
-				 {
-				     if(hiba_box.getSelectedItem().equals("-"))
-				     {
-				         lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
-	                 }
-	                 else
-	                 {
-	                     lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
-	                 }       				     
-				 }
-				Foablak.frame.setCursor(null);
-				JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
+			    if(datum_tol.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }
+                else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
+                }
+                else
+                {
+    			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));			    
+    				String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";																	//tárolt eljárás Stringje
+    				SQL lekerdezo = new SQL();																									//példányosítás
+    				 if(projekt_box.getSelectedItem().equals("-"))
+    	             {
+    				     if(hiba_box.getSelectedItem().equals("-"))
+    	                 {
+    				        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+    	                 }
+    	                 else
+    	                 {
+    	                    lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+    	                 }				     
+    	             }
+    				 else
+    				 {
+    				     if(hiba_box.getSelectedItem().equals("-"))
+    				     {
+    				         lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+    	                 }
+    	                 else
+    	                 {
+    	                     lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+    	                 }       				     
+    				 }
+    				Foablak.frame.setCursor(null);
+    				JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
+                }
 			}
 			catch (Exception e1) 
 	        {
@@ -369,32 +402,43 @@ public class EASQAS_adatok extends JPanel
          {
             try
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
-                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                if(projekt_box.getSelectedItem().equals("-"))
+                if(datum_tol.getJFormattedTextField().getText().equals(""))
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
-                    {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");  //függvénymeghívása a paraméterekkel
-                    }
-                    else
-                    {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
-                    }                   
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }
+                else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
                 }
                 else
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    if(projekt_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");  //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");  //függvénymeghívása a paraméterekkel
+                        }                   
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
-                    }                           
-                }                 
-                Foablak.frame.setCursor(null);
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));  //függvénymeghívása a paraméterekkel
+                        }                           
+                    }                 
+                    Foablak.frame.setCursor(null);
+                }
             }
             catch (Exception e1) 
             {
@@ -413,33 +457,44 @@ public class EASQAS_adatok extends JPanel
 		 {
 			try
 			{
-			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));			    
-			    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
-                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                if(projekt_box.getSelectedItem().equals("-"))
+			    if(datum_tol.getJFormattedTextField().getText().equals(""))
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
-                    {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
-                    }
-                    else
-                    {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
-                    }                   
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }
+                else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
                 }
                 else
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
+    			    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));			    
+    			    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    if(projekt_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                        }                   
                     }
                     else
                     {
-                        lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
-                    }                           
-                }                 			    
-				Foablak.frame.setCursor(null);
-				JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                        }                           
+                    }                 			    
+    				Foablak.frame.setCursor(null);
+    				JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
+                }
 			}
 			catch (Exception e1) 
 	        {
@@ -458,40 +513,51 @@ public class EASQAS_adatok extends JPanel
          {
             try
             {
-                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
-                SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                if(projekt_box.getSelectedItem().equals("-"))
+                if(datum_tol.getJFormattedTextField().getText().equals(""))
                 {
-                    if(hiba_box.getSelectedItem().equals("-"))
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }
+                else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
+                }
+                else
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                    if(projekt_box.getSelectedItem().equals("-"))
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%");   //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        }                   
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%");   //függvénymeghívása a paraméterekkel
+                        if(hiba_box.getSelectedItem().equals("-"))
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                        }
+                        else
+                        {
+                            lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                        }                           
                     }                   
-                }
-                else
-                {
-                    if(hiba_box.getSelectedItem().equals("-"))
-                    {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
+                    if(projekt_box.getSelectedItem().equals("-"))
+                    {               
+                        
                     }
                     else
                     {
-                        lekerdezo.lekerdez_mutat(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()));   //függvénymeghívása a paraméterekkel
-                    }                           
-                }                   
-                if(projekt_box.getSelectedItem().equals("-"))
-                {               
-                    
+                        
+                    }
+                    Foablak.frame.setCursor(null);
                 }
-                else
-                {
-                    
-                }
-                Foablak.frame.setCursor(null);
             }
             catch (Exception e1) 
             {
@@ -514,35 +580,46 @@ public class EASQAS_adatok extends JPanel
             {
                 try
                 {
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
-                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás                    
-                    if(projekt_box.getSelectedItem().equals("-"))
+                    if(datum_tol.getJFormattedTextField().getText().equals(""))
                     {
-                        if(hiba_box.getSelectedItem().equals("-"))
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
-                        }
-                        else
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
-                        }
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                    }
+                    else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                    {
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
                     }
                     else
                     {
-                        if(hiba_box.getSelectedItem().equals("-"))
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        String querry = "call qualitydb.projekt_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás                    
+                        if(projekt_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            if(hiba_box.getSelectedItem().equals("-"))
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", projekt); //függvénymeghívása a paraméterekkel
+                            }
+                            else
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", projekt);   //függvénymeghívása a paraméterekkel
+                            }
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            if(hiba_box.getSelectedItem().equals("-"))
+                            {
+                                lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            }
+                            else
+                            {
+                                lekerdezo.lekerdez_projekt_osszegez(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), projekt);    //függvénymeghívása a paraméterekkel
+                            }
+                                               
+                            
                         }
-                                           
-                        
+                        Foablak.frame.setCursor(null);
+                        JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
                     }
-                    Foablak.frame.setCursor(null);
-                    JOptionPane.showMessageDialog(null, "Mentve az asztalra ProjektPPM.xlsx néven", "Info", 1);
                 }
                 catch (Exception e1) 
                 {
@@ -577,33 +654,44 @@ public class EASQAS_adatok extends JPanel
             {
                 try
                 {
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                    
-                    String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
-                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                     if(projekt_box.getSelectedItem().equals("-"))
-                     {
-                         if(hiba_box.getSelectedItem().equals("-"))
+                    if(datum_tol.getJFormattedTextField().getText().equals(""))
+                    {
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                    }
+                    else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                    {
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
+                    }
+                    else
+                    {
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                    
+                        String querry = "call qualitydb.termek_lekerdezo(?,?,?,?)";                                                                 //tárolt eljárás Stringje
+                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                         if(projekt_box.getSelectedItem().equals("-"))
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                             if(hiba_box.getSelectedItem().equals("-"))
+                             {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", termek);  //függvénymeghívása a paraméterekkel
+                             }
+                             else
+                             {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
+                             }                   
                          }
                          else
                          {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", termek);  //függvénymeghívása a paraméterekkel
-                         }                   
-                     }
-                     else
-                     {
-                         if(hiba_box.getSelectedItem().equals("-"))
-                         {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             if(hiba_box.getSelectedItem().equals("-"))
+                             {
+                                 lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             }
+                             else
+                             {
+                                 lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
+                             }                           
                          }
-                         else
-                         {
-                             lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), termek);  //függvénymeghívása a paraméterekkel
-                         }                           
-                     }
-                    Foablak.frame.setCursor(null);
-                    JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
+                        Foablak.frame.setCursor(null);
+                        JOptionPane.showMessageDialog(null, "Mentve az asztalra TermékPPM.xlsx néven", "Info", 1);
+                    }
                 }
                 catch (Exception e1) 
                 {
@@ -638,33 +726,44 @@ public class EASQAS_adatok extends JPanel
             {
                 try
                 {
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                    
-                    String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
-                    SQL lekerdezo = new SQL();                                                                                                  //példányosítás
-                    if(projekt_box.getSelectedItem().equals("-"))
+                    if(datum_tol.getJFormattedTextField().getText().equals(""))
                     {
-                        if(hiba_box.getSelectedItem().equals("-"))
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
-                        }
-                        else
-                        {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
-                        }                   
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                    }
+                    else if(datum_ig.getJFormattedTextField().getText().equals(""))
+                    {
+                        JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-ig dátumot!", "Hiba üzenet", 2);
                     }
                     else
                     {
-                        if(hiba_box.getSelectedItem().equals("-"))
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                    
+                        String querry = "call qualitydb.hibak_lekerdezo(?,?,?,?)";                                                                   //tárolt eljárás stringje
+                        SQL lekerdezo = new SQL();                                                                                                  //példányosítás
+                        if(projekt_box.getSelectedItem().equals("-"))
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            if(hiba_box.getSelectedItem().equals("-"))
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", "%", hiba); //függvénymeghívása a paraméterekkel
+                            }
+                            else
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), "%", hiba); //függvénymeghívása a paraméterekkel
+                            }                   
                         }
                         else
                         {
-                            lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
-                        }                           
-                    }                               
-                    Foablak.frame.setCursor(null);
-                    JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
+                            if(hiba_box.getSelectedItem().equals("-"))
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), "%", String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            }
+                            else
+                            {
+                                lekerdezo.lekerdez_projekt(querry, datum_tol.getJFormattedTextField().getText(), datum_ig.getJFormattedTextField().getText(), String.valueOf(hiba_box.getSelectedItem()), String.valueOf(projekt_box.getSelectedItem()), hiba);   //függvénymeghívása a paraméterekkel
+                            }                           
+                        }                               
+                        Foablak.frame.setCursor(null);
+                        JOptionPane.showMessageDialog(null, "Mentve az asztalra Hibák_adatai.xlsx néven", "Info", 1);
+                    }
                 }
                 catch (Exception e1) 
                 {

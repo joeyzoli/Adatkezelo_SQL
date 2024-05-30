@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Vevoireklamacio_d8 extends JPanel {
-    JTextField lezaras_datuma;
+    static JTextField lezaras_datuma;
     private JTextArea megelozo_mezo;
     /**
      * Create the panel.
@@ -48,8 +49,16 @@ public class Vevoireklamacio_d8 extends JPanel {
         try 
         {
             SQA_SQL ment = new SQA_SQL();
-            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";           
+            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
+            if(lezaras_datuma.getText().equals("")) {}
+            else
+            {
+                sql = "update qualitydb.Vevoireklamacio_alap set D8 = '"+ lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                ment.mindenes(sql);
+                Vevoireklamacio_fejlec.lezaras = Color.GREEN;
+            }
+            
         } 
         catch (Exception e1) 
         {              
