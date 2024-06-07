@@ -1654,9 +1654,9 @@ public class SQL
         sheet.getCellRange("B" + 13).setNumberValue(reklamacio_dec);
         sheet.getCellRange("C" + 13).setNumberValue(visszajelzes_dec);
         
-        int sumrek = reklamacio_jan + reklamacio_feb + reklamacio_mar + reklamacio_apr + reklamacio_maj + reklamacio_jun + reklamacio_jul + reklamacio_aug + reklamacio_sze + reklamacio_okt +
+        float sumrek = reklamacio_jan + reklamacio_feb + reklamacio_mar + reklamacio_apr + reklamacio_maj + reklamacio_jun + reklamacio_jul + reklamacio_aug + reklamacio_sze + reklamacio_okt +
                 reklamacio_nov + reklamacio_dec;        
-        int sumvissza = visszajelzes_jan + visszajelzes_feb + visszajelzes_mar + visszajelzes_apr + visszajelzes_maj + visszajelzes_jun + visszajelzes_jul + visszajelzes_aug + visszajelzes_sze + visszajelzes_okt + 
+        float sumvissza = visszajelzes_jan + visszajelzes_feb + visszajelzes_mar + visszajelzes_apr + visszajelzes_maj + visszajelzes_jun + visszajelzes_jul + visszajelzes_aug + visszajelzes_sze + visszajelzes_okt + 
                 visszajelzes_nov + visszajelzes_dec;
         //Date date = new Date();
         //LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -1668,8 +1668,8 @@ public class SQL
         Period diff = Period.between(start_date,end_date);
         System.out.println("Eltelt hónapok száma: "+diff.getMonths());
         System.out.println("SUM rek: "+diff.getMonths());
-        int atlagrek = 0;
-        int atlagvissza = 0;
+        float atlagrek = 0.0f;
+        float atlagvissza = 0.0f;
         if(diff.getMonths() == 0)
         {
             atlagrek =  sumrek;
@@ -1677,11 +1677,13 @@ public class SQL
         }
         else
         {
-            atlagrek = (sumrek / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));           //month
-            atlagvissza = (sumvissza / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));       //month
+            atlagrek = (float) (sumrek / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));           //month
+            atlagvissza = (float) (sumvissza / (oszto1+oszto2+oszto3+oszto4+oszto5+oszto6+oszto7+oszto8+oszto9+oszto10+oszto11+oszto12));       //month
         }
-        sheet.getCellRange("B" + 14).setNumberValue(atlagrek);
-        sheet.getCellRange("C" + 15).setNumberValue(atlagvissza);
+        System.out.println("Átlag rek: "+ atlagrek);
+        System.out.println("Átlag vissza: "+atlagvissza);
+        sheet.getCellRange("B" + 14).setNumberValue(Math.round(atlagrek));
+        sheet.getCellRange("C" + 15).setNumberValue(Math.round(atlagvissza));
                
         Chart chart = sheet.getCharts().add();
         chart.setDataRange(sheet.getCellRange("A1:C15"));
@@ -1873,7 +1875,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Február");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".02.28', Datum), if(lezaras_ido > '"+ ig +".02.28',DATEDIFF('"+ ig +".02.28', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".02.28', Datum), if(lezaras_ido > '"+ ig +".02.28',DATEDIFF('"+ ig +".02.28', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".03.01' and Datum <= '"+ ig +".02.28'";
                 stmt.execute(sql);
@@ -1903,7 +1905,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Január");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".01.31', Datum), if(lezaras_ido > '"+ ig +".01.31',DATEDIFF('"+ ig +".01.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".01.31', Datum), if(lezaras_ido > '"+ ig +".01.31',DATEDIFF('"+ ig +".01.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".02.01' and Datum <= '"+ ig +".01.31'";
                 stmt.execute(sql);
@@ -1933,7 +1935,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Március");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".03.31', Datum), if(lezaras_ido > '"+ ig +".03.31',DATEDIFF('"+ ig +".03.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".03.31', Datum), if(lezaras_ido > '"+ ig +".03.31',DATEDIFF('"+ ig +".03.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".04.01' and Datum <= '"+ ig +".03.31'";
                 stmt.execute(sql);
@@ -1963,7 +1965,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Április");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".04.30', Datum), if(lezaras_ido > '"+ ig +".04.30',DATEDIFF('"+ ig +".04.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".04.30', Datum), if(lezaras_ido > '"+ ig +".04.30',DATEDIFF('"+ ig +".04.30', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".05.01' and Datum <= '"+ ig +".04.30'";
                 stmt.execute(sql);
@@ -1993,7 +1995,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Május");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".05.31', Datum), if(lezaras_ido > '"+ ig +".05.31',DATEDIFF('"+ ig +".05.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".05.31', Datum), if(lezaras_ido > '"+ ig +".05.31',DATEDIFF('"+ ig +".05.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".06.01' and Datum <= '"+ ig +".05.31'";
                 stmt.execute(sql);
@@ -2023,7 +2025,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Június");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".06.30', Datum), if(lezaras_ido > '"+ ig +".06.30',DATEDIFF('"+ ig +".06.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".06.30', Datum), if(lezaras_ido > '"+ ig +".06.30',DATEDIFF('"+ ig +".06.30', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".07.01' and Datum <= '"+ ig +".06.30'";
                 stmt.execute(sql);
@@ -2053,7 +2055,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Július");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".07.31', Datum), if(lezaras_ido > '"+ ig +".07.31',DATEDIFF('"+ ig +".07.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".07.31', Datum), if(lezaras_ido > '"+ ig +".07.31',DATEDIFF('"+ ig +".07.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".08.01' and Datum <= '"+ ig +".07.31'";
                 stmt.execute(sql);
@@ -2083,7 +2085,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Augusztus");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".08.31', Datum), if(lezaras_ido > '"+ ig +".08.31',DATEDIFF('"+ ig +".08.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".08.31', Datum), if(lezaras_ido > '"+ ig +".08.31',DATEDIFF('"+ ig +".08.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".09.01' and Datum <= '"+ ig +".08.31'";
                 stmt.execute(sql);
@@ -2113,7 +2115,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Szeptember");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".09.30', Datum), if(lezaras_ido > '"+ ig +".09.30',DATEDIFF('"+ ig +".09.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".09.30', Datum), if(lezaras_ido > '"+ ig +".09.30',DATEDIFF('"+ ig +".09.30', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".10.01' and Datum <= '"+ ig +".09.30'";
                 stmt.execute(sql);
@@ -2143,7 +2145,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("Október");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".10.31', Datum), if(lezaras_ido > '"+ ig +".10.31',DATEDIFF('"+ ig +".10.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".10.31', Datum), if(lezaras_ido > '"+ ig +".10.31',DATEDIFF('"+ ig +".10.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".11.01' and Datum <= '"+ ig +".10.31'";
                 stmt.execute(sql);
@@ -2173,7 +2175,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("November");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".11.30', Datum), if(lezaras_ido > '"+ ig +".11.30',DATEDIFF('"+ ig +".11.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".11.30', Datum), if(lezaras_ido > '"+ ig +".11.30',DATEDIFF('"+ ig +".11.30', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ tol +".12.01' and Datum <= '"+ ig +".11.30'";
                 stmt.execute(sql);
@@ -2203,7 +2205,7 @@ public class SQL
                     }
                 }
                 sheet.getCellRange("R" + cella4).setText("December");
-                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".12.31', Datum), if(lezaras_ido > '"+ ig +".12.31',DATEDIFF('"+ ig +".12.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".12.31', Datum), if(lezaras_ido > '"+ ig +".12.31',DATEDIFF('"+ ig +".12.31', Datum), DATEDIFF(Lezaras_ido, Datum) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "from qualitydb.Vevoireklamacio_alapadat\n"
                         + "where 3=3 and Datum >= '"+ ig +".01.01' and Datum <= '"+ ig +".12.31'";
                 stmt.execute(sql);

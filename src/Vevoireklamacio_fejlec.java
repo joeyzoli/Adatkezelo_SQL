@@ -19,11 +19,21 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -39,6 +49,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 import javax.swing.JButton;
 
@@ -72,6 +83,8 @@ public class Vevoireklamacio_fejlec extends JPanel {
     private String d8 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Q-JK-003 8D report.xlsx";
     static JButton mentes_gomb;
     static JRadioButton koltseg_gomb;
+    private JButton ujreklamacio_gomb;
+    private JFileChooser mentes_helye;
 
     /**
      * Create the panel.
@@ -194,6 +207,11 @@ public class Vevoireklamacio_fejlec extends JPanel {
         lblNewLabel_1.setBounds(427, 24, 91, 14);
         add(lblNewLabel_1);
         
+        mentes_helye = new JFileChooser();
+        mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+        mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        mentes_helye.setDragEnabled(true);
+        
         JLabel qrcimke = new JLabel("QR < 24");
         qrcimke.addMouseListener (new MouseListener () {
             //override the method
@@ -205,9 +223,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 // TODO Auto-generated method stub
                 System.out.println("Klikkelve");
-                JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
-                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();                                
                 if(fajl != null)
@@ -252,40 +268,54 @@ public class Vevoireklamacio_fejlec extends JPanel {
         JLabel lblNewLabel_5 = new JLabel("D5 állapot");
         lblNewLabel_5.setBounds(929, 24, 87, 14);
         add(lblNewLabel_5);
+        
+        ujreklamacio_gomb = new JButton("Új reklamáció");
+        ujreklamacio_gomb.addActionListener(new Panelcsere_Vevoi2());
+        ujreklamacio_gomb.setBounds(184, 20, 136, 23);
+        add(ujreklamacio_gomb);
+        
+        Vevoireklamacio_fejlec.ertesitve = Color.gray;
+        Vevoireklamacio_fejlec.qr = Color.gray;
+        Vevoireklamacio_fejlec.d3 = Color.gray;
+        Vevoireklamacio_fejlec.d5 = Color.gray;
+        Vevoireklamacio_fejlec.lezaras = Color.gray;
+        
+        MyDragDropListener myDragDropListener = new MyDragDropListener();
+        new DropTarget(qrcimke, myDragDropListener);
+        new DropTarget(mentes_helye, myDragDropListener);
   
     }
     
     public String hozzaad(String fajlnev)
-    {
-        String[] fajltipus = fajlnev.split("\\.");                    
+    {                            
         ImageIcon icon = null;
         String tipus = "*";
-        if(fajltipus[1].equals("msg"))
+        if(fajlnev.endsWith("msg"))
         {
             icon = new ImageIcon(outlook_kep);
             tipus = "email";
         }
-        else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
+        else if(fajlnev.endsWith("xlsx") || fajlnev.endsWith("xls"))
         {
             icon = new ImageIcon(excel_kep);
         }
-        else if(fajltipus[1].equals("pdf"))
+        else if(fajlnev.endsWith("pdf"))
         {
             icon = new ImageIcon(pdf_kep);
         }
-        else if(fajltipus[1].equals("jpg"))
+        else if(fajlnev.endsWith("jpg"))
         {
             icon = new ImageIcon(kep_kep);
         }
-        else if(fajltipus[1].equals("png"))
+        else if(fajlnev.endsWith("png"))
         {
             icon = new ImageIcon(kep_kep);
         }
-        else if(fajltipus[1].equals("doc"))
+        else if(fajlnev.endsWith("doc"))
         {
             icon = new ImageIcon(word_kep);
         }
-        else if(fajltipus[1].equals("docx"))
+        else if(fajlnev.endsWith("docx"))
         {
             icon = new ImageIcon(word_kep);
         }
@@ -1002,5 +1032,86 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
+    }
+    
+    class Panelcsere_Vevoi2 implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Vevoireklamacio_V2 vevoirek = new Vevoireklamacio_V2();
+            JScrollPane ablak = new JScrollPane(vevoirek);
+            Foablak.frame.setContentPane(ablak);
+            Foablak.frame.pack();
+         }
+    }
+    
+    class MyDragDropListener implements DropTargetListener {
+
+        @Override
+        public void drop(DropTargetDropEvent event) {
+
+            // Accept copy drops
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+
+            // Get the transfer which can provide the dropped item data
+            Transferable transferable = event.getTransferable();
+
+            // Get the data formats of the dropped item
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+
+            // Loop through the flavors
+            for (DataFlavor flavor : flavors) 
+            {
+                try 
+                {
+                   // If the drop items are files
+                    if (flavor.isFlavorJavaFileListType()) 
+                    {
+                        //System.out.println("A nok képhozzáadás fut");
+                        // Get all of the dropped files
+                        List<?> files = (List<?>) transferable.getTransferData(flavor);
+                        //System.out.println(files.toString());
+                        //System.out.println(files.toString().substring(1,files.toString().length()-1));
+                        File fajl = new File(files.toString().substring(1,files.toString().length()-1));
+                        if(fajl != null)
+                        {                  
+                            Vevoireklamacio_fejlec.d3 = Color.YELLOW;
+                            Vevoireklamacio_fejlec.qr = Color.GREEN;
+                            Vevoireklamacio_d2.fajlok.add(fajl.getName()+";"+fajl.getAbsolutePath()+";"+hozzaad(fajl.getName()));
+                            mentes_gomb.setEnabled(true);
+                            JOptionPane.showMessageDialog(null, "Email csatolva!", "Info", 1);
+                        }
+                     }
+
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                    String hibauzenet = e.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                }
+            }
+            // Inform that the drop is complete
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {
+        }
+
     }
 }

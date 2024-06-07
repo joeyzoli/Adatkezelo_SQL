@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -481,12 +482,15 @@ public class Retour extends JPanel
                     DataTable datatable = new DataTable();
                     
                     sheet = workbook.getWorksheets().get(0);
-                    datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                    datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );                    
+                    
                     for(int szamlalo2 = 1; szamlalo2 < datatable.getRows().size(); szamlalo2++)
                     {
-                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA, Vevoi_rma, Hiba_leirasa) Values('"+ datatable.getRows().get(szamlalo2).getString(0) +"',"
+                        SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        String sql = "Insert into qualitydb.Retour_szeriaszamok (VEAS_ID,Vevoi_ID,Retour_ID, RMA, Vevoi_rma, Hiba_leirasa, rogzites_ideje) Values('"+ datatable.getRows().get(szamlalo2).getString(0) +"',"
                                 + "'"+ datatable.getRows().get(szamlalo2).getString(1) +"','"+ datatable.getRows().get(szamlalo2).getString(2) +"','"+ datatable.getRows().get(szamlalo2).getString(3) +"',"
-                                + "'"+ datatable.getRows().get(szamlalo2).getString(4) +"', '"+ datatable.getRows().get(szamlalo2).getString(5) +"')";
+                                + "'"+ datatable.getRows().get(szamlalo2).getString(4) +"', '"+ datatable.getRows().get(szamlalo2).getString(5) +"', '"+ rogzites.format(timestamp) +"')";
                         iro.mindenes(sql);
                     }
                     JOptionPane.showMessageDialog(null, "Feltöltés kész", "Info", 1);

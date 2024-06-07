@@ -753,27 +753,34 @@ public class Vevoireklamacio_d2 extends JPanel {
                 }
                 
                 ImageIcon icon = null;
-                String[] fajltipus = rset.getString(1).split("\\.");
-                if(fajltipus[1].equals("msg"))
+                if(rset.getString(1).endsWith("msg"))
                 {
                     icon = new ImageIcon(Vevoireklamacio_fejlec.outlook_kep);
                     tipus = "email";
                 }
-                else if(fajltipus[1].equals("xlsx") || fajltipus[1].equals("xls"))
+                else if(rset.getString(1).endsWith("xlsx") || rset.getString(1).endsWith("xls"))
                 {
                     icon = new ImageIcon(Vevoireklamacio_fejlec.excel_kep);
                 }
-                else if(fajltipus[1].equals("pdf"))
+                else if(rset.getString(1).endsWith("pdf"))
                 {
                     icon = new ImageIcon(Vevoireklamacio_fejlec.pdf_kep);
                 }
-                else if(fajltipus[1].equals("jpg"))
+                else if(rset.getString(1).endsWith("jpg"))
                 {
                     icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
                 }
-                else if(fajltipus[1].equals("png"))
+                else if(rset.getString(1).endsWith("png"))
                 {
                     icon = new ImageIcon(Vevoireklamacio_fejlec.kep_kep);
+                }
+                else if(rset.getString(1).endsWith("doc"))
+                {
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.word_kep);
+                }
+                else if(rset.getString(1).endsWith("docx"))
+                {
+                    icon = new ImageIcon(Vevoireklamacio_fejlec.word_kep);
                 }
                 fajlok.add(rset.getString(1)+";"+f.getAbsolutePath()+";"+tipus);
                 Vevoireklamacio_d0.modell.addRow(new Object[]{icon,rset.getString(1)});

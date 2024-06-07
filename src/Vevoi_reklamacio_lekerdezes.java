@@ -702,6 +702,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     sheet.getCellRange("V" + cella3).setNumberValue(Integer.parseInt(rs.getString(5)));          
                     cella3++;
                 }
+                /*
                 int cella4 = 2;
                 int sum = 0;
                 String[] evszam = datumig.getText().split("\\.");
@@ -717,14 +718,11 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 System.out.println(tol);
                 System.out.println(evszam[1]);
                 
-                sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',            \n"
-                        + "        sum(if(mi = 'Reklamáció' && Lezaras_datuma = '', 1,0)) as 'Nyitott reklamáció',\n"
-                        + "        sum(if(mi = 'Reklamáció' && not Lezaras_datuma = '', 1,0)) as 'Lezárt reklamáció',\n"
-                        + "        sum(if(mi = 'Visszajelzés' && Lezaras_datuma = '', 1,0)) as 'Nyitott visszajelzés',\n"
-                        + "        sum(if(mi = 'Visszajelzés' && not Lezaras_datuma = '', 1,0)) as 'Lezárt visszajelzés'\n"
-                        + "                from qualitydb.Vevoireklamacio_alap\n"
-                        + "                    where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' \n"
-                        + "                    group by Hónap  order by Hónap asc";
+                sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',\n"        // --
+                        + "   cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "           from qualitydb.Vevoireklamacio_alapadat\n"
+                        + "       where 3=3 and Datum >= '"+ datumtol.getText() +"' and Datum <= '"+ datumig.getText() +"' \n"
+                        + "             group by Hónap order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
                 /*
@@ -1123,6 +1121,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 //Add a secondary Y axis to the chart
                 cs6.setUsePrimaryAxis(false);
                 */
+                
                 //////////////////////////////////////////////////////////////////////////////////////
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
                 sheet.getAllocatedRange().autoFitColumns();

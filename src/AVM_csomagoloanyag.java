@@ -181,7 +181,6 @@ public class AVM_csomagoloanyag extends JPanel {
                     //cikkszamok.size()
                     for(int szamlalo = 0; szamlalo < cikkszamok.size(); szamlalo++)
                     {
-                        
                         cikkszam = cikkszamok.get(szamlalo);
                         
                         rs = stmt.executeQuery("select \r\n"
@@ -227,8 +226,9 @@ public class AVM_csomagoloanyag extends JPanel {
                                 + "group by RECEIPT_REFERENCE, ARRIVAL_DATE\r\n"
                                 + "order by ARRIVAL_DATE DESC\r\n"
                                 + "-- FETCH FIRST 18 ROWS ONLY");
+                        //System.out.println("Cikkszám amivel baj van: "+ cikkszamok.get(szamlalo));
                         while(rs.next())
-                        {            
+                        {
                             beszerzett_db.add(rs.getInt(1));
                             rendelesi_azonosito.add(rs.getString(2));
                         }                 
@@ -237,10 +237,17 @@ public class AVM_csomagoloanyag extends JPanel {
                         int eredmeny = 0;
                         int seged = 0;
                         int felhasznalt = felhasznalva + zarolt;
+                        
                         for(int szamlalo2 = 0; eredmeny <= felhasznalt; szamlalo2++)
                         {
+                            //System.out.println("Eredmény: "+ eredmeny );
+                            //System.out.println("Felhasznált: "+ felhasznalt );
+                            //System.out.println("Beszerzett Batch: "+ beszerzett_db.get(szamlalo2) );
+                            //System.out.println("Készlet: "+ keszlet );
                             fel1 = beszerzett_db.get(szamlalo2);
                             fel2 += fel1;
+                            //System.out.println("Fel1: "+ fel1 );
+                            //System.out.println("Fel2: "+ fel2 );
                             if(fel2 > keszlet)
                             {            
                                 seged =  fel2 - keszlet;
@@ -249,20 +256,46 @@ public class AVM_csomagoloanyag extends JPanel {
                                 sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
                                 sheet2.getCellRange("D" + cellaszam2).setNumberValue(seged);
                                 cellaszam2++;szamlalo2++;
-                                eredmeny += seged;                            
+                                eredmeny += seged;
+                                //System.out.println("Eredmény: "+eredmeny);
+                                //System.out.println("Felhasznált: "+felhasznalt);
+                                //System.out.println("Számláló: "+szamlalo2);
                                 while(eredmeny <= felhasznalt)
                                 {
-                                    eredmeny += beszerzett_db.get(szamlalo2);
-                                    sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
-                                    sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
-                                    sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
-                                    sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
-                                    cellaszam2++;
-                                    szamlalo2++;
+                                    if(eredmeny == felhasznalt)
+                                    {
+                                        int szam = szamlalo2-1;
+                                        //System.out.println("Beszerezett db ami benne van: "+ beszerzett_db.get(szam));
+                                        eredmeny += beszerzett_db.get((szamlalo2-1));
+                                        sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szam));
+                                        sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szam));
+                                        sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szam));
+                                        sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szam));
+                                        cellaszam2++;
+                                    }
+                                    else
+                                    {
+                                        //System.out.println("Beszerezett db ami benne van: "+ beszerzett_db.get(szamlalo2) );
+                                        eredmeny += beszerzett_db.get(szamlalo2);
+                                        sheet2.getRange().get("A" + cellaszam2).setText(cikkszamok.get(szamlalo));
+                                        sheet2.getCellRange("B" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                        sheet2.getCellRange("C" + cellaszam2).setText(rendelesi_azonosito.get(szamlalo2));
+                                        sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2));
+                                        cellaszam2++;
+                                        szamlalo2++;
+                                    }
                                 }
                                 cellaszam2--;szamlalo2--;
                                 seged = eredmeny- felhasznalt;
-                                sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2)-seged);
+                                if(eredmeny == felhasznalt)
+                                {
+                                    int szam = szamlalo2-1;
+                                    sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szam)-seged);
+                                }
+                                else
+                                {
+                                    sheet2.getCellRange("D" + cellaszam2).setNumberValue(beszerzett_db.get(szamlalo2)-seged);
+                                }
                             }                      
                         }                        
                         
