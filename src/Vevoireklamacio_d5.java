@@ -49,9 +49,9 @@ public class Vevoireklamacio_d5 extends JPanel {
         modell = new DefaultTableModel();
         modell2 = new DefaultTableModel();
         
-        JLabel lblNewLabel = new JLabel("Intézkedések:");
+        JLabel lblNewLabel = new JLabel("Korrektív Intézkedések:");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lblNewLabel.setBounds(148, 46, 156, 14);
+        lblNewLabel.setBounds(148, 46, 195, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Előfordulásra");

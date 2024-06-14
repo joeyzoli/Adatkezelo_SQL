@@ -97,6 +97,7 @@ public class Foablak extends JFrame
 	private Beepules_kereso beepules;
 	private Elokeszitett_anyagkereso elokeszit;
 	private Raktarban_anyag rakiban;
+	private Loxone_parositas lox_parok;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -338,6 +339,10 @@ public class Foablak extends JFrame
 		raki = new JMenuItem("Raktárban levő gyártói adatokkal");
 		raki.addActionListener(new Panelcsere_Raktarban());
 		lekerdezes.add(raki);
+		
+		JMenuItem loxone_led = new JMenuItem("Loxone LS adatok");
+		loxone_led.addActionListener(new Panelcsere_Loxone_paros());
+		lekerdezes.add(loxone_led);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1179,6 +1184,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Loxone_paros implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            lox_parok = new Loxone_parositas();
+            JScrollPane ablak = new JScrollPane(lox_parok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1337,8 +1353,7 @@ public class Foablak extends JFrame
                 //sqa.mindenes(modosit);
                 //System.out.println("Ma nem fut le az SQA email rész");
                 //System.out.println("A hét napja:" + nap);
-            }
-            
+            }            
             
             //System.out.println(this.getClass().getSimpleName());
             //Utolso_sor sorszam = new Utolso_sor();

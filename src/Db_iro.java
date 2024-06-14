@@ -38,7 +38,10 @@ public class Db_iro
 	          String hibauzenet2 = e.toString();
 		      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
 	       }
-	       
+	    if(koztes[0].contains("376421"))
+	    {
+	        koztes[2] = "TECHEM FUNK";
+	    }
 	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");							//kapcsolat létrehozása
 	    stmt = (Statement) conn.createStatement();																									//csatlakozás
 	    String query1 = "INSERT INTO qualitydb.Gyartasi_adatok (VT_azon, Cikksz, Vevo, Vevoi_megnev, Datum, Muszak, Ellenor_neve, Hibagyujtes_helye, FElajanlott, Minta_nagysag, PCB_sorszam, Hibakod, Hiba_megnevezes, Pozicio, Hibak_szam, Sor, Rogzites_idopontja)" + 

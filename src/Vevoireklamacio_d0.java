@@ -317,7 +317,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         add(fajltorles_gomb);
         
         modell2 = new DefaultTableModel();
-        modell2.setColumnIdentifiers(new Object[]{"Cikkszám"});
+        modell2.setColumnIdentifiers(new Object[]{"Reklamált típus"});
         table_1 = new JTable(){
             public boolean editCellAt(int row, int column, java.util.EventObject e) {
                 return false;

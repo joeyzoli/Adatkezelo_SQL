@@ -86,96 +86,68 @@ public class Vevoireklamacio_d2 extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Mi a probléma?");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel.setBounds(228, 64, 102, 14);
+        lblNewLabel.setBounds(228, 27, 102, 14);
         add(lblNewLabel);
         
-        miaproblema_mezo = new JTextArea();
-        miaproblema_mezo.setLineWrap(true);
-        miaproblema_mezo.setWrapStyleWord(true);
-        miaproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        JScrollPane gorgeto1 = new JScrollPane(miaproblema_mezo);
-        gorgeto1.setBounds(340, 59, 260, 64);
-        add(gorgeto1);
         
         JLabel lblNewLabel_1 = new JLabel("Hol detektálta");
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_1.setBounds(723, 64, 94, 14);
+        lblNewLabel_1.setBounds(723, 27, 94, 14);
         add(lblNewLabel_1);
         
-        holdetektalta_mezo = new JTextArea();
-        holdetektalta_mezo.setLineWrap(true);
-        holdetektalta_mezo.setWrapStyleWord(true);
-        holdetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        JScrollPane gorgeto2 = new JScrollPane(holdetektalta_mezo);
-        gorgeto2.setBounds(827, 59, 260, 64);
-        add(gorgeto2);
         
         JLabel lblNewLabel_2 = new JLabel("Miért probléma?");
         lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_2.setBounds(228, 145, 102, 14);
+        lblNewLabel_2.setBounds(228, 123, 102, 14);
         add(lblNewLabel_2);
         
-        miertproblema_mezo = new JTextArea();
-        miertproblema_mezo.setLineWrap(true);
-        miertproblema_mezo.setWrapStyleWord(true);
-        miertproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        JScrollPane gorgeto3 = new JScrollPane(miertproblema_mezo);
-        gorgeto3.setBounds(340, 140, 260, 64);
-        add(gorgeto3);
         
         JLabel lblNewLabel_3 = new JLabel("Hogyan detektálta?");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_3.setBounds(693, 145, 124, 14);
+        lblNewLabel_3.setBounds(693, 123, 124, 14);
         add(lblNewLabel_3);
         
-        hogyandetektalta_mezo = new JTextArea();
-        hogyandetektalta_mezo.setLineWrap(true);
-        hogyandetektalta_mezo.setWrapStyleWord(true);
-        hogyandetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        JScrollPane gorgeto4 = new JScrollPane(hogyandetektalta_mezo);
-        gorgeto4.setBounds(827, 140, 260, 64);
-        add(gorgeto4);
         
         datum_mezo = new JTextField();
         datum_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        datum_mezo.setBounds(340, 232, 86, 20);
+        datum_mezo.setBounds(342, 209, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_4 = new JLabel("Mikor detektálta?");
         lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_4.setBounds(228, 235, 102, 14);
+        lblNewLabel_4.setBounds(228, 212, 102, 14);
         add(lblNewLabel_4);
         
         JLabel lblNewLabel_5 = new JLabel("Hány darabot érint?");
         lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_5.setBounds(657, 235, 160, 14);
+        lblNewLabel_5.setBounds(657, 212, 160, 14);
         add(lblNewLabel_5);
         
         db_mezo = new JTextField();
         db_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        db_mezo.setBounds(827, 232, 86, 20);
+        db_mezo.setBounds(827, 209, 86, 20);
         add(db_mezo);
         db_mezo.setColumns(10);
         
         ki_mezo = new JTextField();
         ki_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        ki_mezo.setBounds(340, 280, 188, 20);
+        ki_mezo.setBounds(342, 252, 188, 20);
         add(ki_mezo);
         ki_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Ki detektálta?");
         lblNewLabel_6.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel_6.setBounds(228, 283, 102, 14);
+        lblNewLabel_6.setBounds(228, 255, 102, 14);
         add(lblNewLabel_6);
         
         JLabel lblNewLabel_7 = new JLabel("Mi látható a képen?");
-        lblNewLabel_7.setBounds(693, 283, 124, 14);
+        lblNewLabel_7.setBounds(216, 297, 124, 14);
         add(lblNewLabel_7);
         
         kepleiras_mezo = new JTextField();
         kepleiras_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        kepleiras_mezo.setBounds(827, 280, 314, 20);
+        kepleiras_mezo.setBounds(340, 294, 314, 20);
         add(kepleiras_mezo);
         kepleiras_mezo.setColumns(10);
         
@@ -380,7 +352,7 @@ public class Vevoireklamacio_d2 extends JPanel {
         fajl_gomb.setBounds(1327, 330, 89, 23);
         add(fajl_gomb);
         
-        JLabel lblNewLabel_11 = new JLabel("Aktuálisan csatolt fájok listája");
+        JLabel lblNewLabel_11 = new JLabel("Aktuálisan csatolt fájlok listája");
         lblNewLabel_11.setBounds(1197, 397, 210, 14);
         add(lblNewLabel_11);
         
@@ -414,6 +386,42 @@ public class Vevoireklamacio_d2 extends JPanel {
         epl_keszites.addActionListener(new EPL_keszito());
         epl_keszites.setBounds(1250, 123, 89, 23);
         add(epl_keszites);
+        
+        miaproblema_mezo = new JTextArea();
+        miaproblema_mezo.setLineWrap(true);
+        miaproblema_mezo.setWrapStyleWord(true);
+        //miaproblema_mezo.setBounds(340, 22, 258, 62);
+        JScrollPane gorgeto1 = new JScrollPane(miaproblema_mezo);
+        gorgeto1.setBounds(340, 27, 260, 64);
+        add(gorgeto1);
+        
+        
+        miertproblema_mezo = new JTextArea();
+        miertproblema_mezo.setLineWrap(true);
+        miertproblema_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto2 = new JScrollPane(miertproblema_mezo);
+        gorgeto2.setBounds(340, 122, 258, 62);
+        add(gorgeto2);
+        
+        holdetektalta_mezo = new JTextArea();
+        holdetektalta_mezo.setLineWrap(true);
+        holdetektalta_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto3 = new JScrollPane(holdetektalta_mezo);
+        gorgeto3.setBounds(827, 22, 258, 62);
+        add(gorgeto3);
+        
+        hogyandetektalta_mezo = new JTextArea();
+        hogyandetektalta_mezo.setLineWrap(true);
+        hogyandetektalta_mezo.setWrapStyleWord(true);
+        JScrollPane gorgeto4 = new JScrollPane(hogyandetektalta_mezo);
+        gorgeto4.setBounds(829, 123, 258, 62);
+        add(gorgeto4);
+        
+        
+        hogyandetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        holdetektalta_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        miertproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        miaproblema_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
 
     }
     

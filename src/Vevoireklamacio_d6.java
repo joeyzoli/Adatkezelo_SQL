@@ -10,6 +10,7 @@ import java.sql.Statement;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class Vevoireklamacio_d6 extends JPanel {
 
@@ -17,6 +18,7 @@ public class Vevoireklamacio_d6 extends JPanel {
      * Create the panel.
      */
     private JTextArea megerosites_mezo;
+    private JTextField textField;
     
     public Vevoireklamacio_d6() {
         setLayout(null);
@@ -33,6 +35,15 @@ public class Vevoireklamacio_d6 extends JPanel {
         JScrollPane gorgeto = new JScrollPane(megerosites_mezo);        
         gorgeto.setBounds(121, 84, 980, 465);
         add(gorgeto);
+        
+        JLabel lblNewLabel_1 = new JLabel("Határidő");
+        lblNewLabel_1.setBounds(1217, 90, 65, 14);
+        add(lblNewLabel_1);
+        
+        textField = new JTextField();
+        textField.setBounds(1208, 125, 86, 20);
+        add(textField);
+        textField.setColumns(10);
 
     }
     

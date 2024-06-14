@@ -51,6 +51,7 @@ public class Retour_szeriaszamok extends JPanel {
     private JRadioButton csekk15;private JRadioButton csekk16;private JRadioButton csekk17;private JRadioButton csekk18;
     private JButton kepmentes_gomb;
     private JCheckBox nff;
+    private String db_id = "";
 
     /**
      * Create the panel.
@@ -743,7 +744,7 @@ public class Retour_szeriaszamok extends JPanel {
                             hibaoka_mezo.setText(rs.getString(27));
                             intezkedes_mezo.setText(rs.getString(28));
                         }
-                        
+                        db_id = rs.getString(1);
                         sql = "select * from qualitydb.Retour_kepek where Szeriaszam = '"+ szeriaszam_mezo.getText() +"'";
                         stmt.execute(sql);
                         rs = stmt.getResultSet();
@@ -998,7 +999,7 @@ public class Retour_szeriaszamok extends JPanel {
                         + "Egyeb_ell = '"+ egyeb1 +"', Egyeb_jav_elott ='"+ egyeb2 +"', Egyeb_jav_utan = '" + egyeb3 +"',Hibakod = '"+ String.valueOf(hibakod_box.getSelectedItem()) +"', Hiba_eredete ='"+ hibaeredet +"',"
                         + " Hiba_leirasa = '"+ hiba_mezo.getText() +"',Javitas_leirasa = '"+ javitas_mezo.getText() +"',Hiba_ok = '"+ hibaoka_mezo.getText() +"',Intezkedes = '"+ intezkedes_mezo.getText() +"',"
                                 + "Kiszallithato = '"+ kiszallithato +"' "
-                        + "where VEAS_ID = '"+ szeriaszam_mezo.getText() +"' or Vevoi_ID = '"+ szeriaszam_mezo.getText() +"'";
+                        + "where ID = '"+ db_id +"'";
                 stmt.executeUpdate(sql);
             }
             else

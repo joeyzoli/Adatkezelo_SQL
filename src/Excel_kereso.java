@@ -14,9 +14,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.spire.xls.CellRange;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Excel_kereso extends JPanel {
     
@@ -25,8 +28,9 @@ public class Excel_kereso extends JPanel {
     private Workbook összesites;
     private Worksheet munkalap;
     private Workbook workbook = new Workbook();
-    private int cellaszam = 1;
     private int fajlszam = 1;
+    private JTextField mukalap_mezo;
+    private File mappa;
 
     /**
      * Create the panel.
@@ -37,8 +41,8 @@ public class Excel_kereso extends JPanel {
         setLayout(null);
  
         JButton open_gomb = new JButton("Open folder");
-        open_gomb.addActionListener(new Kereses());
-        open_gomb.setBounds(467, 154, 163, 23);
+        open_gomb.addActionListener(new Megnyit());
+        open_gomb.setBounds(530, 120, 163, 23);
         add(open_gomb);
         
         összesites = new Workbook();
@@ -46,6 +50,24 @@ public class Excel_kereso extends JPanel {
         munkalap = összesites.getWorksheets().get(0);
         
         setBackground(Foablak.hatter_szine);
+        
+        JLabel lblNewLabel = new JLabel("Mappa megynitása");
+        lblNewLabel.setBounds(361, 120, 132, 18);
+        add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("Munkalap amin keres");
+        lblNewLabel_1.setBounds(361, 168, 132, 14);
+        add(lblNewLabel_1);
+        
+        JButton start_gomb = new JButton("Start");
+        start_gomb.addActionListener(new Kereses());
+        start_gomb.setBounds(465, 226, 89, 23);
+        add(start_gomb);
+        
+        mukalap_mezo = new JTextField();
+        mukalap_mezo.setBounds(530, 165, 163, 20);
+        add(mukalap_mezo);
+        mukalap_mezo.setColumns(10);
 
     }
     
@@ -55,29 +77,14 @@ public class Excel_kereso extends JPanel {
          {           
             try 
             {
-                JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
-                mentes_helye.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                mentes_helye.showOpenDialog(mentes_helye);
-                File mappa = mentes_helye.getSelectedFile();
+                
                 if(mappa != null)
                 {
                     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    munkalap.getRange().get("A" + cellaszam).setText("Cikkszám");
-                    munkalap.getRange().get("B" + cellaszam).setText("Megnevezés");
-                    munkalap.getRange().get("C" + cellaszam).setText("Projekt");
-                    munkalap.getRange().get("D" + cellaszam).setText("Panel szám");
-                    munkalap.getRange().get("E" + cellaszam).setText("Állapot");
-                    munkalap.getRange().get("F" + cellaszam).setText("Darab");
-                    munkalap.getRange().get("G" + cellaszam).setText("Hiba");
-                    munkalap.getRange().get("H" + cellaszam).setText("Sor");
-                    munkalap.getRange().get("I" + cellaszam).setText("Selejtezve");
-                    munkalap.getRange().get("J" + cellaszam).setText("Tömb szám");
-                    munkalap.getRange().get("K" + cellaszam).setText("Fájl helye");
-                    cellaszam++;
+                    
                     listf(mappa.getAbsolutePath(), files);
                                   
-                    munkalap.getAutoFilters().setRange(munkalap.getCellRange("A1:K1"));
+                    //munkalap.getAutoFilters().setRange(munkalap.getCellRange("A1:K1"));
                     munkalap.getAllocatedRange().autoFitColumns();
                     munkalap.getAllocatedRange().autoFitRows();                
                     munkalap.getCellRange("A1:K1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás     
@@ -144,8 +151,18 @@ public class Excel_kereso extends JPanel {
                     { 
                         files.add(file);
                         workbook.loadFromFile(file.getAbsolutePath());
-                        Worksheet sheet = workbook.getWorksheets().get(0);
-                        for(int szamlalo = 2; szamlalo < sheet.getLastRow()+1; szamlalo++)
+                        Worksheet sheet = null;
+                        int van = 0;
+                        for (Object sheet2: workbook.getWorksheets()) {
+                            String sheetName = ((Worksheet) sheet2).getName();                            
+                            System.out.println(sheetName);
+                            if(sheetName.contains(mukalap_mezo.getText()))
+                            {
+                                sheet = workbook.getWorksheets().get(sheetName);
+                                van = 1;
+                            }
+                        }
+                        /*for(int szamlalo = 2; szamlalo < sheet.getLastRow()+1; szamlalo++)
                         {                       
                             if(sheet.getRange().get("A" + szamlalo).getText().contains("2E1129") || sheet.getRange().get("A" + szamlalo).getText().contains("2E0964"))
                             {
@@ -162,6 +179,15 @@ public class Excel_kereso extends JPanel {
                                 munkalap.getRange().get("K" + cellaszam).setText(file.getAbsolutePath());
                                 cellaszam++;
                             }                        
+                        }*/
+                        if(van == 1)
+                        {
+                            munkalap.getRange().get("A1").setText(sheet.getRange().get("A1").getText());
+                            CellRange sourceRange = sheet.getCellRange("A2:AM"+sheet.getLastRow());
+                            CellRange destRange = munkalap.getCellRange("A"+ (munkalap.getLastRow()+1) +":AM"+(munkalap.getLastRow() + sheet.getLastRow()));
+
+                            //Copy a specific cell range from sheet1 to sheet2
+                            sheet.copy (sourceRange,destRange,true);
                         }
                     }
                 } else if (file.isDirectory()) {
@@ -173,5 +199,26 @@ public class Excel_kereso extends JPanel {
     public int daysBetween(Date d1, Date d2){
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
-
+    
+    class Megnyit implements ActionListener                                                                                        //Gomb megnoymásakor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {           
+            try 
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                mentes_helye.showOpenDialog(mentes_helye);
+                mappa = mentes_helye.getSelectedFile();       
+            } 
+            catch (Exception e1) 
+            {                
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();               
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+                setCursor(null); 
+            }
+         }
+    }
 }

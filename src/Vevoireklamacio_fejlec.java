@@ -399,21 +399,29 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     }
                     else
                     {
-                        sql = "update qualitydb.Vevoireklamacio_alap set D8 = '"+ Vevoireklamacio_d8.lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-                        ment.mindenes(sql);
-                        Vevoireklamacio_fejlec.lezaras = Color.GREEN;
-                        Vevoireklamacio_V2.d0.mentes();
-                        Vevoireklamacio_V2.d1.mentes();
-                        Vevoireklamacio_V2.d2.mentes();
-                        Vevoireklamacio_V2.d3.mentes();
-                        Vevoireklamacio_V2.d4.mentes();
-                        Vevoireklamacio_V2.d5.mentes();
-                        Vevoireklamacio_V2.d6.mentes();
-                        Vevoireklamacio_V2.d7.mentes();
-                        Vevoireklamacio_V2.d8.mentes();
-                        Vevoireklamacio_V2.koltseg.mentes();
-                        Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-                        JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+                        sql = "select DATEDIFF('"+ Vevoireklamacio_d8.lezaras_datuma.getText() +"','"+ Vevoireklamacio_d0.ertesitve.getJFormattedTextField().getText() +"') from qualitydb.Vevoireklamacio_alap where 3 = 3";
+                        if(Integer.valueOf(ment.tombvissza_sajat(sql)[0]) < 0)
+                        {
+                            JOptionPane.showMessageDialog(null, "A Lezárás dátuma nem lehet kisebb az értesítés dátumánál!", "Hiba üzenet", 2);
+                        }
+                        else
+                        {
+                            sql = "update qualitydb.Vevoireklamacio_alap set D8 = '"+ Vevoireklamacio_d8.lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                            ment.mindenes(sql);
+                            Vevoireklamacio_fejlec.lezaras = Color.GREEN;
+                            Vevoireklamacio_V2.d0.mentes();
+                            Vevoireklamacio_V2.d1.mentes();
+                            Vevoireklamacio_V2.d2.mentes();
+                            Vevoireklamacio_V2.d3.mentes();
+                            Vevoireklamacio_V2.d4.mentes();
+                            Vevoireklamacio_V2.d5.mentes();
+                            Vevoireklamacio_V2.d6.mentes();
+                            Vevoireklamacio_V2.d7.mentes();
+                            Vevoireklamacio_V2.d8.mentes();
+                            Vevoireklamacio_V2.koltseg.mentes();
+                            Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+                            JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
+                        }
                     }
                 }
             }

@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new IFS_kereses());
+		feltolt.addActionListener(new Szeriaszam_gyarto());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1138,11 +1138,11 @@ public class Torlo extends JPanel
                     {
                         if(szamlalo2 < 10)
                         {
-                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0) +"0"+ szamlalo2);
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0) +"-0"+ szamlalo2);
                         }
                         else
                         {
-                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0) +"10");
+                            sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0) +"-10");
                         }
                         cellaszam++;
                     }
@@ -2081,7 +2081,7 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Retour szériaszámok.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
