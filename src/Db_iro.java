@@ -550,7 +550,7 @@ public class Db_iro
            }  
         }
     }
-	
+	/*
 	void iro_retour(String datum, String vevo, String tipus, String vagy, int beerkezett, int elteres, String rma, String megjegyzes, String vevoirma)
     {   
         String[] koztes = tipus.split(",");                                          //bejövő Stringet darabolni kell
@@ -621,7 +621,7 @@ public class Db_iro
               se.printStackTrace();
            }  
         }
-    }
+    }*/
 	
 	void iro_retour_ido(String sql)
     {   

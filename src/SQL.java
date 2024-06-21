@@ -70,7 +70,7 @@ public class SQL
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
-            if(System.getProperty("user.name").equals("csader.zsolt") || System.getProperty("user.name").equals("kovacs.zoltan"))
+            if(System.getProperty("user.name").equals("csader.zsolt"))
             {
                 UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
@@ -3086,7 +3086,7 @@ public class SQL
            }  
         }
     }
-	
+	/*
 	public void retour_vissza(String id)
     {
         Connection conn = null;
@@ -3207,7 +3207,7 @@ public class SQL
            }  
         }
     }
-	
+	*/
 	public void hitlista(String projekt, String cikk, String datumtol, String datumig, String poz)
     {
         Connection conn = null;

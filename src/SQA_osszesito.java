@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
@@ -115,6 +123,15 @@ public class SQA_osszesito extends JPanel {
         honap_box.addActionListener(new Szukito());
         honap_box.setBounds(696, 73, 154, 22);
         add(honap_box);
+        
+        JLabel lblNewLabel_4 = new JLabel("Raktári cikkek típussal");
+        lblNewLabel_4.setBounds(1040, 525, 154, 14);
+        add(lblNewLabel_4);
+        
+        JButton keres_gomb = new JButton("Keresés");
+        keres_gomb.addActionListener(new IFS_kereses());
+        keres_gomb.setBounds(1204, 521, 89, 23);
+        add(keres_gomb);
         adatok();
         
     }
@@ -1171,5 +1188,94 @@ public class SQA_osszesito extends JPanel {
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
         }
+    }
+    
+    class IFS_kereses implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Raktári cikkek.xlsx";
+
+                  DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                  Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                      
+                  Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                  Statement stmt = con.createStatement();                      
+                                               
+                  Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+                  Workbook workbook = new Workbook();
+                  Worksheet sheet = workbook.getWorksheets().get(0);               
+                  ResultSet rs = stmt.executeQuery("select cikk.part_no, ifsapp.Inventory_Part_API.Get_Description(cikk.CONTRACT,cikk.PART_NO), ifsapp.inventory_part_api.Get_Second_Commodity(cikk.contract, cikk.Part_no), csoport.attr_value, osztaly.attr_value, tipus.attr_value\r\n"
+                          + "from ifsapp.INVENTORY_PART_CHAR_ALL cikk,\r\n"
+                          + "(select part_no, attr_value from ifsapp.INVENTORY_PART_CHAR_ALL where 3=3 and characteristic_code = 'GRP') csoport, -- attr_value\r\n"
+                          + "(select part_no, attr_value from ifsapp.INVENTORY_PART_CHAR_ALL where 3=3 and characteristic_code = 'CLASS') osztaly,\r\n"
+                          + "(select part_no, attr_value from ifsapp.INVENTORY_PART_CHAR_ALL where 3=3 and characteristic_code = 'TYPE') tipus\r\n"
+                          + "where 3=3\r\n"
+                          + "and cikk.part_no = csoport.part_no\r\n"
+                          + "and cikk.part_no = osztaly.part_no\r\n"
+                          + "and cikk.part_no = tipus.part_no\r\n"
+                          + "group by cikk.part_no, csoport.attr_value, osztaly.attr_value, tipus.attr_value, \r\n"
+                          + "ifsapp.Inventory_Part_API.Get_Description(cikk.CONTRACT,cikk.PART_NO), ifsapp.inventory_part_api.Get_Second_Commodity(cikk.contract, cikk.Part_no)\r\n"
+                          + "");
+                  
+                  int cellaszam = 1;
+                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
+                  sheet.getRange().get("C" + cellaszam).setText("Projekt");
+                  sheet.getRange().get("D" + cellaszam).setText("Csoport");
+                  sheet.getRange().get("E" + cellaszam).setText("Osztály");
+                  sheet.getRange().get("F" + cellaszam).setText("Típus");
+                  cellaszam++;
+                  
+                  while(rs.next())
+                  {
+                      sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                      sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                      sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                      sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                      sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                      cellaszam++;
+                  }
+
+                  
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet.getAllocatedRange().autoFitColumns();
+                  sheet.getAllocatedRange().autoFitRows();
+                  
+                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  stmt.close();
+                  con.close();
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook3.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook3.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Raktári cikkek.xlsx néven!", "Info", 1); 
+                  con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+            }  
+                               
+         }
     }
 }

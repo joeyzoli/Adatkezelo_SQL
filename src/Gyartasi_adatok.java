@@ -40,6 +40,7 @@ public class Gyartasi_adatok extends JPanel
 	private JTextField pozicio;
 	private SimpleDateFormat idopont;
 	private Timestamp timestamp;
+	private JTextField touchup_mezo;
 	
 	/**
 	 * Gyártási adatok osztály. Ezen a felületen lehet felvinni az adatokat az SQL táblába
@@ -106,7 +107,7 @@ public class Gyartasi_adatok extends JPanel
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_2.setBounds(378, 206, 111, 14);
 		
-		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));           //combobox_tomb.getCombobox2(ComboBox.hiba_helye)
+		hiba_combobox = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hiba_helye));           //combobox_tomb.getCombobox(ComboBox.hiba_helye)
 		hiba_combobox.setBounds(499, 202, 156, 22);
 		
 		JLabel lblNewLabel_3 = new JLabel("Felajánlott mennyiség");
@@ -195,6 +196,15 @@ public class Gyartasi_adatok extends JPanel
 		add(mintanagysag);
 		add(felajanlott);
 		add(ellenor_neve);
+		
+		JLabel lblNewLabel_14 = new JLabel("Touch up dolgozó");
+		lblNewLabel_14.setBounds(665, 166, 119, 14);
+		add(lblNewLabel_14);
+		
+		touchup_mezo = new JTextField();
+		touchup_mezo.setBounds(794, 163, 226, 20);
+		add(touchup_mezo);
+		touchup_mezo.setColumns(10);
 	}
 	
 	class Iro implements ActionListener																						//mentés gomb megnyomáskor hívodik meg
@@ -207,12 +217,23 @@ public class Gyartasi_adatok extends JPanel
 			    idopont = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			    timestamp = new Timestamp(System.currentTimeMillis());
 				Db_iro beleir = new Db_iro();																				//példányosítás
-				beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
-						String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
-						String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));				//Író osztály függvényének meghívása paraméterrel
-				szamlalo++;																																			//szamlalo növelése a DB-ben levő sorszámhoz
-				id.setText(String.valueOf(szamlalo)); 																												//számláló újraírása
-		
+				if(touchup_mezo.getText().equals(""))
+				{
+    				beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
+    						String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
+    						String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));				//Író osztály függvényének meghívása paraméterrel
+    				szamlalo++;																																			//szamlalo növelése a DB-ben levő sorszámhoz
+    				id.setText(String.valueOf(szamlalo)); 																												//számláló újraírása
+				}
+				else
+				{
+				    beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), touchup_mezo.getText(), 
+                            String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
+                            String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));              //Író osztály függvényének meghívása paraméterrel
+                    szamlalo++;                                                                                                                                         //szamlalo növelése a DB-ben levő sorszámhoz
+                    id.setText(String.valueOf(szamlalo)); 
+				}
+				touchup_mezo.setText("");
 				Urlap_torlo torles = new Urlap_torlo();																												//űrlap törlő példányosítása
 				torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);												//űrlap kitöltött mezőinek alaphelyzetbe állítása
 			 }
@@ -248,12 +269,23 @@ public class Gyartasi_adatok extends JPanel
 					Db_iro beleir = new Db_iro();
 					idopont = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	                timestamp = new Timestamp(System.currentTimeMillis());
-					beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
-							String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
-							String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));
-					szamlalo++;
-					id.setText(String.valueOf(szamlalo)); 
-			
+	                if(touchup_mezo.getText().equals(""))
+	                {
+	                    beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), String.valueOf(ellenor_neve.getSelectedItem()), 
+	                            String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
+	                            String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));              //Író osztály függvényének meghívása paraméterrel
+	                    szamlalo++;                                                                                                                                         //szamlalo növelése a DB-ben levő sorszámhoz
+	                    id.setText(String.valueOf(szamlalo));                                                                                                               //számláló újraírása
+	                }
+	                else
+	                {
+	                    beleir.iro_gyartas(String.valueOf(vt_azon.getSelectedItem()), datum.getText(), muszak.getText(), touchup_mezo.getText(), 
+	                            String.valueOf(hiba_combobox.getSelectedItem()), Integer.parseInt(felajanlott.getText()), Integer.parseInt(mintanagysag.getText()), pcb_sorszam.getText(), 
+	                            String.valueOf(hibakod_combobox.getSelectedItem()), pozicio.getText(), Integer.parseInt(hibak_szama.getText()), sor.getText(), idopont.format(timestamp));              //Író osztály függvényének meghívása paraméterrel
+	                    szamlalo++;                                                                                                                                         //szamlalo növelése a DB-ben levő sorszámhoz
+	                    id.setText(String.valueOf(szamlalo)); 
+	                }
+	                touchup_mezo.setText("");
 					Urlap_torlo torles = new Urlap_torlo();
 					torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
 				 }

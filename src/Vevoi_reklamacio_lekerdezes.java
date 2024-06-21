@@ -12,6 +12,8 @@ import javax.swing.UIManager;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.Chart;
 import com.spire.xls.ExcelChartType;
 import com.spire.xls.ExcelVersion;
@@ -350,7 +352,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 Worksheet sheet = workbook.getWorksheets().get(0);   
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-                stmt = (Statement) conn.createStatement();
+                stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 String sql = "SELECT DATE_FORMAT(Ertesites_Datuma,'%Y%m'), sum(if(mi = 'Reklamáció',1,0)) as reklamacio, sum(if(mi = 'Visszajelzés',1,0)) as visszajelzes FROM  qualitydb.Vevoireklamacio_alap where   Ertesites_Datuma >= '"+ datumtol.getText() 
                         +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' group by DATE_FORMAT(Ertesites_Datuma,'%Y%m')\n"
                                 + "order by DATE_FORMAT(Ertesites_Datuma,'%Y%m') asc";
@@ -702,7 +704,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     sheet.getCellRange("V" + cella3).setNumberValue(Integer.parseInt(rs.getString(5)));          
                     cella3++;
                 }
-                /*
+                
                 int cella4 = 2;
                 int sum = 0;
                 String[] evszam = datumig.getText().split("\\.");
@@ -719,46 +721,28 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 System.out.println(evszam[1]);
                 
                 sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',\n"        // --
-                        + "   cast(AVG(if(Nyitva is null, DATEDIFF(now(), Datum), Nyitva )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                        + "           from qualitydb.Vevoireklamacio_alapadat\n"
-                        + "       where 3=3 and Datum >= '"+ datumtol.getText() +"' and Datum <= '"+ datumig.getText() +"' \n"
+                        + "   cast(AVG(if(Lezaras_datuma = '', DATEDIFF(now(), Ertesites_Datuma), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                        + "           from qualitydb.Vevoireklamacio_alap\n"
+                        + "       where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' \n"
                         + "             group by Hónap order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
-                /*
-                for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
-                {            
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("02"))
-                    {
-                        if(valtoev == 1)
-                        {
-                            if(Integer.valueOf(evszam[1]) >= 2)
-                            {
-                                ig = Integer.valueOf(evszam[0]);
-                                tol = ig-1;
-                            }
-                            else
-                            {
-                                ig = Integer.valueOf(evszam[0]);
-                                tol = ig-1;
-                                ig--;
-                                tol--;
-                            }
-                        }
-                        sheet.getCellRange("R" + cella4).setText("Február");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".02.28', Datum), if(lezaras_ido > '"+ ig +".02.28',DATEDIFF('"+ ig +".02.28', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".03.01' and Datum <= '"+ ig +".02.28'";
-                        stmt.execute(sql);
-                        resultSet = stmt.getResultSet();
-                        if(resultSet.next())
-                        sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
-                        {
-                            sheet.getCellRange("W" + cella4).setNumberValue(69);
-                        }
-                    }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("01"))
+                ResultSet resultSet;
+                int ennyivel_kell = 0;
+                /*int size =0;
+                if (rs != null) 
+                {
+                  rs.last();    // moves cursor to the last row
+                  size = rs.getRow(); // get row id 
+                }*/
+                //System.out.println("REsult mérete: "+ size);
+                DataTable datatable = new DataTable();
+                JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                jdbcAdapter.fillDataTable(datatable, rs);
+                for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                {                    
+                    String evhet = datatable.getRows().get(szamlalo).getString(0);
+                    if(evhet.endsWith("01"))
                     {
                         if(valtoev == 1)
                         {
@@ -776,19 +760,51 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Január");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".01.31', Datum), if(lezaras_ido > '"+ ig +".01.31',DATEDIFF('"+ ig +".01.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".02.01' and Datum <= '"+ ig +".01.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".01.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".01.31',DATEDIFF('"+ ig +".01.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".02.01' and Ertesites_Datuma <= '"+ ig +".01.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
-                    }          
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("03"))
+                    }
+                    if(evhet.endsWith("02"))
+                    {
+                        if(valtoev == 1)
+                        {
+                            if(Integer.valueOf(evszam[1]) >= 2)
+                            {
+                                ig = Integer.valueOf(evszam[0]);
+                                tol = ig-1;
+                            }
+                            else
+                            {
+                                ig = Integer.valueOf(evszam[0]);
+                                tol = ig-1;
+                                ig--;
+                                tol--;
+                            }
+                        }
+                        sheet.getCellRange("R" + cella4).setText("Február");
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".02.28', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".02.28',DATEDIFF('"+ ig +".02.28', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".03.01' and Ertesites_Datuma <= '"+ ig +".02.28' and Figyelem = 'igen'";
+                        stmt.execute(sql);
+                        resultSet = stmt.getResultSet();
+                        if(resultSet.next())
+                        sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
+                        if(resultSet.getString(1).contains("2022"))
+                        {
+                            sheet.getCellRange("W" + cella4).setNumberValue(69);
+                        }
+                    }
+                    if(evhet.endsWith("03"))
                     {
                         if(valtoev == 1)
                         {
@@ -806,19 +822,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Március");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".03.31', Datum), if(lezaras_ido > '"+ ig +".03.31',DATEDIFF('"+ ig +".03.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".04.01' and Datum <= '"+ ig +".03.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".03.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".03.31',DATEDIFF('"+ ig +".03.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".04.01' and Ertesites_Datuma <= '"+ ig +".03.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("04"))
+                    if(evhet.endsWith("04"))
                     {
                         if(valtoev == 1)
                         {
@@ -836,19 +853,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Április");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".04.30', Datum), if(lezaras_ido > '"+ ig +".04.30',DATEDIFF('"+ ig +".04.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".05.01' and Datum <= '"+ ig +".04.30'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".04.30', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".04.30',DATEDIFF('"+ ig +".04.30', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".05.01' and Ertesites_Datuma <= '"+ ig +".04.30' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("05"))
+                    if(evhet.endsWith("05"))
                     {
                         if(valtoev == 1)
                         {
@@ -866,19 +884,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Május");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".05.31', Datum), if(lezaras_ido > '"+ ig +".05.31',DATEDIFF('"+ ig +".05.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".06.01' and Datum <= '"+ ig +".05.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".05.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".05.31',DATEDIFF('"+ ig +".05.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".06.01' and Ertesites_Datuma <= '"+ ig +".05.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).endsWith("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("06"))
+                    if(evhet.endsWith("06"))
                     {
                         if(valtoev == 1)
                         {
@@ -896,19 +915,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Június");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".06.30', Datum), if(lezaras_ido > '"+ ig +".06.30',DATEDIFF('"+ ig +".06.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".07.01' and Datum <= '"+ ig +".06.30'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".06.30', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".06.30',DATEDIFF('"+ ig +".06.30', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".07.01' and Ertesites_Datuma <= '"+ ig +".06.30' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("07"))
+                    if(evhet.endsWith("07"))
                     {
                         if(valtoev == 1)
                         {
@@ -926,19 +946,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Július");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".07.31', Datum), if(lezaras_ido > '"+ ig +".07.31',DATEDIFF('"+ ig +".07.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".08.01' and Datum <= '"+ ig +".07.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".07.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".07.31',DATEDIFF('"+ ig +".07.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".08.01' and Ertesites_Datuma <= '"+ ig +".07.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("08"))
+                    if(evhet.endsWith("08"))
                     {
                         if(valtoev == 1)
                         {
@@ -956,19 +977,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Augusztus");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".08.31', Datum), if(lezaras_ido > '"+ ig +".08.31',DATEDIFF('"+ ig +".08.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".09.01' and Datum <= '"+ ig +".08.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".08.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".08.31',DATEDIFF('"+ ig +".08.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".09.01' and Ertesites_Datuma <= '"+ ig +".08.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("09"))
+                    if(evhet.endsWith("09"))
                     {
                         if(valtoev == 1)
                         {
@@ -986,19 +1008,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Szeptember");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".09.30', Datum), if(lezaras_ido > '"+ ig +".09.30',DATEDIFF('"+ ig +".09.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".10.01' and Datum <= '"+ ig +".09.30'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".09.30', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".09.30',DATEDIFF('"+ ig +".09.30', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".10.01' and Ertesites_Datuma <= '"+ ig +".09.30' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("10"))
+                    if(evhet.endsWith("10"))
                     {
                         if(valtoev == 1)
                         {
@@ -1016,19 +1039,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("Október");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".10.31', Datum), if(lezaras_ido > '"+ ig +".10.31',DATEDIFF('"+ ig +".10.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".11.01' and Datum <= '"+ ig +".10.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".10.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".10.31',DATEDIFF('"+ ig +".10.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".11.01' and Ertesites_Datuma <= '"+ ig +".10.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("11"))
+                    if(evhet.endsWith("11"))
                     {
                         if(valtoev == 1)
                         {
@@ -1046,19 +1070,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("November");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".11.30', Datum), if(lezaras_ido > '"+ ig +".11.30',DATEDIFF('"+ ig +".11.30', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ tol +".12.01' and Datum <= '"+ ig +".11.30'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".11.30', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".11.30',DATEDIFF('"+ ig +".11.30', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".12.01' and Ertesites_Datuma <= '"+ ig +".11.30' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
-                    if(datatable6.getRows().get(szamlalo).getString(0).contains("12"))
+                    if(evhet.endsWith("12"))
                     {
                         if(valtoev == 1)
                         {
@@ -1076,27 +1101,28 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                             }
                         }
                         sheet.getCellRange("R" + cella4).setText("December");
-                        sql = "select  cast(AVG(if(Nyitva is null, DATEDIFF('"+ ig +".12.31', Datum), if(lezaras_ido > '"+ ig +".12.31',DATEDIFF('"+ ig +".12.31', Datum), Nyitva ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
-                                + "from qualitydb.Vevoireklamacio_alapadat\n"
-                                + "where 3=3 and Datum >= '"+ ig +".01.01' and Datum <= '"+ ig +".12.31'";
+                        sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".12.31', Ertesites_Datuma), \n"
+                                + "if(Lezaras_datuma  > '"+ ig +".12.31',DATEDIFF('"+ ig +".12.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
+                                + "from qualitydb.Vevoireklamacio_alap\n"
+                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".01.01' and Ertesites_Datuma <= '"+ ig +".12.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
                         sheet.getCellRange("W" + cella4).setNumberValue(resultSet.getInt(1));
-                        if(datatable6.getRows().get(szamlalo).getString(0).contains("2022"))
+                        if(resultSet.getString(1).contains("2022"))
                         {
                             sheet.getCellRange("W" + cella4).setNumberValue(69);
                         }
                     }
                     //sheet.getCellRange("R" + cella4).setNumberValue(Integer.parseInt(datatable6.getRows().get(szamlalo).getString(0)));
+                    
+                    sum += sheet.getCellRange("W" + cella4).getNumberValue();          //Integer.parseInt
                     cella4++;
-                }
+                    ennyivel_kell++;
+                    //rs.next();
+                }                
                 
-                for (int szamlalo = 0; szamlalo < datatable4.getRows().size(); szamlalo++) 
-                {         
-                   sum += Integer.parseInt(datatable6.getRows().get(szamlalo).getString(1));          
-                }
-                int atlag = sum / datatable4.getRows().size();
+                int atlag = sum / ennyivel_kell;
                 sheet.getCellRange("W14").setNumberValue(atlag);
                 
                 Chart chart5 = sheet.getCharts().add();
@@ -1120,14 +1146,97 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          
                 //Add a secondary Y axis to the chart
                 cs6.setUsePrimaryAxis(false);
-                */
+                
+                /**********************************************Ötödik diagramm******************************************/
+                
+                sheet.getRange().get("A" + 100).setText("Projekt");
+                sheet.getRange().get("B" + 100).setText("Belső költség");
+                sheet.getRange().get("C" + 100).setText("Fuvar költség");
+                sheet.getRange().get("D" + 100).setText("Selejt költség");
+                sheet.getRange().get("E" + 100).setText("Egyéb költség");
+                int cellaszam6 = 101;
+                int resultvege = 0;
+                sql = "select Vevo,\n"
+                        + " cast(sum(belso_koltseg) as decimal(15,0)),\n"
+                        + " cast(sum(fuvar_koltseg) as decimal(15,0)),\n"
+                        + " cast(sum(selejt_koltseg) as decimal(15,0)),\n"
+                        + " cast(sum(egyeb_koltseg) as decimal(15,0)),\n"
+                        + " sum(belso_koltseg)+sum(fuvar_koltseg)+sum(selejt_koltseg)+sum(egyeb_koltseg) as osszes "
+                        + "from qualitydb.Vevoireklamacio_alap\n"
+                        + "where 3=3 and Lezaras_datuma >= '"+datumtol.getText() +"' and Lezaras_datuma <= '"+ datumig.getText() +"'\n"
+                        + "group by Vevo order by osszes desc";
+                stmt.execute(sql);
+                rs = stmt.getResultSet();
+                DataTable datatable2 = new DataTable();
+                jdbcAdapter.fillDataTable(datatable2, rs);
+                for(int szamlalo = 0; szamlalo < datatable2.getRows().size(); szamlalo++)
+                {
+                    sheet.getRange().get("A" + cellaszam6).setText(datatable2.getRows().get(szamlalo).getString(0));
+                    sheet.getRange().get("B" + cellaszam6).setNumberValue(Integer.parseInt(datatable2.getRows().get(szamlalo).getString(1)));
+                    sheet.getRange().get("C" + cellaszam6).setNumberValue(Integer.parseInt(datatable2.getRows().get(szamlalo).getString(2)));
+                    sheet.getRange().get("D" + cellaszam6).setNumberValue(Integer.parseInt(datatable2.getRows().get(szamlalo).getString(3)));
+                    sheet.getRange().get("E" + cellaszam6).setNumberValue(Integer.parseInt(datatable2.getRows().get(szamlalo).getString(4)));
+                    cellaszam6++;
+                    resultvege++;
+                }
+                Chart chart6 = sheet.getCharts().add();
+                chart6.setDataRange(sheet.getCellRange("A100:E"+ (100+resultvege)));            //
+                chart6.setSeriesDataFromRange(false);
+
+                chart6.setLeftColumn(1);
+                chart6.setTopRow(105);
+                chart6.setRightColumn(11);
+                chart6.setBottomRow(135);
+                
+                chart6.setChartType(ExcelChartType.ColumnStacked);
+                
+                chart6.setChartTitle("Reklamáció költsége projektenként");
+                chart6.getChartTitleArea().isBold(true);
+                chart6.getChartTitleArea().setSize(14);
+                chart6.getPrimaryCategoryAxis().setTitle("Projektek");
+                chart6.getPrimaryCategoryAxis().getFont().isBold(true);
+                chart6.getPrimaryCategoryAxis().getTitleArea().isBold(true);
+                chart6.getPrimaryValueAxis().setTitle("Összesen");
+                chart6.getPrimaryValueAxis().hasMajorGridLines(false);
+                chart6.getPrimaryValueAxis().setMinValue(0);
+                chart6.getPrimaryValueAxis().setMaxValue(500000);
+                chart6.getPrimaryValueAxis().getTitleArea().isBold(true);
+                chart6.getPrimaryValueAxis().getTitleArea().setTextRotationAngle(90);
+                
+                ChartSeries series6 = chart6.getSeries();
+                for (int i = 0;i < series6.size();i++)
+                {
+                    ChartSerie cs = series6.get(i);
+                    cs.getFormat().getOptions().isVaryColor(true);
+                    cs.getDataPoints().getDefaultDataPoint().getDataLabels().hasValue(true);           
+                }
+                
+                chart6.getLegend().setPosition(LegendPositionType.Top);
                 
                 //////////////////////////////////////////////////////////////////////////////////////
+                Worksheet sheet2 = workbook.getWorksheets().get(1);
+                sql = "select *"
+                        + "from qualitydb.Vevoireklamacio_alap\n"
+                        + "where 3=3 and Lezaras_datuma >= '"+datumtol.getText() +"' and Lezaras_datuma <= '"+ datumig.getText() +"'\n"
+                        + "order by Lezaras_datuma asc";
+                stmt.execute(sql);
+                rs = stmt.getResultSet();
+                DataTable datatable3 = new DataTable();
+                jdbcAdapter.fillDataTable(datatable3, rs);
+                sheet2.insertDataTable(datatable3, true, 1, 1);
+                
+                sheet.setName("Diagrammok");
+                sheet2.setName("Alapadatok");
+                
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
                 sheet.getAllocatedRange().autoFitColumns();
-                sheet.getAllocatedRange().autoFitRows();
-                
+                sheet.getAllocatedRange().autoFitRows();                
                 sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                
+                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();                
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
                 UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
@@ -1142,7 +1251,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
                     try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                     {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
                         {    
                             workbook2.removeSheetAt(i); 
                         }      
@@ -1157,7 +1266,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
                     try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                     {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
                         {    
                             workbook2.removeSheetAt(i); 
                         }      

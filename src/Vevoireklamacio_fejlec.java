@@ -52,6 +52,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 public class Vevoireklamacio_fejlec extends JPanel {
     static JTextField id_mezo;
@@ -85,6 +86,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
     static JRadioButton koltseg_gomb;
     private JButton ujreklamacio_gomb;
     private JFileChooser mentes_helye;
+    private JCheckBox szures_gomb;
 
     /**
      * Create the panel.
@@ -282,6 +284,15 @@ public class Vevoireklamacio_fejlec extends JPanel {
         
         MyDragDropListener myDragDropListener = new MyDragDropListener();
         new DropTarget(qrcimke, myDragDropListener);
+        
+        JLabel lblNewLabel_2 = new JLabel("Szűrés");
+        lblNewLabel_2.setBounds(1178, 24, 46, 14);
+        add(lblNewLabel_2);
+        
+        szures_gomb = new JCheckBox("");
+        szures_gomb.setBounds(1184, 40, 21, 23);
+        szures_gomb.addActionListener(new Mentesgomb_aktival());
+        add(szures_gomb);
         new DropTarget(mentes_helye, myDragDropListener);
   
     }
@@ -374,6 +385,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
          {
             try
             {
+                SQA_SQL ment = new SQA_SQL();
                 if(Vevoireklamacio_d8.lezaras_datuma.getText().equals(""))
                 {
                     Vevoireklamacio_V2.d0.mentes();
@@ -389,8 +401,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
                 }
                 else
-                {
-                    SQA_SQL ment = new SQA_SQL();
+                {                    
                     String sql = "select D3 from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
                     ment.tombvissza_sajat(sql);
                     if(ment.tombvissza_sajat(sql)[0] == null)
@@ -423,6 +434,16 @@ public class Vevoireklamacio_fejlec extends JPanel {
                             JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
                         }
                     }
+                }
+                if(szures_gomb.isSelected())
+                {
+                    String sql = "update qualitydb.Vevoireklamacio_alap set Figyelem = 'nem' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    ment.mindenes(sql);
+                }
+                else
+                {
+                    String sql = "update qualitydb.Vevoireklamacio_alap set Figyelem = 'igen' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    ment.mindenes(sql);
                 }
             }
             catch (Exception e1) 
@@ -459,6 +480,18 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     Vevoireklamacio_V2.d8.visszatolt();
                     Vevoireklamacio_V2.koltseg.visszatolt();
                     Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
+                    SQA_SQL ment = new SQA_SQL();
+                    String sql = "select Figyelem from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+                    
+                    if(ment.tombvissza_sajat(sql)[0].equals("nem"))
+                    {
+                        szures_gomb.setSelected(true);
+                    }
+                    else
+                    {
+                        szures_gomb.setSelected(false);
+                    }
+                    
                     Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 }
             } 
