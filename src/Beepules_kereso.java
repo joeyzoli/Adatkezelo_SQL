@@ -137,7 +137,7 @@ public class Beepules_kereso extends JPanel {
                           sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                           sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                           sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
-                          sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
+                          sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
                           cellaszam++;
                       }
                       if(osszefuzott2.equals("")){ }
@@ -168,7 +168,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
-                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
+                              sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -200,7 +200,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
-                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
+                              sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -232,7 +232,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
-                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
+                              sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -264,7 +264,7 @@ public class Beepules_kereso extends JPanel {
                               sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
                               sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
                               sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
-                              sheet2.getRange().get("K" + cellaszam).setText(rs.getString(12));
+                              sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
                               cellaszam++;
                           }
                       }
@@ -376,6 +376,7 @@ public class Beepules_kereso extends JPanel {
                 {   
                     osszefuzott5 = osszefuzott5.substring(0, osszefuzott5.length() - 1);
                 }
+                System.out.println(osszefuzott);
                 Foablak.frame.setCursor(null);   
             } 
             catch (Exception e1) 

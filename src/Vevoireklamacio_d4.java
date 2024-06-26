@@ -30,10 +30,14 @@ public class Vevoireklamacio_d4 extends JPanel {
     private JTextArea gep_det;
     private JTextArea ember_det;
     private JTextArea mod_det;
-    private JCheckBox anyag_gomb;
-    private JCheckBox gep_gomb;    
-    private JCheckBox ember_gomb;
-    private JCheckBox mod_gomb;
+    private JCheckBox eloanyag_gomb;
+    private JCheckBox elogep_gomb;    
+    private JCheckBox eloember_gomb;
+    private JCheckBox elomod_gomb;
+    private JCheckBox detanyag_gomb;
+    private JCheckBox detgep_gomb;
+    private JCheckBox detember_gomb;
+    private JCheckBox detmod_gomb;
     
     public Vevoireklamacio_d4() {
         setLayout(null);
@@ -147,25 +151,45 @@ public class Vevoireklamacio_d4 extends JPanel {
         mod_det.setBounds(523, 504, 720, 39);
         add(mod_det);
         
-        anyag_gomb = new JCheckBox("");
-        anyag_gomb.addActionListener(new Mentesgomb_aktival());
-        anyag_gomb.setBounds(415, 77, 26, 23);
-        add(anyag_gomb);
+        eloanyag_gomb = new JCheckBox("");
+        eloanyag_gomb.addActionListener(new Mentesgomb_aktival());
+        eloanyag_gomb.setBounds(415, 77, 26, 23);
+        add(eloanyag_gomb);
         
-        gep_gomb = new JCheckBox("");
-        gep_gomb.addActionListener(new Mentesgomb_aktival());
-        gep_gomb.setBounds(415, 135, 26, 23);
-        add(gep_gomb);
+        elogep_gomb = new JCheckBox("");
+        elogep_gomb.addActionListener(new Mentesgomb_aktival());
+        elogep_gomb.setBounds(415, 135, 26, 23);
+        add(elogep_gomb);
         
-        ember_gomb = new JCheckBox("");
-        ember_gomb.addActionListener(new Mentesgomb_aktival());
-        ember_gomb.setBounds(415, 188, 26, 23);
-        add(ember_gomb);
+        eloember_gomb = new JCheckBox("");
+        eloember_gomb.addActionListener(new Mentesgomb_aktival());
+        eloember_gomb.setBounds(415, 188, 26, 23);
+        add(eloember_gomb);
         
-        mod_gomb = new JCheckBox("");
-        mod_gomb.addActionListener(new Mentesgomb_aktival());
-        mod_gomb.setBounds(415, 243, 26, 23);
-        add(mod_gomb);
+        elomod_gomb = new JCheckBox("");
+        elomod_gomb.addActionListener(new Mentesgomb_aktival());
+        elomod_gomb.setBounds(415, 243, 26, 23);
+        add(elomod_gomb);
+        
+        detanyag_gomb = new JCheckBox("");
+        detanyag_gomb.addActionListener(new Mentesgomb_aktival());
+        detanyag_gomb.setBounds(415, 331, 26, 23);
+        add(detanyag_gomb);
+        
+        detgep_gomb = new JCheckBox("");
+        detgep_gomb.addActionListener(new Mentesgomb_aktival());
+        detgep_gomb.setBounds(415, 392, 26, 23);
+        add(detgep_gomb);
+        
+        detember_gomb = new JCheckBox("");
+        detember_gomb.addActionListener(new Mentesgomb_aktival());
+        detember_gomb.setBounds(415, 449, 21, 23);
+        add(detember_gomb);
+        
+        detmod_gomb = new JCheckBox("");
+        detmod_gomb.addActionListener(new Mentesgomb_aktival());
+        detmod_gomb.setBounds(415, 505, 26, 23);
+        add(detmod_gomb);
 
     }
     
@@ -180,24 +204,42 @@ public class Vevoireklamacio_d4 extends JPanel {
             ment.mindenes(sql);
             
             String gyokerok = ";";
-            if(anyag_gomb.isSelected())
+            String gyokerok2 = ";";
+            if(eloanyag_gomb.isSelected())
             {
                 gyokerok += "anyag;";
             }
-            if(gep_gomb.isSelected())
+            if(elogep_gomb.isSelected())
             {
                 gyokerok += "gep;";
             }
-            if(ember_gomb.isSelected())
+            if(eloember_gomb.isSelected())
             {
                 gyokerok += "ember;";
             }
-            if(mod_gomb.isSelected())
+            if(elomod_gomb.isSelected())
             {
                 gyokerok += "mod;";
             }
             
-            sql = "update qualitydb.Vevoireklamacio_alap set Gyokerok = '"+ gyokerok +"' "                   
+            if(detanyag_gomb.isSelected())
+            {
+                gyokerok2 += "anyag;";
+            }
+            if(detgep_gomb.isSelected())
+            {
+                gyokerok2 += "gep;";
+            }
+            if(detember_gomb.isSelected())
+            {
+                gyokerok2 += "ember;";
+            }
+            if(detmod_gomb.isSelected())
+            {
+                gyokerok2 += "mod;";
+            }
+            
+            sql = "update qualitydb.Vevoireklamacio_alap set Gyokerok = '"+ gyokerok +"',  Gyokerok2 = '"+ gyokerok2 +"' "                   
                     + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
             
@@ -230,15 +272,19 @@ public class Vevoireklamacio_d4 extends JPanel {
         }
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = (Statement) conn.createStatement();
-        String sql = "select anyag, gep, ember, mod_, Gyokerok from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        String sql = "select anyag, gep, ember, mod_, Gyokerok, Gyokerok2 from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
         stmt.execute(sql);
         ResultSet rs = stmt.getResultSet();
         if(rs.next())
         {
-            anyag_gomb.setSelected(false);
-            gep_gomb.setSelected(false);
-            ember_gomb.setSelected(false);
-            mod_gomb.setSelected(false);
+            eloanyag_gomb.setSelected(false);
+            elogep_gomb.setSelected(false);
+            eloember_gomb.setSelected(false);
+            elomod_gomb.setSelected(false);            
+            detanyag_gomb.setSelected(false);
+            detgep_gomb.setSelected(false);
+            detember_gomb.setSelected(false);
+            detmod_gomb.setSelected(false);
             
             if(rs.getString(1) != null)
             {                
@@ -312,19 +358,40 @@ public class Vevoireklamacio_d4 extends JPanel {
                 {
                     if(gyokerok[szamlalo].equals("anyag"))
                     {
-                        anyag_gomb.setSelected(true); 
+                        eloanyag_gomb.setSelected(true); 
                     }
                     else if(gyokerok[szamlalo].equals("gep"))
                     {
-                        gep_gomb.setSelected(true);
+                        elogep_gomb.setSelected(true);
                     }
                     else if(gyokerok[szamlalo].equals("ember"))
                     {
-                        ember_gomb.setSelected(true);
+                        eloember_gomb.setSelected(true);
                     }
                     else
                     {
-                        mod_gomb.setSelected(true);
+                        elomod_gomb.setSelected(true);
+                    }
+                }
+                
+                String[] gyokerok2 = rs.getString(6).split(";");
+                for(int szamlalo = 0; szamlalo < gyokerok2.length; szamlalo++)
+                {
+                    if(gyokerok2[szamlalo].equals("anyag"))
+                    {
+                        detanyag_gomb.setSelected(true); 
+                    }
+                    else if(gyokerok2[szamlalo].equals("gep"))
+                    {
+                        detgep_gomb.setSelected(true);
+                    }
+                    else if(gyokerok2[szamlalo].equals("ember"))
+                    {
+                        detember_gomb.setSelected(true);
+                    }
+                    else
+                    {
+                        detmod_gomb.setSelected(true);
                     }
                 }
             }

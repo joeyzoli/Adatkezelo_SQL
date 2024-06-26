@@ -681,12 +681,15 @@ public class SQL
         jdbcAdapter3.fillDataTable(datatable3, resultSet3);
         Vevoi_reklmacio_bevitel.hibaoka_mezo.setText("");
         Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText("");
-        String[] hibaoka = {datatable3.getRows().get(0).getString(1)};
-        String[] hibaoka2 = {datatable3.getRows().get(0).getString(3)};
-        DefaultComboBoxModel<String> hiba = new DefaultComboBoxModel<>(hibaoka);
-        DefaultComboBoxModel<String> hiba2 = new DefaultComboBoxModel<>(hibaoka2);
-        Vevoi_reklmacio_bevitel.hibaokozoja_box.setModel(hiba);
-        Vevoi_reklmacio_bevitel.hibaokozoja2_box.setModel(hiba2);
+        //String[] hibaoka = {datatable3.getRows().get(0).getString(1)};
+        //String[] hibaoka2 = {datatable3.getRows().get(0).getString(3)};
+        //DefaultComboBoxModel<String> hiba = new DefaultComboBoxModel<>(hibaoka);
+        //DefaultComboBoxModel<String> hiba2 = new DefaultComboBoxModel<>(hibaoka2);
+        //Vevoi_reklmacio_bevitel.hibaokozoja_box.setModel(hiba);
+        //Vevoi_reklmacio_bevitel.hibaokozoja2_box.setModel(hiba2);
+        Vevoi_reklmacio_bevitel.hibaokozoja_box.setSelectedItem(datatable3.getRows().get(0).getString(1));
+        Vevoi_reklmacio_bevitel.hibaokozoja2_box.setSelectedItem(datatable3.getRows().get(0).getString(3));
+        
         Vevoi_reklmacio_bevitel.hibaoka_mezo.setText(datatable3.getRows().get(0).getString(0));
         Vevoi_reklmacio_bevitel.hibaoka2_mezo.setText(datatable3.getRows().get(0).getString(2));
         sql = "SELECT intezkedes, felelos, hatarido FROM qualitydb.Vevoireklamacio_detekt where ID = '"+ id +"'";

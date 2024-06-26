@@ -233,7 +233,7 @@ public class Gyartasi_adatok extends JPanel
                     szamlalo++;                                                                                                                                         //szamlalo növelése a DB-ben levő sorszámhoz
                     id.setText(String.valueOf(szamlalo)); 
 				}
-				touchup_mezo.setText("");
+				//touchup_mezo.setText("");
 				Urlap_torlo torles = new Urlap_torlo();																												//űrlap törlő példányosítása
 				torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);												//űrlap kitöltött mezőinek alaphelyzetbe állítása
 			 }
@@ -285,7 +285,7 @@ public class Gyartasi_adatok extends JPanel
 	                    szamlalo++;                                                                                                                                         //szamlalo növelése a DB-ben levő sorszámhoz
 	                    id.setText(String.valueOf(szamlalo)); 
 	                }
-	                touchup_mezo.setText("");
+	                //touchup_mezo.setText("");
 					Urlap_torlo torles = new Urlap_torlo();
 					torles.urlaptorles(felajanlott, mintanagysag, pcb_sorszam, pozicio, hibak_szama, sor);
 				 }

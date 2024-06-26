@@ -22,6 +22,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -66,6 +67,7 @@ public class SQA_osszesito extends JPanel {
         szukitett_modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"ID", "Dátum", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
         szukitett_modell.setColumnIdentifiers(new Object[]{"ID", "Reklamáció száma", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setModel(modell);
         
         JScrollPane gorgeto = new JScrollPane(table);
@@ -132,6 +134,15 @@ public class SQA_osszesito extends JPanel {
         keres_gomb.addActionListener(new IFS_kereses());
         keres_gomb.setBounds(1204, 521, 89, 23);
         add(keres_gomb);
+        
+        JLabel lblNewLabel_5 = new JLabel("Kíválasztott sor törlése");
+        lblNewLabel_5.setBounds(1040, 574, 142, 14);
+        add(lblNewLabel_5);
+        
+        JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles());
+        torles_gomb.setBounds(1204, 570, 89, 23);
+        add(torles_gomb);
         adatok();
         
     }
@@ -1278,4 +1289,97 @@ public class SQA_osszesito extends JPanel {
                                
          }
     }
+    
+    class Torles implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+                int reply = JOptionPane.showConfirmDialog(null, "Biztos törlöd a kiválasztott sort?", "Értesítés", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                   Class.forName("com.mysql.cj.jdbc.Driver");
+                   conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                   stmt = (Statement) conn.createStatement();                             
+                   Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                   
+                   Utolso_sor sorszam = new Utolso_sor();
+                   int sor = table.getSelectedRow();
+                   int utolsosor = Integer.parseInt(sorszam.utolso("qualitydb.SQA_reklamaciok"));
+                   int id = Integer.parseInt(table.getValueAt(sor, 0).toString());
+                   int id2 = id+1;
+                   
+                   String sql = "delete from qualitydb.SQA_reklamaciok where id = '"+ table.getValueAt(sor, 0).toString() +"'";
+                   stmt.execute(sql);
+                   //ResultSet rs = stmt.getResultSet();
+                   System.out.println("Utolsó sor "+utolsosor);
+                   System.out.println("következő id "+id2);
+                   String evszam = String.valueOf(id);
+                   File torolni = new File("\\\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\20"+ evszam.subSequence(0, 2) +"\\"+ id+"\\");
+                   System.out.println(torolni.getAbsolutePath());
+                   deleteFolder(torolni);
+                   
+    
+                   for(int szamlalo = id; szamlalo < (utolsosor+1); szamlalo++)
+                   {
+                       System.out.println("Fut a for");
+                       sql = "update qualitydb.SQA_reklamaciok set id = '"+ id +"', futo_id = '"+ id +"'  where id = '"+ id2 +"'";
+                       stmt.execute(sql);
+                       id++;
+                       id2++;
+                       File ezt = new File("\\\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\20"+ evszam.subSequence(0, 2) +"\\"+ (szamlalo+1)+"\\");
+                       File erre = new File("\\\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\20"+ evszam.subSequence(0, 2) +"\\"+ szamlalo+"\\");
+                       ezt.renameTo(erre);
+                   }
+                   sql = "ALTER TABLE qualitydb.SQA_reklamaciok AUTO_INCREMENT = "+ id +"";
+                   stmt.execute(sql);
+                   stmt.close();
+                   conn.close();
+                   
+                   int rowCount = modell.getRowCount();
+                   
+                   
+                   for (int i = rowCount - 1; i > -1; i--) 
+                   {
+                     modell.removeRow(i);
+                   }
+                   
+                   table.setModel(modell);
+                   
+                   adatok();
+                   Foablak.frame.pack();
+                   Foablak.frame.repaint();
+                   Foablak.frame.setCursor(null);
+                }
+                else {}
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    public void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) { //some JVMs return null for empty dirs
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        folder.delete();
+    }
+    
+    
 }

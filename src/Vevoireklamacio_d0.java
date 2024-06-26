@@ -64,7 +64,8 @@ public class Vevoireklamacio_d0 extends JPanel {
     private ComboBox combobox_tomb = new ComboBox();
     static JComboBox<String> tipus_box;
     private JComboBox<String> felelos_box;
-    private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
+    //private String excelhelye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";
+    private String excelhelye = "\\\\172.20.22.7\\kozos\\telefonkönyv\\Telefonlista_VEAS_új.xls";
     private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
     private Kivalaszt valaszto = new Kivalaszt();
     private JTextField felelos_mezo;
@@ -289,7 +290,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
                 + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
                 + "ORDER by part_no";
-        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql) );                             //cikkszamok.tombvissza(sql)      //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                             //cikkszamok.tombvissza(sql)      //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
         tipus_box.addActionListener(new Valtozas());
         tipus_box.addActionListener(new Hozzaad());
@@ -810,9 +811,10 @@ public class Vevoireklamacio_d0 extends JPanel {
                 String nev = String.valueOf(felelos_box.getSelectedItem());
                 for(int szamlalo = 2; szamlalo < sheet.getLastRow()+1;szamlalo++)
                 {
-                    if(sheet.getRange().get("B"+szamlalo).getText().toLowerCase().equals(nev.toLowerCase()))
+                    if(sheet.getRange().get("C"+szamlalo).getText().toLowerCase().contains(nev.toLowerCase()))
                     {
-                        email2_mezo.setText(sheet.getRange().get("C"+szamlalo).getText());
+                        email2_mezo.setText(sheet.getRange().get("I"+szamlalo).getText());
+                        telefonszam2_mezo.setText(sheet.getRange().get("G"+szamlalo).getText());
                         break;
                     }
                         

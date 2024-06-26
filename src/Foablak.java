@@ -98,6 +98,7 @@ public class Foablak extends JFrame
 	private Elokeszitett_anyagkereso elokeszit;
 	private Raktarban_anyag rakiban;
 	private Loxone_parositas lox_parok;
+	private AVM_UTMH utmh;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -260,7 +261,7 @@ public class Foablak extends JFrame
 		forraszthatosagi_vizsgalat.addActionListener(new Panelcsere_Forraszthatosag());
 		menu.add(forraszthatosagi_vizsgalat);
 		
-		JMenuItem vevoirek_v2 = new JMenuItem("Vevőireklmáció V2.0");
+		JMenuItem vevoirek_v2 = new JMenuItem("Vevőireklamációk V2.0");
 		vevoirek_v2.addActionListener(new Panelcsere_Vevoi2());
 		menu.add(vevoirek_v2);
 		menu.add(torles);
@@ -343,6 +344,10 @@ public class Foablak extends JFrame
 		JMenuItem loxone_led = new JMenuItem("Loxone LS adatok");
 		loxone_led.addActionListener(new Panelcsere_Loxone_paros());
 		lekerdezes.add(loxone_led);
+		
+		JMenuItem utmh_adatok = new JMenuItem("AVM UTMH");
+		utmh_adatok.addActionListener(new Panelcsere_UTMH());
+		lekerdezes.add(utmh_adatok);
 		
 		JMenu vizsga = new JMenu("Vizsga");
 		vizsga.setForeground(new Color(255, 140, 0));
@@ -1190,6 +1195,17 @@ public class Foablak extends JFrame
          {
             lox_parok = new Loxone_parositas();
             JScrollPane ablak = new JScrollPane(lox_parok);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_UTMH implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            utmh = new AVM_UTMH();
+            JScrollPane ablak = new JScrollPane(utmh);
             setContentPane(ablak);
             pack();
          }

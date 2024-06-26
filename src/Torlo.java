@@ -2101,24 +2101,24 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Retour minden adat formázott.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\RMA.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
                Worksheet sheet = workbook.getWorksheets().get(0);               
                DataTable datatable = new DataTable();
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
-               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   /*stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
-                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");*/
+                   stmt.executeUpdate("update qualitydb.Retour_szeriaszamok set  Hiba_leirasa = '" + datatable.getRows().get(szamlalo).getString(1) //+"; "+ datatable.getRows().get(szamlalo).getString(2) +"' "
+                           + "' where Vevoi_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "' or Veas_ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
                    System.out.println("Fut a For");
-                   stmt.executeUpdate("update qualitydb.Retour set  Analizis_datum = '" + datatable.getRows().get(szamlalo).getString(1)+"', Felelos1 = '" + datatable.getRows().get(szamlalo).getString(2)+"',"
+                   /*stmt.executeUpdate("update qualitydb.Retour set  Analizis_datum = '" + datatable.getRows().get(szamlalo).getString(1)+"', Felelos1 = '" + datatable.getRows().get(szamlalo).getString(2)+"',"
                            + "Gepes_datum = '" + datatable.getRows().get(szamlalo).getString(3)+"',Felelos2 = '" + datatable.getRows().get(szamlalo).getString(4)+"',"
                            + "Kezi_datum = '" + datatable.getRows().get(szamlalo).getString(5)+"',Felelos3 = '" + datatable.getRows().get(szamlalo).getString(6)+"',"
                            + "Teszt_datum = '" + datatable.getRows().get(szamlalo).getString(7)+"',Felelos4 = '" + datatable.getRows().get(szamlalo).getString(8)+"',"
                            + "Vegell_datum = '" + datatable.getRows().get(szamlalo).getString(9)+"',Felelos5 = '" + datatable.getRows().get(szamlalo).getString(10)+"' "
-                           + " where ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                           + " where ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");*/
                }              
                Foablak.frame.setCursor(null);                        
                stmt.close();
