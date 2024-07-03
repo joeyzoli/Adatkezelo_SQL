@@ -411,6 +411,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     Vevoireklamacio_V2.d6.mentes();
                     Vevoireklamacio_V2.d7.mentes();
                     Vevoireklamacio_V2.d8.mentes();
+                    Vevoireklamacio_V2.koltseg.mentes();
                     Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
                     JOptionPane.showMessageDialog(null, "Mentve", "Info", 1);
                 }
@@ -514,85 +515,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                     }
                     Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
                 }
-                if (key == KeyEvent.VK_LEFT)                                                                                               //ha az entert nyomják le akkor hívódik meg
-                {
-                    int id = Integer.valueOf(id_mezo.getText());
-                    id = id-1;
-                    id_mezo.setText(String.valueOf(id));
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                    mentes_gomb.setEnabled(false);
-                    Vevoireklamacio_d2.fajlok.clear();
-                    Vevoireklamacio_V2.d0.visszatolt();
-                    Vevoireklamacio_V2.d1.visszatolt();
-                    Vevoireklamacio_V2.d2.visszatolt();
-                    Vevoireklamacio_V2.d3.visszatolt();
-                    Vevoireklamacio_V2.d4.visszatolt();
-                    Vevoireklamacio_V2.d5.visszatolt();
-                    Vevoireklamacio_V2.d6.visszatolt();
-                    Vevoireklamacio_V2.d7.visszatolt();
-                    Vevoireklamacio_V2.d8.visszatolt();
-                    Vevoireklamacio_V2.koltseg.visszatolt();
-                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-                    SQA_SQL ment = new SQA_SQL();
-                    String sql = "select Figyelem from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-                    
-                    if(ment.tombvissza_sajat(sql).length > 0)
-                    {
-                        if(ment.tombvissza_sajat(sql)[0].equals("nem"))
-                        {
-                            szures_gomb.setSelected(true);
-                        }
-                        else
-                        {
-                            szures_gomb.setSelected(false);
-                        }
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "Ilyen ID-val nincsen reklamáció!", "Hiba üzenet", 2);
-                    }
-                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-                }
                 
-                if (key == KeyEvent.VK_RIGHT)                                                                                               //ha az entert nyomják le akkor hívódik meg
-                {
-                    int id = Integer.valueOf(id_mezo.getText());
-                    id = id+1;
-                    id_mezo.setText(String.valueOf(id));
-                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                    mentes_gomb.setEnabled(false);
-                    Vevoireklamacio_d2.fajlok.clear();
-                    Vevoireklamacio_V2.d0.visszatolt();
-                    Vevoireklamacio_V2.d1.visszatolt();
-                    Vevoireklamacio_V2.d2.visszatolt();
-                    Vevoireklamacio_V2.d3.visszatolt();
-                    Vevoireklamacio_V2.d4.visszatolt();
-                    Vevoireklamacio_V2.d5.visszatolt();
-                    Vevoireklamacio_V2.d6.visszatolt();
-                    Vevoireklamacio_V2.d7.visszatolt();
-                    Vevoireklamacio_V2.d8.visszatolt();
-                    Vevoireklamacio_V2.koltseg.visszatolt();
-                    Vevoireklamacio_fejlec.mentes_gomb.setEnabled(false);
-                    SQA_SQL ment = new SQA_SQL();
-                    String sql = "select Figyelem from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
-                    
-                    if(ment.tombvissza_sajat(sql).length > 0)
-                    {
-                        if(ment.tombvissza_sajat(sql)[0].equals("nem"))
-                        {
-                            szures_gomb.setSelected(true);
-                        }
-                        else
-                        {
-                            szures_gomb.setSelected(false);
-                        }
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "Ilyen ID-val nincsen reklamáció!", "Hiba üzenet", 2);
-                    }
-                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
-                }
             } 
             catch (Exception e1) 
             {              

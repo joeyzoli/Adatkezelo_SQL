@@ -457,6 +457,11 @@ public class Retour_szeriaszamok extends JPanel {
         nff = new JCheckBox("NFF");
         nff.setBounds(1115, 225, 53, 23);
         add(nff);
+        
+        JButton tortenet_gomb = new JButton("Történet ellenőrzés");
+        tortenet_gomb.addActionListener(new Tortenet());
+        tortenet_gomb.setBounds(572, 130, 151, 23);
+        add(tortenet_gomb);
 
     }
     
@@ -1439,5 +1444,29 @@ public class Retour_szeriaszamok extends JPanel {
               se.printStackTrace();
            }  
         }
+    }
+    
+    class Tortenet implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                SQA_SQL csekkol = new SQA_SQL();
+                String sql = "select * from qualitydb.Retour_szeriaszamok where Veas_ID = '"+ szeriaszam_mezo.getText() +"' or vevoi_id = '"+ szeriaszam_mezo.getText() +"'";
+                csekkol.minden_excel(sql, "Szériaszám történet.xlsx");
+                Foablak.frame.setCursor(null);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Szériaszám történet.xlsx néven!", "Info", 1);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
 }
