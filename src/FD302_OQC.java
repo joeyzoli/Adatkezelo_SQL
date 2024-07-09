@@ -119,7 +119,7 @@ public class FD302_OQC extends JPanel {
         lblNewLabel_20.setBounds(38, 406, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok2));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(167, 402, 215, 22);
         add(hiba_box);
         
@@ -264,6 +264,7 @@ public class FD302_OQC extends JPanel {
         add(mennyiseg_label);
         
         JButton torles_gomb = new JButton("Törlés");
+        torles_gomb.addActionListener(new Torles());
         torles_gomb.setBounds(82, 525, 89, 23);
         add(torles_gomb);
         
@@ -597,6 +598,26 @@ public class FD302_OQC extends JPanel {
         @Override
         public void keyReleased(KeyEvent e){                                              //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom           
         }              
+    }
+    
+    class Torles implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                visszaallit();
+                
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
     
 }

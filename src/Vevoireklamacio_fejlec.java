@@ -18,6 +18,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
@@ -308,6 +309,20 @@ public class Vevoireklamacio_fejlec extends JPanel {
         jobb_gomb.setBounds(184, 20, 46, 18);
         add(jobb_gomb);
         new DropTarget(mentes_helye, myDragDropListener);
+        
+        Foablak.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        Foablak.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(Foablak.frame, 
+                    "Biztos elmentettél mindent és bezárod az ablakot?", "Close Window?", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    System.exit(0);
+                }
+            }
+        });
   
     }
     

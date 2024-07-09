@@ -64,7 +64,7 @@ public class FD302_Vizualis extends JPanel {
         lblNewLabel_20.setBounds(38, 406, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                    //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok2));                    //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(167, 402, 215, 22);
         add(hiba_box);
         

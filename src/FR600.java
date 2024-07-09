@@ -238,7 +238,7 @@ public class FR600 extends JPanel {
         lblNewLabel_20.setBounds(47, 488, 46, 14);
         add(lblNewLabel_20);
         
-        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
+        hiba_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.hibakodok2));                //combobox_tomb.getCombobox(ComboBox.hibakodok)
         hiba_box.setBounds(188, 484, 215, 22);
         add(hiba_box);
         

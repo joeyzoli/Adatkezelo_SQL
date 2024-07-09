@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +38,7 @@ import com.spire.xls.Worksheet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
+import javax.swing.JTextField;
 
 public class SQA_osszesito extends JPanel {
     private JTable table;
@@ -47,6 +50,7 @@ public class SQA_osszesito extends JPanel {
     private String beallitasok = System.getProperty("user.home") + "\\sqa_szures.txt";
     private JComboBox<String> honap_box;
     private int honap = 0;
+    private JTextField cikkszam_mezo;
 
     /**
      * Create the panel.
@@ -143,6 +147,16 @@ public class SQA_osszesito extends JPanel {
         torles_gomb.addActionListener(new Torles());
         torles_gomb.setBounds(1204, 570, 89, 23);
         add(torles_gomb);
+        
+        cikkszam_mezo = new JTextField();
+        cikkszam_mezo.setBounds(916, 74, 211, 20);
+        cikkszam_mezo.addKeyListener(new Enter());
+        add(cikkszam_mezo);
+        cikkszam_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_6 = new JLabel("Cikkszám szerinti kereső");
+        lblNewLabel_6.setBounds(950, 56, 161, 14);
+        add(lblNewLabel_6);
         adatok();
         
     }
@@ -1381,5 +1395,93 @@ public class SQA_osszesito extends JPanel {
         folder.delete();
     }
     
-    
+    class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            try 
+            {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    if(cikkszam_mezo.getText().equals(""))
+                    {
+                        adatok();
+                    }
+                    else
+                    {
+                        Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                        Connection conn = null;
+                        Statement stmt = null;               
+                        ResultSet rs;
+                        int rowCount = modell.getRowCount();
+                        for (int i = rowCount - 1; i > -1; i--) 
+                        {
+                          modell.removeRow(i);
+                        }
+                        
+                        table.setModel(modell); 
+                        System.out.println("Fut");         
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                        stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
+                        String sql = "select id, datum, inditotta, vagy,cikkszam,projekt, lezaras_ido,\r\n"
+                                + "if(lezaras_ido is null, DATEDIFF(now(), Datum), DATEDIFF(Lezaras_ido, Datum)) as nyitva,\r\n"
+                                + "Hibaleiras\r\n"
+                                + "from qualitydb.SQA_reklamaciok\r\n"
+                                + "where 3 = 3 and Cikkszam like '%"+ cikkszam_mezo.getText() +"%'";                                        
+                        stmt.execute(sql);      
+                        rs = stmt.getResultSet();
+                        while(rs.next())
+                        {
+                            if(rs.getString(7) != null)
+                            {
+                                String[] datum = rs.getString(7).split(" ");
+                                String[] datum2 = rs.getString(2).split(" ");
+                                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),datum[0],rs.getString(8),rs.getString(9)});                  
+                            }
+                            else
+                            {
+                                String[] datum2 = rs.getString(2).split(" ");
+                                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)});
+                            }                                     
+                        }
+                        TableColumnModel columnModel = table.getColumnModel();
+                        for (int column = 0; column < table.getColumnCount(); column++) {
+                            int width = 15; // Min width
+                            for (int row = 0; row < table.getRowCount(); row++) {
+                                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                                Component comp = table.prepareRenderer(renderer, row, column);
+                                width = Math.max(comp.getPreferredSize().width +1 , width);
+                            }
+                            if(width > 300)
+                                width=300;
+                            columnModel.getColumn(column).setPreferredWidth(width);
+                        }
+                        Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+                    }
+                }
+                
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
+    }
 }

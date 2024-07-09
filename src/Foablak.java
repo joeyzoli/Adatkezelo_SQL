@@ -99,6 +99,7 @@ public class Foablak extends JFrame
 	private Raktarban_anyag rakiban;
 	private Loxone_parositas lox_parok;
 	private AVM_UTMH utmh;
+	private Hager_adatok hager_adat;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -456,6 +457,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem excel_kereso = new JMenuItem("Excel kereső");
 		egyeb.add(excel_kereso);
+		
+		JMenuItem hager_adat = new JMenuItem("Hager adatok");
+		hager_adat.addActionListener(new Panelcsere_Hager());
+		egyeb.add(hager_adat);
 		excel_kereso.addActionListener(new Panelcsere_Excel_kereso());
 		
 		ain.addActionListener(new Panelcsere_AIN());
@@ -1206,6 +1211,17 @@ public class Foablak extends JFrame
          {
             utmh = new AVM_UTMH();
             JScrollPane ablak = new JScrollPane(utmh);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Hager implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            hager_adat = new Hager_adatok();
+            JScrollPane ablak = new JScrollPane(hager_adat);
             setContentPane(ablak);
             pack();
          }

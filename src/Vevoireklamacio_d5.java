@@ -15,14 +15,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -99,6 +104,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 }
             }
         });
+        
         modell.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table.setModel(modell);        
         JScrollPane gorgeto = new JScrollPane(table);
@@ -188,8 +194,45 @@ public class Vevoireklamacio_d5 extends JPanel {
         torles2_gomb.addActionListener(new Torles2());
         torles2_gomb.setBounds(1306, 562, 89, 23);
         add(torles2_gomb);
+        
+        DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        TableColumn dateColumn = table.getColumnModel().getColumn(3);
+        dateColumn.setCellEditor(new DatePickerCellEditor(formatter));//DatePickerCellEditor
+        DateCellRenderer renderer = new DateCellRenderer();
+        table.getColumnModel().getColumn(3).setCellRenderer(renderer);       
+        table.setDefaultRenderer(Date.class, renderer);
+        /*DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        final DatePickerCellEditor dateCellPrev = new DatePickerCellEditor(formatter);
+        dateCellPrev.addCellEditorListener(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent arg0) {
+                dateCellPrev.setFormats(formatter);
+            }
+            @Override
+            public void editingCanceled(ChangeEvent arg0) {
+                dateCellPrev.setFormats(formatter);
+            }
+        });
+        table.getColumnModel().getColumn(3).setCellEditor(dateCellPrev);*/
 
     }
+    
+    public class DateCellRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable jtable, Object value, boolean selected, boolean hasFocus, int row, int column) {
+
+            if (value instanceof Date) {
+                DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+                value = formatter.format(value);
+            }
+
+
+            return super.getTableCellRendererComponent(jtable, value, selected, hasFocus, row, column);
+
+        }
+    }
+    
     
     class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
@@ -208,7 +251,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 {             
                     Vevoireklamacio_fejlec.d5 = Color.GREEN;
                     Vevoireklamacio_fejlec.lezaras = Color.YELLOW;
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
                     Date date = new Date();               
                     String maiido = formatter.format(date);
                     sql = "update qualitydb.Vevoireklamacio_alap set D5 = '"+ maiido +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
@@ -324,7 +367,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 else
                 {
                     sql = "update qualitydb.Vevoireklamacio_elo set Feladat = '"+ table.getValueAt(szamlalo, 0).toString() +"', Felelos = '"+table.getValueAt(szamlalo, 1).toString() +"', "
-                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+table.getValueAt(szamlalo, 3).toString() +"' "                   
+                            + "Hatarido = '"+ table.getValueAt(szamlalo, 2).toString() +"', Lezaras_datuma = '"+ table.getValueAt(szamlalo, 3).toString() +"' "                   
                             + "where id = '"+ table.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
@@ -393,6 +436,7 @@ public class Vevoireklamacio_d5 extends JPanel {
             sql = "select * from qualitydb.Vevoireklamacio_det where REk_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and D = 'D5'";
             stmt.execute(sql);
             rs = stmt.getResultSet();
+
             while(rs.next())
             {
                 modell2.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});

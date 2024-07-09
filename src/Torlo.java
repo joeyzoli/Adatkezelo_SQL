@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Retour_frissit());
+		feltolt.addActionListener(new Szeriaszam_gyarto());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2819,6 +2819,61 @@ public class Torlo extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
             }  
                                
+         }
+    }
+	
+	class Excel_feldolgozo implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+
+            try 
+            {
+               
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Beépülés 122EMV159-CONT.xlsx";                             
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               Workbook workbook = new Workbook();
+               workbook.setVersion(ExcelVersion.Version2016);
+               workbook.loadFromFile(excelfile1);
+               Worksheet sheet = workbook.getWorksheets().get(0);               
+               DataTable datatable = new DataTable();
+               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+               int szam = 1;
+               int cellaszam = 2;
+               System.out.println(datatable.getRows().get(0).getString(3));
+               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               {
+                   if(szamlalo < (datatable.getRows().size()-1))
+                   {
+                       
+                       if(datatable.getRows().get(szamlalo).getString(3).equals(datatable.getRows().get((szamlalo+1)).getString(3)))
+                       {
+                           sheet.getRange().get("E"+cellaszam).setText(String.valueOf(szam));
+                           szam++;
+                       }
+                       else
+                       {
+                           sheet.getRange().get("E"+cellaszam).setText(String.valueOf(szam));
+                           szam = 1;
+                           System.out.println("nem egyezik");
+                           System.out.println("sor " +szamlalo);
+                       }
+                       cellaszam++;
+                   }
+                   
+               }
+
+               workbook.saveToFile(excelfile1, ExcelVersion.Version2016);
+               Foablak.frame.setCursor(null);                                                      
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
          }
     }
 	
