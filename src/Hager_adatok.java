@@ -3,6 +3,7 @@ import javax.swing.JPanel;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -42,6 +43,8 @@ public class Hager_adatok extends JPanel {
         megnyit_gomb.addActionListener(new Lekerdezes());
         megnyit_gomb.setBounds(630, 159, 89, 23);
         add(megnyit_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     
@@ -73,9 +76,12 @@ public class Hager_adatok extends JPanel {
                     }
                     osszefuzott_me = osszefuzott_me.substring(0, osszefuzott_me.length() - 1);
                     Workbook workbook2 = new Workbook();
+                    Workbook workbook4 = new Workbook();
                     workbook2.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet2 = workbook2.getWorksheets().get(0);
                     Worksheet sheet3 = workbook2.getWorksheets().get(1);
+                    Worksheet sheet4 = workbook2.getWorksheets().get(2);
+                    Worksheet sheet5 = workbook4.getWorksheets().get(0);
                      
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                     //jdbc mysql driver meghÃ­vÃ¡sa
                     
@@ -97,7 +103,7 @@ public class Hager_adatok extends JPanel {
                             + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
                             + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                             + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
-                            + "videoton.fkov.dolgozo \n"
+                            + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
                             + "from videoton.fkov \n"
                             + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
                             + " where videoton.fkov.panel in ("+ osszefuzott +")");
@@ -119,6 +125,7 @@ public class Hager_adatok extends JPanel {
                       sheet2.getRange().get("O" + cellaszam).setText("Hibakód");
                       sheet2.getRange().get("P" + cellaszam).setText("error");
                       sheet2.getRange().get("Q" + cellaszam).setText("Dolgozó");
+                      sheet2.getRange().get("R" + cellaszam).setText("Érvénytelenítve");
                       cellaszam++;
                       
                       while(rs.next())
@@ -140,13 +147,14 @@ public class Hager_adatok extends JPanel {
                           sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
                           sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
                           sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                          sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
                           cellaszam++;
                       }
                       
                       rs = stmt.executeQuery("select  hibakod "
                               + "from videoton.fkov \n"
                               + " \n"
-                              + " where videoton.fkov.panel in ("+ osszefuzott +") and hely = '58'");
+                              + " where videoton.fkov.panel in ("+ osszefuzott +") and hely = '58' group by hibakod");
                       
                       osszefuzott = "";
                       while(rs.next())
@@ -206,24 +214,154 @@ public class Hager_adatok extends JPanel {
                         }
                       
                       /////////////////////////////////////////IFS kezdés
-                      /*DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                      DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
                       Class.forName("oracle.jdbc.OracleDriver");  //.driver
                                           
                       Connection con2 = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                       Statement stmt2 = con2.createStatement();
-                      */
+                      
+                      cellaszam = 1;
+                      sheet4.getRange().get("A" + cellaszam).setText("Contract");
+                      sheet4.getRange().get("B" + cellaszam).setText("Part no");
+                      sheet4.getRange().get("C" + cellaszam).setText("Tracy ID");
+                      sheet4.getRange().get("D" + cellaszam).setText("Szériaszám");
+                      sheet4.getRange().get("E" + cellaszam).setText("Alternatív Szériaszám");
+                      sheet4.getRange().get("F" + cellaszam).setText("Gyártás Dátuma");
+                      sheet4.getRange().get("G" + cellaszam).setText("Beolvasási pont");
+                      sheet4.getRange().get("H" + cellaszam).setText("REsource ID");
+                      sheet4.getRange().get("I" + cellaszam).setText("Scan Loc");
+                      sheet4.getRange().get("J" + cellaszam).setText("Művelet száma");
+                      sheet4.getRange().get("K" + cellaszam).setText("Művelet megnevezése");
+                      sheet4.getRange().get("L" + cellaszam).setText("Pass");
+                      sheet4.getRange().get("M" + cellaszam).setText("Ismétlések száma");
+                      sheet4.getRange().get("N" + cellaszam).setText("Javítás óta ismétlések száma");
+                      sheet4.getRange().get("O" + cellaszam).setText("Komment");
+                      sheet4.getRange().get("P" + cellaszam).setText("Tracy Space code");
+                      sheet4.getRange().get("Q" + cellaszam).setText("Alfanumerikus érték");
+                      sheet4.getRange().get("R" + cellaszam).setText("Package ID");
+                      
+                      cellaszam++;
+                      
+                      rs = stmt2.executeQuery("select ot.contract,\r\n"
+                              + "       ct.part_no,\r\n"
+                              + "       ot.tracy_id,\r\n"
+                              + "       ot.TRACY_SERIAL_NO,\r\n"
+                              + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                              + "       ot.manuf_date,\r\n"
+                              + "       ot.work_center_no,\r\n"
+                              + "       ot.resource_id,\r\n"
+                              + "       ot.scan_loc,\r\n"
+                              + "       ot.operation_no,\r\n"
+                              + "       ot.operation_description,\r\n"
+                              + "       ot.pass,\r\n"
+                              + "       ot.repetitions,\r\n"
+                              + "       ot.REPET_LAST_REPAIR,\r\n"
+                              + "       so.comments,\r\n"
+                              + "       so.tracy_spec_code,\r\n"
+                              + "       so.alfa_num_value,\r\n"
+                              + "       ct.package_id\r\n"
+                              + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                              + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                              + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                              + " where 3 = 3\r\n"
+                              + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott +")\r\n"
+                              + "   and ot.contract = so.contract(+)\r\n"
+                              + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                              + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                              + "      --and ot.tracy_id = '35903860'\r\n"
+                              + "   and so.COMMENTS(+) is not null \r\n"
+                              + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                              + "   and ot.history_id = ct.history_id\r\n"
+                              + "   and ot.tracy_id = ct.tracy_id\r\n"
+                              + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                              + " order by ot.manuf_date asc ");
+                      
+                      DataTable datatable2 = new DataTable();
+                      JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                      jdbcAdapter.fillDataTable(datatable2, rs);
+                      //sheet2.insertDataTable(datatable2, true, 1, 1);
+                      
+                      for(int szamlalo2 = 0; szamlalo2 < datatable2.getRows().size(); szamlalo2++)
+                      {                           
+                          sheet4.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
+                          sheet4.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
+                          sheet4.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
+                          sheet4.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
+                          sheet4.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
+                          sheet4.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
+                          sheet4.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
+                          sheet4.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
+                          sheet4.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
+                          sheet4.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
+                          sheet4.getRange().get("K" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(10));
+                          sheet4.getRange().get("L" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(11));
+                          sheet4.getRange().get("M" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(12));
+                          sheet4.getRange().get("N" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(13));
+                          sheet4.getRange().get("O" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(14));
+                          sheet4.getRange().get("P" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(15));
+                          sheet4.getRange().get("Q" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(16));
+                          sheet4.getRange().get("R" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(17));
+                          cellaszam++;
+                          
+                      }
+                      cellaszam = 1;
+                      sheet5.getRange().get("A" + cellaszam).setText("Tracy ID");
+                      sheet5.getRange().get("B" + cellaszam).setText("Anyagtracy ID");
+                      sheet5.getRange().get("C" + cellaszam).setText("Cikkszam");
+                      sheet5.getRange().get("D" + cellaszam).setText("Folyamat tracy ID");
+                      sheet5.getRange().get("E" + cellaszam).setText("Barcode ID");
+                      sheet5.getRange().get("F" + cellaszam).setText("Tracy gyári szám");
+                      sheet5.getRange().get("G" + cellaszam).setText("Panel azonosító");
+                      sheet5.getRange().get("H" + cellaszam).setText("Komponens cikk");
+                      sheet5.getRange().get("I" + cellaszam).setText("Cikk megnevezés");
+                      sheet5.getRange().get("J" + cellaszam).setText("Sarzs");
+                      sheet5.getRange().get("K" + cellaszam).setText("ME szám");
+                      sheet5.getRange().get("L" + cellaszam).setText("Felhasználás ideje");
+                      cellaszam++;
+                      
+                      rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                              + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                              + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott +")");
+                      
+                      while(rs.next())
+                      {                        
+                          sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                          sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                          sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                          sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                          sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                          sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                          sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                          sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                          sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                          sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                          sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                          sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                          
+                          cellaszam++;
+                      }
                       
                       
-                      
-                      sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                      sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:R1"));
                       sheet2.getAllocatedRange().autoFitColumns();
                       sheet2.getAllocatedRange().autoFitRows();
                       sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                       
-                      sheet3.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                      sheet3.getAutoFilters().setRange(sheet3.getCellRange("A1:R1"));
                       sheet3.getAllocatedRange().autoFitColumns();
                       sheet3.getAllocatedRange().autoFitRows();
                       sheet3.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                      
+                      sheet4.getAutoFilters().setRange(sheet4.getCellRange("A1:R1"));
+                      sheet4.getAllocatedRange().autoFitColumns();
+                      sheet4.getAllocatedRange().autoFitRows();
+                      sheet4.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                      
+                      sheet5.getAutoFilters().setRange(sheet5.getCellRange("A1:R1"));
+                      sheet5.getAllocatedRange().autoFitColumns();
+                      sheet5.getAllocatedRange().autoFitRows();
+                      sheet5.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                      
                       String hova = System.getProperty("user.home") + "\\Desktop\\Hager adatok.xlsx";
                       try 
                       {
@@ -231,7 +369,7 @@ public class Hager_adatok extends JPanel {
                           FileInputStream fileStream = new FileInputStream(hova);
                           try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
                           {
-                              for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
+                              for(int i = workbook3.getNumberOfSheets()-1; i > 2 ;i--)
                               {    
                                   workbook3.removeSheetAt(i); 
                               }      
@@ -240,6 +378,29 @@ public class Hager_adatok extends JPanel {
                               output.close();
                           }
                           JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Hager adatok.xlsx néven!", "Info", 1); 
+                          con.close();
+                      } 
+                      catch (Exception e1) 
+                      {
+                          
+                      }
+                      
+                      hova = System.getProperty("user.home") + "\\Desktop\\Hager adatok2.xlsx";
+                      try 
+                      {
+                          workbook4.saveToFile(hova, ExcelVersion.Version2016);
+                          FileInputStream fileStream = new FileInputStream(hova);
+                          try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                          {
+                              for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                              {    
+                                  workbook3.removeSheetAt(i); 
+                              }      
+                              FileOutputStream output = new FileOutputStream(hova);
+                              workbook3.write(output);
+                              output.close();
+                          }
+                          JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Hager adatok2.xlsx néven!", "Info", 1); 
                           con.close();
                       } 
                       catch (Exception e1) 

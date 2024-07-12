@@ -458,24 +458,43 @@ public class SQL_teszt
             System.out.println(sheet.getLastRow());
             
             JFileChooser mentes_helye = new JFileChooser();
+            mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
             mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             mentes_helye.showOpenDialog(mentes_helye);
             File fajl = mentes_helye.getSelectedFile();
             //System.out.println(fajl.getAbsolutePath());
-            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-            
-            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            if(fajl.getName().contains(".xlsx"))
             {
-                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                workbook2.write(output);
-                output.close();
+                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                
+                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                    workbook2.write(output);
+                    output.close();
+                }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
             }
-            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+            else
+            {
+                workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                {
+                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                    workbook2.write(output);
+                    output.close();
+                }
+            }
             
         } 
         catch (SQLException e1)                                                     //kivétel esetén történik

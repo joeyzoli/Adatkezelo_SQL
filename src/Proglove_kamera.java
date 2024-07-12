@@ -31,6 +31,7 @@ public class Proglove_kamera extends JPanel {
     private File mappa;
     private File[] fajlok;
     private String menteshelye = System.getProperty("user.home") + "\\Desktop\\Proglove kamera.xlsx";
+    private File excel;
 
     /**
      * Create the panel.
@@ -115,7 +116,7 @@ public class Proglove_kamera extends JPanel {
                             if(fajlneve.startsWith("~$")){}
                             else
                             {               
-                                File excel = new File(hely+ "\\" +fajlok[szamlalo2].getName());
+                                excel = new File(hely+ "\\" +fajlok[szamlalo2].getName());
                                 Workbook workbook = new Workbook();             
                                 workbook.loadFromFile(excel.getAbsolutePath());
                                 Worksheet sheet = workbook.getWorksheets().get(0);
@@ -136,9 +137,12 @@ public class Proglove_kamera extends JPanel {
                                             String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
                                             if(osszefuzve.contains(sheet.getRange().get("A" + szamlalo3).getText().toString()))
                                             {                                                                        
-                                                sheet3.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));
-                                                sheet3.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
-                                                sheet3.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(2));
+                                                /*sheet3.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
+                                                sheet3.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
+                                                sheet3.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(2));*/
+                                                sheet3.getRange().get("A" + cellaszam).setText(sheet.getRange().get("A" + szamlalo3).getText().toString());
+                                                sheet3.getRange().get("B" + cellaszam).setText(sheet.getRange().get("B" + szamlalo3).getText().toString());
+                                                sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("C" + szamlalo3).getText().toString());
                                                 String[] koztes = nev[0].toString().split(" ");
                                                 sheet3.getRange().get("D" + cellaszam).setText(koztes[1]);                                               
                                                 sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[1]));
@@ -175,7 +179,8 @@ public class Proglove_kamera extends JPanel {
                 JOptionPane.showMessageDialog(null, "Mentve az asztalra Jelenléti összesítő.xlsx", "Info", 1);
             } 
             catch (Exception e1) 
-            {              
+            {
+                System.out.println(excel.getAbsolutePath());
                 e1.printStackTrace();
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();

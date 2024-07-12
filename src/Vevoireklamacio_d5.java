@@ -359,6 +359,7 @@ public class Vevoireklamacio_d5 extends JPanel {
             String sql = "";
             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
             {
+                System.out.println(table.getValueAt(szamlalo, 3).toString());
                 if(table.getValueAt(szamlalo, 4).toString().equals(""))
                 {
                     sql = "insert into qualitydb.Vevoireklamacio_elo (Feladat,Felelos,Hatarido,Lezaras_datuma,D,Rek_ID) values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+table.getValueAt(szamlalo, 1).toString() +"', "
