@@ -17,6 +17,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -103,6 +105,7 @@ public class Proglove_kamera extends JPanel {
                 sheet3.getRange().get("C" + cellaszam).setText("Hibajelenség");
                 sheet3.getRange().get("D" + cellaszam).setText("Delivery note");
                 sheet3.getRange().get("E" + cellaszam).setText("Beérkezés ideje");
+                sheet3.getRange().get("F" + cellaszam).setText("Excel dátum");
                 cellaszam++;
                 fajlok = mappa.listFiles(filter);                                                           //a beolvasott adatok egy fájl tömbbe rakja                      
                 for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
@@ -121,38 +124,90 @@ public class Proglove_kamera extends JPanel {
                                 workbook.loadFromFile(excel.getAbsolutePath());
                                 Worksheet sheet = workbook.getWorksheets().get(0);
                                 String[] nev = excel.getName().split("\\.");
-                                //DataTable datatable2 = new DataTable();
-                                //datatable2 = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                                DataTable datatable2 = new DataTable();
+                                datatable2 = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                                 //System.out.println(sheet.getLastRow());
                                 if(datatable.getRows().get(szamlalo).getString(0).equals("")){}
                                 else
                                 {
-                                    for(int szamlalo3 = 1; szamlalo3 < sheet.getLastRow(); szamlalo3++)
+                                    for(int szamlalo3 = 1; szamlalo3 < datatable2.getRows().size(); szamlalo3++)
                                     {
                                         
-                                        if(sheet.getRange().get("A" + szamlalo3).getText().toString().equals("")){}
+                                        if(datatable2.getRows().get(szamlalo3).getString(0).equals("")){}  //sheet.getRange().get("A" + szamlalo3).getText().toString().equals("")
                                         else
                                         {
                                             //System.out.println(sheet.getRange().get("A" + szamlalo3).getText().toString());
-                                            String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
-                                            if(osszefuzve.contains(sheet.getRange().get("A" + szamlalo3).getText().toString()))
-                                            {                                                                        
-                                                /*sheet3.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
-                                                sheet3.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
-                                                sheet3.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(2));*/
+                                            //String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
+                                            if(datatable2.getRows().get(szamlalo3).getString(0).contains(datatable.getRows().get(szamlalo).getString(0)))
+                                            {
+                                                //String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
+                                                //if(osszefuzve.equals(sheet.getRange().get("A" + szamlalo3).getText().toString()))
+                                                //{                                                                        
+                                                //sheet3.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(0));
+                                                //sheet3.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(1));
+                                                //sheet3.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(2));
                                                 sheet3.getRange().get("A" + cellaszam).setText(sheet.getRange().get("A" + szamlalo3).getText().toString());
                                                 sheet3.getRange().get("B" + cellaszam).setText(sheet.getRange().get("B" + szamlalo3).getText().toString());
                                                 sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("C" + szamlalo3).getText().toString());
+                                                try 
+                                                {
+                                                    String input = sheet.getRange().get("F" + szamlalo3).getText().toString().replace(" ", "");
+                                                    input = input.substring(0, input.length() - 1);
+                                                    System.out.println(input);
+                                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                                                    LocalDate date = LocalDate.parse(input, formatter);
+                                                    System.out.println(date);
+                                                    sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("F" + szamlalo3).getText().toString());
+                                                }
+                                                catch (Exception e1) 
+                                                {
+                                                    sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("G" + szamlalo3).getText().toString());
+                                                    System.out.println("A catch rész megy");
+                                                }
+                                                //sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("F" + szamlalo3).getText().toString());
                                                 String[] koztes = nev[0].toString().split(" ");
-                                                sheet3.getRange().get("D" + cellaszam).setText(koztes[1]);                                               
-                                                sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[1]));
-                                                cellaszam++;
+                                                if(koztes.length > 2)
+                                                {
+                                                    sheet3.getRange().get("D" + cellaszam).setText(koztes[2]);                                               
+                                                    sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[2]));
+                                                    cellaszam++;
+                                                }
+                                                else
+                                                {
+                                                    sheet3.getRange().get("D" + cellaszam).setText(koztes[1]);                                               
+                                                    sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[1]));
+                                                    cellaszam++;
+                                                }
+                                                
                                                 System.out.println("Találat");
-                                            }
+                                            }/*
+                                            if(sheet.getRange().get("A" + szamlalo3).getText().toString().contains(datatable.getRows().get(szamlalo).getString(0)))
+                                            {                                                                        
+                                                
+                                                sheet3.getRange().get("A" + cellaszam).setText(sheet.getRange().get("A" + szamlalo3).getText().toString());
+                                                if(sheet.getRange().get("B" + szamlalo3).getText().toString().equals(""))
+                                                {
+                                                    sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("D" + szamlalo3).getText().toString());
+                                                    String[] koztes = nev[0].toString().split(" ");
+                                                    sheet3.getRange().get("D" + cellaszam).setText(koztes[1]);                                               
+                                                    sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[1]));
+                                                }
+                                                else
+                                                {
+                                                    sheet3.getRange().get("B" + cellaszam).setText(sheet.getRange().get("B" + szamlalo3).getText().toString());
+                                                    sheet3.getRange().get("C" + cellaszam).setText(sheet.getRange().get("C" + szamlalo3).getText().toString());
+                                                    String[] koztes = nev[0].toString().split(" ");
+                                                    sheet3.getRange().get("D" + cellaszam).setText(koztes[1]);                                               
+                                                    sheet3.getRange().get("E" + cellaszam).setText(ifs(koztes[1]));
+                                                    cellaszam++;
+                                                }
+                                                sheet3.getRange().get("F" + cellaszam).setText(sheet.getRange().get("F" + szamlalo3).getText().toString());
+                                                System.out.println("Találat");
+                                            }*/
                                         }
                                     }
                                 }
-                                System.out.println("Fájl átnézve");
+                                //System.out.println("Fájl átnézve");
                             }
                                
                         }
@@ -176,7 +231,7 @@ public class Proglove_kamera extends JPanel {
                     output.close();
                 }
                 Foablak.frame.setCursor(null); 
-                JOptionPane.showMessageDialog(null, "Mentve az asztalra Jelenléti összesítő.xlsx", "Info", 1);
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra Proglove kamera.xlsx", "Info", 1);
             } 
             catch (Exception e1) 
             {
@@ -206,7 +261,7 @@ public class Proglove_kamera extends JPanel {
                     + "where 3=3\r\n"
                     + "and RECEIPT_REFERENCE = '"+ keresett +"'");
             if(rs.next())
-            {  
+            {
                 visszatero = rs.getString(1);
             }
               

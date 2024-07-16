@@ -156,12 +156,21 @@ public class Hager_adatok extends JPanel {
                               + " \n"
                               + " where videoton.fkov.panel in ("+ osszefuzott +") and hely = '58' group by hibakod");
                       
+                      String osszefuzott2 = osszefuzott;
                       osszefuzott = "";
                       while(rs.next())
                       {  
                           osszefuzott += ("'" + rs.getString(1) +"',");
                       }
-                      osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                      if(osszefuzott.equals(""))
+                      {
+                          osszefuzott = osszefuzott2;
+                      }
+                      else
+                      {
+                          osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                      }
+                      
                       
                       rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                               + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
