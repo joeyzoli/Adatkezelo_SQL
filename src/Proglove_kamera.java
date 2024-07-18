@@ -124,21 +124,21 @@ public class Proglove_kamera extends JPanel {
                                 workbook.loadFromFile(excel.getAbsolutePath());
                                 Worksheet sheet = workbook.getWorksheets().get(0);
                                 String[] nev = excel.getName().split("\\.");
-                                DataTable datatable2 = new DataTable();
-                                datatable2 = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                                //DataTable datatable2 = new DataTable();
+                                //datatable2 = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                                 //System.out.println(sheet.getLastRow());
                                 if(datatable.getRows().get(szamlalo).getString(0).equals("")){}
                                 else
                                 {
-                                    for(int szamlalo3 = 1; szamlalo3 < datatable2.getRows().size(); szamlalo3++)
+                                    for(int szamlalo3 = 1; szamlalo3 < sheet.getLastRow()+1; szamlalo3++)
                                     {
                                         
-                                        if(datatable2.getRows().get(szamlalo3).getString(0).equals("")){}  //sheet.getRange().get("A" + szamlalo3).getText().toString().equals("")
+                                        if(sheet.getRange().get("A" + szamlalo3).getText().toString().equals("")){}  //sheet.getRange().get("A" + szamlalo3).getText().toString().equals("")
                                         else
                                         {
                                             //System.out.println(sheet.getRange().get("A" + szamlalo3).getText().toString());
                                             //String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
-                                            if(datatable2.getRows().get(szamlalo3).getString(0).contains(datatable.getRows().get(szamlalo).getString(0)))
+                                            if(sheet.getRange().get("A" + szamlalo3).getText().toString().contains(datatable.getRows().get(szamlalo).getString(0)))
                                             {
                                                 //String osszefuzve = "S"+datatable.getRows().get(szamlalo).getString(0);
                                                 //if(osszefuzve.equals(sheet.getRange().get("A" + szamlalo3).getText().toString()))

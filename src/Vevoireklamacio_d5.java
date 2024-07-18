@@ -15,13 +15,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -187,9 +193,9 @@ public class Vevoireklamacio_d5 extends JPanel {
         JButton torles2_gomb = new JButton("Törlés");
         torles2_gomb.addActionListener(new Torles2());
         torles2_gomb.setBounds(1306, 562, 89, 23);
-        add(torles2_gomb);
+        add(torles2_gomb);  
         
-        /*DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         TableColumn dateColumn = table.getColumnModel().getColumn(3);
         dateColumn.setCellEditor(new DatePickerCellEditor(formatter));//DatePickerCellEditor
         DateCellRenderer renderer = new DateCellRenderer();
@@ -210,7 +216,7 @@ public class Vevoireklamacio_d5 extends JPanel {
         table.getColumnModel().getColumn(3).setCellEditor(dateCellPrev);*/
 
     }
-    /*
+    
     public class DateCellRenderer extends DefaultTableCellRenderer {
                
         @Override
@@ -224,8 +230,7 @@ public class Vevoireklamacio_d5 extends JPanel {
             return super.getTableCellRendererComponent(jtable, value, selected, hasFocus, row, column);
 
         }
-    }*/
-    
+    }
     
     class Mentes implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
@@ -353,6 +358,15 @@ public class Vevoireklamacio_d5 extends JPanel {
             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
             {                
                 System.out.println(table.getValueAt(szamlalo, 3).toString());
+                String dateStr = table.getValueAt(szamlalo, 3).toString();
+                DateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+                Date date = formatter.parse(dateStr);
+                System.out.println(date);        
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String formatedDate = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
+                System.out.println("formatedDate : " + formatedDate);  
 
                 if(table.getValueAt(szamlalo, 4).toString().equals(""))
                 {
@@ -424,7 +438,7 @@ public class Vevoireklamacio_d5 extends JPanel {
             ResultSet rs = stmt.getResultSet();
             while(rs.next())
             {
-                modell.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});
+                modell.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});             //rs.getString(6)
             }
             table.setModel(modell);
             

@@ -13,6 +13,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -447,8 +451,12 @@ public class Vevoi_reklmacio_bevitel extends JPanel
     {
         public void actionPerformed(ActionEvent e)
          {
+            Connection conn = null;
+            Statement stmt = null;
             try 
             {
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");                           //kapcsolat létrehozása
+                stmt = (Statement) conn.createStatement();
                 String muszaki;
                 String termeles;
                 if(muszaki_igen.isSelected())
@@ -529,13 +537,33 @@ public class Vevoi_reklmacio_bevitel extends JPanel
                     }
                     else
                     {
-                        for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                        String sql = "select * from qualitydb.Vevoireklamacio_felelosok where Datum = '" + datum_mezo.getText() + "' and Cikkszam = '" + String.valueOf(tipus_box.getSelectedItem()) + "'";
+                        ResultSet rs = stmt.executeQuery(sql);
+                        if(rs.next())
                         {
-                            iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
-                                    String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2,rma_mezo.getText());
+                            for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                            {
+                                iras.ujrair_alapadat(Integer.parseInt(id_mezo.getText()), datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), hibaoka_mezo.getText(),                             
+                                        String.valueOf(hibaokozoja_box.getSelectedItem()), hibaoka2_mezo.getText(), String.valueOf(hibaokozoja2_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(reklamalt_db.getText()), hibaleiras_mezo.getText(), 2,rma_mezo.getText());
+                                System.out.println("Fut a for");
+                            }                          
                         }
+                        else
+                        {
+                            for(int szamlalo = 0; szamlalo < felelos_tabla.getRowCount(); szamlalo++)
+                            {
+                                for(int szamlalo2 = 0; szamlalo2 < zarolt_tabla.getRowCount(); szamlalo2++)
+                                {
+                                    iras.iro_vevoi_felelos(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()), zarolt_tabla.getValueAt(szamlalo2, 1).toString(), Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 2).toString()),
+                                                 Integer.parseInt(zarolt_tabla.getValueAt(szamlalo2, 3).toString()), muszaki, termeles, felelos_tabla.getValueAt(szamlalo, 0).toString(), felelos_tabla.getValueAt(szamlalo, 1).toString());                            
+                                }
+                                iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                            }
+                            iras.iro_vevoi_id(datum_mezo.getText(), String.valueOf(tipus_box.getSelectedItem()));
+                        }
+                        
                         SQA_SQL kapcsolok = new SQA_SQL();
-                        String sql = "update qualitydb.Vevoireklamacio_felelosok set Muszaki_doku = '"+ muszaki +"', Termeles = '"+ termeles +"' where datum = '"+datum_mezo.getText()+"' and Cikkszam = '"+ String.valueOf(tipus_box.getSelectedItem()) +"'";
+                        sql = "update qualitydb.Vevoireklamacio_felelosok set Muszaki_doku = '"+ muszaki +"', Termeles = '"+ termeles +"' where datum = '"+datum_mezo.getText()+"' and Cikkszam = '"+ String.valueOf(tipus_box.getSelectedItem()) +"'";
                         kapcsolok.mindenes(sql);
                     }
                     

@@ -505,6 +505,7 @@ public class Db_iro
         }
         else
         {
+            
             String query = "update qualitydb.Vevoireklamacio_felelosok set  Talalt_db = '"+ talalt +"' where Datum = '" + datum + "' and Cikkszam = '" + cikkszam + "' and Zarolt = '" + zarolt + "'";
             stmt.executeUpdate(query);
             
