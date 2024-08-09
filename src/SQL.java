@@ -3494,9 +3494,9 @@ public class SQL
             stmt2 = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
             String sql = "select Vevo,\n"
-                    + " sum(Beerkezett),\n"
-                    + " sum(if(raktar_db is null, 0, raktar_db)),\n"
-                    + " sum(if(selejt is null, 0, selejt)) \n"
+                    + " cast(sum(Beerkezett) as decimal(15,0)),\n"
+                    + " cast(sum(if(raktar_db is null or raktar_db = '', 0, raktar_db)) as decimal(15,0)),\n"
+                    + " cast(sum(if(selejt is null or selejt = '', 0, selejt)) as decimal(15,0))  \n"
                     + " from qualitydb.Retour \n"
                     + " where Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' and Vagy = 'Javítás' "
                             + "and not Vevo ='Formlabs' and not Vevo = 'Techem' and not Vevo = 'EBM' and not Vevo = 'Innogy' and not Vevo = 'Alstom France' \n"
@@ -3566,7 +3566,7 @@ public class SQL
             
             String sql2 = "select Vevo,\n"
                     + "sum(Beerkezett),\n"
-                    + "AVG(if(Raktar_datum is null,DATEDIFF(now(), Datum),DATEDIFF(Raktar_datum, Datum))) AS 'Kulonbseg'       \n"
+                    + "AVG(if(Raktar_datum is null or Raktar_datum = '',DATEDIFF(now(), Datum),DATEDIFF(Raktar_datum, Datum))) AS 'Kulonbseg'       \n"
                     + "from qualitydb.Retour\n"
                     + "where 3 = 3 and Datum >= '"+ datumtol +"' and Datum <= '"+ datumig +"' and Vagy = 'Javítás' \n"
                             + "and not Vevo ='Formlabs' and not Vevo = 'Techem' and not Vevo = 'EBM' and not Vevo = 'Innogy' and not Vevo = 'Alstom France' \n"

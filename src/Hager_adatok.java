@@ -494,8 +494,8 @@ public class Hager_adatok extends JPanel {
                     ResultSet rs2 = null;
                     
                     ResultSet rs = stmt2.executeQuery("Select WAIV_DEV_REJ_NO  \r\n"
-                            + "from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                            + "where PART_NO in ('900A16') and QTY_ONHAND > 0 and WAIV_DEV_REJ_NO not like '*'");
+                            + "from ifsapp.INVENTORY_PART_IN_STOCK_UIV \r\n"
+                            + "where PART_NO in ("+ osszefuzott_cikk +") and QTY_ONHAND > 0 and WAIV_DEV_REJ_NO not like '*'");
                     String osszefuzott = "";
                     while(rs.next())
                     {  

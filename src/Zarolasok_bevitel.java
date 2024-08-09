@@ -1137,7 +1137,8 @@ public class Zarolasok_bevitel extends JPanel {
                     String hibauzenet = e1.toString();
                     Email hibakuldes = new Email();
                     hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu",this.getClass().getSimpleName()+" "+ hibauzenet);
-                    JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                    JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet                    
+                    return;
                 }
                 Foablak.frame.setCursor(null);                                                                                         //egér mutató alaphelyzetbe állítása
             

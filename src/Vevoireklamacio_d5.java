@@ -197,9 +197,9 @@ public class Vevoireklamacio_d5 extends JPanel {
         
         DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         TableColumn dateColumn = table.getColumnModel().getColumn(3);
-        dateColumn.setCellEditor(new DatePickerCellEditor(formatter));//DatePickerCellEditor
+        dateColumn.setCellEditor(new DatePickerCellEditor(formatter));      //DatePickerCellEditor
         DateCellRenderer renderer = new DateCellRenderer();
-        table.getColumnModel().getColumn(3).setCellRenderer(renderer);       
+        table.getColumnModel().getColumn(3).setCellRenderer(renderer);
         table.setDefaultRenderer(Date.class, renderer);
         /*DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         final DatePickerCellEditor dateCellPrev = new DatePickerCellEditor(formatter);

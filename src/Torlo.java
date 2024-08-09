@@ -66,7 +66,7 @@ public class Torlo extends JPanel
 		
 		JButton gyartas_torles = new JButton("Törlés");
 		gyartas_torles.setBounds(412, 163, 77, 23);
-		gyartas_torles.addActionListener(new Torles_gyartas());
+		//gyartas_torles.addActionListener(new Torles_gyartas());
 		
 		JLabel lblNewLabel_2 = new JLabel("CSV gyártó");
 		lblNewLabel_2.setBounds(132, 236, 83, 14);
@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Szeriaszam_gyarto());
+		feltolt.addActionListener(new FR1200());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -995,8 +995,8 @@ public class Torlo extends JPanel
             }                                         
          }
     }
-	
-	class Lekerdezes_IFS implements ActionListener                                                                                      //csv-t gyárt a gomb
+	/////////////////////////////////////////////////////////////////////IFS keresés ////////////////////////////////////////////////
+	class Lekerdezes_IFS implements ActionListener                                                                                      
     {
         public void actionPerformed(ActionEvent e)
          {
@@ -1066,8 +1066,12 @@ public class Torlo extends JPanel
                           + "and kulso.TRANSACTION_CODE = 'INVM-IN'\n"
                           + "and kulso.location_no in('AEL00','AEL00-B','PRGL-K','UGYUJTO','UGYUJTO-B','UKEPRO','UPCB','UPRGL')");
                   /*ResultSet rs = stmt.executeQuery("select part_no, manufacturer_no, manu_part_no, user_changed\n"
-                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok");*/
+                          + "from ifsapp.part_manu_part_no_cfv nyilatkozatok");
                   
+                  ResultSet rs = stmt.executeQuery("select MANUF_DATE , TRACY_SERIAL_NO\n"
+                          + "from ifsapp.C_OPER_TRACY_OVW\n"
+                          + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
+                          + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
                   ResultSet rs = stmt.executeQuery("select MANUF_DATE , TRACY_SERIAL_NO\n"
                           + "from ifsapp.C_OPER_TRACY_OVW\n"
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
@@ -2865,6 +2869,215 @@ public class Torlo extends JPanel
 
                workbook.saveToFile(excelfile1, ExcelVersion.Version2016);
                Foablak.frame.setCursor(null);                                                      
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+	
+	class FR1200 implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+
+            try 
+            {
+                Connection con = null;
+                //Connection con2 = null;
+                Statement stmt = null;
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                try
+                {
+                    Workbook workbook = new Workbook();
+                    Worksheet sheet = workbook.getWorksheets().get(0);
+                    
+                    int cellaszam = 1;
+                    sheet.getRange().get("A" + cellaszam).setText("Szériaszám");
+                    sheet.getRange().get("B" + cellaszam).setText("BS kiesés ideje");
+                    sheet.getRange().get("C" + cellaszam).setText("Teszt szám");
+                    sheet.getRange().get("D" + cellaszam).setText("Failtestname");
+                    sheet.getRange().get("E" + cellaszam).setText("Error");
+                    sheet.getRange().get("F" + cellaszam).setText("Javítás ideje");
+                    sheet.getRange().get("G" + cellaszam).setText("Javított hibakód");
+                    sheet.getRange().get("H" + cellaszam).setText("Pozíció");
+                    sheet.getRange().get("I" + cellaszam).setText("Retest ideje");
+                    sheet.getRange().get("J" + cellaszam).setText("Eredmény");
+                    cellaszam++;
+                    ResultSet rs = null;
+                    JdbcAdapter jdbcAdapter;
+                    DataTable datatable;
+                    //Registering the Driver
+                    DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa   
+                    //Getting the connection
+                    String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+                   
+                    con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
+
+                        //System.out.println(hanyszor);
+                        String sql = "SELECT panel \n"
+                                + "FROM videoton.fkov \n"
+                                + "where ido >= '2024.03.11' and ido < '2024.06.13'\n"
+                                + "and hely = '99' \n"
+                                + "and ok = '0'\n"
+                                + "group by panel";            //panelszam       
+     
+                        //con2 = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                        //String sql3 = "select Panelszam from qualitydb.Beolvasott_panelek where 3 = 3";
+                        
+                        Statement cstmt = con.createStatement(
+                                ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                ResultSet.CONCUR_UPDATABLE);
+
+                        cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                        rs = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+                        datatable = new DataTable();
+                        jdbcAdapter = new JdbcAdapter();
+                        new JdbcAdapter(); 
+                        jdbcAdapter.fillDataTable(datatable, rs);
+                        // datatable.getRows().get(szamlalo).getString(0)
+                        
+                        System.out.println("Datatable mérete: "+ datatable.getRows().size());
+                        int javitva = 0;
+                        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+                        {
+                            sql = "select  nev, videoton.fkov.*\n"
+                                    + "from videoton.fkov\n"
+                                    + " inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
+                                    + "where 3=3\n"
+                                    + "and panel = '"+ datatable.getRows().get(szamlalo).getString(0) +"' \n"
+                                    + "and ido > '2024.03.10' and ido < '2024.06.13' \n"
+                                    + "order by ido asc"; 
+                            
+                            cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                            rs = cstmt.getResultSet(); 
+                            javitva = 0;
+                            while(rs.next())
+                            {
+                                if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) == 0)
+                                {
+                                    sheet.getRange().get("A" + cellaszam).setText(rs.getString(5));
+                                    sheet.getRange().get("B" + cellaszam).setText(rs.getString(4));
+                                    sheet.getRange().get("C" + cellaszam).setText(rs.getString(15));
+                                    sheet.getRange().get("D" + cellaszam).setText(rs.getString(18));
+                                    sheet.getRange().get("E" + cellaszam).setText(rs.getString(19));
+                                    
+                                    while(rs.next())
+                                    {
+                                        //System.out.println("Fut a belső while");
+                                        if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) == 0)
+                                        {                                            
+                                            sheet.getRange().get("D" + cellaszam).setText(rs.getString(18));
+                                            sheet.getRange().get("E" + cellaszam).setText(rs.getString(19));
+                                        }
+                                        else if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) != 0)
+                                        {
+                                            if(javitva == 0)
+                                            {
+                                                sheet.getRange().get("J" + cellaszam).setText("Sikeres retest javítás nélkül");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(rs.getString(1).contains("Javítás"))
+                                            {
+                                                sheet.getRange().get("F" + cellaszam).setText(rs.getString(4));
+                                                sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                                sheet.getRange().get("H" + cellaszam).setText(rs.getString(14));
+                                                
+                                                int volte = 0;
+                                                while(rs.next())
+                                                {
+                                                    if(rs.getString(1).contains("Javítás"))
+                                                    {
+                                                        sheet.getRange().get("F" + cellaszam).setText(rs.getString(4));
+                                                        sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                                        sheet.getRange().get("H" + cellaszam).setText(rs.getString(14));
+                                                    }
+                                                    if(rs.getString(1).equals("AVM FR1200AX BS"))
+                                                    {
+                                                        sheet.getRange().get("I" + cellaszam).setText(rs.getString(4));
+                                                        if(rs.getInt(6) == 0)
+                                                        {
+                                                            sheet.getRange().get("J" + cellaszam).setText("Sikertelen");
+                                                        }
+                                                        else
+                                                        {
+                                                            sheet.getRange().get("J" + cellaszam).setText("Sikeres");                                                               
+                                                        }
+                                                        volte = 1;
+                                                        javitva = 1;                                                        
+                                                    }
+                                                    
+                                                }
+                                                if(volte == 0)
+                                                {
+                                                    sheet.getRange().get("J" + cellaszam).setText("Nem volt még retest");
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    cellaszam++;
+                                }
+                                System.out.println("Fut a fő while és a sorszám pedig: "+ szamlalo + " a szériaszám pedig: " + datatable.getRows().get(szamlalo).getString(0));
+                            }
+                            //System.out.println(szamlalo);
+                        }       
+                        con.close();
+                        
+                        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                        sheet.getAllocatedRange().autoFitColumns();
+                        sheet.getAllocatedRange().autoFitRows();
+                        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                        
+                        String hova = System.getProperty("user.home") + "\\Desktop\\FR1200AX BS kiesések.xlsx";
+                        workbook.saveToFile(hova, ExcelVersion.Version2016);
+                        FileInputStream fileStream = new FileInputStream(hova);
+                        try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                        {
+                            for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                            {    
+                                workbook3.removeSheetAt(i); 
+                            }      
+                            FileOutputStream output = new FileOutputStream(hova);
+                            workbook3.write(output);
+                            output.close();
+                        }
+                        Foablak.frame.setCursor(null);
+                        JOptionPane.showMessageDialog(null, "Mentve az asztalra", "Info", 1);
+                }
+                catch(Exception e1)
+                {
+                    e1.printStackTrace();
+                    String hibauzenet2 = e1.toString();
+                    JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+                }
+                finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+                {
+                    try 
+                    {
+                      if (stmt != null)
+                         con.close();
+                    } 
+                    catch (SQLException se){}
+                    try 
+                    {
+                      if (con != null)
+                         con.close();
+                    } 
+                    catch (SQLException se) 
+                    {
+                      se.printStackTrace();
+                    }  
+                } 
+                                                                     
             }             
             catch (Exception e1) 
             {

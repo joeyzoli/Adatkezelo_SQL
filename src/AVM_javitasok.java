@@ -188,8 +188,11 @@ public class AVM_javitasok extends JPanel {
                     sheet.getRange().get("L" + cellaszam).setText("Pozíció");
                     sheet.getRange().get("M" + cellaszam).setText("Hibakód");
                     cellaszam++;
+                    int szam = 1;
                     while(rs.next())
                     {
+                        System.out.println("Fut a while" + szam);
+                        szam++;
                         sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
                         if(rs.getString(1).indexOf(",") > 0)
                         {

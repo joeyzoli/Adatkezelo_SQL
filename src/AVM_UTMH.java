@@ -174,7 +174,7 @@ public class AVM_UTMH extends JPanel {
                                + "from (select videoton.fkov.panel, max(ido) as 'Datum' from videoton.fkov "
                                + "     where videoton.fkov.panel in ("+ osszefuzott +") group by videoton.fkov.panel) belso, videoton.fkov \n"
                                + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                               + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum");
+                               + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum and videoton.fkovsor.nev not like '%Csomagolás%'");
                        System.out.println("Lefutott");
                        while(rs2.next())
                        {                        
