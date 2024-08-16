@@ -18,7 +18,7 @@ public class Vevoireklamacio_d6 extends JPanel {
      * Create the panel.
      */
     private JTextArea megerosites_mezo;
-    private JTextField textField;
+    private JTextField lezaras_mezo;
     
     public Vevoireklamacio_d6() {
         setLayout(null);
@@ -40,10 +40,11 @@ public class Vevoireklamacio_d6 extends JPanel {
         lblNewLabel_1.setBounds(1217, 90, 65, 14);
         add(lblNewLabel_1);
         
-        textField = new JTextField();
-        textField.setBounds(1208, 125, 86, 20);
-        add(textField);
-        textField.setColumns(10);
+        lezaras_mezo = new JTextField();
+        lezaras_mezo.setBounds(1208, 125, 86, 20);
+        lezaras_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        add(lezaras_mezo);
+        lezaras_mezo.setColumns(10);
 
     }
     
@@ -52,7 +53,8 @@ public class Vevoireklamacio_d6 extends JPanel {
         try 
         {
             SQA_SQL ment = new SQA_SQL();
-            String sql = "update qualitydb.Vevoireklamacio_alap set Hatekonysag = '"+ megerosites_mezo.getText() +"'";           
+            String sql = "update qualitydb.Vevoireklamacio_alap set Hatekonysag = '"+ megerosites_mezo.getText() +"',"
+                    + "D6_lezaras = '"+ lezaras_mezo.getText() +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";           
             ment.mindenes(sql);
         } 
         catch (Exception e1) 
@@ -83,12 +85,15 @@ public class Vevoireklamacio_d6 extends JPanel {
         }
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = (Statement) conn.createStatement();
-        String sql = "select Hatekonysag from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        String sql = "select Hatekonysag, D6_lezaras from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
         stmt.execute(sql);
         ResultSet rs = stmt.getResultSet();
+        megerosites_mezo.setText("");
+        lezaras_mezo.setText("");
         if(rs.next())
         {           
             megerosites_mezo.setText(rs.getString(1));
+            lezaras_mezo.setText(rs.getString(2));
         }
         stmt.close();
         conn.close();                

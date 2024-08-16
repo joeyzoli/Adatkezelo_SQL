@@ -228,6 +228,66 @@ public class SQA_SQL {
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
     
+    public int mindenes2(String SQL)
+    {
+        Connection conn = null;
+        Statement stmt = null;
+        int szam = 0;
+        try 
+        {
+           try 
+           {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+           } 
+           catch (Exception e) 
+           {
+              System.out.println(e);
+              String hibauzenet2 = e.toString();
+              JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+        }
+        conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+        stmt = (Statement) conn.createStatement();
+        stmt.executeUpdate(SQL);
+        
+        stmt.close();
+        conn.close();
+                
+        }          
+        catch (Exception e) 
+        {
+            szam = 1;
+            e.printStackTrace();
+            String hibauzenet = e.toString();
+            Email hibakuldes = new Email();
+            hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+        } 
+        finally 
+        {
+           try 
+           {
+              if (stmt != null)
+                 conn.close();
+           } 
+           catch (SQLException se) {}
+           try 
+           {
+              if (conn != null)
+                 conn.close();
+           } 
+           catch (SQLException se) 
+           {
+               se.printStackTrace();
+               String hibauzenet = se.toString();
+               Email hibakuldes = new Email();
+               hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+               JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+           }  
+        }
+        return szam;
+        //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
     public void sqa_email()
     {
         Connection conn = null;

@@ -100,6 +100,7 @@ public class Foablak extends JFrame
 	private Loxone_parositas lox_parok;
 	private AVM_UTMH utmh;
 	private Hager_adatok hager_adat;
+	private Nyilatkozatbekero nyilatkozat;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -442,6 +443,10 @@ public class Foablak extends JFrame
 		
 		JMenuItem fajl_atiras = new JMenuItem("Fájl átírás");
 		fajl_atiras.addActionListener(new Panelcsere_Fajlatiras());
+		
+		JMenuItem nyilatkozatok = new JMenuItem("Nyilatkozatbekérő");
+		nyilatkozatok.addActionListener(new Panelcsere_Nyilatkozatok());
+		egyeb.add(nyilatkozatok);
 		egyeb.add(fajl_atiras);
 		
 		JMenuItem csv_gyart = new JMenuItem("CSV készítő");
@@ -1227,6 +1232,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_Nyilatkozatok implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            nyilatkozat = new Nyilatkozatbekero();
+            JScrollPane ablak = new JScrollPane(nyilatkozat);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1349,7 +1365,7 @@ public class Foablak extends JFrame
                 SQA_SQL sqa = new SQA_SQL();
                 sqa.sqa_email();
                 sqa.retour_email();
-                //sqa.uj_rendelesek();
+                sqa.uj_rendelesek();
                 System.out.println("Lefutott az SQA email");
                 sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
             }

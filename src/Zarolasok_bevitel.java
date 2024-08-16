@@ -877,8 +877,7 @@ public class Zarolasok_bevitel extends JPanel {
                             {
                                 if(technikus_csekk.isSelected())
                                 {
-                                    technikus = "Igen";
-                                    
+                                    technikus = "Igen";                                    
                                 }
                                 sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
@@ -928,30 +927,11 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                                 
                             }
-                            lekerdezes.mindenes(sql);
-                            eszleleshelye_mezo.setText("");
-                            muszak_mezo.setText("");
-                            mernok_mezo.setText("");
-                            zaroltdb_mezo.setText("0");
-                            zarolas_helye.setText("");
-                            zarolasoka_mezo.setText("");
-                            intezkedes_mezo.setText("");
-                            datum_mezo.setText("");
-                            sorszam_mezo.setText("");
-                            eredmeny_mezo.setText("");
-                            ujradatum_mezo.setText("");
-                            ido_mezo.setText("");
-                            technikus_csekk.setSelected(false);
-                            felelos_mezo.setText("");
-                            gyokerok_mezo.setText("");
-                            gyokerintezkedes_mezo.setText("");
-                            b2_mezo.setText("");
-                            visszaellenorzes_mezo.setText("");
-                            meszam_mezo.setText("");
-                            projekt_box.setSelectedIndex(1);
-                            tipus_box.setSelectedIndex(1);
-                            zarolta_box.setSelectedIndex(1);
-                            ellenorzott_mezo.setText("0");
+                            if(lekerdezes.mindenes2(sql) == 0)
+                            {
+                                visszaallit();
+                            }
+                            
                             
                             int kovetkezo = Integer.parseInt(id_mezo.getText());
                             id_mezo.setText(String.valueOf(kovetkezo + 1));
@@ -1015,30 +995,11 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                                 
                             }
-                            lekerdezes.mindenes(sql);
-                            eszleleshelye_mezo.setText("");
-                            muszak_mezo.setText("");
-                            mernok_mezo.setText("");
-                            zaroltdb_mezo.setText("0");
-                            zarolas_helye.setText("");
-                            zarolasoka_mezo.setText("");
-                            intezkedes_mezo.setText("");
-                            datum_mezo.setText("");
-                            sorszam_mezo.setText("");
-                            eredmeny_mezo.setText("");
-                            ujradatum_mezo.setText("");
-                            ido_mezo.setText("");
-                            technikus_csekk.setSelected(false);
-                            felelos_mezo.setText("");
-                            gyokerok_mezo.setText("");
-                            gyokerintezkedes_mezo.setText("");
-                            b2_mezo.setText("");
-                            visszaellenorzes_mezo.setText("");
-                            meszam_mezo.setText("");
-                            projekt_box.setSelectedIndex(1);
-                            tipus_box.setSelectedIndex(1);
-                            zarolta_box.setSelectedIndex(1);
-                            ellenorzott_mezo.setText("0");
+                            if(lekerdezes.mindenes2(sql) == 0)
+                            {
+                                visszaallit();
+                            }
+                            
                             
                             int kovetkezo = Integer.parseInt(id_mezo.getText());
                             id_mezo.setText(String.valueOf(kovetkezo + 1));
@@ -1101,30 +1062,10 @@ public class Zarolasok_bevitel extends JPanel {
                                             + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                             
                         }
-                        lekerdezes.mindenes(sql);
-                        eszleleshelye_mezo.setText("");
-                        muszak_mezo.setText("");
-                        mernok_mezo.setText("");
-                        zaroltdb_mezo.setText("0");
-                        zarolas_helye.setText("");
-                        zarolasoka_mezo.setText("");
-                        intezkedes_mezo.setText("");
-                        datum_mezo.setText("");
-                        sorszam_mezo.setText("");
-                        eredmeny_mezo.setText("");
-                        ujradatum_mezo.setText("");
-                        ido_mezo.setText("");
-                        technikus_csekk.setSelected(false);
-                        felelos_mezo.setText("");
-                        gyokerok_mezo.setText("");
-                        gyokerintezkedes_mezo.setText("");
-                        b2_mezo.setText("");
-                        visszaellenorzes_mezo.setText("");
-                        meszam_mezo.setText("");
-                        projekt_box.setSelectedIndex(1);
-                        tipus_box.setSelectedIndex(1);
-                        zarolta_box.setSelectedIndex(1);
-                        ellenorzott_mezo.setText("0");
+                        if(lekerdezes.mindenes2(sql) == 0)
+                        {
+                            visszaallit();
+                        }                        
                         
                         int kovetkezo = Integer.parseInt(id_mezo.getText());
                         id_mezo.setText(String.valueOf(kovetkezo + 1));
@@ -1144,6 +1085,33 @@ public class Zarolasok_bevitel extends JPanel {
             
            
          }
+    }
+    
+    private void visszaallit()
+    {
+        eszleleshelye_mezo.setText("");
+        muszak_mezo.setText("");
+        mernok_mezo.setText("");
+        zaroltdb_mezo.setText("0");
+        zarolas_helye.setText("");
+        zarolasoka_mezo.setText("");
+        intezkedes_mezo.setText("");
+        datum_mezo.setText("");
+        sorszam_mezo.setText("");
+        eredmeny_mezo.setText("");
+        ujradatum_mezo.setText("");
+        ido_mezo.setText("");
+        technikus_csekk.setSelected(false);
+        felelos_mezo.setText("");
+        gyokerok_mezo.setText("");
+        gyokerintezkedes_mezo.setText("");
+        b2_mezo.setText("");
+        visszaellenorzes_mezo.setText("");
+        meszam_mezo.setText("");
+        projekt_box.setSelectedIndex(1);
+        tipus_box.setSelectedIndex(1);
+        zarolta_box.setSelectedIndex(1);
+        ellenorzott_mezo.setText("0");
     }
     
     public void visszatolt(String id)

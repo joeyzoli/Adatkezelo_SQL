@@ -2320,8 +2320,7 @@ public class SQL
         String intezkedes = "";
         String felelos = "";
         int sor = 2;
-        sheet2.getRange().get("R" + 1).setText("Intézkedés");
-        sheet2.getRange().get("S" + 1).setText("Felelős");
+        
         for(int a = 0; a < minden.size(); a++)
         {
             for(int b = 0; b < datatable7.getRows().size(); b++)

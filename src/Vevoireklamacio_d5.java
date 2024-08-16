@@ -17,17 +17,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
-import org.jdesktop.swingx.table.DatePickerCellEditor;
 
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -195,7 +191,7 @@ public class Vevoireklamacio_d5 extends JPanel {
         torles2_gomb.setBounds(1306, 562, 89, 23);
         add(torles2_gomb);  
         
-        DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        /*DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         TableColumn dateColumn = table.getColumnModel().getColumn(3);
         dateColumn.setCellEditor(new DatePickerCellEditor(formatter));      //DatePickerCellEditor
         DateCellRenderer renderer = new DateCellRenderer();
@@ -357,7 +353,7 @@ public class Vevoireklamacio_d5 extends JPanel {
             String sql = "";
             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
             {                
-                System.out.println(table.getValueAt(szamlalo, 3).toString());
+                /*System.out.println(table.getValueAt(szamlalo, 3).toString());
                 String dateStr = table.getValueAt(szamlalo, 3).toString();
                 DateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
                 Date date = formatter.parse(dateStr);
@@ -367,7 +363,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 cal.setTime(date);
                 String formatedDate = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
                 System.out.println("formatedDate : " + formatedDate);  
-
+                */
                 if(table.getValueAt(szamlalo, 4).toString().equals(""))
                 {
                     sql = "insert into qualitydb.Vevoireklamacio_elo (Feladat,Felelos,Hatarido,Lezaras_datuma,D,Rek_ID) values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+table.getValueAt(szamlalo, 1).toString() +"', "
@@ -543,7 +539,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 }
                 else
                 {
-                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    if(table2.getValueAt(sor, 4).toString().equals(""))
                     {
                         modell2.removeRow(sor);
                     }

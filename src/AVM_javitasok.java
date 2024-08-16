@@ -172,6 +172,7 @@ public class AVM_javitasok extends JPanel {
                     ResultSet rs = stmt.getResultSet();
                     ResultSet rs2 = null;
                     Workbook workbook = new Workbook();
+                    workbook.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet = workbook.getWorksheets().get(0);
                     int cellaszam = 1;
                     sheet.getRange().get("A" + cellaszam).setText("Javítási bevétel");
@@ -284,7 +285,7 @@ public class AVM_javitasok extends JPanel {
                         {
                             for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
                             {    
-                                workbook3.removeSheetAt(i); 
+                                workbook3.removeSheetAt(i);
                             }      
                             FileOutputStream output = new FileOutputStream(hova);
                             workbook3.write(output);

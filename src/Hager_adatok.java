@@ -90,8 +90,9 @@ public class Hager_adatok extends JPanel {
                     }
                     osszefuzott_me = osszefuzott_me.substring(0, osszefuzott_me.length() - 1);
                     Workbook workbook2 = new Workbook();
-                    Workbook workbook4 = new Workbook();
                     workbook2.setVersion(ExcelVersion.Version2016);
+                    Workbook workbook4 = new Workbook();
+                    workbook4.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet2 = workbook2.getWorksheets().get(0);
                     Worksheet sheet3 = workbook2.getWorksheets().get(1);
                     Worksheet sheet4 = workbook2.getWorksheets().get(2);
@@ -347,7 +348,8 @@ public class Hager_adatok extends JPanel {
                               + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott +")");
                       
                       while(rs.next())
-                      {                        
+                      {
+                          System.out.println(rs.getString(1));
                           sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
                           sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
                           sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
@@ -501,7 +503,21 @@ public class Hager_adatok extends JPanel {
                     {  
                         osszefuzott += ("'" + rs.getString(1) +"',");
                     }
-                    osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                    try
+                    {  
+                        osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                        
+                        
+                     
+                      
+                      Foablak.frame.setCursor(null);  
+                    }
+                    catch (Exception e1) 
+                    {                        
+                        JOptionPane.showMessageDialog(null, "Nincs még ME számmal rendelkező készlet!", "Hiba üzenet", 2);
+                        Foablak.frame.setCursor(null);//kiírja a hibaüzenetet
+                        return;
+                    }
                     
                     rs = stmt.executeQuery("SELECT panel FROM videoton.csomagol where csomag in ("+ osszefuzott +")");
                     
@@ -535,7 +551,7 @@ public class Hager_adatok extends JPanel {
                         if(rs2.next())
                         {   
                             sheet2.getRange().get("A" + cellaszam).setText(rs2.getString(1));
-                            sheet2.getRange().get("B" + cellaszam).setText(rs2.getString(2));
+                            sheet2.getRange().get("B" + cellaszam).setNumberValue(rs2.getInt(2));
                             sheet2.getRange().get("C" + cellaszam).setText(rs2.getString(3));
                             System.out.println("Szériaszám beírva: " + cellaszam);
                             cellaszam++;                       
@@ -569,7 +585,7 @@ public class Hager_adatok extends JPanel {
                             workbook3.write(output);
                             output.close();
                         }
-                        JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Hager adatok.xlsx néven!", "Info", 1); 
+                        JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Hager raktárban adatok.xlsx néven!", "Info", 1); 
                         con.close();
                     } 
                     catch (Exception e1) 
@@ -581,10 +597,9 @@ public class Hager_adatok extends JPanel {
                         hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                         JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
                     }
-                 
-                  }
-                  Foablak.frame.setCursor(null);  
-                  }           
+                }
+                
+            }
             catch(Exception e1)
             { 
                 System.out.println(e1);

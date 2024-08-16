@@ -128,12 +128,12 @@ public class Gyartasi_adatok extends JPanel
 		mintanagysag.setText("0");
 		mintanagysag.setColumns(10);
 		
-		JLabel lblNewLabel_9 = new JLabel("PCB sorszám");
+		JLabel lblNewLabel_9 = new JLabel("Megjegyzés");
 		lblNewLabel_9.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_9.setBounds(413, 314, 76, 14);
 		
 		pcb_sorszam = new JTextField();
-		pcb_sorszam.setBounds(499, 311, 86, 20);
+		pcb_sorszam.setBounds(499, 311, 521, 20);
 		pcb_sorszam.setColumns(10);
 		
 		JLabel lblNewLabel_10 = new JLabel("Hibakód");
