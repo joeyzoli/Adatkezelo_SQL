@@ -309,7 +309,7 @@ public class SQA_SQL {
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select id, inditotta,Statusz, Statusz_ido, DATEDIFF(now(), Statusz_ido) as 'Kulonbseg'\r\n"
-                + ", Ertesitve, Lezaras_ido from qualitydb.SQA_reklamaciok\r\n"
+                + ", Ertesitve, Lezaras_ido, DATEDIFF(now(), Datum) as 'Nyitva' from qualitydb.SQA_reklamaciok\r\n"
                 + "where 3 = 3";                                        
         stmt.execute(sql);      
         resultSet = stmt.getResultSet();
@@ -324,7 +324,14 @@ public class SQA_SQL {
                     {
                         if(resultSet.getString(7) == null)
                         {
-                            cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                            if(resultSet.getInt(8) > 30)
+                            {
+                                cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+",schweighardt.robert@veas.videoton.hu" +";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                            }
+                            else
+                            {
+                                cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2) +";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                            }
                         }
                     }                   
                 }

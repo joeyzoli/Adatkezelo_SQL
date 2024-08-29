@@ -1379,7 +1379,7 @@ public class Foablak extends JFrame
                 modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
                 sqa.mindenes(modosit);
                 
-                if(nap == 3)
+                /*if(nap == 3)
                 {
                     if(sqa.tombvissza_sajat("select Lefutott from qualitydb.Hetfo where id = '1'")[0].equals("igen")) { }
                     else
@@ -1396,7 +1396,7 @@ public class Foablak extends JFrame
                 {
                     sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'nem' where ID = '1'");
                 }
-                
+                */
                 //modosit = "update qualitydb.Uj_rendelesek set  Ertesitve = 'nem' where id = 1";
                 //sqa.mindenes(modosit);
                 //System.out.println("Ma nem fut le az SQA email rész");

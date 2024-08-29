@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Aron());
+		feltolt.addActionListener(new Norma());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -3301,6 +3301,102 @@ public class Torlo extends JPanel
                   }    */                   
                   JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
                   con.close();  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+            }  
+                               
+         }
+    }
+	
+	class Norma implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                //DataTable datatable = new DataTable();
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Normaidő cikkentént.xlsx";
+
+                  Workbook workbook = new Workbook();
+                  Workbook workbook2 = new Workbook();
+                  workbook.setVersion(ExcelVersion.Version2016);
+                  workbook.loadFromFile(System.getProperty("user.home") + "\\Desktop\\QuickReport-45895-20240828143943.xlsx");
+                  Worksheet sheet = workbook.getWorksheets().get(0);
+                  DataTable datatable = new DataTable();
+                  Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                  //DataTable datatable2 = new DataTable();
+                  datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                  //datatable2 = sheet2.exportDataTable(sheet2.getAllocatedRange(), false, false );
+                  int cellaszam = 1;
+                  sheet2.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet2.getRange().get("B" + cellaszam).setText("Megnevezés");
+                  sheet2.getRange().get("C" + cellaszam).setText("CCS2");
+                  sheet2.getRange().get("D" + cellaszam).setText("Kiszállítás ideje");
+                  sheet2.getRange().get("E" + cellaszam).setText("KPISMDQTY");
+                  sheet2.getRange().get("F" + cellaszam).setText("KPIASSTIME");
+                  cellaszam++;
+                  
+                  for(int szamlalo = 1; szamlalo < datatable.getRows().size();szamlalo++)
+                  {
+                      for(int szamlalo2 = szamlalo+1; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                      {
+                          if(datatable.getRows().get(szamlalo).getString(0).equals(datatable.getRows().get(szamlalo2).getString(0)) 
+                                  && datatable.getRows().get(szamlalo).getString(1).equals(datatable.getRows().get(szamlalo2).getString(1))
+                                  && datatable.getRows().get(szamlalo).getString(2).equals(datatable.getRows().get(szamlalo2).getString(2))
+                                  && datatable.getRows().get(szamlalo).getString(3).equals(datatable.getRows().get(szamlalo2).getString(3)))
+                          {
+                              sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
+                              sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
+                              sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
+                              sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                              if(szamlalo < 5524)
+                              if(datatable.getRows().get(szamlalo).getString(6).equals("KPISMDQTY"))
+                              {
+                                  sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
+                                  sheet2.getRange().get("F" + cellaszam).setText(datatable.getRows().get(szamlalo+1).getString(7));
+                              }
+                              else
+                              {
+                                  sheet2.getRange().get("F" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
+                                  sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo+1).getString(7));
+                              }
+                              
+                          break;    
+                          }
+                          System.out.println(szamlalo2);
+                      }
+                      cellaszam++;
+                      System.out.println("Fut a külső for");
+                  }
+                  sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:J1"));
+                  sheet2.getAllocatedRange().autoFitColumns();
+                  sheet2.getAllocatedRange().autoFitRows();
+                  
+                  sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook3.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook3.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1);  
                   Foablak.frame.setCursor(null);  
                   }           
             catch(Exception e1)

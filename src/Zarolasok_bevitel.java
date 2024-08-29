@@ -20,9 +20,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JTextField;
+
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 
 public class Zarolasok_bevitel extends JPanel {
@@ -56,7 +62,9 @@ public class Zarolasok_bevitel extends JPanel {
     private JTextField ellenorzott_mezo;
     private JComboBox<String> hibacsoport_box;
     private JComboBox<String> hibatipus_box;
-    //private static final Object zar_1 = new Object();
+    private Workbook workbook = new Workbook();
+    private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
+    private Kivalaszt valaszto = new Kivalaszt();
 
     /**
      * Create the panel.
@@ -87,6 +95,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_2);
         
         projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                    //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
+        projekt_box.addActionListener(valaszto);
         projekt_box.setBounds(98, 84, 164, 22);
         add(projekt_box);
         
@@ -134,7 +143,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
-        JLabel lblNewLabel_8 = new JLabel("Hol van");
+        JLabel lblNewLabel_8 = new JLabel("Észlelés helye");
         lblNewLabel_8.setBounds(621, 136, 85, 14);
         add(lblNewLabel_8);
         
@@ -383,6 +392,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_2);
         
         projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                    //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
+        projekt_box.addActionListener(valaszto);
         projekt_box.setBounds(98, 84, 164, 22);
         add(projekt_box);
         
@@ -1096,7 +1106,7 @@ public class Zarolasok_bevitel extends JPanel {
         zarolas_helye.setText("");
         zarolasoka_mezo.setText("");
         intezkedes_mezo.setText("");
-        datum_mezo.setText("");
+        //datum_mezo.setText("");
         sorszam_mezo.setText("");
         eredmeny_mezo.setText("");
         ujradatum_mezo.setText("");
@@ -1108,10 +1118,12 @@ public class Zarolasok_bevitel extends JPanel {
         b2_mezo.setText("");
         visszaellenorzes_mezo.setText("");
         meszam_mezo.setText("");
-        projekt_box.setSelectedIndex(1);
-        tipus_box.setSelectedIndex(1);
-        zarolta_box.setSelectedIndex(1);
+        projekt_box.removeActionListener(valaszto);
+        projekt_box.setSelectedIndex(0);
+        tipus_box.setSelectedIndex(0);
+        zarolta_box.setSelectedIndex(0);
         ellenorzott_mezo.setText("0");
+        projekt_box.addActionListener(valaszto);
     }
     
     public void visszatolt(String id)
@@ -1247,5 +1259,67 @@ public class Zarolasok_bevitel extends JPanel {
         {
             // TODO Auto-generated method stub           
         }    
+    }
+    
+    class Kivalaszt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            String[] cikkbox = null;
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                DefaultComboBoxModel<String> model;
+                String keresett = String.valueOf(projekt_box.getSelectedItem());
+                String vevo = "";
+
+                workbook.loadFromFile(excelhelye2);
+                workbook.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow(); szamlalo++)
+                {
+                    if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
+                    {
+                        vevo =  sheet.getRange().get("A"+szamlalo).getText();
+                        System.out.println(vevo);
+                    }
+                }                
+                
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                
+                Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt = con.createStatement();              
+                ResultSet rs = stmt.executeQuery( "select cikkszamok.part_no, \r\n"
+                        + "        cikkszamok.REVISION_TEXT,\r\n"
+                        + "        cikkszamok.CF$_PRODUCT_CODE_DESC \r\n"
+                        + "from ifsapp.PART_REVISION_cfv cikkszamok\r\n"
+                        + "where 3 = 3 and cf$_second_commodity = '"+ vevo +"' order by part_no asc");
+                ArrayList<String> cikkszamok = new ArrayList<String>();
+                while(rs.next())
+                {
+                    if(rs.getString(2) != null)
+                    {
+                        cikkszamok.add(rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3));
+                    }
+                    else
+                    {
+                        cikkszamok.add(rs.getString(1)+ " "+ rs.getString(3));
+                    }
+                }
+                cikkbox = cikkszamok.toArray(new String[cikkszamok.size()]);
+                
+                model = new DefaultComboBoxModel<String>(cikkbox);
+                tipus_box.setModel(model); 
+                Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
 }

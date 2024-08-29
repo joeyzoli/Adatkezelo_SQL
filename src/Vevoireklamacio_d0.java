@@ -502,11 +502,11 @@ public class Vevoireklamacio_d0 extends JPanel {
             String szin3 = String.valueOf(Vevoireklamacio_fejlec.d3.getRGB());
             String szin4 = String.valueOf(Vevoireklamacio_fejlec.d5.getRGB());
             String szin5 = String.valueOf(Vevoireklamacio_fejlec.lezaras.getRGB());
-            int rowCount = modell2.getRowCount();           
+            /*int rowCount = modell2.getRowCount();           
             for (int i = rowCount - 1; i > -1; i--) 
             {
               modell2.removeRow(i);
-            }
+            }*/
             sql = "update qualitydb.Vevoireklamacio_alap set Szinek = '"+ szin1+";"+ szin2+";"+ szin3+";"+ szin4+";"+ szin5+"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
         } 

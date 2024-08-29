@@ -221,6 +221,7 @@ public class Nyilatkozatbekero extends JPanel {
                         sheet2.getRange().get("B" + cellaszam).setText("Description");
                         sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
                         cellaszam++;
+                        int van = 0;
                         while(rs.next())
                         {
                             System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
@@ -228,28 +229,36 @@ public class Nyilatkozatbekero extends JPanel {
                             sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
                             sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
                             cellaszam++;
+                            van++;
                         }
-                        sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:J1"));
-                        sheet2.getAllocatedRange().autoFitColumns();
-                        sheet2.getAllocatedRange().autoFitRows();
-                        
-                        sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                        
-                        String menteshelye = System.getProperty("user.home") + "\\Desktop\\"+ table.getValueAt(szamlalo, 0).toString() +".xlsx";
-                        workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
-                        
-                        
-                        FileInputStream fileStream = new FileInputStream(menteshelye);
-                        try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                        if(van > 0)
                         {
-                            for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
-                            {    
-                                workbook3.removeSheetAt(i); 
-                            }      
-                            FileOutputStream output = new FileOutputStream(menteshelye);
-                            workbook3.write(output);
-                            output.close();
-                        } 
+                            sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:J1"));
+                            sheet2.getAllocatedRange().autoFitColumns();
+                            sheet2.getAllocatedRange().autoFitRows();
+                            
+                            sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                            
+                            String menteshelye = System.getProperty("user.home") + "\\Desktop\\"+ table.getValueAt(szamlalo, 0).toString() +".xlsx";
+                            workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                            
+                            
+                            FileInputStream fileStream = new FileInputStream(menteshelye);
+                            try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                            {
+                                for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                {    
+                                    workbook3.removeSheetAt(i); 
+                                }      
+                                FileOutputStream output = new FileOutputStream(menteshelye);
+                                workbook3.write(output);
+                                output.close();
+                            } 
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
                     }
                     System.out.println("Fut a fő for");
                 }
