@@ -2735,18 +2735,20 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Munkafüzet1.xlsx";                             
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Q-NY-006 Zárolási nyilvántartás-2024.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
                Worksheet sheet = workbook.getWorksheets().get(0);               
                DataTable datatable = new DataTable();
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
-               for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   stmt.executeUpdate("delete from qualitydb.Beolvasott_panelek where  Panelszam like '" + datatable.getRows().get(szamlalo).getString(0) +"%' "
-                           + "and Idopont > '2024.05.14 00:01:00'");
+                   stmt.executeUpdate("UPDATE qualitydb.Zarolasok SET hiba_gyokeroka = '" + datatable.getRows().get(szamlalo).getString(5) +"', Gyokerok_intezkedes = '" + datatable.getRows().get(szamlalo).getString(6) +"' "
+                           + "where  Tipus like '" + datatable.getRows().get(szamlalo).getString(0) +"%' and Zarolt_db = '" + datatable.getRows().get(szamlalo).getString(1) +"' "
+                                   + "and Zarolas_datuma = '" + datatable.getRows().get(szamlalo).getString(2) +"' and Papir_sorszama = '" + datatable.getRows().get(szamlalo).getString(3) +"'");
                    System.out.println("Fut a For");
+                   System.out.println(szamlalo);
                }              
                Foablak.frame.setCursor(null);                        
                stmt.close();
@@ -3328,7 +3330,7 @@ public class Torlo extends JPanel
                   Workbook workbook = new Workbook();
                   Workbook workbook2 = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
-                  workbook.loadFromFile(System.getProperty("user.home") + "\\Desktop\\QuickReport-45895-20240828143943.xlsx");
+                  workbook.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Kiszállítások db számmal.xlsx");
                   Worksheet sheet = workbook.getWorksheets().get(0);
                   DataTable datatable = new DataTable();
                   Worksheet sheet2 = workbook2.getWorksheets().get(0);
@@ -3342,6 +3344,7 @@ public class Torlo extends JPanel
                   sheet2.getRange().get("D" + cellaszam).setText("Kiszállítás ideje");
                   sheet2.getRange().get("E" + cellaszam).setText("KPISMDQTY");
                   sheet2.getRange().get("F" + cellaszam).setText("KPIASSTIME");
+                  sheet2.getRange().get("G" + cellaszam).setText("Kiszállított db szám");
                   cellaszam++;
                   
                   for(int szamlalo = 1; szamlalo < datatable.getRows().size();szamlalo++)
@@ -3351,12 +3354,14 @@ public class Torlo extends JPanel
                           if(datatable.getRows().get(szamlalo).getString(0).equals(datatable.getRows().get(szamlalo2).getString(0)) 
                                   && datatable.getRows().get(szamlalo).getString(1).equals(datatable.getRows().get(szamlalo2).getString(1))
                                   && datatable.getRows().get(szamlalo).getString(2).equals(datatable.getRows().get(szamlalo2).getString(2))
-                                  && datatable.getRows().get(szamlalo).getString(3).equals(datatable.getRows().get(szamlalo2).getString(3)))
+                                  && datatable.getRows().get(szamlalo).getString(3).equals(datatable.getRows().get(szamlalo2).getString(3))
+                                  && datatable.getRows().get(szamlalo).getString(10).equals(datatable.getRows().get(szamlalo2).getString(10)))
                           {
                               sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
                               sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
                               sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
                               sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
+                              sheet2.getRange().get("G" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(10));
                               if(szamlalo < 5524)
                               if(datatable.getRows().get(szamlalo).getString(6).equals("KPISMDQTY"))
                               {

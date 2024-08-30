@@ -336,6 +336,26 @@ public class SQA_SQL {
                     }                   
                 }
             }
+            else
+            {
+                if(resultSet.getInt(8) >=7)
+                {
+                    if(resultSet.getString(6).equals("Nem"))
+                    {
+                        if(resultSet.getString(7) == null)
+                        {
+                            if(resultSet.getInt(8) > 30)
+                            {
+                                cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2)+",schweighardt.robert@veas.videoton.hu" +";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                            }
+                            else
+                            {
+                                cimzettek.add(resultSet.getString(1)+";"+resultSet.getString(2) +";"+resultSet.getString(3)+";"+resultSet.getString(4));
+                            }
+                        }
+                    }                   
+                }
+            }
         }
         if(cimzettek.size() >= 1 )
         {
