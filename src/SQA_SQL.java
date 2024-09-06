@@ -310,7 +310,7 @@ public class SQA_SQL {
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select id, inditotta,Statusz, Statusz_ido, DATEDIFF(now(), Statusz_ido) as 'Kulonbseg'\r\n"
                 + ", Ertesitve, Lezaras_ido, DATEDIFF(now(), Datum) as 'Nyitva' from qualitydb.SQA_reklamaciok\r\n"
-                + "where 3 = 3";                                        
+                + "where 3 = 3 and lezaras_ido is null";                                        
         stmt.execute(sql);      
         resultSet = stmt.getResultSet();
         ArrayList<String> cimzettek = new ArrayList<String>();
@@ -339,7 +339,7 @@ public class SQA_SQL {
             else
             {
                 if(resultSet.getInt(8) >=7)
-                {
+                {                    
                     if(resultSet.getString(6).equals("Nem"))
                     {
                         if(resultSet.getString(7) == null)
@@ -368,19 +368,37 @@ public class SQA_SQL {
                 Email emailkuldes = new Email();
                 String[] adatok = cimzettek.get(szamlalo).split(";");
                 String emailcim = "";
+                String[] adatok2 = null;
                 for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
                 {
-                    if(datatable.getRows().get(szamlalo2).getString(0).equals(adatok[1]) )
+                    adatok2 = adatok[1].split(",");
+                    if(datatable.getRows().get(szamlalo2).getString(0).equals(adatok2[0]) )
                     {
-                        emailcim = datatable.getRows().get(szamlalo2).getString(1);
+                        if(adatok2.length == 2)
+                        {
+                            emailcim = datatable.getRows().get(szamlalo2).getString(1)+",schweighardt.robert@veas.videoton.hu";
+                        }
+                        else
+                        {
+                            emailcim = datatable.getRows().get(szamlalo2).getString(1);
+                        }
                     }
                 }
                 if(emailcim.equals("")) {}
                 else
                 {
-                    emailkuldes.sqa_emailkuldes(adatok[1],emailcim,emailcim,adatok[0],adatok[3],adatok[2]);
-                    String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
-                    stmt.executeUpdate(modosit);
+                    if(adatok2.length == 2)
+                    {
+                        emailkuldes.sqa_emailkuldes(adatok2[0]+", Schweighardt Róbert","easqas@veas.videoton.hu",emailcim,adatok[0],adatok[3],adatok[2]);
+                        String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
+                        stmt.executeUpdate(modosit);
+                    }
+                    else
+                    {
+                        emailkuldes.sqa_emailkuldes(adatok[1],"easqas@veas.videoton.hu",emailcim,adatok[0],adatok[3],adatok[2]);
+                        String modosit = "update qualitydb.SQA_reklamaciok set  Ertesitve = 'Igen' where ID = '"+ adatok[0]  +"'";
+                        stmt.executeUpdate(modosit);
+                    }
                 }
             }
         }
@@ -573,7 +591,7 @@ public class SQA_SQL {
                         {
                             emailcim = datatable.getRows().get(szamlalo2).getString(2)+", kovacs.sandor@veas.videoton.hu, reznyak.norbert@veas.videoton.hu";
                         }
-                    }
+                    }                    
                     //emailcim = "kovacs.zoltan@veas.videoton.hu";
                     File excel = new File(System.getProperty("user.home") + "\\"+datatable2.getRows().get(szamlalo).getString(2)+".xlsx");
                     emailkuldes.retour_emailkuldes("easqas@veas.videoton.hu", emailcim, datatable2.getRows().get(szamlalo).getString(2), excel);

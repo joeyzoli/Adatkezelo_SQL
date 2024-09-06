@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Norma());
+		feltolt.addActionListener(new Lekerdezes_IFS());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1072,26 +1072,10 @@ public class Torlo extends JPanel
                           + "from ifsapp.C_OPER_TRACY_OVW\n"
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
                           + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
-                  ResultSet rs = stmt.executeQuery("select PART_NO as Cikkszam,\n"
-                          + "DESCRIPTION as Megnevezes, \n"
-                          + "ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO) as Szallito,\n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_id(ORDER_NO,LINE_NO,RELEASE_NO) as Gyarto_szama,\n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO) as Gyartoi_cikkszam,\n"
-                          + "max(DATE_ENTERED) as Utolso_rendeles\n"
-                          + "from ifsapp.PURCHASE_ORDER_LINE_ALL\n"
-                          + "where\n"
-                          + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \n"
-                          + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) and DATE_ENTERED > to_date( '20230101', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) )\n"
-                          + "group by ifsapp.Supplier_API.Get_Vendor_Name(VENDOR_NO), PART_NO,\n"
-                          + "DESCRIPTION, \n"
-                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_No(CONTRACT,PART_NO,VENDOR_NO), \n"
-                          + "ifsapp.Purchase_Part_Supplier_API.Get_Vendor_Part_Description(CONTRACT,PART_NO,VENDOR_NO), \n"
-                          + "PROJECT_ID, \n"
-                          + "ifsapp.Project_API.Get_Name(PROJECT_ID), \n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Id(ORDER_NO,LINE_NO,RELEASE_NO), \n"
-                          + "ifsapp.Purchase_Order_Line_Part_Api.Get_Manufacturer_Part_No(ORDER_NO,LINE_NO,RELEASE_NO)");
+                  ResultSet rs = stmt.executeQuery("select TRACY_SERIAL_NO, COMPONENT_PART , WAIV_DEV_REJ_NO, CONSUMPTION_DATE \n"
+                          + "from ifsapp.C_MTRL_TRACY_OVW\n"
+                          + "where 3 = 3 and  COMPONENT_PART = '451-413-11-E92' \n"
+                          + "");
                   Workbook workbook = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1099,17 +1083,19 @@ public class Torlo extends JPanel
        
                   //Get the first worksheet
                   Worksheet sheet = workbook.getWorksheets().get(0);
-                  //sheet.insertDataTable(datatable, true, 1, 1)
+                  //sheet.insertDataTable(datatable, true, 1, 1);
                   int cellaszam = 1;
-                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
-                  sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
-                  sheet.getRange().get("B" + cellaszam).setText("Gyártó azonosító");
+                  sheet.getRange().get("A" + cellaszam).setText("Szériaszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Komponens cikk");
+                  sheet.getRange().get("C" + cellaszam).setText("ME szám");
+                  sheet.getRange().get("D" + cellaszam).setText("FElhasználás dátuma");
                   cellaszam++;
                   while(rs.next())
                   { 
                       sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                      sheet.getRange().get("B" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                      sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
                       cellaszam++;
                   }
                   sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
@@ -2947,7 +2933,7 @@ public class Torlo extends JPanel
                         String sql = "SELECT panel \n"
                                 + "FROM videoton.fkov \n"
                                 + "where ido >= '2024.03.11' and ido < '2024.06.13'\n"
-                                + "and hely = '98' \n"
+                                + "and hely = '114' \n"
                                 + "and ok = '0'\n"
                                 + "group by panel";            //panelszam       
      
@@ -2986,7 +2972,7 @@ public class Torlo extends JPanel
                             javitva = 0;
                             while(rs.next())
                             {
-                                if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) == 0)
+                                if(rs.getString(1).equals("AVM FB7530AX LIFE") && rs.getInt(6) == 0)
                                 {
                                     sheet.getRange().get("A" + cellaszam).setText(rs.getString(5));
                                     sheet.getRange().get("B" + cellaszam).setText(rs.getString(4));
@@ -2998,13 +2984,13 @@ public class Torlo extends JPanel
                                     while(rs.next())
                                     {
                                         //System.out.println("Fut a belső while");
-                                        if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) == 0)
+                                        if(rs.getString(1).equals("AVM FB7530AX LIFE") && rs.getInt(6) == 0)
                                         {                                            
                                             sheet.getRange().get("D" + cellaszam).setText(rs.getString(18));
                                             sheet.getRange().get("E" + cellaszam).setText(rs.getString(19));
                                             sheet.getRange().get("K" + cellaszam).setText("Failed");
                                         }
-                                        else if(rs.getString(1).equals("AVM FR1200AX BS") && rs.getInt(6) != 0)
+                                        else if(rs.getString(1).equals("AVM FB7530AX LIFE") && rs.getInt(6) != 0)
                                         {
                                             if(javitva == 0)
                                             {
@@ -3045,7 +3031,7 @@ public class Torlo extends JPanel
                                                         System.out.println(rs.getString(7).replace("A", "") +"   "+ rs2.getString(1));
                                                     }
                                                 }
-                                                if(rs.getString(1).equals("AVM FR1200AX BS"))
+                                                if(rs.getString(1).equals("AVM FB7530AX LIFE"))
                                                 {
                                                     sheet.getRange().get("J" + cellaszam).setText(rs.getString(4));
                                                     if(rs.getInt(6) == 0)
@@ -3086,7 +3072,7 @@ public class Torlo extends JPanel
                         sheet.getAllocatedRange().autoFitRows();
                         sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                         
-                        String hova = System.getProperty("user.home") + "\\Desktop\\FR1200AX BS kiesések.xlsx";
+                        String hova = System.getProperty("user.home") + "\\Desktop\\FB7530AX LIFE kiesések.xlsx";
                         workbook.saveToFile(hova, ExcelVersion.Version2016);
                         FileInputStream fileStream = new FileInputStream(hova);
                         try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 

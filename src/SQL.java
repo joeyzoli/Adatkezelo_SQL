@@ -78,25 +78,28 @@ public class SQL
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                String menteshelye2 = fajl.getAbsolutePath();
-                System.out.println(menteshelye2);
-                if(menteshelye2.contains(".xlsx")){}
-                else
+                if(fajl != null)
                 {
-                    menteshelye2 = menteshelye2 + ".xlsx";
-                }                
-                System.out.println(menteshelye2);
-                workbook.saveToFile(menteshelye2, ExcelVersion.Version2016);          
-                FileInputStream fileStream = new FileInputStream(menteshelye2);
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-                {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(menteshelye2);
-                    workbook2.write(output);
-                    output.close();
+                    String menteshelye2 = fajl.getAbsolutePath();
+                    System.out.println(menteshelye2);
+                    if(menteshelye2.contains(".xlsx")){}
+                    else
+                    {
+                        menteshelye2 = menteshelye2 + ".xlsx";
+                    }                
+                    System.out.println(menteshelye2);
+                    workbook.saveToFile(menteshelye2, ExcelVersion.Version2016);          
+                    FileInputStream fileStream = new FileInputStream(menteshelye2);
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(menteshelye2);
+                        workbook2.write(output);
+                        output.close();
+                    }
                 }
             }
             else

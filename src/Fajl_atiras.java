@@ -65,6 +65,8 @@ public class Fajl_atiras extends JPanel {
         start_gomb.addActionListener(new Ertek_atiras());
         start_gomb.setBounds(491, 276, 89, 23);
         add(start_gomb);
+        
+        setBackground(Foablak.hatter_szine);
 
     }
     

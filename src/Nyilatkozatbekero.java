@@ -9,12 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -27,8 +29,17 @@ import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 public class Nyilatkozatbekero extends JPanel {
     
@@ -36,11 +47,15 @@ public class Nyilatkozatbekero extends JPanel {
     private JComboBox<String> reach_box;
     private JComboBox<String> rohs_box;
     private JComboBox<String> cmrt_box;
+    private JComboBox<String> reach2_box;
+    private JComboBox<String> rohs2_box;
+    private JComboBox<String> cmrt2_box;
     private JTextArea uzenet_mezo;
     private SQA_SQL beszallitok = new SQA_SQL();
     private JTable table;
     private DefaultTableModel modell;
     private String kodfejto = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kódfejtő.xlsx";
+    private JTextField targy_mezo;
 
     /**
      * Create the panel.
@@ -77,17 +92,17 @@ public class Nyilatkozatbekero extends JPanel {
         add(gorgeto);
         
         String[] reach = {"-","0", "6", "7", "8", "9", "1", "2", "6, 9", "7, 9", "8, 9", "9, 9", "1, 9", "2, 9"};
-        reach_box = new JComboBox<String>(reach);
+        reach_box = new JComboBox<String>(reach);                            //reach
         reach_box.setBounds(529, 173, 111, 22);
         add(reach_box);
         
         String[] rohs = {"-","0", "2", "3", "3,9"};
-        rohs_box = new JComboBox<String>(rohs);
+        rohs_box = new JComboBox<String>(rohs);                             //rohs
         rohs_box.setBounds(665, 173, 111, 22);
         add(rohs_box);
         
         String[] cmrt = {"-","0", "60", "62", "63", "64", "69", "70", "72", "73", "74", "79", "80", "84", "85", "99"};
-        cmrt_box = new JComboBox<String>(cmrt);
+        cmrt_box = new JComboBox<String>(cmrt);                             //cmrt
         cmrt_box.setBounds(812, 173, 111, 22);
         add(cmrt_box);
         
@@ -145,6 +160,23 @@ public class Nyilatkozatbekero extends JPanel {
         JLabel lblNewLabel_5 = new JLabel("Címzettek");
         lblNewLabel_5.setBounds(40, 271, 89, 14);
         add(lblNewLabel_5);
+        
+        targy_mezo = new JTextField();
+        targy_mezo.setBounds(465, 241, 458, 20);
+        add(targy_mezo);
+        targy_mezo.setColumns(10);
+        
+        reach2_box = new JComboBox<String>(reach);                           //reach
+        reach2_box.setBounds(529, 208, 111, 22);
+        add(reach2_box);
+        
+        rohs2_box = new JComboBox<String>(rohs);                            //rohs
+        rohs2_box.setBounds(665, 208, 111, 22);
+        add(rohs2_box);
+        
+        cmrt2_box = new JComboBox<String>(cmrt);                            //cmrt
+        cmrt2_box.setBounds(812, 208, 111, 22);
+        add(cmrt2_box);
 
     }
     
@@ -172,6 +204,7 @@ public class Nyilatkozatbekero extends JPanel {
     
     class Email_kuldes implements ActionListener                                                                                             //termék gomb megnyomáskor hívodik meg
     {
+        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
          {
             try
@@ -193,72 +226,527 @@ public class Nyilatkozatbekero extends JPanel {
                 System.out.println("Kezdődik");
                 for(int szamlalo = 0; szamlalo < table.getRowCount();szamlalo++)
                 {
-                    System.out.println("Tábla mérete "+ table.getRowCount());
                     if(String.valueOf(reach_box.getSelectedItem()).equals("-")) {}
                     else
                     {
-                        System.out.println("Kiválasztott reach "+String.valueOf(reach_box.getSelectedItem()));
-                        String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
-                                + "from ifsapp.PART_MANUFACTURER\r\n"
-                                + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
-                                + "group by MANUFACTURER_NO");
-                        String reach = "";
-                        for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                        if(String.valueOf(reach2_box.getSelectedItem()).equals("-")) 
                         {
-                            if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(reach_box.getSelectedItem())))
+                            System.out.println("Kiválasztott reach "+String.valueOf(reach_box.getSelectedItem()));
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String reach = "";                            
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
                             {
-                                reach = datatable.getRows().get(szamlalo2).getString(3);
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(reach_box.getSelectedItem())))
+                                {
+                                    reach = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                                
                             }
-                        }
-                        System.out.println("REach "+reach);               
-                        rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
-                                + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
-                                + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"'\r\n"
-                                + "and manufacturer_no = '"+ gyarto +"'");
-                        Worksheet sheet2 = workbook2.getWorksheets().get(0);
-                        int cellaszam = 1;
-                        sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
-                        sheet2.getRange().get("B" + cellaszam).setText("Description");
-                        sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
-                        cellaszam++;
-                        int van = 0;
-                        while(rs.next())
-                        {
-                            System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
-                            sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                            sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                            sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                            System.out.println("Reach "+reach);                             
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
                             cellaszam++;
-                            van++;
-                        }
-                        if(van > 0)
-                        {
-                            sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:J1"));
-                            sheet2.getAllocatedRange().autoFitColumns();
-                            sheet2.getAllocatedRange().autoFitRows();
-                            
-                            sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                            
-                            String menteshelye = System.getProperty("user.home") + "\\Desktop\\"+ table.getValueAt(szamlalo, 0).toString() +".xlsx";
-                            workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
-                            
-                            
-                            FileInputStream fileStream = new FileInputStream(menteshelye);
-                            try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                            int van = 0;
+                            while(rs.next())
                             {
-                                for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
-                                {    
-                                    workbook3.removeSheetAt(i); 
-                                }      
-                                FileOutputStream output = new FileOutputStream(menteshelye);
-                                workbook3.write(output);
-                                output.close();
-                            } 
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Reach.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Reach értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
                         }
                         else
                         {
-                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String reach = "";
+                            String reach2 = "";
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                            {
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(reach_box.getSelectedItem())))
+                                {
+                                    reach = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(reach2_box.getSelectedItem())))
+                                {
+                                    reach2 = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                            }
+                            System.out.println("Reach "+reach);
+                            System.out.println("Reach2 "+reach2);
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"' and not nyilatkozatok.CF$_reach = '"+ reach2 +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            cellaszam++;
+                            int van = 0;
+                            while(rs.next())
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Reach.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Reach értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
                         }
+                    }
+                    
+                    if(String.valueOf(rohs_box.getSelectedItem()).equals("-")) {}
+                    else
+                    {
+                        if(String.valueOf(rohs2_box.getSelectedItem()).equals("-")) 
+                        {
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String rohs = "";
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                            {
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(rohs_box.getSelectedItem())))
+                                {
+                                    rohs = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                            }
+                            System.out.println("Rohs "+rohs);
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ rohs +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            cellaszam++;
+                            int van = 0;
+                            while(rs.next())
+                            {
+                                System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Rohs.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                } 
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított Rohs értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
+                        }
+                        else
+                        {
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String rohs = "";
+                            String rohs2 = "";
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                            {
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(rohs_box.getSelectedItem())))
+                                {
+                                    rohs = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(rohs2_box.getSelectedItem())))
+                                {
+                                    rohs2 = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                            }
+                            System.out.println("Rohs "+rohs);
+                            System.out.println("Rohs2 "+rohs2);
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ rohs +"' and not nyilatkozatok.CF$_reach = '"+ rohs2 +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            cellaszam++;
+                            int van = 0;
+                            while(rs.next())
+                            {
+                                System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Rohs.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                } 
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított Rohs értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
+                        }
+                    }
+                    
+                    if(String.valueOf(cmrt_box.getSelectedItem()).equals("-")) {}
+                    else
+                    {
+                        if(String.valueOf(cmrt_box.getSelectedItem()).equals("-")) 
+                        {
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String cmrt = "";
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                            {
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(cmrt_box.getSelectedItem())))
+                                {
+                                    cmrt = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                            }
+                            System.out.println("CMRT "+cmrt);
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ cmrt +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            cellaszam++;
+                            int van = 0;
+                            while(rs.next())
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                } 
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított CMRT értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
+                        }
+                        else
+                        {
+                            String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                    + "from ifsapp.PART_MANUFACTURER\r\n"
+                                    + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                    + "group by MANUFACTURER_NO");
+                            String cmrt = "";
+                            String cmrt2 = "";
+                            for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                            {
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(cmrt_box.getSelectedItem())))
+                                {
+                                    cmrt = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                                if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(cmrt2_box.getSelectedItem())))
+                                {
+                                    cmrt2 = datatable.getRows().get(szamlalo2).getString(3);
+                                }
+                            }
+                            System.out.println("CMRT "+cmrt);
+                            System.out.println("CMRT2 "+cmrt2);
+                            rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                    + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ cmrt +"' and not nyilatkozatok.CF$_reach = '"+ cmrt2 +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"'");
+                            Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                            int cellaszam = 1;
+                            sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                            sheet2.getRange().get("B" + cellaszam).setText("Description");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            cellaszam++;
+                            int van = 0;
+                            while(rs.next())
+                            {
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                                cellaszam++;
+                                van++;
+                            }
+                            if(van > 0)
+                            {
+                                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                                sheet2.getAllocatedRange().autoFitColumns();
+                                sheet2.getAllocatedRange().autoFitRows();
+                                
+                                sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                                
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT.xlsx";
+                                workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                
+                                
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                } 
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított CMRT értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                            }
+                        }
+                    }
+                    
+                    File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\");
+                    if(fajl.exists()) {}
+                    else
+                    {
+                        fajl.mkdir();
+                    }
+                    File[] torlendofajlok = fajl.listFiles();
+                    
+                    if(torlendofajlok.length == 1)
+                    {
+                        Properties props = new Properties(); //new Properties();     System.getProperties();
+                        
+                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                        Message message = new MimeMessage(session);
+                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                        message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu
+                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
+                       
+                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                       
+                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                        MimeBodyPart attachmentPart = new MimeBodyPart();
+                        attachmentPart.attachFile(torlendofajlok[0]);
+                        multipart.addBodyPart(attachmentPart);
+                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                               
+                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                        
+                        Transport.send(message);                                                        //levél küldése
+    
+                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                    }
+                    if(torlendofajlok.length == 2)
+                    {
+                        Properties props = new Properties(); //new Properties();     System.getProperties();
+                        
+                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                        Message message = new MimeMessage(session);
+                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                        message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása
+                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
+                       
+                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                       
+                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                        MimeBodyPart attachmentPart = new MimeBodyPart();
+                        MimeBodyPart attachmentPart2= new MimeBodyPart();
+                        attachmentPart.attachFile(torlendofajlok[0]);
+                        attachmentPart2.attachFile(torlendofajlok[1]);
+                        multipart.addBodyPart(attachmentPart);
+                        multipart.addBodyPart(attachmentPart2);
+                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                               
+                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                        
+                        Transport.send(message);                                                        //levél küldése
+    
+                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                    }
+                    if(torlendofajlok.length == 3)
+                    {
+                        Properties props = new Properties(); //new Properties();     System.getProperties();
+                        
+                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                        Message message = new MimeMessage(session);
+                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                        message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása
+                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
+                       
+                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                       
+                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                        MimeBodyPart attachmentPart = new MimeBodyPart();
+                        MimeBodyPart attachmentPart2= new MimeBodyPart();
+                        MimeBodyPart attachmentPart3 = new MimeBodyPart();
+                        attachmentPart.attachFile(torlendofajlok[0]);
+                        attachmentPart2.attachFile(torlendofajlok[1]);
+                        attachmentPart3.attachFile(torlendofajlok[2]);
+                        multipart.addBodyPart(attachmentPart);
+                        multipart.addBodyPart(attachmentPart2);
+                        multipart.addBodyPart(attachmentPart3);
+                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                               
+                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                        
+                        Transport.send(message);                                                        //levél küldése
+    
+                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                    }
+                    
+                    
+                    for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                    {
+                        torlendofajlok[szamlalo2].delete();
                     }
                     System.out.println("Fut a fő for");
                 }
@@ -289,7 +777,7 @@ public class Nyilatkozatbekero extends JPanel {
                 stmt.close();
                 con.close();
                 System.out.println("Vége");
-                JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                JOptionPane.showMessageDialog(null, "Kész! \n Email/Email-ek elküldve'", "Info", 1); 
                 con.close();  
                 Foablak.frame.setCursor(null);  
 

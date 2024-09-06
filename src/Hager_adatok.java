@@ -4,6 +4,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.CellRange;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -34,9 +35,9 @@ public class Hager_adatok extends JPanel {
     public Hager_adatok() {
         setLayout(null);
         
-        JLabel lblNewLabel = new JLabel("Kiszállított panelek adatainak keresése");
+        JLabel lblNewLabel = new JLabel("Kiszállított panelek adatainak keresése - ME számot vár");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel.setBounds(387, 163, 219, 14);
+        lblNewLabel.setBounds(290, 163, 316, 14);
         add(lblNewLabel);
         
         JButton megnyit_gomb = new JButton("Megnyitás");
@@ -51,8 +52,8 @@ public class Hager_adatok extends JPanel {
         lblNewLabel_1.setBounds(534, 59, 199, 14);
         add(lblNewLabel_1);
         
-        JLabel lblNewLabel_2 = new JLabel("Raktárban levő szériaszámok");
-        lblNewLabel_2.setBounds(387, 211, 156, 14);
+        JLabel lblNewLabel_2 = new JLabel("Raktárban levő szériaszámok - Cikkszámot vár");
+        lblNewLabel_2.setBounds(290, 211, 316, 14);
         add(lblNewLabel_2);
         
         JButton megnyit2_gomb = new JButton("Megnyitás");
@@ -468,6 +469,7 @@ public class Hager_adatok extends JPanel {
                     workbook.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet = workbook.getWorksheets().get(0);
                     DataTable datatable = new DataTable();
+                    DataTable datatable2 = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                     String osszefuzott_cikk = "";
                     for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
@@ -478,6 +480,7 @@ public class Hager_adatok extends JPanel {
                     Workbook workbook2 = new Workbook();
                     workbook2.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                    Worksheet sheet3 = workbook2.getWorksheets().get(1);
                     
                      
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                     //jdbc mysql driver meghÃ­vÃ¡sa
@@ -565,10 +568,28 @@ public class Hager_adatok extends JPanel {
                         
                     }
                     
+                    rs = stmt2.executeQuery("select part_no as Cikkszam,ifsapp.INVENTORY_PART_API.Get_Description(contract,part_no) as Megnevezes, waiv_dev_rej_no as ME_szam, warehouse as Raktar, location_no as Raktarhely_szama, QTY_ONHAND as Keszleten\r\n"
+                            + "from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
+                            + "where PART_NO in ("+ osszefuzott_cikk +") and QTY_ONHAND > 0");
+                    
+                    JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                    jdbcAdapter.fillDataTable(datatable2, rs);
+                    
+                    sheet3.insertDataTable(datatable2, true, 1, 1);
+                    
+                    CellRange range = sheet3.getCellRange(1, 1, sheet3.getLastRow(), sheet3.getLastColumn());
+                    //Convert numbers stored as text back to number
+                    range.convertToNumber();
+                    
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:R1"));
                     sheet2.getAllocatedRange().autoFitColumns();
                     sheet2.getAllocatedRange().autoFitRows();
                     sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    
+                    sheet3.getAutoFilters().setRange(sheet3.getCellRange("A1:R1"));
+                    sheet3.getAllocatedRange().autoFitColumns();
+                    sheet3.getAllocatedRange().autoFitRows();
+                    sheet3.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                     
                     String hova = System.getProperty("user.home") + "\\Desktop\\Hager raktárban adatok.xlsx";
                     try 
@@ -577,7 +598,7 @@ public class Hager_adatok extends JPanel {
                         FileInputStream fileStream = new FileInputStream(hova);
                         try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
                         {
-                            for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                            for(int i = workbook3.getNumberOfSheets()-1; i > 1 ;i--)
                             {    
                                 workbook3.removeSheetAt(i); 
                             }      
