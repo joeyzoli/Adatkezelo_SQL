@@ -747,15 +747,7 @@ public class Zarolasok_bevitel extends JPanel {
         stmt.close();
         conn.close();
         
-        } 
-        catch (SQLException e1) 
-        {
-           e1.printStackTrace();
-           String hibauzenet = e1.toString();
-           Email hibakuldes = new Email();
-           hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu",this.getClass().getSimpleName()+" "+ hibauzenet);
-           JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                 //kiírja a hibaüzenetet
-        } 
+        }        
         catch (Exception e) 
         {
            e.printStackTrace();

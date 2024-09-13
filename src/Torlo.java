@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Lekerdezes_IFS());
+		feltolt.addActionListener(new IFS_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2757,7 +2757,7 @@ public class Torlo extends JPanel
          {
             try
             {              
-                String menteshelye = System.getProperty("user.home") + "\\Desktop\\IFS.xlsx";
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Techem FUNK szériaszámok.xlsx";
 
                   DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
                   Class.forName("oracle.jdbc.OracleDriver");  //.driver
@@ -2765,7 +2765,7 @@ public class Torlo extends JPanel
                   Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                   Statement stmt = con.createStatement();                      
                   
-                  String excelfile1 = System.getProperty("user.home") + "\\Desktop\\NEDAP.xlsx";                             
+                  String excelfile1 = System.getProperty("user.home") + "\\Desktop\\panelek.xlsx";                             
                   Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                   Workbook workbook = new Workbook();
                   Workbook workbook2 = new Workbook();
@@ -2774,23 +2774,31 @@ public class Torlo extends JPanel
                   DataTable datatable = new DataTable();
                   datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                   Worksheet sheet2 = workbook2.getWorksheets().get(0);
-                  for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                  int cellaszam = 1;
+                  sheet2.getRange().get("A"+cellaszam).setText("Szériaszám");                  
+                  sheet2.getRange().get("B"+cellaszam).setText("Doboz szám");
+                  sheet2.getRange().get("C"+cellaszam).setText("Trac fej");
+                  /*sheet2.getRange().get("D"+cellaszam).setText("Beolvasási pont");
+                  sheet2.getRange().get("E"+cellaszam).setText("Doboz szám");
+                  sheet2.getRange().get("F"+cellaszam).setText("Trac fej státusz");*/
+                  cellaszam++;
+                  ResultSet rs = null;
+                  for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                   {
-                      ResultSet rs = stmt.executeQuery("select SCAN_LOC\n"
-                              + "from ifsapp.C_OPER_TRACY_OVW\n"
-                              + "where 3 = 3\n"
-                              + "        and OPERATION_NO = 130 \n"
-                              + "        and TRACY_SERIAL_NO = '" + datatable.getRows().get(szamlalo).getString(0) +"'");
+                      rs = stmt.executeQuery("select TRACY_SERIAL_NO, PACKAGE_ID, tracy_status  \n"
+                              + "from ifsapp.C_TRACY\n"
+                              + "where 3 = 3 and TRACY_SERIAL_NO = '"+ datatable.getRows().get(szamlalo).getString(0) +"'");
+                      System.out.println("Szériaszám: "+ datatable.getRows().get(szamlalo).getString(0) );
                       if(rs.next())
                       {
-                          sheet2.getRange().get("A"+szamlalo).setText(datatable.getRows().get(szamlalo).getString(0));
-                          sheet2.getRange().get("B"+szamlalo).setText(rs.getString(1));
+                          sheet2.getRange().get("A"+cellaszam).setText(rs.getString(1));
+                          sheet2.getRange().get("B"+cellaszam).setText(rs.getString(2));
+                          sheet2.getRange().get("C"+cellaszam).setText(rs.getString(3));
+                          cellaszam++;
+                          System.out.println("Fut a while");
                       }
-                      else
-                      {
-                          sheet2.getRange().get("A"+szamlalo).setText(datatable.getRows().get(szamlalo).getString(0));
-                      }
-                      System.out.println("Fut a for");
+                      
+                      //System.out.println("Fut a for");
                       System.out.println(szamlalo);
                   }
                   

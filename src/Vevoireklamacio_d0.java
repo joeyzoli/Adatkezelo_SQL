@@ -290,7 +290,8 @@ public class Vevoireklamacio_d0 extends JPanel {
                 + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
                 + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
                 + "ORDER by part_no";
-        tipus_box = new JComboBox<String>(cikkszamok.tombvissza(sql));                             //cikkszamok.tombvissza(sql)      //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
+        String[] tomb = {"Válassz vevőt"};
+        tipus_box = new JComboBox<String>(tomb);                             //cikkszamok.tombvissza(sql)      //combobox_tomb.getCombobox(ComboBox.vevoi_cikk)
         tipus_box.setBounds(1012, 159, 353, 22);
         tipus_box.addActionListener(new Valtozas());
         tipus_box.addActionListener(new Hozzaad());
@@ -537,6 +538,16 @@ public class Vevoireklamacio_d0 extends JPanel {
             {               
                 vevo_box.removeActionListener(valaszto);
                 Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
+                sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
+                        + "from ifsapp.PART_REVISION\r\n"
+                        + "where 3 = 3\r\n"
+                        + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
+                        + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
+                        + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
+                        + "ORDER by part_no";
+                DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<String>(cikkszamok.tombvissza(sql));
+                
+                tipus_box.setModel(model2);
                 vevo_box.setSelectedItem(rs.getString(3));
                 beszallito_mezo.setText(rs.getString(4));
                 //ertesites_mezo.setText(rs.getString(5));

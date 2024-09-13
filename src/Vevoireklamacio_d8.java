@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 public class Vevoireklamacio_d8 extends JPanel {
     static JTextField lezaras_datuma;
     private JTextArea megelozo_mezo;
+    private JLabel lblNewLabel_2;
+    private JTextField felelos_mezo;
     /**
      * Create the panel.
      */
@@ -41,6 +43,15 @@ public class Vevoireklamacio_d8 extends JPanel {
         lezaras_datuma.setBounds(706, 524, 86, 20);
         add(lezaras_datuma);
         lezaras_datuma.setColumns(10);
+        
+        lblNewLabel_2 = new JLabel("Felelős");
+        lblNewLabel_2.setBounds(590, 485, 46, 14);
+        add(lblNewLabel_2);
+        
+        felelos_mezo = new JTextField();
+        felelos_mezo.setBounds(706, 482, 171, 20);
+        add(felelos_mezo);
+        felelos_mezo.setColumns(10);
 
     }
     
@@ -49,7 +60,8 @@ public class Vevoireklamacio_d8 extends JPanel {
         try 
         {
             SQA_SQL ment = new SQA_SQL();
-            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"', D8_felelos = '"+ felelos_mezo.getText() +"' "
+                    + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
             if(lezaras_datuma.getText().equals("")) {}
             else
@@ -86,6 +98,7 @@ public class Vevoireklamacio_d8 extends JPanel {
             {
                 megelozo_mezo.setText(rs.getString(1));
                 lezaras_datuma.setText(rs.getString(2));
+                felelos_mezo.setText(rs.getString(3));
             }
             stmt.close();
             conn.close();                

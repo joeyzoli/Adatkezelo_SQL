@@ -19,6 +19,7 @@ public class Vevoireklamacio_d6 extends JPanel {
      */
     private JTextArea megerosites_mezo;
     private JTextField lezaras_mezo;
+    private JTextField felelos_mezo;
     
     public Vevoireklamacio_d6() {
         setLayout(null);
@@ -37,14 +38,23 @@ public class Vevoireklamacio_d6 extends JPanel {
         add(gorgeto);
         
         JLabel lblNewLabel_1 = new JLabel("Határidő");
-        lblNewLabel_1.setBounds(1217, 90, 65, 14);
+        lblNewLabel_1.setBounds(1151, 168, 65, 14);
         add(lblNewLabel_1);
         
         lezaras_mezo = new JTextField();
-        lezaras_mezo.setBounds(1208, 125, 86, 20);
+        lezaras_mezo.setBounds(1212, 165, 86, 20);
         lezaras_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
         add(lezaras_mezo);
         lezaras_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_2 = new JLabel("Felelős");
+        lblNewLabel_2.setBounds(1151, 111, 46, 14);
+        add(lblNewLabel_2);
+        
+        felelos_mezo = new JTextField();
+        felelos_mezo.setBounds(1212, 108, 166, 20);
+        add(felelos_mezo);
+        felelos_mezo.setColumns(10);
 
     }
     
@@ -53,7 +63,7 @@ public class Vevoireklamacio_d6 extends JPanel {
         try 
         {
             SQA_SQL ment = new SQA_SQL();
-            String sql = "update qualitydb.Vevoireklamacio_alap set Hatekonysag = '"+ megerosites_mezo.getText() +"',"
+            String sql = "update qualitydb.Vevoireklamacio_alap set Hatekonysag = '"+ megerosites_mezo.getText() +"', D6_felelos = '"+ felelos_mezo.getText() +"',"
                     + "D6_lezaras = '"+ lezaras_mezo.getText() +"' where ID = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";           
             ment.mindenes(sql);
         } 
@@ -85,7 +95,7 @@ public class Vevoireklamacio_d6 extends JPanel {
         }
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = (Statement) conn.createStatement();
-        String sql = "select Hatekonysag, D6_lezaras from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+        String sql = "select Hatekonysag, D6_lezaras, D6_felelos from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
         stmt.execute(sql);
         ResultSet rs = stmt.getResultSet();
         megerosites_mezo.setText("");
@@ -94,6 +104,7 @@ public class Vevoireklamacio_d6 extends JPanel {
         {           
             megerosites_mezo.setText(rs.getString(1));
             lezaras_mezo.setText(rs.getString(2));
+            felelos_mezo.setText(rs.getString(3));
         }
         stmt.close();
         conn.close();                
@@ -129,5 +140,4 @@ public class Vevoireklamacio_d6 extends JPanel {
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
     }
-
 }

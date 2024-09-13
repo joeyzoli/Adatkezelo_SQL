@@ -28,6 +28,16 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 public class Hager_adatok extends JPanel {
+    
+    private String osszefuzott = "";
+    private String osszefuzott2 = "";;
+    private String osszefuzott3 = "";;
+    private String osszefuzott4 = "";;
+    private String osszefuzott5 = "";;
+    private String osszefuzott6 = "";;
+    private String osszefuzott7 = "";;
+    private String osszefuzott8 = "";;
+    private String osszefuzott9 = "";;
 
     /**
      * Create the panel.
@@ -65,6 +75,7 @@ public class Hager_adatok extends JPanel {
     
     class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
+        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
          {
             try
@@ -83,6 +94,15 @@ public class Hager_adatok extends JPanel {
                     workbook.setVersion(ExcelVersion.Version2016);
                     Worksheet sheet = workbook.getWorksheets().get(0);
                     DataTable datatable = new DataTable();
+                    DataTable datatable2 = new DataTable();
+                    DataTable datatable3 = new DataTable();
+                    DataTable datatable4 = new DataTable();
+                    DataTable datatable5 = new DataTable();
+                    DataTable datatable6 = new DataTable();
+                    DataTable datatable7 = new DataTable();
+                    DataTable datatable8 = new DataTable();
+                    DataTable datatable9 = new DataTable();
+                    DataTable datatable10 = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                     String osszefuzott_me = "";
                     for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
@@ -108,12 +128,111 @@ public class Hager_adatok extends JPanel {
                     Statement stmt = con.createStatement();
                     
                     ResultSet rs = stmt.executeQuery("SELECT panel FROM videoton.csomagol where csomag in ("+ osszefuzott_me +")");
-                    String osszefuzott = "";
+                    
+                    int cellaszam = 1;
+                    sheet2.getRange().get("A" + cellaszam).setText("Azonosító");
+                    sheet2.getRange().get("B" + cellaszam).setText("Munkahely száma");
+                    sheet2.getRange().get("C" + cellaszam).setText("Munkahely neve");
+                    sheet2.getRange().get("D" + cellaszam).setText("Dátum");
+                    sheet2.getRange().get("E" + cellaszam).setText("Panelszám");
+                    sheet2.getRange().get("F" + cellaszam).setText("Teszter szám");
+                    sheet2.getRange().get("G" + cellaszam).setText("Eredmény");
+                    sheet2.getRange().get("H" + cellaszam).setText("Hibakód");
+                    sheet2.getRange().get("I" + cellaszam).setText("kód2");
+                    sheet2.getRange().get("J" + cellaszam).setText("torolt");
+                    sheet2.getRange().get("K" + cellaszam).setText("Szériaszám");
+                    sheet2.getRange().get("L" + cellaszam).setText("Teszt szám");
+                    sheet2.getRange().get("M" + cellaszam).setText("Pozició");
+                    sheet2.getRange().get("N" + cellaszam).setText("Teljes szám");
+                    sheet2.getRange().get("O" + cellaszam).setText("Hibakód");
+                    sheet2.getRange().get("P" + cellaszam).setText("error");
+                    sheet2.getRange().get("Q" + cellaszam).setText("Dolgozó");
+                    sheet2.getRange().get("R" + cellaszam).setText("Érvénytelenítve");
+                    cellaszam++;
+                    
+                    int szam = 0;
                     while(rs.next())
-                    {  
-                        osszefuzott += ("'" + rs.getString(1) +"',");
+                    {                        
+                        if(szam < 1000)
+                        {                            
+                            osszefuzott += ("'" + rs.getString(1) +"',");                          
+                        }
+                        else if(szam >= 1000 && szam < 2000)
+                        {                            
+                            osszefuzott2 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else if(szam >= 2000  && szam < 3000)
+                        {                           
+                            osszefuzott3 += ("'" + rs.getString(1) +"',");                                    
+                        }
+                        else if(szam >= 3000  && szam < 4000)
+                        {                          
+                            osszefuzott4 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else if(szam >= 4000  && szam < 5000)
+                        {                            
+                            osszefuzott5 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else if(szam >= 5000  && szam < 6000)
+                        {                            
+                            osszefuzott6 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else if(szam >= 6000  && szam < 7000)
+                        {                            
+                            osszefuzott7 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else if(szam >= 7000  && szam < 8000)
+                        {                           
+                            osszefuzott8 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        else
+                        {                            
+                            osszefuzott9 += ("'" + rs.getString(1) +"',");                                     
+                        }
+                        szam++;
+                        System.out.println(szam);
                     }
+                    
                     osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                    if(osszefuzott2 != "")
+                    {   
+                        osszefuzott2 = osszefuzott2.substring(0, osszefuzott2.length() - 1);
+                    }
+                    
+                    if(osszefuzott3 != "")
+                    {   
+                        osszefuzott3 = osszefuzott3.substring(0, osszefuzott3.length() - 1);
+                    }
+                    
+                    if(osszefuzott4 != "")
+                    {   
+                        osszefuzott4 = osszefuzott4.substring(0, osszefuzott4.length() - 1);
+                    }
+                    
+                    if(osszefuzott5 != "")
+                    {   
+                        osszefuzott5 = osszefuzott5.substring(0, osszefuzott5.length() - 1);
+                    }
+                    
+                    if(osszefuzott6 != "")
+                    {   
+                        osszefuzott6 = osszefuzott6.substring(0, osszefuzott6.length() - 1);
+                    }
+                    
+                    if(osszefuzott7 != "")
+                    {   
+                        osszefuzott7 = osszefuzott7.substring(0, osszefuzott7.length() - 1);
+                    }
+                    
+                    if(osszefuzott8 != "")
+                    {   
+                        osszefuzott8 = osszefuzott8.substring(0, osszefuzott8.length() - 1);
+                    }
+                    
+                    if(osszefuzott9 != "")
+                    {   
+                        osszefuzott9 = osszefuzott9.substring(0, osszefuzott9.length() - 1);
+                    }
                     
                     rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                             + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
@@ -123,27 +242,7 @@ public class Hager_adatok extends JPanel {
                             + "from videoton.fkov \n"
                             + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
                             + " where videoton.fkov.panel in ("+ osszefuzott +")");
-                      int cellaszam = 1;
-                      sheet2.getRange().get("A" + cellaszam).setText("Azonosító");
-                      sheet2.getRange().get("B" + cellaszam).setText("Munkahely száma");
-                      sheet2.getRange().get("C" + cellaszam).setText("Munkahely neve");
-                      sheet2.getRange().get("D" + cellaszam).setText("Dátum");
-                      sheet2.getRange().get("E" + cellaszam).setText("Panelszám");
-                      sheet2.getRange().get("F" + cellaszam).setText("Teszter szám");
-                      sheet2.getRange().get("G" + cellaszam).setText("Eredmény");
-                      sheet2.getRange().get("H" + cellaszam).setText("Hibakód");
-                      sheet2.getRange().get("I" + cellaszam).setText("kód2");
-                      sheet2.getRange().get("J" + cellaszam).setText("torolt");
-                      sheet2.getRange().get("K" + cellaszam).setText("Szériaszám");
-                      sheet2.getRange().get("L" + cellaszam).setText("Teszt szám");
-                      sheet2.getRange().get("M" + cellaszam).setText("Pozició");
-                      sheet2.getRange().get("N" + cellaszam).setText("Teljes szám");
-                      sheet2.getRange().get("O" + cellaszam).setText("Hibakód");
-                      sheet2.getRange().get("P" + cellaszam).setText("error");
-                      sheet2.getRange().get("Q" + cellaszam).setText("Dolgozó");
-                      sheet2.getRange().get("R" + cellaszam).setText("Érvénytelenítve");
-                      cellaszam++;
-                      
+                                            
                       while(rs.next())
                       {                        
                           sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
@@ -166,13 +265,294 @@ public class Hager_adatok extends JPanel {
                           sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
                           cellaszam++;
                       }
+                      if(osszefuzott2.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott2 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott3.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott3 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott4.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott4 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott5.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott5 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott6.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott6 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott7.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott7 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott8.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott8 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
+                      if(osszefuzott9.equals("")) {}
+                      else
+                      {
+                          rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                  + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                  + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                  + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                  + "videoton.fkov.dolgozo,  if(videoton.fkov.torolt in ('-1', '1'), \"Igen\", \"Nem\") as Torolt \n"
+                                  + "from videoton.fkov \n"
+                                  + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                  + " where videoton.fkov.panel in ("+ osszefuzott9 +")");
+                                                  
+                            while(rs.next())
+                            {                        
+                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                                cellaszam++;
+                            }
+                      }
                       
+                      /////////////////////////////////////////////////////////////////////////////////////////////////////
                       rs = stmt.executeQuery("select  hibakod "
                               + "from videoton.fkov \n"
                               + " \n"
                               + " where videoton.fkov.panel in ("+ osszefuzott +") and hely = '58' group by hibakod");
                       
-                      String osszefuzott2 = osszefuzott;
+                      String osszefuzott10 = osszefuzott;
                       osszefuzott = "";
                       while(rs.next())
                       {  
@@ -180,7 +560,7 @@ public class Hager_adatok extends JPanel {
                       }
                       if(osszefuzott.equals(""))
                       {
-                          osszefuzott = osszefuzott2;
+                          osszefuzott = osszefuzott10;
                       }
                       else
                       {
@@ -215,7 +595,6 @@ public class Hager_adatok extends JPanel {
                         sheet3.getRange().get("P" + cellaszam).setText("error");
                         sheet3.getRange().get("Q" + cellaszam).setText("Dolgozó");
                         cellaszam++;
-                        
                         while(rs.next())
                         {                        
                             sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
@@ -236,6 +615,454 @@ public class Hager_adatok extends JPanel {
                             sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
                             sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
                             cellaszam++;
+                        }
+                        
+                        if(osszefuzott2.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott2 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott2;
+                            osszefuzott2 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott2 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott2.equals(""))
+                            {
+                                osszefuzott2 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott2 = osszefuzott2.substring(0, osszefuzott2.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott2 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott3.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott3 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott3;
+                            osszefuzott3 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott3 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott3.equals(""))
+                            {
+                                osszefuzott3 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott3 = osszefuzott3.substring(0, osszefuzott3.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott3 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott4.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott4 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott4;
+                            osszefuzott4 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott4 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott4.equals(""))
+                            {
+                                osszefuzott4 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott4 = osszefuzott4.substring(0, osszefuzott4.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott4 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott5.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott5 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott5;
+                            osszefuzott5 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott5 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott5.equals(""))
+                            {
+                                osszefuzott5 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott5 = osszefuzott5.substring(0, osszefuzott5.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott5 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott6.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott6 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott6;
+                            osszefuzott6 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott6 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott6.equals(""))
+                            {
+                                osszefuzott6 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott6 = osszefuzott6.substring(0, osszefuzott6.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott6 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott7.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott7 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott7;
+                            osszefuzott7 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott7 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott7.equals(""))
+                            {
+                                osszefuzott7 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott7 = osszefuzott7.substring(0, osszefuzott7.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott7 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott8.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott8 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott8;
+                            osszefuzott8 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott8 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott8.equals(""))
+                            {
+                                osszefuzott8 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott8 = osszefuzott.substring(0, osszefuzott8.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott8 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
+                        }
+                        
+                        if(osszefuzott9.equals("")) {}
+                        else
+                        {
+                            rs = stmt.executeQuery("select  hibakod "
+                                    + "from videoton.fkov \n"
+                                    + " \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott9 +") and hely = '58' group by hibakod");
+                            
+                            osszefuzott10 = osszefuzott9;
+                            osszefuzott9 = "";
+                            while(rs.next())
+                            {  
+                                osszefuzott9 += ("'" + rs.getString(1) +"',");
+                            }
+                            if(osszefuzott9.equals(""))
+                            {
+                                osszefuzott9 = osszefuzott10;
+                            }
+                            else
+                            {
+                                osszefuzott9 = osszefuzott9.substring(0, osszefuzott9.length() - 1);
+                            }
+                            
+                            
+                            rs = stmt.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                    + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                    + "videoton.fkov.dolgozo \n"
+                                    + "from videoton.fkov \n"
+                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                    + " where videoton.fkov.panel in ("+ osszefuzott9 +")");
+                              ;
+                              while(rs.next())
+                              {                        
+                                  sheet3.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                                  sheet3.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                                  sheet3.getRange().get("C" + cellaszam).setText(rs.getString(3));  
+                                  sheet3.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                                  sheet3.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                                  sheet3.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                                  sheet3.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                                  sheet3.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                                  sheet3.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                                  sheet3.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                                  sheet3.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                                  sheet3.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                                  sheet3.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                                  sheet3.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                                  sheet3.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                                  sheet3.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                                  sheet3.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                                  cellaszam++;
+                              }
                         }
                       
                       /////////////////////////////////////////IFS kezdés
@@ -266,7 +1093,6 @@ public class Hager_adatok extends JPanel {
                       sheet4.getRange().get("R" + cellaszam).setText("Package ID");
                       
                       cellaszam++;
-                      
                       rs = stmt2.executeQuery("select ot.contract,\r\n"
                               + "       ct.part_no,\r\n"
                               + "       ot.tracy_id,\r\n"
@@ -301,7 +1127,7 @@ public class Hager_adatok extends JPanel {
                               + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
                               + " order by ot.manuf_date asc ");
                       
-                      DataTable datatable2 = new DataTable();
+                      datatable2 = new DataTable();
                       JdbcAdapter jdbcAdapter = new JdbcAdapter();
                       jdbcAdapter.fillDataTable(datatable2, rs);
                       //sheet2.insertDataTable(datatable2, true, 1, 1);
@@ -329,6 +1155,545 @@ public class Hager_adatok extends JPanel {
                           cellaszam++;
                           
                       }
+                      
+                      if(osszefuzott2.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott2 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable3 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable3, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable3.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable3.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott3.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott3 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable4 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable4, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable4.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable4.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott4.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott4 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable5 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable5, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable5.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable5.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott5.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott5 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable6 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable6, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable6.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable6.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott6.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott6 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable7 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable7, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable7.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable7.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott7.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott7 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable8 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable8, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable8.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable8.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott8.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott8 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable9 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable9, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable9.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable9.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      if(osszefuzott9.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select ot.contract,\r\n"
+                                  + "       ct.part_no,\r\n"
+                                  + "       ot.tracy_id,\r\n"
+                                  + "       ot.TRACY_SERIAL_NO,\r\n"
+                                  + "       ot.ALT_TRACY_SERIAL_NO1,\r\n"
+                                  + "       ot.manuf_date,\r\n"
+                                  + "       ot.work_center_no,\r\n"
+                                  + "       ot.resource_id,\r\n"
+                                  + "       ot.scan_loc,\r\n"
+                                  + "       ot.operation_no,\r\n"
+                                  + "       ot.operation_description,\r\n"
+                                  + "       ot.pass,\r\n"
+                                  + "       ot.repetitions,\r\n"
+                                  + "       ot.REPET_LAST_REPAIR,\r\n"
+                                  + "       so.comments,\r\n"
+                                  + "       so.tracy_spec_code,\r\n"
+                                  + "       so.alfa_num_value,\r\n"
+                                  + "       ct.package_id\r\n"
+                                  + "  from ifsapp.C_OPER_TRACY_OVW      ot,\r\n"
+                                  + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
+                                  + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
+                                  + " where 3 = 3\r\n"
+                                  + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott9 +")\r\n"
+                                  + "   and ot.contract = so.contract(+)\r\n"
+                                  + "   and ot.tracy_id = so.tracy_id(+)\r\n"
+                                  + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
+                                  + "      --and ot.tracy_id = '35903860'\r\n"
+                                  + "   and so.COMMENTS(+) is not null \r\n"
+                                  + "   -- and (so.tracy_spec_code = 'MANUF_START_DATE'  or  so.tracy_spec_code = 'MANUF_END_DATE')\r\n"
+                                  + "   and ot.history_id = ct.history_id\r\n"
+                                  + "   and ot.tracy_id = ct.tracy_id\r\n"
+                                  + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
+                                  + " order by ot.manuf_date asc ");
+                          
+                          datatable10 = new DataTable();
+                          jdbcAdapter = new JdbcAdapter();
+                          jdbcAdapter.fillDataTable(datatable10, rs);
+                          //sheet2.insertDataTable(datatable2, true, 1, 1);
+                          
+                          for(int szamlalo2 = 0; szamlalo2 < datatable10.getRows().size(); szamlalo2++)
+                          {                           
+                              sheet4.getRange().get("A" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(0));
+                              sheet4.getRange().get("B" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(1));
+                              sheet4.getRange().get("C" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(2));
+                              sheet4.getRange().get("D" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(3));
+                              sheet4.getRange().get("E" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(4));
+                              sheet4.getRange().get("F" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(5));
+                              sheet4.getRange().get("G" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(6));
+                              sheet4.getRange().get("H" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(7));
+                              sheet4.getRange().get("I" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(8));
+                              sheet4.getRange().get("J" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(9));
+                              sheet4.getRange().get("K" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(10));
+                              sheet4.getRange().get("L" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(11));
+                              sheet4.getRange().get("M" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(12));
+                              sheet4.getRange().get("N" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(13));
+                              sheet4.getRange().get("O" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(14));
+                              sheet4.getRange().get("P" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(15));
+                              sheet4.getRange().get("Q" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(16));
+                              sheet4.getRange().get("R" + cellaszam).setText(datatable10.getRows().get(szamlalo2).getString(17));
+                              cellaszam++;
+                              
+                          }
+                      }
+                      
+                      
+                      
                       cellaszam = 1;
                       sheet5.getRange().get("A" + cellaszam).setText("Tracy ID");
                       sheet5.getRange().get("B" + cellaszam).setText("Anyagtracy ID");
@@ -367,7 +1732,223 @@ public class Hager_adatok extends JPanel {
                           cellaszam++;
                       }
                       
+                      if(osszefuzott2.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott2 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
                       
+                      if(osszefuzott3.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott3 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott4.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott4 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott5.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott5 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott6.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott6 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott7.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott7 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott8.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott8 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+                      
+                      if(osszefuzott9.equals("")) {}
+                      else
+                      {
+                          rs = stmt2.executeQuery("select anyag.*, ifsapp.inventory_part_api.get_description (anyag.Contract,anyag.Component_Part) cikk_nev \r\n"
+                                  + "from ifsapp.C_MTRL_TRACY_OVW anyag\r\n"
+                                  + "where 3 = 3 and TRACY_SERIAL_NO in ("+ osszefuzott9 +")");
+                          
+                          while(rs.next())
+                          {
+                              System.out.println(rs.getString(1));
+                              sheet5.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                              sheet5.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                              sheet5.getRange().get("C" + cellaszam).setText(rs.getString(4));  
+                              sheet5.getRange().get("D" + cellaszam).setText(rs.getString(5));
+                              sheet5.getRange().get("E" + cellaszam).setText(rs.getString(6));
+                              sheet5.getRange().get("F" + cellaszam).setText(rs.getString(7));
+                              sheet5.getRange().get("G" + cellaszam).setText(rs.getString(8));
+                              sheet5.getRange().get("H" + cellaszam).setText(rs.getString(9));
+                              sheet5.getRange().get("I" + cellaszam).setText(rs.getString(26));
+                              sheet5.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                              sheet5.getRange().get("K" + cellaszam).setText(rs.getString(13));
+                              sheet5.getRange().get("L" + cellaszam).setText(rs.getString(20));
+                              
+                              cellaszam++;
+                          }
+                      }
+
+
                       sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:R1"));
                       sheet2.getAllocatedRange().autoFitColumns();
                       sheet2.getAllocatedRange().autoFitRows();
@@ -434,8 +2015,8 @@ public class Hager_adatok extends JPanel {
                           
                       }
                 }
-                  Foablak.frame.setCursor(null);  
-                  }           
+                Foablak.frame.setCursor(null);  
+            }           
             catch(Exception e1)
             { 
                 System.out.println(e1);
