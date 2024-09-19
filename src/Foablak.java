@@ -1359,7 +1359,7 @@ public class Foablak extends JFrame
             //lekerdez.vevoi_email2();            
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
-
+            System.out.println(System.getProperty("user.name"));
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();

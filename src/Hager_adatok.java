@@ -105,11 +105,7 @@ public class Hager_adatok extends JPanel {
                     DataTable datatable10 = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                     String osszefuzott_me = "";
-                    for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
-                    {
-                        osszefuzott_me += ("'" + datatable.getRows().get(szamlalo).getString(0) +"',");
-                    }
-                    osszefuzott_me = osszefuzott_me.substring(0, osszefuzott_me.length() - 1);
+                    
                     Workbook workbook2 = new Workbook();
                     workbook2.setVersion(ExcelVersion.Version2016);
                     Workbook workbook4 = new Workbook();
@@ -126,6 +122,13 @@ public class Hager_adatok extends JPanel {
                     Connection con;                   
                     con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!"); 
                     Statement stmt = con.createStatement();
+                    
+                    for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                    {
+                        osszefuzott_me += ("'" + datatable.getRows().get(szamlalo).getString(0) +"',");
+                    }
+                    osszefuzott_me = osszefuzott_me.substring(0, osszefuzott_me.length() - 1);
+                    
                     
                     ResultSet rs = stmt.executeQuery("SELECT panel FROM videoton.csomagol where csomag in ("+ osszefuzott_me +")");
                     

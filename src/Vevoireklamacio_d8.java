@@ -91,7 +91,7 @@ public class Vevoireklamacio_d8 extends JPanel {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = (Statement) conn.createStatement();
-            String sql = "select Megelozointezkedes, lezaras_datuma from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
+            String sql = "select Megelozointezkedes, lezaras_datuma, D8_felelos from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             stmt.execute(sql);
             ResultSet rs = stmt.getResultSet();
             if(rs.next())

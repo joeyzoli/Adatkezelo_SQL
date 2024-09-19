@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new IFS_kereses());
+		feltolt.addActionListener(new Telecom());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -3382,6 +3382,96 @@ public class Torlo extends JPanel
                   sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                   
                   workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                  
+                  
+                  FileInputStream fileStream = new FileInputStream(menteshelye);
+                  try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                  {
+                      for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                      {    
+                          workbook3.removeSheetAt(i); 
+                      }      
+                      FileOutputStream output = new FileOutputStream(menteshelye);
+                      workbook3.write(output);
+                      output.close();
+                  }                       
+                  JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1);  
+                  Foablak.frame.setCursor(null);  
+                  }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
+            }  
+                               
+         }
+    }
+	
+	class Telecom implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                //DataTable datatable = new DataTable();
+                String menteshelye = System.getProperty("user.home") + "\\Desktop\\telecom heti.xlsx";
+
+                  Workbook workbook = new Workbook();
+                  workbook.setVersion(ExcelVersion.Version2016);
+                  workbook.loadFromFile(menteshelye);
+                  Worksheet sheet = workbook.getWorksheets().get(0);
+                  DataTable datatable = new DataTable();
+                  //DataTable datatable2 = new DataTable();
+                  datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                  //datatable2 = sheet2.exportDataTable(sheet2.getAllocatedRange(), false, false );
+                  
+                  int toroltsorok = 0;
+                  for(int szamlalo = 1; szamlalo < datatable.getRows().size();szamlalo++)
+                  {
+                      String[] datum = datatable.getRows().get(szamlalo).getString(7).split(" ");
+                      String[] ido = datum[3].split(":");
+                      //System.out.println("Óra: "+ ido[0]);
+                      //System.out.println("Perc: "+ ido[1]);
+                      if(Integer.valueOf(ido[0]) > 21)
+                      {
+                          sheet.deleteRow(szamlalo+1);
+                          sheet.getRange().get("H" + (szamlalo+1)).setText("");
+                          System.out.println("Törlés "+ datatable.getRows().get(szamlalo).getString(7));
+                          toroltsorok++;
+                      }
+                      if(Integer.valueOf(ido[0]) < 5)
+                      {
+                          sheet.deleteRow(szamlalo+1);
+                          System.out.println("Törlés "+ datatable.getRows().get(szamlalo).getString(7));
+                          sheet.getRange().get("H" + (szamlalo+1)).setText("");
+                          toroltsorok++;
+                      }
+                      if(Integer.valueOf(ido[0]) == 5)
+                      {
+                          if(Integer.valueOf(ido[1]) < 55)
+                          {
+                              sheet.deleteRow(szamlalo+1);
+                              sheet.getRange().get("H" + (szamlalo+1)).setText("");
+                              System.out.println("Törlés "+ datatable.getRows().get(szamlalo).getString(7));
+                              toroltsorok++;
+                          }
+                      }
+                      System.out.println(szamlalo);
+                      //System.out.println(datatable.getRows().get(szamlalo).getString(7));
+                  }
+                  System.out.println("Törölt sorok száma: " +toroltsorok);
+                  
+                  sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
+                  sheet.getAllocatedRange().autoFitColumns();
+                  sheet.getAllocatedRange().autoFitRows();
+                  
+                  sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                  
+                  workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
                   
                   
                   FileInputStream fileStream = new FileInputStream(menteshelye);

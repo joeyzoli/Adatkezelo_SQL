@@ -389,13 +389,13 @@ public class Vevoireklamacio_d7 extends JPanel {
                 }
                 else
                 {
-                    if(table.getValueAt(sor, 4).toString().equals(""))
+                    if(table2.getValueAt(sor, 4).toString().equals(""))
                     {
                         modell2.removeRow(sor);
                     }
                     else
                     {
-                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
+                        String sql = "delete from qualitydb.Vevoireklamacio_det where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
                         SQA_SQL torlo = new SQA_SQL();
                         torlo.mindenes(sql);
                         modell2.removeRow(sor);

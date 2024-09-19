@@ -143,7 +143,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
-        JLabel lblNewLabel_8 = new JLabel("Észlelés helye");
+        JLabel lblNewLabel_8 = new JLabel("Hol van");
         lblNewLabel_8.setBounds(621, 136, 85, 14);
         add(lblNewLabel_8);
         
@@ -440,7 +440,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
-        JLabel lblNewLabel_8 = new JLabel("Észlelés helye");
+        JLabel lblNewLabel_8 = new JLabel("Hol van");
         lblNewLabel_8.setBounds(621, 136, 85, 14);
         add(lblNewLabel_8);
         

@@ -40,6 +40,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JCheckBox;
 
 public class Nyilatkozatbekero extends JPanel {
     
@@ -56,6 +57,14 @@ public class Nyilatkozatbekero extends JPanel {
     private DefaultTableModel modell;
     private String kodfejto = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Kódfejtő.xlsx";
     private JTextField targy_mezo;
+    private JCheckBox reach_gomb;
+    private JCheckBox rohs_gomb;
+    private JCheckBox cmrt_gomb;
+    private JCheckBox emrt_gomb;
+    private final String reach_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\Q-B-007 REACH declaration for supplier 2.docx";
+    private final String rohs_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\Q-B-006 RoHS declaration for supplier.docx";
+    private final String cmrt_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\RMI_CMRT_6.4.xlsx";
+    private final String emrt_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\RMI_EMRT_1.3.xlsx";
 
     /**
      * Create the panel.
@@ -177,6 +186,22 @@ public class Nyilatkozatbekero extends JPanel {
         cmrt2_box = new JComboBox<String>(cmrt);                            //cmrt
         cmrt2_box.setBounds(812, 208, 111, 22);
         add(cmrt2_box);
+        
+        reach_gomb = new JCheckBox("Reach csatolása");
+        reach_gomb.setBounds(962, 268, 126, 23);
+        add(reach_gomb);
+        
+        rohs_gomb = new JCheckBox("Rohs csatolása");
+        rohs_gomb.setBounds(962, 312, 126, 23);
+        add(rohs_gomb);
+        
+        cmrt_gomb = new JCheckBox("CMRT csatolása");
+        cmrt_gomb.setBounds(962, 349, 126, 23);
+        add(cmrt_gomb);
+        
+        emrt_gomb = new JCheckBox("EMRT csatolása");
+        emrt_gomb.setBounds(962, 392, 126, 23);
+        add(emrt_gomb);
 
     }
     
@@ -224,6 +249,7 @@ public class Nyilatkozatbekero extends JPanel {
                 SQA_SQL gyarto_szama = new SQA_SQL();
                 ResultSet rs = null;
                 System.out.println("Kezdődik");
+                int voltlevel = 0;
                 for(int szamlalo = 0; szamlalo < table.getRowCount();szamlalo++)
                 {
                     if(String.valueOf(reach_box.getSelectedItem()).equals("-")) {}
@@ -242,6 +268,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(reach_box.getSelectedItem())))
                                 {
                                     reach = datatable.getRows().get(szamlalo2).getString(3);
+                                    break;
                                 }
                                 
                             }
@@ -249,12 +276,12 @@ public class Nyilatkozatbekero extends JPanel {
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_reach is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -273,7 +300,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Reach.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" REACH parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
                                 
                                 
@@ -318,12 +345,12 @@ public class Nyilatkozatbekero extends JPanel {
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"' and not nyilatkozatok.CF$_reach = '"+ reach2 +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_reach is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -342,7 +369,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Reach.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" REACH parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
                                 
                                 
@@ -385,13 +412,13 @@ public class Nyilatkozatbekero extends JPanel {
                             System.out.println("Rohs "+rohs);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
-                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ rohs +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_Rohs = '"+ rohs +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_Rohs is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -411,7 +438,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Rohs.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" ROHS parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
                                 
                                 
@@ -455,13 +482,13 @@ public class Nyilatkozatbekero extends JPanel {
                             System.out.println("Rohs2 "+rohs2);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
-                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ rohs +"' and not nyilatkozatok.CF$_reach = '"+ rohs2 +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_Rohs = '"+ rohs +"' and not nyilatkozatok.CF$_Rohs = '"+ rohs2 +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_Rohs is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -481,7 +508,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" Rohs.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" ROHS parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
                                 
                                 
@@ -524,13 +551,13 @@ public class Nyilatkozatbekero extends JPanel {
                             System.out.println("CMRT "+cmrt);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
-                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ cmrt +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_cmrt = '"+ cmrt +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_cmrt is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -549,7 +576,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT, EMRT parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
                                 
                                 
@@ -593,13 +620,13 @@ public class Nyilatkozatbekero extends JPanel {
                             System.out.println("CMRT2 "+cmrt2);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
-                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ cmrt +"' and not nyilatkozatok.CF$_reach = '"+ cmrt2 +"'\r\n"
-                                    + "and manufacturer_no = '"+ gyarto +"'");
+                                    + "WHERE 3 = 3 and not nyilatkozatok.CF$_cmrt = '"+ cmrt +"' and not nyilatkozatok.CF$_cmrt = '"+ cmrt2 +"'\r\n"
+                                    + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_cmrt is null)");
                             Worksheet sheet2 = workbook2.getWorksheets().get(0);
                             int cellaszam = 1;
                             sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
                             sheet2.getRange().get("B" + cellaszam).setText("Description");
-                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer No");
+                            sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
                             cellaszam++;
                             int van = 0;
                             while(rs.next())
@@ -618,10 +645,9 @@ public class Nyilatkozatbekero extends JPanel {
                                 
                                 sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                                 
-                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT.xlsx";
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" CMRT, EMRT parts list.xlsx";
                                 workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
-                                
-                                
+
                                 FileInputStream fileStream = new FileInputStream(menteshelye);
                                 try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
                                 {
@@ -649,98 +675,394 @@ public class Nyilatkozatbekero extends JPanel {
                     }
                     File[] torlendofajlok = fajl.listFiles();
                     
+                    SQA_SQL cimzett = new SQA_SQL();
+                    String emailcim = null;
+                    
+                    if(cimzett.tombvissza_sajat("select email from qualitydb.Kontaktlista where Gyarto = '"+ table.getValueAt(szamlalo, 0).toString() +"'").length == 0){System.out.println("nulla hossz");}
+                    else
+                    {
+                        emailcim = cimzett.tombvissza_sajat("select email from qualitydb.Kontaktlista where Gyarto = '"+ table.getValueAt(szamlalo, 0).toString() +"'")[0];
+                        System.out.println("Van iylen emailcím");
+                    }
+                    
+                    
                     if(torlendofajlok.length == 1)
                     {
-                        Properties props = new Properties(); //new Properties();     System.getProperties();
-                        
-                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
-                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
-                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
-                        Message message = new MimeMessage(session);
-                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
-                        message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu
-                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
-                       
-                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
-                       
-                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
-                        MimeBodyPart attachmentPart = new MimeBodyPart();
-                        attachmentPart.attachFile(torlendofajlok[0]);
-                        multipart.addBodyPart(attachmentPart);
-                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
-                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
-                               
-                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
-                        
-                        Transport.send(message);                                                        //levél küldése
-    
-                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        if(emailcim == null)
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártó nincs felvéve a kontaktlistára: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                        else if(emailcim.contains("@"))
+                        {
+                            Properties props = new Properties(); //new Properties();     System.getProperties();                        
+                            props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                            props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                            Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                            Message message = new MimeMessage(session);
+                            message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                            if(System.getProperty("user.name").equals("meszaros.agnes"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("meszaros.agnes@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("jenei.erika"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("jenei.erika@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("kovacs.zoltan"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));
+                            }
+                            message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu                            
+                            message.setSubject(targy_mezo.getText()+ " "+ emailcim);                                              //tárgy beállítása
+                           
+                            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                           
+                            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                            MimeBodyPart attachmentPart = new MimeBodyPart();
+                            MimeBodyPart attachmentPart2 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart3 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart4 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart5 = new MimeBodyPart();
+                            
+                            attachmentPart.attachFile(torlendofajlok[0]);
+                            multipart.addBodyPart(attachmentPart);
+                            
+                            if(reach_gomb.isSelected())
+                            {
+                                File fajl1 = new File(reach_helye);
+                                attachmentPart2.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart2);
+                            }
+                            if(rohs_gomb.isSelected())
+                            {
+                                File fajl1 = new File(rohs_helye);
+                                attachmentPart3.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart3);
+                            }
+                            if(cmrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(cmrt_helye);
+                                attachmentPart4.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart4);
+                            }
+                            if(emrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(emrt_helye);
+                                attachmentPart5.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart5);
+                            }
+                            
+                            textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                                   
+                            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                            
+                            Transport.send(message);                                                        //levél küldése
+                            voltlevel++;
+                            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        }
+                        else
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Email címe, nem tudom elküldeni a levelet: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
                     }
                     if(torlendofajlok.length == 2)
                     {
-                        Properties props = new Properties(); //new Properties();     System.getProperties();
-                        
-                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
-                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
-                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
-                        Message message = new MimeMessage(session);
-                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
-                        message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása
-                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
-                       
-                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
-                       
-                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
-                        MimeBodyPart attachmentPart = new MimeBodyPart();
-                        MimeBodyPart attachmentPart2= new MimeBodyPart();
-                        attachmentPart.attachFile(torlendofajlok[0]);
-                        attachmentPart2.attachFile(torlendofajlok[1]);
-                        multipart.addBodyPart(attachmentPart);
-                        multipart.addBodyPart(attachmentPart2);
-                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
-                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
-                               
-                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
-                        
-                        Transport.send(message);                                                        //levél küldése
-    
-                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        if(emailcim == null)
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártó nincs felvéve a kontaktlistára: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                        else if(emailcim.contains("@"))
+                        {
+                            Properties props = new Properties(); //new Properties();     System.getProperties();
+                            
+                            props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                            props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                            Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                            Message message = new MimeMessage(session);
+                            message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                            if(System.getProperty("user.name").equals("meszaros.agnes"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("meszaros.agnes@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("jenei.erika"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("jenei.erika@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("kovacs.zoltan"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));
+                            }
+                            message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu                            
+                            message.setSubject(targy_mezo.getText()+ " "+ emailcim);                                              //tárgy beállítása
+                           
+                            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                           
+                            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                            MimeBodyPart attachmentPart = new MimeBodyPart();
+                            MimeBodyPart attachmentPart2= new MimeBodyPart();
+                            MimeBodyPart attachmentPart3 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart4 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart5 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart6 = new MimeBodyPart();
+                            attachmentPart.attachFile(torlendofajlok[0]);
+                            attachmentPart2.attachFile(torlendofajlok[1]);
+                            multipart.addBodyPart(attachmentPart);
+                            multipart.addBodyPart(attachmentPart2);
+                            
+                            if(reach_gomb.isSelected())
+                            {
+                                File fajl1 = new File(reach_helye);
+                                attachmentPart3.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart3);
+                            }
+                            if(rohs_gomb.isSelected())
+                            {
+                                File fajl1 = new File(rohs_helye);
+                                attachmentPart4.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart4);
+                            }
+                            if(cmrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(cmrt_helye);
+                                attachmentPart5.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart5);
+                            }
+                            if(emrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(emrt_helye);
+                                attachmentPart6.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart6);
+                            }
+                            
+                            textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                                   
+                            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                            
+                            Transport.send(message);                                                        //levél küldése
+                            voltlevel++;
+                            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        }
+                        else
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                File ujhely = new File(System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName());
+                                ujhely.getParentFile().mkdirs(); 
+                                ujhely.createNewFile();                                
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Email címe, nem tudom elküldeni a levelet: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
                     }
                     if(torlendofajlok.length == 3)
                     {
-                        Properties props = new Properties(); //new Properties();     System.getProperties();
-                        
-                        props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
-                        props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
-                        Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
-                        Message message = new MimeMessage(session);
-                        message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
-                        message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása
-                        message.setSubject(targy_mezo.getText());                                              //tárgy beállítása
-                       
-                        Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
-                       
-                        MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
-                        MimeBodyPart attachmentPart = new MimeBodyPart();
-                        MimeBodyPart attachmentPart2= new MimeBodyPart();
-                        MimeBodyPart attachmentPart3 = new MimeBodyPart();
-                        attachmentPart.attachFile(torlendofajlok[0]);
-                        attachmentPart2.attachFile(torlendofajlok[1]);
-                        attachmentPart3.attachFile(torlendofajlok[2]);
-                        multipart.addBodyPart(attachmentPart);
-                        multipart.addBodyPart(attachmentPart2);
-                        multipart.addBodyPart(attachmentPart3);
-                        textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
-                        multipart.addBodyPart(textPart);                                            //csatolmány osztály           
-                               
-                        message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
-                        
-                        Transport.send(message);                                                        //levél küldése
-    
-                        System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        if(emailcim == null)
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártó nincs felvéve a kontaktlistára: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                        else if(emailcim.contains("@"))
+                        {
+                            Properties props = new Properties(); //new Properties();     System.getProperties();
+                            
+                            props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                            props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                            Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                            Message message = new MimeMessage(session);
+                            message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                            if(System.getProperty("user.name").equals("meszaros.agnes"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("meszaros.agnes@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("jenei.erika"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("jenei.erika@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("kovacs.zoltan"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("recepcio"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu,recepcio@veas.videoton.hu,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu                            
+                            message.setSubject(targy_mezo.getText()+ " "+ emailcim);                                              //tárgy beállítása
+                           
+                            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                           
+                            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                            MimeBodyPart attachmentPart = new MimeBodyPart();
+                            MimeBodyPart attachmentPart2= new MimeBodyPart();
+                            MimeBodyPart attachmentPart3 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart4 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart5 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart6 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart7 = new MimeBodyPart();
+                            attachmentPart.attachFile(torlendofajlok[0]);
+                            attachmentPart2.attachFile(torlendofajlok[1]);
+                            attachmentPart3.attachFile(torlendofajlok[2]);
+                            multipart.addBodyPart(attachmentPart);
+                            multipart.addBodyPart(attachmentPart2);
+                            multipart.addBodyPart(attachmentPart3);
+                            
+                            if(reach_gomb.isSelected())
+                            {
+                                File fajl1 = new File(reach_helye);
+                                attachmentPart4.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart4);
+                            }
+                            if(rohs_gomb.isSelected())
+                            {
+                                File fajl1 = new File(rohs_helye);
+                                attachmentPart5.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart5);
+                            }
+                            if(cmrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(cmrt_helye);
+                                attachmentPart6.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart6);
+                            }
+                            if(emrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(emrt_helye);
+                                attachmentPart7.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart7);
+                            }
+                            
+                            textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                                   
+                            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                            
+                            Transport.send(message);                                                        //levél küldése
+                            voltlevel++; 
+                            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        }
+                        else
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Email címe, nem tudom elküldeni a levelet: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
                     }
                     
                     
@@ -750,39 +1072,20 @@ public class Nyilatkozatbekero extends JPanel {
                     }
                     System.out.println("Fut a fő for");
                 }
-                /*
-                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
-                sheet.getAllocatedRange().autoFitColumns();
-                sheet.getAllocatedRange().autoFitRows();
                 
-                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-                
-                workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
-                rs.close();
-                stmt.close();
-                con.close();
-                
-                FileInputStream fileStream = new FileInputStream(menteshelye);
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-                {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(menteshelye);
-                    workbook2.write(output);
-                    output.close();
-                }   */
                 rs.close();
                 stmt.close();
                 con.close();
                 System.out.println("Vége");
-                JOptionPane.showMessageDialog(null, "Kész! \n Email/Email-ek elküldve'", "Info", 1); 
+                if(voltlevel > 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Kész! \n Email/Email-ek elküldve'", "Info", 1);
+                }
                 con.close();  
                 Foablak.frame.setCursor(null);  
 
                   
-                  }           
+            }           
             catch(Exception e1)
             { 
                 System.out.println(e1);

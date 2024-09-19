@@ -538,7 +538,7 @@ public class Vevoireklamacio_d0 extends JPanel {
             {               
                 vevo_box.removeActionListener(valaszto);
                 Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
-                sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
+                sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok \r\n"
                         + "from ifsapp.PART_REVISION\r\n"
                         + "where 3 = 3\r\n"
                         + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"

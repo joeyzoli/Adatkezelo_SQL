@@ -545,7 +545,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                     }
                     else
                     {
-                        String sql = "delete from qualitydb.Vevoireklamacio_elo where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
+                        String sql = "delete from qualitydb.Vevoireklamacio_det where ID ='"+ table2.getValueAt(sor, 4).toString() +"'";
                         SQA_SQL torlo = new SQA_SQL();
                         torlo.mindenes(sql);
                         modell2.removeRow(sor);
