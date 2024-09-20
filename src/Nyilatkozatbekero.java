@@ -238,7 +238,8 @@ public class Nyilatkozatbekero extends JPanel {
                 Class.forName("oracle.jdbc.OracleDriver");  //.driver
                                     
                 Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
-                Statement stmt = con.createStatement();                      
+                Statement stmt = con.createStatement();     
+                Statement stmt2 = con.createStatement();
                 Workbook workbook = new Workbook();
                 Workbook workbook2 = new Workbook();
                 workbook.setVersion(ExcelVersion.Version2016);
@@ -248,6 +249,7 @@ public class Nyilatkozatbekero extends JPanel {
                 datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
                 SQA_SQL gyarto_szama = new SQA_SQL();
                 ResultSet rs = null;
+                ResultSet rs2 = null;
                 System.out.println("Kezdődik");
                 int voltlevel = 0;
                 for(int szamlalo = 0; szamlalo < table.getRowCount();szamlalo++)
@@ -286,11 +288,34 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                System.out.println(cikkszam);
+                                System.out.println(megnevezes);
+                                System.out.println(gyartoicikk);
+                                if(rs2.next())
+                                {                                    
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }                               
                             }
                             if(van > 0)
                             {
@@ -355,11 +380,31 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                if(rs2.next())
+                                {
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }
                             }
                             if(van > 0)
                             {
@@ -423,12 +468,31 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                if(rs2.next())
+                                {
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }
                             }
                             if(van > 0)
                             {
@@ -493,12 +557,31 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                System.out.println(rs.getString(1) +" "+ rs.getString(2) +" "+ rs.getString(3));
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                if(rs2.next())
+                                {
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }
                             }
                             if(van > 0)
                             {
@@ -562,11 +645,31 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                if(rs2.next())
+                                {
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }
                             }
                             if(van > 0)
                             {
@@ -631,11 +734,31 @@ public class Nyilatkozatbekero extends JPanel {
                             int van = 0;
                             while(rs.next())
                             {
-                                sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
-                                sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                                sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                                cellaszam++;
-                                van++;
+                                String cikkszam = rs.getString(1);
+                                String megnevezes = rs.getString(2);
+                                String gyartoicikk = rs.getString(3);
+                                rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                        + "from\r\n"
+                                        + "(select\r\n"
+                                        + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                        + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                        + "where\r\n"
+                                        + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                        + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                        + "and part_no = '"+ cikkszam +"') rendeles");
+                                if(rs2.next())
+                                {
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                }
                             }
                             if(van > 0)
                             {
