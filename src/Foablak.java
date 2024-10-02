@@ -231,15 +231,15 @@ public class Foablak extends JFrame
 		
 		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
 		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
-		menu.add(vevoi_reklamaciok);
+		//menu.add(vevoi_reklamaciok);
 		
 		JMenuItem vevoi_lezaras = new JMenuItem("Vevői lezárás");
 		vevoi_lezaras.addActionListener(new PanelCsere_vevoi_lezaras());
-		menu.add(vevoi_lezaras);
+		//menu.add(vevoi_lezaras);
 		
 		JMenuItem vevoi_ujadat = new JMenuItem("Vevői új adat");
 		vevoi_ujadat.addActionListener(new PanelCsere_vevoi_ujadat());
-		menu.add(vevoi_ujadat);
+		//menu.add(vevoi_ujadat);
 		
 		JMenuItem retour = new JMenuItem("Retour");
 		retour.addActionListener(new PanelCsere_retour());
@@ -1355,8 +1355,8 @@ public class Foablak extends JFrame
         public void run()
         {
             SQL lekerdez = new SQL();
-            lekerdez.vevoi_email();
-            //lekerdez.vevoi_email2();            
+            //lekerdez.vevoi_email();
+            lekerdez.vevoi_email2();            
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             System.out.println(System.getProperty("user.name"));

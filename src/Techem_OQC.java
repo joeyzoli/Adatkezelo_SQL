@@ -223,6 +223,7 @@ public class Techem_OQC extends JPanel {
                     int cellaszam2 = 6;
                     int cellaszam3 = 6;
                     int megjegyzes = 39;
+                    int megjegyzes2 = 43;
                     int sorszam = 1;
                     meszamok.clear();
                     szeriaszamok.clear();
@@ -532,8 +533,8 @@ public class Techem_OQC extends JPanel {
                                             else if(rs3.getString(15).equals(""))  {}
                                             else
                                             {
-                                                sheet5.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
-                                                megjegyzes++;
+                                                sheet5.getRange().get("D" + megjegyzes2).setText(sorszam +" "+rs3.getString(15));
+                                                megjegyzes2++;
                                                 sorszam++;
                                             }
                                             harmincketto++;
@@ -596,8 +597,8 @@ public class Techem_OQC extends JPanel {
                                             else if(rs3.getString(15).equals(""))  {}
                                             else
                                             {
-                                                sheet3.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
-                                                megjegyzes++;
+                                                sheet3.getRange().get("D" + megjegyzes2).setText(sorszam +" "+rs3.getString(15));
+                                                megjegyzes2++;
                                                 sorszam++;
                                             }
                                             harmincketto++;
@@ -660,9 +661,10 @@ public class Techem_OQC extends JPanel {
                                             else if(rs3.getString(15).equals(""))  {}
                                             else
                                             {
-                                                sheet.getRange().get("D" + megjegyzes).setText(sorszam +" "+rs3.getString(15));
-                                                megjegyzes++;
+                                                sheet.getRange().get("D" + megjegyzes2).setText(sorszam +" "+rs3.getString(15));
+                                                megjegyzes2++;
                                                 sorszam++;
+                                                System.out.println("Van megjegyzés "+ rs3.getString(15));
                                             }
                                             harmincketto++;
                                             cellaszam++;
@@ -674,9 +676,9 @@ public class Techem_OQC extends JPanel {
                         }
                         
                     }
-                    System.out.println("Végzett az ME szám");
-                    System.out.println("Cellaszám "+ cellaszam);
-                    System.out.println("Vaniylen "+ vanilyen);
+                    //System.out.println("Végzett az ME szám");
+                    //System.out.println("Cellaszám "+ cellaszam);
+                    //System.out.println("Vanilyen "+ vanilyen);
                     if(vanilyen > 0)
                     {
                         File f = new File(System.getProperty("user.home") + "\\Desktop\\Techem OQC\\Techem OQC_Rhsz_"+ raklapok.get(szamlalo) +".xlsx");          //\\Techem OQC

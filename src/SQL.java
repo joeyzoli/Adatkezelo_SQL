@@ -2908,10 +2908,12 @@ public class SQL
                 {
                     if(sheet.getRange().get("C" + szamlalo).getText().equals(rs.getString(4)))
                     {
+                        System.out.println("Ez az ID: " +rs.getString(2));
                         sql = "select felelos, Vevo, tipus from qualitydb.Vevoireklamacio_alap where ID =  '"+ rs.getString(2) +"'";                                            
                         stmt2.execute(sql);    
                         rs2 = stmt2.getResultSet();
                         if(rs2.next());
+                        System.out.println("Ez van benne: " +rs2.getString(1));
                         String[] felelos = rs2.getString(1).split(";");                        
                         cimzett = sheet.getRange().get("I" + szamlalo).getText() ;      //+",reznyak.norbert@veas.videoton.hu,makk.aron@veas.videoton.hu"                        
                         for(int szamlalo2 = 1; szamlalo2 < sheet.getLastRow()+1; szamlalo2++)
@@ -3060,7 +3062,7 @@ public class SQL
             }
     
             System.out.println("Lefutott az Email2 rész");
-            resultSet.close();
+            //resultSet.close();
             stmt.close();
             conn.close();
         

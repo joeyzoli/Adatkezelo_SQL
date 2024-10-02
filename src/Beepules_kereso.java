@@ -33,6 +33,7 @@ public class Beepules_kereso extends JPanel {
     private String osszefuzott3;
     private String osszefuzott4;
     private String osszefuzott5;
+    private JTextField datum_mezo;
 
     /**
      * Create the panel.
@@ -65,7 +66,7 @@ public class Beepules_kereso extends JPanel {
         
         JButton start_gomb = new JButton("Start");
         start_gomb.addActionListener(new Kereses());
-        start_gomb.setBounds(495, 229, 89, 23);
+        start_gomb.setBounds(489, 247, 89, 23);
         add(start_gomb);
         
         setBackground(Foablak.hatter_szine);
@@ -74,6 +75,15 @@ public class Beepules_kereso extends JPanel {
         lblNewLabel_3.setFont(new Font("Tahoma", Font.ITALIC, 10));
         lblNewLabel_3.setBounds(654, 122, 171, 14);
         add(lblNewLabel_3);
+        
+        JLabel lblNewLabel_4 = new JLabel("Dátum -tól");
+        lblNewLabel_4.setBounds(384, 209, 103, 14);
+        add(lblNewLabel_4);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.setBounds(534, 206, 86, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
 
     }
     
@@ -288,7 +298,79 @@ public class Beepules_kereso extends JPanel {
                       }
                       JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS beépülés adatok.xlsx néven!", "Info", 1); 
                       con.close(); 
-                }  
+                }
+                else
+                { 
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    
+                    Workbook workbook2 = new Workbook();
+                    Worksheet sheet2 = workbook2.getWorksheets().get(0);
+            
+                      int cellaszam = 1;
+                      sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
+                      sheet2.getRange().get("B" + cellaszam).setText("Komponens cikkszám");
+                      sheet2.getRange().get("C" + cellaszam).setText("Beépült ME szám");
+                      sheet2.getRange().get("D" + cellaszam).setText("Sarzs");
+                      sheet2.getRange().get("E" + cellaszam).setText("Felhasznált mennyiség");
+                      sheet2.getRange().get("F" + cellaszam).setText("Gyártás ideje");
+                      sheet2.getRange().get("G" + cellaszam).setText("Gyártó azonosító");
+                      sheet2.getRange().get("H" + cellaszam).setText("Gyártó neve");
+                      sheet2.getRange().get("I" + cellaszam).setText("Gyártói cikkszám 1");
+                      sheet2.getRange().get("J" + cellaszam).setText("Gyártói cikkszám 2");
+                      sheet2.getRange().get("K" + cellaszam).setText("Gyártói lot 1");
+                      sheet2.getRange().get("L" + cellaszam).setText("Beérkezés dátuma");
+                      cellaszam++;
+                      rs = stmt.executeQuery("select beepulesek.*, gyartoiadatok.C_MANUFACTURER_ID as gyarto_azonosito,ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
+                              + "gyartoiadatok.C_MANU_PART_NO as gyartoicikk1, gyartoiadatok.C_MANU_PART_NO2 as gyartoicikk2, gyartoiadatok.C_LOT1  as gyartoi_lot  , gyartoiadatok.C_DATE1 as beerkezes  \r\n"
+                              + "from ifsapp.C_INV_PART_BARCODE_HIST gyartoiadatok,\r\n"
+                              + "    (select TRACY_SERIAL_NO as szeriaszam, COMPONENT_PART as komponens, WAIV_DEV_REJ_NO as me_szam, LOT_BATCH_NO as Sarzs, QTY_CONSUMED as felhasznalt_menny, CONSUMPTION_DATE as gyartas_ideje \r\n"
+                              + "      from ifsapp.C_MTRL_TRACY_OVW\r\n"
+                              + "    where CONSUMPTION_DATE > to_date( '"+ datum_mezo.getText().replace(".", "") +"', 'YYYYMMDDHH24:MI:SS' )\r\n"
+                              + "     and COMPONENT_PART = '"+ komponens_mezo.getText() +"') beepulesek\r\n"
+                              + "  where 3 = 3\r\n"
+                              + "    and beepulesek.me_szam = gyartoiadatok.WAIV_DEV_REJ_NO  and gyartoiadatok.C_DATE1 is not null\r\n"
+                              + "           group by beepulesek.szeriaszam, beepulesek.komponens, beepulesek.me_szam,beepulesek.sarzs, beepulesek.felhasznalt_menny, beepulesek.gyartas_ideje, gyartoiadatok.C_MANUFACTURER_ID,\r\n"
+                              + "           gyartoiadatok.C_MANU_PART_NO, gyartoiadatok.C_MANU_PART_NO2 , gyartoiadatok.C_LOT1, gyartoiadatok.C_DATE1\r\n"
+                              + "           order by beepulesek.szeriaszam asc");
+                      while(rs.next())
+                      {                        
+                          sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                          sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                          sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                          sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                          sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                          sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                          sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                          sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                          sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                          sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                          sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                          sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                          cellaszam++;
+                      }
+                      
+                      
+                      
+                      sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                      sheet2.getAllocatedRange().autoFitColumns();
+                      sheet2.getAllocatedRange().autoFitRows();
+                      sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                      String hova = System.getProperty("user.home") + "\\Desktop\\IFS beépülés adatok.xlsx";
+                      workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                      FileInputStream fileStream = new FileInputStream(hova);
+                      try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                      {
+                          for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                          {    
+                              workbook3.removeSheetAt(i); 
+                          }      
+                          FileOutputStream output = new FileOutputStream(hova);
+                          workbook3.write(output);
+                          output.close();
+                      }
+                      JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS beépülés adatok.xlsx néven!", "Info", 1); 
+                      con.close(); 
+                }
                 Foablak.frame.setCursor(null);    
                 
             } 

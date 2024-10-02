@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Telecom());
+		feltolt.addActionListener(new Vevoi_frissit());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1639,8 +1639,8 @@ public class Torlo extends JPanel
             try
             {
                 ResultSet result;
-                JdbcAdapter jdbcAdapter;
-                DataTable datatable;
+                //JdbcAdapter jdbcAdapter;
+                //DataTable datatable;
                 Workbook workbook;
                 //Registering the Driver
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
@@ -1676,9 +1676,14 @@ public class Torlo extends JPanel
                         + "    from        videoton.fkov\n"
                         + "    where        \n"
                         + "                videoton.fkov.hely in (125,126,127,128,129,130)\n"
-                        + "    order by    videoton.fkov.ido asc;";*/
+                        + "    order by    videoton.fkov.ido asc;";
                 
-                String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";
+                String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
+                String sql = "select nev, fkov.*  \n"
+                        + "from videoton.fkov\n"
+                        + " inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
+                        + "where 3=3 and hely = '26'\n"
+                        + "and panel like '%LOX-0046%'";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1686,16 +1691,34 @@ public class Torlo extends JPanel
                            
                 cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                 result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
-                datatable = new DataTable();
+                //datatable = new DataTable();
                 
                 workbook = new Workbook();
                 workbook.setVersion(ExcelVersion.Version2016); 
-                jdbcAdapter = new JdbcAdapter();         
-                jdbcAdapter.fillDataTable(datatable, result);
+                //jdbcAdapter = new JdbcAdapter();         
+                //jdbcAdapter.fillDataTable(datatable, result);
              
                 //Get the first worksheet
                 Worksheet sheet = workbook.getWorksheets().get(0);
-                sheet.insertDataTable(datatable, true, 1, 1);
+                int cellaszam = 1;
+                sheet.getRange().get("A" + cellaszam).setText("Panel");
+                sheet.getRange().get("B" + cellaszam).setText("Idő");
+                sheet.getRange().get("C" + cellaszam).setText("Ok");
+                sheet.getRange().get("D" + cellaszam).setText("Szériaszám");
+                sheet.getRange().get("E" + cellaszam).setText("Másodlagos kód");
+                cellaszam++;
+                while(result.next())
+                {
+                    sheet.getRange().get("A" + cellaszam).setText(result.getString(5));
+                    sheet.getRange().get("B" + cellaszam).setText(result.getString(4));
+                    sheet.getRange().get("C" + cellaszam).setText(result.getString(6));
+                    sheet.getRange().get("D" + cellaszam).setText(result.getString(12));
+                    sheet.getRange().get("E" + cellaszam).setText(result.getString(10));
+                    cellaszam++;
+                    System.out.println(cellaszam);
+                }
+                
+                //sheet.insertDataTable(datatable, true, 1, 1);
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
@@ -1705,7 +1728,7 @@ public class Torlo extends JPanel
                 result.close();
                 cstmt.close();
                 con.close();
-                workbook.setActiveSheetIndex(0);
+                //workbook.setActiveSheetIndex(0);
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -3498,6 +3521,72 @@ public class Torlo extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                        //kiírja a hibaüzenetet
             }  
                                
+         }
+    }
+	
+	class Vevoi_frissit implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+            Statement stmt2 = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               stmt2 = (Statement) conn.createStatement();
+               String excelfile1 =  "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Projekt- mérnök.xlsx";                            
+               Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
+               Workbook workbook = new Workbook();
+               workbook.loadFromFile(excelfile1);
+               Worksheet sheet = workbook.getWorksheets().get(0);               
+               DataTable datatable = new DataTable();
+               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+               ResultSet rs = null;
+               
+               rs = stmt2.executeQuery("select id, felelos, vevo from qualitydb.Vevoireklamacio_alap where 3 = 3");
+               
+               while(rs.next())
+               {
+                   if(rs.getString(2).equals(";"))
+                   {
+                       for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+                       {
+                           if(rs.getString(3).toUpperCase().equals(datatable.getRows().get(szamlalo).getString(0).toUpperCase()))
+                           {
+                               stmt.executeUpdate("update qualitydb.Vevoireklamacio_alap set  Felelos = ';" + datatable.getRows().get(szamlalo).getString(1) +"' "
+                                       + "where ID = '" + rs.getString(1) + "'");
+                               System.out.println("Találat");
+                           }
+                           System.out.println("Fut a for");
+                       }     
+                   }
+                   System.out.println("Fut a while");
+               }
+               Foablak.frame.setCursor(null);                        
+               stmt.close();
+               conn.close();                
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
          }
     }
 	

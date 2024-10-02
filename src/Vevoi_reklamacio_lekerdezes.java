@@ -137,12 +137,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         JLabel lblNewLabel_5 = new JLabel("Gafikonok");
         lblNewLabel_5.setBounds(430, 529, 80, 14);
-        add(lblNewLabel_5);
-        
-        JLabel lblNewLabel_6 = new JLabel("6D");
-        lblNewLabel_6.setBounds(430, 573, 46, 14);
-        add(lblNewLabel_6);
-        
+        add(lblNewLabel_5);        
+        /*
         JLabel lblNewLabel_7 = new JLabel("Csatolt Képek");
         lblNewLabel_7.setBounds(420, 619, 90, 14);
         add(lblNewLabel_7);
@@ -159,7 +155,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         JButton excelmentes = new JButton("Mentés");
         excelmentes.setBounds(520, 651, 89, 23);
         excelmentes.addActionListener(new Excelmentes());
-        add(excelmentes);
+        add(excelmentes);*/
         ido();
         
         setBackground(Foablak.hatter_szine);
@@ -1217,7 +1213,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 Worksheet sheet2 = workbook.getWorksheets().get(1);
                 sql = "select *"
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + "where 3=3 and Lezaras_datuma >= '"+datumtol.getText() +"' and Lezaras_datuma <= '"+ datumig.getText() +"'\n"
+                        + "where 3=3 and Ertesites_datuma >= '"+datumtol.getText() +"' and Ertesites_datuma <= '"+ datumig.getText() +"'\n"
                         + "order by Lezaras_datuma asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();

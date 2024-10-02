@@ -187,7 +187,7 @@ public class SQA_SQL {
               System.out.println(e);
               String hibauzenet2 = e.toString();
               JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
+           }
         conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = (Statement) conn.createStatement();
         stmt.executeUpdate(SQL);
