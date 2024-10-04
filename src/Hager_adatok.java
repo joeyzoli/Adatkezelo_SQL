@@ -26,6 +26,8 @@ import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 public class Hager_adatok extends JPanel {
     
@@ -37,7 +39,9 @@ public class Hager_adatok extends JPanel {
     private String osszefuzott6 = "";;
     private String osszefuzott7 = "";;
     private String osszefuzott8 = "";;
-    private String osszefuzott9 = "";;
+    private String osszefuzott9 = "";
+    private JTextField iranyszam_mezo;
+    private JTextField datum_mezo;;
 
     /**
      * Create the panel.
@@ -70,12 +74,38 @@ public class Hager_adatok extends JPanel {
         megnyit2_gomb.addActionListener(new Lekerdezes2());
         megnyit2_gomb.setBounds(630, 207, 89, 23);
         add(megnyit2_gomb);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(66, 250, 1021, 23);
+        add(separator);
+        
+        JLabel lblNewLabel_3 = new JLabel("Irányszám");
+        lblNewLabel_3.setBounds(473, 298, 109, 14);
+        add(lblNewLabel_3);
+        
+        iranyszam_mezo = new JTextField();
+        iranyszam_mezo.setBounds(630, 295, 155, 20);
+        add(iranyszam_mezo);
+        iranyszam_mezo.setColumns(10);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.setBounds(630, 326, 86, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_4 = new JLabel("Dátum");
+        lblNewLabel_4.setBounds(473, 329, 70, 14);
+        add(lblNewLabel_4);
+        
+        JButton keres_gomb = new JButton("Keresés");
+        keres_gomb.addActionListener(new Lekerdezes3());
+        keres_gomb.setBounds(555, 370, 89, 23);
+        add(keres_gomb);
 
     }
     
     class Lekerdezes implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
-        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
          {
             try
@@ -2204,6 +2234,140 @@ public class Hager_adatok extends JPanel {
                     }
                 }
                 
+            }
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+            }  
+                               
+         }
+    }
+    
+    class Lekerdezes3 implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {              
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Workbook workbook2 = new Workbook();
+                workbook2.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);
+              
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                     //jdbc mysql driver meghÃ­vÃ¡sa
+                
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+                Connection con;                   
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!"); 
+                Statement stmt = con.createStatement();
+                
+                DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                    
+                Connection con2 = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                Statement stmt2 = con2.createStatement();
+                ResultSet rs2 = null;
+                
+                ResultSet rs = stmt.executeQuery("SELECT * \r\n"
+                        + "FROM videoton.kov \r\n"
+                        + "where 3 = 3 -- and panel = '111A24058AA2440321694'\r\n"
+                        + " and ido > '"+ datum_mezo.getText() +" 00:00:00' and ido < '"+ datum_mezo.getText() +" 23:59:59'\r\n"
+                        + " and gyszam = '"+ iranyszam_mezo.getText() +"'");
+                
+                int cellaszam = 1;
+                sheet2.getRange().get("A" + cellaszam).setText("Dátum");
+                sheet2.getRange().get("B" + cellaszam).setText("Sor");
+                sheet2.getRange().get("C" + cellaszam).setText("Eredeti cimke");
+                sheet2.getRange().get("D" + cellaszam).setText("Cikkszám");
+                sheet2.getRange().get("E" + cellaszam).setText("Megnevezés");
+                sheet2.getRange().get("F" + cellaszam).setText("Charge");
+                sheet2.getRange().get("G" + cellaszam).setText("Lot");
+                sheet2.getRange().get("H" + cellaszam).setText("Lot2");
+                sheet2.getRange().get("I" + cellaszam).setText("Datecod");
+                sheet2.getRange().get("J" + cellaszam).setText("Gyártó");
+                sheet2.getRange().get("K" + cellaszam).setText("Gyártói cikk");
+                sheet2.getRange().get("L" + cellaszam).setText("Eredeti menny");
+                sheet2.getRange().get("M" + cellaszam).setText("ME");
+                sheet2.getRange().get("N" + cellaszam).setText("Panel");
+                sheet2.getRange().get("O" + cellaszam).setText("Iranyszam");
+                
+                cellaszam++;
+                
+                while(rs.next())
+                {  
+                    sheet2.getRange().get("A" + cellaszam).setText(rs.getString(6));
+                    sheet2.getRange().get("B" + cellaszam).setText("Fuji NXT"+rs.getString(11));
+                    sheet2.getRange().get("C" + cellaszam).setText(rs.getString(4));
+                    
+                    String meszam = rs.getString(4).substring(rs.getString(4).length() -8, rs.getString(4).length());
+                    
+                   
+                    System.out.println("ME: "+meszam );
+                    
+                    rs2 = stmt2.executeQuery("select PART_NO, ifsapp.inventory_part_api.Get_Description(contract, part_no) Megnevezes,  LOT_BATCH_NO,\r\n"
+                            + "C_LOT1  as gyartoi_lot, C_LOT2, C_MANU_PART_NO2 as gyartoicikk2, ifsapp.MANUFACTURER_INFO_API.Get_Name(C_MANUFACTURER_ID) as gyarto_neve,\r\n"
+                            + "C_MANU_PART_NO as gyartoicikk1, ORIGIN_PACK_SIZE    \r\n"
+                            + "from ifsapp.INVENTORY_PART_BARCODE   \r\n"
+                            + "  where 3 = 3\r\n"
+                            + "  and WAIV_DEV_REJ_NO = '"+ meszam +"'");
+                    if(rs2.next())
+                    {                  
+                        sheet2.getRange().get("D" + cellaszam).setText(rs2.getString(1));
+                        sheet2.getRange().get("E" + cellaszam).setText(rs2.getString(2));
+                        sheet2.getRange().get("F" + cellaszam).setText(rs2.getString(3));
+                        sheet2.getRange().get("G" + cellaszam).setText(rs2.getString(4));
+                        sheet2.getRange().get("H" + cellaszam).setText(rs2.getString(5));
+                        sheet2.getRange().get("I" + cellaszam).setText(rs2.getString(6));
+                        sheet2.getRange().get("J" + cellaszam).setText(rs2.getString(7));
+                        sheet2.getRange().get("K" + cellaszam).setText(rs2.getString(8));
+                        sheet2.getRange().get("L" + cellaszam).setText(rs2.getString(9));
+                        sheet2.getRange().get("M" + cellaszam).setText(meszam);
+                    }
+                    sheet2.getRange().get("N" + cellaszam).setText(rs.getString(3));
+                    sheet2.getRange().get("O" + cellaszam).setText(rs.getString(10));
+                    
+                    cellaszam++;
+                }
+
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:R1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+    
+                String hova = System.getProperty("user.home") + "\\Desktop\\Hager beépülés adatok.xlsx";
+                try 
+                {
+                    workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                    FileInputStream fileStream = new FileInputStream(hova);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(hova);
+                        workbook3.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra Hager raktárban adatok.xlsx néven!", "Info", 1); 
+                    con.close();
+                } 
+                catch (Exception e1) 
+                {
+                    System.out.println(e1);
+                    e1.printStackTrace();
+                    String hibauzenet = e1.toString();
+                    Email hibakuldes = new Email();
+                    hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                    JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kiírja a hibaüzenetet
+                }
+                Foablak.frame.setCursor(null); 
             }
             catch(Exception e1)
             { 
