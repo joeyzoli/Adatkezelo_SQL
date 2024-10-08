@@ -929,6 +929,59 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                                 
                             }
+                            
+                            if(intezkedes_mezo.getText().equals("")) {}
+                            else
+                            {
+                                String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                                {
+                                    String uzenet = "Sziasztok! \n \n"
+                                            + "Zárolva lett az alábbi tétel: \n"
+                                            + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                            + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                            + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                            + "Dátum: "+ datum_mezo.getText() +"\n"
+                                            + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                            + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                            + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
+                                    Email email = new Email();
+                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                    lekerdezes.mindenes(sql2);
+                                }
+                            }
+                            
+                            if(technikus.equals("Igen"))
+                            {
+                                if(gyokerintezkedes_mezo.getText().equals("")) {}
+                                else
+                                {
+                                    String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                    if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                                    {
+                                        String uzenet = "Sziasztok! \n \n"
+                                                + "Zárolva lett az alábbi tétel: \n"
+                                                + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                                + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                                + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                                + "Dátum: "+ datum_mezo.getText() +"\n"
+                                                + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                                + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                                + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
+                                                + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
+                                        Email email = new Email();
+                                        email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                        sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                        lekerdezes.mindenes(sql2);
+                                    }
+                                }
+                            }
+                            
                             if(lekerdezes.mindenes2(sql) == 0)
                             {
                                 visszaallit();
@@ -997,6 +1050,59 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                                 
                             }
+                            
+                            if(intezkedes_mezo.getText().equals("")) {}
+                            else
+                            {
+                                String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                                {
+                                    String uzenet = "Sziasztok! \n \n"
+                                            + "Zárolva lett az alábbi tétel: \n"
+                                            + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                            + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                            + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                            + "Dátum: "+ datum_mezo.getText() +"\n"
+                                            + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                            + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                            + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
+                                    Email email = new Email();
+                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                    lekerdezes.mindenes(sql2);
+                                }
+                            }
+                            
+                            if(technikus.equals("Igen"))
+                            {
+                                if(gyokerintezkedes_mezo.getText().equals("")) {}
+                                else
+                                {
+                                    String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                    if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                                    {
+                                        String uzenet = "Sziasztok! \n \n"
+                                                + "Zárolva lett az alábbi tétel: \n"
+                                                + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                                + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                                + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                                + "Dátum: "+ datum_mezo.getText() +"\n"
+                                                + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                                + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                                + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
+                                                + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
+                                        Email email = new Email();
+                                        email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                        sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                        lekerdezes.mindenes(sql2);
+                                    }
+                                }
+                            }
+                            
                             if(lekerdezes.mindenes2(sql) == 0)
                             {
                                 visszaallit();
@@ -1064,10 +1170,63 @@ public class Zarolasok_bevitel extends JPanel {
                                             + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
                             
                         }
+                        if(intezkedes_mezo.getText().equals("")) {}
+                        else
+                        {
+                            String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                            if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                            {
+                                String uzenet = "Sziasztok! \n \n"
+                                        + "Zárolva lett az alábbi tétel: \n"
+                                        + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                        + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                        + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                        + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                        + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                        + "Dátum: "+ datum_mezo.getText() +"\n"
+                                        + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                        + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                        + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
+                                Email email = new Email();
+                                email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                lekerdezes.mindenes(sql2);
+                            }
+                        }
+                        
+                        if(technikus.equals("Igen"))
+                        {
+                            if(gyokerintezkedes_mezo.getText().equals("")) {}
+                            else
+                            {
+                                String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                                {
+                                    String uzenet = "Sziasztok! \n \n"
+                                            + "Zárolva lett az alábbi tétel: \n"
+                                            + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                            + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                            + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                            + "Dátum: "+ datum_mezo.getText() +"\n"
+                                            + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                            + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                            + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
+                                            + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
+                                    Email email = new Email();
+                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                    lekerdezes.mindenes(sql2);
+                                }
+                            }
+                        }
+                        
                         if(lekerdezes.mindenes2(sql) == 0)
                         {
                             visszaallit();
-                        }                        
+                        }
+                        
                         
                         int kovetkezo = Integer.parseInt(id_mezo.getText());
                         id_mezo.setText(String.valueOf(kovetkezo + 1));

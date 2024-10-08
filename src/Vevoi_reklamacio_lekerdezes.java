@@ -518,7 +518,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         + "sum(if(mi = 'Reklamáció', 1, 0)) as 'Reklamáció', \n"
                         + "sum(if(mi = 'Visszajelzés', 1, 0)) as 'Visszajelzés'\n"
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + " where 3=3 and Ertesites_Datuma >= '2024.01.01' and Ertesites_Datuma <= '2024.05.28'\n"
+                        + " where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"'\n"
                         + "group by Vevo, Hónap order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -583,9 +583,9 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     //sheet.getRange().get("G" + cella2).setText(datatable3.getRows().get(szamlalo).getString(1));                    
                     sheet.getCellRange("G" + cella2).setNumberValue(rs.getInt(3));
                     sheet.getCellRange("H" + cella2).setNumberValue(rs.getInt(4));
-                    cella2++;
+                    cella2++;                    
                 }
-                
+                System.out.println("cella: "+cella2);
                 int meddig = 2;
                 int mettol = 2;
                 for(int szamlalo = 2; szamlalo < cella2; szamlalo++)
@@ -596,9 +596,20 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     }
                     else
                     {
-                        sheet.getCellRange("E"+(mettol+1)+":E"+meddig).setText("");
-                        meddig++;
-                        mettol = meddig;                    
+                        System.out.println("mettől: "+mettol);
+                        System.out.println("Meddig: "+meddig);
+                        if(mettol == meddig) 
+                        {
+                            sheet.getCellRange("E"+(mettol+1)).setText("");
+                            meddig++;
+                            mettol = meddig;
+                        }
+                        else
+                        {
+                            sheet.getCellRange("E"+(mettol+1)+":E"+meddig).setText("");
+                            meddig++;
+                            mettol = meddig;
+                        }
                     }
                 }
                 /*
@@ -1214,7 +1225,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 sql = "select *"
                         + "from qualitydb.Vevoireklamacio_alap\n"
                         + "where 3=3 and Ertesites_datuma >= '"+datumtol.getText() +"' and Ertesites_datuma <= '"+ datumig.getText() +"'\n"
-                        + "order by Lezaras_datuma asc";
+                        + "order by Ertesites_datuma asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
                 DataTable datatable3 = new DataTable();
@@ -1229,10 +1240,10 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 sheet.getAllocatedRange().autoFitRows();                
                 sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
-                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:BK1"));
                 sheet2.getAllocatedRange().autoFitColumns();
                 sheet2.getAllocatedRange().autoFitRows();                
-                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                sheet2.getCellRange("A1:BK1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
                 UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();

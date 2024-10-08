@@ -2139,7 +2139,7 @@ public class SQA_bevitel extends JPanel {
                 table.getColumnModel().getColumn(4).setPreferredWidth(20);
                 table.getColumnModel().getColumn(5).setPreferredWidth(20);
                 table.getColumnModel().getColumn(6).setPreferredWidth(20);
-                table.setRowSelectionInterval(0, 0);
+                table.setRowSelectionInterval(0, 0);          /////////////////////////////////////////////////////////////////////////////////////////
                 String link2 = rs.getString(25);
                 
                 hibaleiras = new String[table.getRowCount()];
