@@ -65,6 +65,12 @@ public class Zarolasok_bevitel extends JPanel {
     private Workbook workbook = new Workbook();
     private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
     private Kivalaszt valaszto = new Kivalaszt();
+    private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu";
+    private String gepes = "gepesfolyamatellenor@veas.videoton.hu";
+    private String kezi = "quality.control@veas.videoton.hu,quality.inspection@veas.videoton.hu,folyamatellenor.163@veas.videoton.hu,hager.security.oqc@veas.videoton.hu,loxoneoqc@veas.videoton.hu";
+    private String vegszereles = "avmoqc@veas.videoton.hu,osram_vegellenorzes@veas.videoton.hu,loxoneoqc@veas.videoton.hu,\r\n"
+                                + "hager.security.oqc@veas.videoton.hu,techemoqc@veas.videoton.hu,telecomdesignoqc@veas.videoton.hu,proglove@veas.videoton.hu";
+    private String cimzettek = "";
 
     /**
      * Create the panel.
@@ -934,8 +940,22 @@ public class Zarolasok_bevitel extends JPanel {
                             else
                             {
                                 String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                                 if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                                 {
+                                     
+                                    if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                    {
+                                        cimzettek = gepes;
+                                    }
+                                    else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                    {
+                                        cimzettek = kezi;
+                                    }
+                                    else
+                                    {
+                                        cimzettek = vegszereles;
+                                    }     
                                     String uzenet = "Sziasztok! \n \n"
                                             + "Zárolva lett az alábbi tétel: \n"
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -948,7 +968,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }
@@ -960,8 +980,21 @@ public class Zarolasok_bevitel extends JPanel {
                                 else
                                 {
                                     String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                    if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                                     if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                                     {
+                                        if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                        {
+                                            cimzettek = gepes;
+                                        }
+                                        else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                        {
+                                            cimzettek = kezi;
+                                        }
+                                        else
+                                        {
+                                            cimzettek = vegszereles;
+                                        }     
                                         String uzenet = "Sziasztok! \n \n"
                                                 + "Zárolva lett az alábbi tétel: \n"
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -975,7 +1008,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                                 + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                         Email email = new Email();
-                                        email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                         sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                         lekerdezes.mindenes(sql2);
                                     }
@@ -1055,8 +1088,21 @@ public class Zarolasok_bevitel extends JPanel {
                             else
                             {
                                 String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                                 if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                                 {
+                                    if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                    {
+                                        cimzettek = gepes;
+                                    }
+                                    else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                    {
+                                        cimzettek = kezi;
+                                    }
+                                    else
+                                    {
+                                        cimzettek = vegszereles;
+                                    }     
                                     String uzenet = "Sziasztok! \n \n"
                                             + "Zárolva lett az alábbi tétel: \n"
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -1069,7 +1115,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }
@@ -1081,8 +1127,21 @@ public class Zarolasok_bevitel extends JPanel {
                                 else
                                 {
                                     String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                    if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                                     if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                                     {
+                                        if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                        {
+                                            cimzettek = gepes;
+                                        }
+                                        else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                        {
+                                            cimzettek = kezi;
+                                        }
+                                        else
+                                        {
+                                            cimzettek = vegszereles;
+                                        }     
                                         String uzenet = "Sziasztok! \n \n"
                                                 + "Zárolva lett az alábbi tétel: \n"
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -1096,7 +1155,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                                 + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                         Email email = new Email();
-                                        email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                         sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                         lekerdezes.mindenes(sql2);
                                     }
@@ -1174,8 +1233,21 @@ public class Zarolasok_bevitel extends JPanel {
                         else
                         {
                             String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                            if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                             if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                             {
+                                if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                {
+                                    cimzettek = gepes;
+                                }
+                                else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                {
+                                    cimzettek = kezi;
+                                }
+                                else
+                                {
+                                    cimzettek = vegszereles;
+                                }     
                                 String uzenet = "Sziasztok! \n \n"
                                         + "Zárolva lett az alábbi tétel: \n"
                                         + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -1188,7 +1260,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                         + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                 Email email = new Email();
-                                email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu,, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                 sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                 lekerdezes.mindenes(sql2);
                             }
@@ -1200,8 +1272,21 @@ public class Zarolasok_bevitel extends JPanel {
                             else
                             {
                                 String sql2 = "select Email2 from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                                if(lekerdezes.tombvissza_sajat(sql2).length > 0)
                                 if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
                                 {
+                                    if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                    {
+                                        cimzettek = gepes;
+                                    }
+                                    else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                    {
+                                        cimzettek = kezi;
+                                    }
+                                    else
+                                    {
+                                        cimzettek = vegszereles;
+                                    }     
                                     String uzenet = "Sziasztok! \n \n"
                                             + "Zárolva lett az alábbi tétel: \n"
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
@@ -1215,7 +1300,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                             + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", "kovacs.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, rabine.anita@veas.videoton.hu", "", "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }

@@ -144,6 +144,7 @@ public class Techem_OQC extends JPanel {
                 Workbook workbook2 = new Workbook();
                 Workbook workbook3 = new Workbook();
                 Workbook workbook5 = new Workbook();
+                SQA_SQL napok = new SQA_SQL();
                 if(String.valueOf(cikk_box.getSelectedItem()).equals("1742"))
                 {
                     workbook.loadFromFile(excelfile);
@@ -433,32 +434,65 @@ public class Techem_OQC extends JPanel {
                                                         + "and poz = 2");
                                                 if(rs.next())
                                                 {
-                                                    SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
-                                                    Date mikor = hosszu.parse(rs.getString(1));
-                                                    Calendar cal = Calendar.getInstance(); // creates calendar                                        
-                                                    cal.setTime(mikor);               // sets calendar time/date
-                                                    //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
-                                                    //cal.getTime();                         // returns new date object plus one hour
-                                                    //System.out.println(sheet.getRange().get("D" + 2).getText());
-                                                    String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
-                                                    Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
-                                                    //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
-                                                    if(ellenorzes.compareTo(mikor) > 0) 
+                                                    String[] csakdatum =  rs.getString(1).split(" ");
+                                                    if(Integer.valueOf(napok.tombvissza_sajat("select  DATEDIFF('" +csakdatum[0]+"', '"+sheet.getRange().get("D" + 2).getText().replace("-", ".")+"') from qualitydb.Techem_OQC")[0]) > 14)
                                                     {
-                                                        //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
-                                                        cal.add(Calendar.HOUR_OF_DAY, 600);
-                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                        String szoveg = "Result after " + lejar[0];
-                                                        sheet.getRange().get("M" + cellaszam).setText(szoveg);
-                                                        sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                        
+                                                        ResultSet rs4 = stmt3.executeQuery("select min(ido)\r\n"
+                                                                + "from videoton.fkov\r\n"
+                                                                + "where\r\n"
+                                                                + "videoton.fkov.hely = '93'   and\r\n"
+                                                                + "videoton.fkov.panel like \"4TCH%\" \r\n"
+                                                                + "and poz = 2 and ido > '"+ datum[0] +"'");
+                                                        if(rs4.next())
+                                                        {
+                                                            SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                            Date mikor = hosszu.parse(rs4.getString(1));
+                                                            System.out.println("Régi "+ napok.tombvissza_sajat("select  DATEDIFF('" +csakdatum[0]+"', '"+sheet.getRange().get("D" + 2).getText().replace("-", ".")+"') from qualitydb.Techem_OQC")[0] +" Dátum: "+ rs4.getString(1)+ " dátum amivel keres: "+ sheet.getRange().get("D" + 2).getText()) ;
+                                                            Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                            cal.setTime(mikor);               // sets calendar time/date
+                                                            //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                            //cal.getTime();                         // returns new date object plus one hour
+                                                            //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                            //String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                            //Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                            //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                            cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                            String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                            String szoveg = "Result after " + lejar[0];
+                                                            sheet.getRange().get("M" + cellaszam).setText(szoveg);
+                                                            sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        cal.add(Calendar.HOUR_OF_DAY, 300);
-                                                        String[] lejar = hosszu.format(cal.getTime()).split(" ");
-                                                        String szoveg = "Result after " + lejar[0];
-                                                        sheet.getRange().get("M" + cellaszam).setText(szoveg);
-                                                        sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                        SimpleDateFormat hosszu = new SimpleDateFormat("yyyy.MM.dd");
+                                                        Date mikor = hosszu.parse(rs.getString(1));
+                                                        Calendar cal = Calendar.getInstance(); // creates calendar                                        
+                                                        cal.setTime(mikor);               // sets calendar time/date
+                                                        //cal.add(Calendar.HOUR_OF_DAY, 300);      // adds one hour
+                                                        //cal.getTime();                         // returns new date object plus one hour
+                                                        //System.out.println(sheet.getRange().get("D" + 2).getText());
+                                                        String[] pontos = sheet.getRange().get("D" + 2).getText().split("-"); 
+                                                        Date ellenorzes = hosszu.parse(pontos[0]+"."+pontos[1]+"."+pontos[2]); 
+                                                        //System.out.println("Tagolt dátum: "+pontos[0]+"."+pontos[1]+"."+pontos[2]);
+                                                        if(ellenorzes.compareTo(mikor) > 0) 
+                                                        {
+                                                            //System.out.println("Múltban Ellenorzes ideje: "+ ellenorzes + "   Berakva idő: "+ mikor);
+                                                            cal.add(Calendar.HOUR_OF_DAY, 600);
+                                                            String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                            String szoveg = "Result after " + lejar[0];
+                                                            sheet.getRange().get("M" + cellaszam).setText(szoveg);
+                                                            sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                        }
+                                                        else
+                                                        {
+                                                            cal.add(Calendar.HOUR_OF_DAY, 300);
+                                                            String[] lejar = hosszu.format(cal.getTime()).split(" ");
+                                                            String szoveg = "Result after " + lejar[0];
+                                                            sheet.getRange().get("M" + cellaszam).setText(szoveg);
+                                                            sheet.getCellRange("M" + cellaszam +":O"+ cellaszam).getCellStyle().setHorizontalAlignment(HorizontalAlignType.Center);
+                                                        }
                                                     }
                                                 }
                                                 if(rs3.getString(15) == null) {}
