@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new IFS_lekerdezes_Marcsi());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1639,8 +1639,8 @@ public class Torlo extends JPanel
             try
             {
                 ResultSet result;
-                //JdbcAdapter jdbcAdapter;
-                //DataTable datatable;
+                JdbcAdapter jdbcAdapter;
+                DataTable datatable;
                 Workbook workbook;
                 //Registering the Driver
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
@@ -1679,11 +1679,11 @@ public class Torlo extends JPanel
                         + "    order by    videoton.fkov.ido asc;";
                 
                 String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
-                String sql = "select nev, fkov.*  \n"
+                String sql = "select *\n"
                         + "from videoton.fkov\n"
-                        + " inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
-                        + "where 3=3 and hely = '26'\n"
-                        + "and panel like '%LOX-0046%'";
+                        + "where\n"
+                        + "videoton.fkov.hely = '49'   and\n"
+                        + " ido > '2024.01.01'";
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1691,15 +1691,16 @@ public class Torlo extends JPanel
                            
                 cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                 result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
-                //datatable = new DataTable();
+                datatable = new DataTable();
                 
                 workbook = new Workbook();
                 workbook.setVersion(ExcelVersion.Version2016); 
-                //jdbcAdapter = new JdbcAdapter();         
-                //jdbcAdapter.fillDataTable(datatable, result);
+                jdbcAdapter = new JdbcAdapter();         
+                jdbcAdapter.fillDataTable(datatable, result);
              
                 //Get the first worksheet
                 Worksheet sheet = workbook.getWorksheets().get(0);
+                /*
                 int cellaszam = 1;
                 sheet.getRange().get("A" + cellaszam).setText("Panel");
                 sheet.getRange().get("B" + cellaszam).setText("Idő");
@@ -1716,9 +1717,9 @@ public class Torlo extends JPanel
                     sheet.getRange().get("E" + cellaszam).setText(result.getString(10));
                     cellaszam++;
                     System.out.println(cellaszam);
-                }
+                }*/
                 
-                //sheet.insertDataTable(datatable, true, 1, 1);
+                sheet.insertDataTable(datatable, true, 1, 1);
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();

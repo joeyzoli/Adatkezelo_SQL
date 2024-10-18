@@ -640,6 +640,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
                 frissites_mezo.setText(rs.getString(7));
                 String[] felelos = rs.getString(8).split(";");
+                
                 if(felelos.length > 1)
                 {
                     felelos_mezo.setText(felelos[0]);

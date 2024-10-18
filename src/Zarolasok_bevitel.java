@@ -968,7 +968,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }
@@ -1008,7 +1008,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                                 + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                         Email email = new Email();
-                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                         sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                         lekerdezes.mindenes(sql2);
                                     }
@@ -1115,7 +1115,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }
@@ -1155,7 +1155,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                                 + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                         Email email = new Email();
-                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                        email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                         sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                         lekerdezes.mindenes(sql2);
                                     }
@@ -1260,7 +1260,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
                                         + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
                                 Email email = new Email();
-                                email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                 sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                 lekerdezes.mindenes(sql2);
                             }
@@ -1300,7 +1300,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\t\n"
                                             + "Gyökérokra hozott intézkedés: "+ gyokerintezkedes_mezo.getText() +"\n\nÜdvözlettel: EASQAS program";
                                     Email email = new Email();
-                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés", uzenet);
+                                    email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
                                     sql2 = "update qualitydb.Zarolasok set Email2 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }

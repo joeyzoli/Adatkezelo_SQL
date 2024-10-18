@@ -181,6 +181,8 @@ public class Vevoireklamacio_d7 extends JPanel {
                 modell.addRow(new Object[]{elofordulas_mezo.getText(), felelos_mezo.getText(),hatarido_mezo.getText(),"",""});
                 table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
                 table.setModel(modell);
+                felelos_mezo.setText("");
+                elofordulas_mezo.setText("");
             }
             catch (Exception e1) 
             {;
@@ -202,6 +204,8 @@ public class Vevoireklamacio_d7 extends JPanel {
                 modell2.addRow(new Object[]{detektalas_mezo.getText(), felelos2_mezo.getText(),hatarido2_mezo.getText(),"",""});
                 table2.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
                 table2.setModel(modell2);
+                felelos2_mezo.setText("");
+                detektalas_mezo.setText("");
             }
             catch (Exception e1) 
             {;

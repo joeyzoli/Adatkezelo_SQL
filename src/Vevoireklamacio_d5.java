@@ -300,6 +300,8 @@ public class Vevoireklamacio_d5 extends JPanel {
                     columnModel.getColumn(column).setPreferredWidth(width);
                 }
                 table.setModel(modell);
+                felelos_mezo.setText("");
+                elofordulas_mezo.setText("");
             }
             catch (Exception e1) 
             {;
@@ -333,6 +335,8 @@ public class Vevoireklamacio_d5 extends JPanel {
                     columnModel.getColumn(column).setPreferredWidth(width);
                 }
                 table2.setModel(modell2);
+                felelos2_mezo.setText("");
+                detektalas_mezo.setText("");
             }
             catch (Exception e1) 
             {
@@ -376,6 +380,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                             + "where id = '"+ table.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
+                System.out.println("Fut az első for");
             }
             
             for(int szamlalo = 0; szamlalo < table2.getRowCount(); szamlalo++)
@@ -392,6 +397,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                             + "where id = '"+ table2.getValueAt(szamlalo, 4).toString() +"'";
                 }
                 ment.mindenes(sql);
+                System.out.println("Fut a második for");
             }                        
         } 
         catch (Exception e1) 
