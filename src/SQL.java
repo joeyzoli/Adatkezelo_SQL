@@ -193,6 +193,7 @@ public class SQL
             sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
             if(System.getProperty("user.name").equals("csader.zsolt"))
             {
+                UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -858,23 +859,23 @@ public class SQL
         {      
             if(lezart.equals("igen") && nyitott.equals("igen"))
             {
-                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                                +"' and Datum <= '"+ datumig +"'";
+                sql = "SELECT id, mi, vevo, Ertesites_datuma, Tipus, Miaproblema, lezaras_datuma, figyelem FROM  qualitydb.Vevoireklamacio_alap where Vevo like '"+ projekt +"' and Ertesites_Datuma >= '"+ datumtol 
+                                +"' and Ertesites_Datuma <= '"+ datumig +"'";
             }
             else if(lezart.equals("igen") && nyitott.equals("nem"))
             {
-                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                                +"' and Datum <= '"+ datumig +"' and Lezaras_ido is not null  ";
+                sql = "SELECT id, mi, vevo, Ertesites_datuma, Tipus, Miaproblema, lezaras_datuma, figyelem FROM  qualitydb.Vevoireklamacio_alap where Vevo like '"+ projekt +"' and Ertesites_Datuma >= '"+ datumtol 
+                                +"' and Ertesites_Datuma <= '"+ datumig +"' and not Lezaras_datuma = ''  ";
             }
             else
             {
-                sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where Projekt like '"+ projekt +"' and Datum >= '"+ datumtol 
-                        +"' and Datum <= '"+ datumig +"' and Lezaras_ido is null  ";
+                sql = "SELECT id, mi, vevo, Ertesites_datuma, Tipus, Miaproblema, lezaras_datuma, figyelem FROM  qualitydb.Vevoireklamacio_alap where Vevo like '"+ projekt +"' and Ertesites_Datuma >= '"+ datumtol 
+                        +"' and Ertesites_Datuma <= '"+ datumig +"' and Lezaras_datuma = ''  ";
             }
         }
         else
         { 
-            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alapadat where ID = '"+ id +"'"; 
+            sql = "SELECT * FROM  qualitydb.Vevoireklamacio_alap where ID = '"+ id +"'"; 
         }
         stmt.execute(sql);
         resultSet = stmt.getResultSet();
@@ -3251,6 +3252,7 @@ public class SQL
         
         sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
         
+        UIManager.put("FileChooser.openButtonText","Mentés");
         JFileChooser mentes_helye = new JFileChooser();
         mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         mentes_helye.showOpenDialog(mentes_helye);

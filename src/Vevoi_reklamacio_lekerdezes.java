@@ -1,3 +1,4 @@
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 
@@ -9,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -121,8 +124,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         JButton excel_gomb = new JButton("Excel");
         excel_gomb.addActionListener(new Excel());
-        excel_gomb.setBounds(520, 525, 89, 23);
-        add(excel_gomb);
+        excel_gomb.setBounds(285, 525, 89, 23);
+        //add(excel_gomb);
         
         id_mezo = new JTextField();
         id_mezo.setBounds(520, 152, 86, 20);
@@ -162,7 +165,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         JButton v2_grafikon_gomb = new JButton("V2.0 grafikon");
         v2_grafikon_gomb.addActionListener(new Vevoi_2());
-        v2_grafikon_gomb.setBounds(812, 529, 157, 23);
+        v2_grafikon_gomb.setBounds(494, 525, 157, 23);
         add(v2_grafikon_gomb);
     }
     
@@ -193,6 +196,19 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 }
                                 
                 lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart, id_mezo.getText());
+                TableColumnModel columnModel = table.getColumnModel();
+                for (int column = 0; column < table.getColumnCount(); column++) {
+                    int width = 15; // Min width
+                    for (int row = 0; row < table.getRowCount(); row++) {
+                        TableCellRenderer renderer = table.getCellRenderer(row, column);
+                        Component comp = table.prepareRenderer(renderer, row, column);
+                        width = Math.max(comp.getPreferredSize().width +1 , width);
+                    }
+                    if(width > 300)
+                        width=300;
+                    columnModel.getColumn(column).setPreferredWidth(width);
+                }
+                //table.setModel(modell);
             } 
             catch (Exception e1) 
             {              

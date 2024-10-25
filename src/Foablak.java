@@ -429,7 +429,7 @@ public class Foablak extends JFrame
 		JMenu egyeb = new JMenu("Egyéb");
 		menuBar.add(egyeb);
 		
-		JMenuItem smelter_masolo = new JMenuItem("Smelter másoló");
+		JMenuItem smelter_masolo = new JMenuItem("Smelterek");
 		smelter_masolo.addActionListener(new PanelCsere_Smelter());
 		egyeb.add(smelter_masolo);
 		
