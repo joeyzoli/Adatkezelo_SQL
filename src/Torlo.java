@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Zarolt_frissit_2());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -2681,7 +2681,7 @@ public class Torlo extends JPanel
          {
             Connection conn = null;
             Statement stmt = null;
-          
+            Statement stmt2 = null;
             try 
             {
                try 
@@ -2696,17 +2696,36 @@ public class Torlo extends JPanel
                }
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\Zarolasok_szukitett.xlsx";                             
+               stmt2 = (Statement) conn.createStatement();
+               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\betöltendő zárolás.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                Workbook workbook = new Workbook();
                workbook.loadFromFile(excelfile1);
                Worksheet sheet = workbook.getWorksheets().get(0);               
                DataTable datatable = new DataTable();
                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
-               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                {
-                   stmt.executeUpdate("update qualitydb.Zarolasok set  Valogatas_eredmenye = '" + datatable.getRows().get(szamlalo).getString(1) +"' "
-                           + "where ID = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                   ResultSet rs = stmt2.executeQuery("select hiba_gyokeroka, Gyokerok_intezkedes, Visszaellenorzes from qualitydb.Zarolasok where Papir_sorszama = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                   if(rs.next())
+                   {
+                       if(rs.getString(1).equals(""))
+                       {
+                           stmt.executeUpdate("update qualitydb.Zarolasok set  hiba_gyokeroka = '" + datatable.getRows().get(szamlalo).getString(1) +"' "
+                                   + "where Papir_sorszama = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                       }
+                       if(rs.getString(2).equals(""))
+                       {
+                           stmt.executeUpdate("update qualitydb.Zarolasok set  Gyokerok_intezkedes = '" + datatable.getRows().get(szamlalo).getString(2) +"' "
+                                   + "where Papir_sorszama = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                       }
+                       if(rs.getString(3).equals(""))
+                       {
+                           stmt.executeUpdate("update qualitydb.Zarolasok set  Visszaellenorzes = '" + datatable.getRows().get(szamlalo).getString(3) +"' "
+                                   + "where Papir_sorszama = '" + datatable.getRows().get(szamlalo).getString(0) + "'");
+                       }
+                   }
+                   
                    System.out.println("Fut a For");
                }              
                Foablak.frame.setCursor(null);                        

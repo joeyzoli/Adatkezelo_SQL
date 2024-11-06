@@ -877,8 +877,6 @@ public class Zarolasok_bevitel extends JPanel {
                 {
                     if(Integer.valueOf(ellenorzott_mezo.getText()) != 0)
                     {
-                        System.out.println(Integer.valueOf(ellenorzott_mezo.getText()));
-                        System.out.println(Integer.valueOf(zaroltdb_mezo.getText()));
                         if(Integer.valueOf(ellenorzott_mezo.getText()) == Integer.valueOf(zaroltdb_mezo.getText()))
                         {
                             if(rs.next())

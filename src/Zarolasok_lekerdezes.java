@@ -92,7 +92,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
                 
-                String sql = "select projekt, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
+                String sql = "select projekt, cast(sum(zarolt_db) as decimal(15,0)) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
                         + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "group by projekt order by sum(zarolt_db) desc \r\n";
@@ -157,7 +157,7 @@ public class Zarolasok_lekerdezes extends JPanel {
                 
                 /********************************************Második diagramm*************************************************/
                 
-                String sql2 = "select zarolas_oka, sum(zarolt_db) from qualitydb.Zarolasok \r\n"
+                String sql2 = "select zarolas_oka, cast(sum(zarolt_db) as decimal(15,0)) from qualitydb.Zarolasok \r\n"
                         + "where 3 = 3 \r\n"
                         + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "group by zarolas_oka order by sum(zarolt_db) desc limit 10 \r\n";

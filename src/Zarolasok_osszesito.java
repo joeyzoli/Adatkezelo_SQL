@@ -270,7 +270,7 @@ public class Zarolasok_osszesito extends JPanel {
                 {
                     Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                     SQA_SQL zarolas = new SQA_SQL();
-                    String sql = "select id from qualitydb.Zarolasok where Papir_sorszama = '"+ zarolopapir_mezo.getText() + "'";
+                    String sql = "select id from qualitydb.Zarolasok where Papir_sorszama like '%"+ zarolopapir_mezo.getText() + "%'";
                     if(zarolas.tombvissza_sajat(sql).length > 0)
                     {
                         String id = zarolas.tombvissza_sajat(sql)[0];

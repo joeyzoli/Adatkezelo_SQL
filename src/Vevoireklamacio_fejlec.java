@@ -434,7 +434,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
                 {                    
                     String sql = "select D3 from qualitydb.Vevoireklamacio_alap where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
                     ment.tombvissza_sajat(sql);
-                    if(ment.tombvissza_sajat(sql)[0] == null)
+                    if(ment.tombvissza_sajat(sql)[0] == null || ment.tombvissza_sajat(sql)[0].equals(""))
                     {
                         JOptionPane.showMessageDialog(null, "A D3 lezárása nélkül nem lehet lezárni a reklamációt!", "Hiba üzenet", 2);
                     }
