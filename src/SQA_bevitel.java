@@ -331,7 +331,7 @@ public class SQA_bevitel extends JPanel {
         add(tortenesideje_mezo);
         tortenesideje_mezo.setColumns(10);
         
-        JButton valtozas_gomb = new JButton("Válzotás mentése");
+        JButton valtozas_gomb = new JButton("Változás mentése");
         valtozas_gomb.addActionListener(new Tortenet());
         valtozas_gomb.setBounds(552, 630, 139, 23);
         add(valtozas_gomb);
@@ -735,7 +735,7 @@ public class SQA_bevitel extends JPanel {
         add(tortenesideje_mezo);
         tortenesideje_mezo.setColumns(10);
         
-        JButton valtozas_gomb = new JButton("Válzotás mentése");
+        JButton valtozas_gomb = new JButton("Változás mentése");
         valtozas_gomb.addActionListener(new Tortenet());
         valtozas_gomb.setBounds(552, 630, 139, 23);
         add(valtozas_gomb);

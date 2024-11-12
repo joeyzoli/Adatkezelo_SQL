@@ -184,12 +184,12 @@ public class SQA_osszesito extends JPanel {
             {
                 String[] datum = rs.getString(7).split(" ");
                 String[] datum2 = rs.getString(2).split(" ");
-                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),datum[0],rs.getString(8),rs.getString(9)});                  
+                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),datum[0],rs.getString(8),rs.getString(9)});                  
             }
             else
             {
                 String[] datum2 = rs.getString(2).split(" ");
-                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)});
+                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),rs.getString(7),rs.getString(8),rs.getString(9)});
             }                                     
         }
         TableColumnModel columnModel = table.getColumnModel();

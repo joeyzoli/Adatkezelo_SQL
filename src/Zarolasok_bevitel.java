@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JSeparator;
 
 public class Zarolasok_bevitel extends JPanel {
     private JTextField id_mezo;
@@ -48,6 +49,7 @@ public class Zarolasok_bevitel extends JPanel {
     private JTextField lezaras_mezo;
     private ComboBox combobox_tomb = new ComboBox();
     private JTextArea gyokerintezkedes_mezo;
+    private JTextArea gyokerintezkedes2_mezo;
     private JTextArea zarolasoka_mezo;
     private JTextArea intezkedes_mezo;
     private JTextArea gyokerok_mezo;
@@ -71,6 +73,8 @@ public class Zarolasok_bevitel extends JPanel {
     private String vegszereles = "avmoqc@veas.videoton.hu,osram_vegellenorzes@veas.videoton.hu,loxoneoqc@veas.videoton.hu,\r\n"
                                 + "hager.security.oqc@veas.videoton.hu,techemoqc@veas.videoton.hu,telecomdesignoqc@veas.videoton.hu,proglove@veas.videoton.hu";
     private String cimzettek = "";
+    private JTextField hatarido_mezo;
+    private JComboBox<String> gyokerokvalaszto_box;
 
     /**
      * Create the panel.
@@ -100,7 +104,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_2.setBounds(42, 88, 46, 14);
         add(lblNewLabel_2);
         
-        projekt_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.vevoi_projekt));                    //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
+        projekt_box = new JComboBox<String>();                    //combobox_tomb.getCombobox(ComboBox.vevoi_projekt)
         projekt_box.addActionListener(valaszto);
         projekt_box.setBounds(98, 84, 164, 22);
         add(projekt_box);
@@ -109,7 +113,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_3.setBounds(306, 88, 46, 14);
         add(lblNewLabel_3);
         
-        tipus_box = new JComboBox<String>(cikkszamok());                      //cikkszamok()
+        tipus_box = new JComboBox<String>();                      //cikkszamok()
         tipus_box.setBounds(362, 84, 283, 22);
         add(tipus_box);
         
@@ -196,7 +200,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(sorszam_mezo);
         sorszam_mezo.setColumns(10);
         
-        zarolta_box = new JComboBox<String>(ellenori_nevsor());                           //ellenori_nevsor()
+        zarolta_box = new JComboBox<String>();                           //ellenori_nevsor()
         zarolta_box.setBounds(1024, 176, 184, 22);
         add(zarolta_box);
         
@@ -242,11 +246,11 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
-        lblNewLabel_18.setBounds(510, 424, 46, 14);
+        lblNewLabel_18.setBounds(837, 466, 46, 14);
         add(lblNewLabel_18);
         
         felelos_mezo = new JTextField();
-        felelos_mezo.setBounds(579, 421, 251, 20);
+        felelos_mezo.setBounds(908, 463, 251, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
         
@@ -257,7 +261,7 @@ public class Zarolasok_bevitel extends JPanel {
         gyokerok_mezo = new JTextArea();
         gyokerok_mezo.setLineWrap(true);
         gyokerok_mezo.setWrapStyleWord(true);
-        gyokerok_mezo.setBounds(160, 461, 215, 92);
+        gyokerok_mezo.setBounds(160, 461, 240, 115);
         add(gyokerok_mezo);
         
         JLabel lblNewLabel_20 = new JLabel("Gyökérokra hozott intézkedés");
@@ -267,21 +271,28 @@ public class Zarolasok_bevitel extends JPanel {
         gyokerintezkedes_mezo = new JTextArea();
         gyokerintezkedes_mezo.setLineWrap(true);
         gyokerintezkedes_mezo.setWrapStyleWord(true);
-        gyokerintezkedes_mezo.setBounds(579, 461, 215, 92);
+        gyokerintezkedes_mezo.setBounds(579, 461, 248, 115);
         add(gyokerintezkedes_mezo);
         
+        gyokerintezkedes2_mezo = new JTextArea();
+        gyokerintezkedes2_mezo.setLineWrap(true);
+        gyokerintezkedes2_mezo.setWrapStyleWord(true);
+        gyokerintezkedes2_mezo.setBounds(579, 461, 248, 115);
+        add(gyokerintezkedes2_mezo);
+        gyokerintezkedes2_mezo.setVisible(false);
+        
         JLabel lblNewLabel_21 = new JLabel("IFS zárolás szükséges-e");
-        lblNewLabel_21.setBounds(855, 466, 148, 14);
+        lblNewLabel_21.setBounds(893, 424, 148, 14);
         add(lblNewLabel_21);
         
         b2_mezo = new JTextField();
-        b2_mezo.setBounds(995, 463, 86, 20);
+        b2_mezo.setBounds(1066, 421, 86, 20);
         add(b2_mezo);
         b2_mezo.setColumns(10);
         
         JButton mentes_gomb = new JButton("Mentés");
         mentes_gomb.addActionListener(new Mentes());
-        mentes_gomb.setBounds(539, 621, 89, 23);
+        mentes_gomb.setBounds(539, 627, 89, 23);
         add(mentes_gomb);
         
         JLabel lblNewLabel_22 = new JLabel("Lezárás dátuma");
@@ -299,16 +310,16 @@ public class Zarolasok_bevitel extends JPanel {
         add(lezaras_gomb);
         
         String[] terulet = {"Gépes", "Kézi","Végszerelés"};
-        felelosterulet_box = new JComboBox<String>(terulet);                         //terulet
+        felelosterulet_box = new JComboBox<String>();                         //terulet
         felelosterulet_box.setBounds(362, 420, 102, 22);
         add(felelosterulet_box);
         
         JLabel lblNewLabel_23 = new JLabel("Gyökérokra hozott intézkedés visszaellenőrzése");
-        lblNewLabel_23.setBounds(42, 587, 277, 14);
+        lblNewLabel_23.setBounds(42, 599, 277, 14);
         add(lblNewLabel_23);
         
         visszaellenorzes_mezo = new JTextField();
-        visszaellenorzes_mezo.setBounds(329, 581, 572, 20);
+        visszaellenorzes_mezo.setBounds(329, 596, 572, 20);
         add(visszaellenorzes_mezo);
         visszaellenorzes_mezo.setColumns(10);
         
@@ -351,7 +362,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_26);
         
         String[] hibacsoportok = {"alkatrész hiba", "alkatrész sérülés", "azonosítás", "beültetési hiba", "csomagolás", "darabolás", "dokumentáció", "Forrasztási hiba", "Forrasztási hiba / Hiányzó jelölés", "Funkcionális", "Hiányzó jelölés", "Jelölés", "kiöntés", "lakkozás", "nyomtatás", "ragasztás", "szennyeződés", "szerelés", "vegyes", "anyagkezelés" };
-        hibacsoport_box = new JComboBox<String>(hibacsoportok);                                              //hibacsoportok
+        hibacsoport_box = new JComboBox<String>();                                              //hibacsoportok
         hibacsoport_box.setBounds(160, 320, 192, 22);
         add(hibacsoport_box);
         
@@ -360,13 +371,31 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_27);
         
         String[] hibatipusok = {"AOI", "címke", "címke tartalom", "deformálódás", "elcsúszott alkatrész", "elektromos hiba", "FCT", "felcserélt kábel", "ferde", "fordított", "furatkitöltöttség", "hiány", "hiányos", "hiányzó", "hiányzó forr", "hiányzó forrasztás", "hiányzó ragasztás", "hideg forr", "hideg forrasztás, óngolyó", "hosszú láb", "Hűtőpaszta pozíció", "kevés ón", "kiborult", "kupak nincs levéve", "levert alkatrész", "maszkolás", "megolvadt alkatrész", "membrán", "méret eltérés", "nem kötött meg az anyag", "nyitott", "ónfelfutás", "óngolyó", "panel", "PCB felület", "QR kód", "ragasztó a paden", "sérülés", "sok ón", "sorjás alkatrész", "szennyezett címke", "termék azonosító keveredés", "Touch-up jelölés hiányzik", "TUP", "zárlat", "zárlat/TUP"};
-        hibatipus_box = new JComboBox<String>(hibatipusok);                                                //hibatipusok
+        hibatipus_box = new JComboBox<String>();                                                //hibatipusok
         hibatipus_box.setBounds(514, 320, 215, 22);
         add(hibatipus_box);
         
         ido();
         
         setBackground(Foablak.hatter_szine);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(45, 286, 1163, 27);
+        add(separator);
+        
+        JLabel lblNewLabel_28 = new JLabel("Határidő");
+        lblNewLabel_28.setBounds(837, 512, 46, 14);
+        add(lblNewLabel_28);
+        
+        hatarido_mezo = new JTextField();
+        hatarido_mezo.setBounds(908, 509, 86, 20);
+        add(hatarido_mezo);
+        hatarido_mezo.setColumns(10);
+        
+        String[] szam = {"1", "2","3","4","5"};
+        gyokerokvalaszto_box = new JComboBox<String>(szam);
+        gyokerokvalaszto_box.setBounds(676, 428, 73, 22);
+        add(gyokerokvalaszto_box);
 
     }
     
@@ -1553,6 +1582,28 @@ public class Zarolasok_bevitel extends JPanel {
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Gyokerok_valaszto implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                String sql = "update qualitydb.Zarolasok set  Lezaras_datuma ='"+ lezaras_mezo.getText() +"' where id = '"+ id_mezo.getText() +"'";
+                lekerdezes.mindenes(sql);
+                Foablak.frame.setCursor(null);                                                                                         //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu",this.getClass().getSimpleName()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                    //kivétel esetén kiírja a hibaüzenetet
             }
          }
     }

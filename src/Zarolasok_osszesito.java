@@ -34,6 +34,7 @@ public class Zarolasok_osszesito extends JPanel {
     private JComboBox<String> projekt_box;
     private JComboBox<String> cikkszam_box;
     private ComboBox combobox_tomb = new ComboBox();
+    private JTextField datum_mezo;
 
     /**
      * Create the panel.
@@ -96,6 +97,16 @@ public class Zarolasok_osszesito extends JPanel {
         cikkszam_box.addActionListener(new Cikkszam_szuro());
         cikkszam_box.setBounds(352, 86, 265, 22);
         add(cikkszam_box);
+        
+        datum_mezo = new JTextField();
+        datum_mezo.addKeyListener(new Datum_szuro());
+        datum_mezo.setBounds(765, 87, 108, 20);
+        add(datum_mezo);
+        datum_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_4 = new JLabel("Dátum szűrés");
+        lblNewLabel_4.setBounds(661, 90, 116, 14);
+        add(lblNewLabel_4);
         adatok();
         cikkszamok();
 
@@ -369,6 +380,79 @@ public class Zarolasok_osszesito extends JPanel {
             }
                             
          }
+    }
+    
+    class Datum_szuro implements KeyListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void keyPressed (KeyEvent e) 
+        {    
+            try 
+            {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                    
+                    int rowCount = modell.getRowCount();
+                    
+                    for (int i = rowCount - 1; i > -1; i--) 
+                    {
+                      modell.removeRow(i);
+                    }
+                    table.setModel(modell);
+                    Connection conn = null;
+                    Statement stmt = null;               
+                    ResultSet rs;       
+                    
+                    conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                    stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
+                    String sql = "select id, projekt, tipus, eszleles_helye,zarolt_db,hol_van, zarolas_oka,\r\n"
+                            + "zarolas_datuma\r\n"
+                            + "from qualitydb.Zarolasok\r\n"
+                            + "where 3 = 3 and Zarolas_datuma = '"+ datum_mezo.getText() +"' order by ID desc";                                        
+                    stmt.execute(sql);      
+                    rs = stmt.getResultSet();
+                    while(rs.next())
+                    {
+                        String[] datum = rs.getString(8).split(" ");
+                        modell.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),datum[0]});                             
+                    }
+                    final TableColumnModel columnModel = table.getColumnModel();
+                    for (int column = 0; column < table.getColumnCount(); column++) {
+                        int width = 15; // Min width
+                        for (int row = 0; row < table.getRowCount(); row++) {
+                            TableCellRenderer renderer = table.getCellRenderer(row, column);
+                            Component comp = table.prepareRenderer(renderer, row, column);
+                            width = Math.max(comp.getPreferredSize().width +1 , width);
+                        }
+                        if(width > 300)
+                            width=300;
+                        columnModel.getColumn(column).setPreferredWidth(width);
+                    }
+                    //table.setModel(modell);
+                    Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása                   
+                }              
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         
+        }
+        @Override
+        public void keyTyped(KeyEvent e)                                                //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }
+        @Override
+        public void keyReleased(KeyEvent e)                                             //kötelezően kell implementálni, de ezt nem akarom figyelni, így üresen hagyom 
+        {
+            // TODO Auto-generated method stub           
+        }    
     }
     
     class Cikkszam_szuro implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
