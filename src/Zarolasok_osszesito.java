@@ -107,6 +107,11 @@ public class Zarolasok_osszesito extends JPanel {
         JLabel lblNewLabel_4 = new JLabel("Dátum szűrés");
         lblNewLabel_4.setBounds(661, 90, 116, 14);
         add(lblNewLabel_4);
+        
+        JButton cikkujra_gomb = new JButton("Cikkszámok újratöltése");
+        cikkujra_gomb.addActionListener(new Cikk_ujratolt());
+        cikkujra_gomb.setBounds(1348, 85, 187, 23);
+        add(cikkujra_gomb);
         adatok();
         cikkszamok();
 
@@ -169,10 +174,11 @@ public class Zarolasok_osszesito extends JPanel {
     
     private void cikkszamok()
     {
-        String[] cikkbox = null;
+        //String[] cikkbox = null;
         DefaultComboBoxModel<String> model;
         try
         {
+            /*
             Class.forName("oracle.jdbc.OracleDriver");  //.driver
             
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
@@ -183,20 +189,26 @@ public class Zarolasok_osszesito extends JPanel {
                     + "from ifsapp.PART_REVISION_cfv cikkszamok\r\n"
                     + "where 3 = 3 order by part_no asc");
             ArrayList<String> cikkszamok = new ArrayList<String>();
+            SQA_SQL betolt = new SQA_SQL();
+            betolt.mindenes("delete from qualitydb.Cikk_valtozatok");   
             while(rs.next())
             {
                 if(rs.getString(2) != null)
                 {
                     cikkszamok.add(rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3));
+                    betolt.mindenes("insert into qualitydb.Cikk_valtozatok (Cikkek) Values('"+ rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3) +"')");
                 }
                 else
                 {
                     cikkszamok.add(rs.getString(1)+ " "+ rs.getString(3));
+                    betolt.mindenes("insert into qualitydb.Cikk_valtozatok (Cikkek) Values('"+ rs.getString(1)+ " "+ rs.getString(3) +"')");
                 }
             }
             cikkbox = cikkszamok.toArray(new String[cikkszamok.size()]);
+            */
+            SQA_SQL betolt = new SQA_SQL();
             
-            model = new DefaultComboBoxModel<String>(cikkbox);
+            model = new DefaultComboBoxModel<String>(betolt.tombvissza_sajat("select cikkek from qualitydb.Cikk_valtozatok where 3 = 3"));                     //cikkbox
             cikkszam_box.setModel(model); 
         }
         catch (Exception e1) 
@@ -207,6 +219,58 @@ public class Zarolasok_osszesito extends JPanel {
             hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
         }
+    }
+    
+    class Cikk_ujratolt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                String[] cikkbox = null;
+                DefaultComboBoxModel<String> model;
+            
+                    Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                    
+                    Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                    Statement stmt = con.createStatement();              
+                    ResultSet rs = stmt.executeQuery( "select cikkszamok.part_no, \r\n"
+                            + "        cikkszamok.REVISION_TEXT,\r\n"
+                            + "        cikkszamok.CF$_PRODUCT_CODE_DESC \r\n"
+                            + "from ifsapp.PART_REVISION_cfv cikkszamok\r\n"
+                            + "where 3 = 3 order by part_no asc");
+                    ArrayList<String> cikkszamok = new ArrayList<String>();
+                    SQA_SQL betolt = new SQA_SQL();
+                    betolt.mindenes("delete from qualitydb.Cikk_valtozatok");   
+                    while(rs.next())
+                    {
+                        if(rs.getString(2) != null)
+                        {
+                            cikkszamok.add(rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3));
+                            betolt.mindenes("insert into qualitydb.Cikk_valtozatok (Cikkek) Values('"+ rs.getString(1)+ "- "+ rs.getString(2) + " "+ rs.getString(3) +"')");
+                        }
+                        else
+                        {
+                            cikkszamok.add(rs.getString(1)+ " "+ rs.getString(3));
+                            betolt.mindenes("insert into qualitydb.Cikk_valtozatok (Cikkek) Values('"+ rs.getString(1)+ " "+ rs.getString(3) +"')");
+                        }
+                    }
+                    cikkbox = cikkszamok.toArray(new String[cikkszamok.size()]);
+                    
+                    model = new DefaultComboBoxModel<String>(cikkbox);                     //cikkbox
+                    cikkszam_box.setModel(model);
+                    Foablak.frame.setCursor(null);
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
     }
     
     class Uj_zarolas implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
