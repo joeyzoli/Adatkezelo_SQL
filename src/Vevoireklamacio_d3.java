@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -378,6 +379,7 @@ public class Vevoireklamacio_d3 extends JPanel {
                     alap_hibas.setText("");
                 }
             }
+            hatarido();
         }        
         stmt.close();
         conn.close();        
@@ -415,11 +417,39 @@ public class Vevoireklamacio_d3 extends JPanel {
     }
     
     public void hatarido()
-    {
-        hatarido_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
-        hatarido2_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
-        hatarido3_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
-        hatarido4_mezo.setText(Vevoireklamacio_fejlec.d3_cimke.getText());
+    {       
+        
+        Calendar calendar = Calendar.getInstance();
+        String[] datum = Vevoireklamacio_fejlec.ertesites_cimke.getText().split("\\.");
+        calendar.set(Integer.parseInt(datum[0]),(Integer.parseInt(datum[1])-1),Integer.parseInt(datum[2])); //Integer.parseInt(datum[0])
+        //date=calendar.getTime(); 
+        SimpleDateFormat s;
+        s=new SimpleDateFormat("yyyy.MM.dd");
+        
+        //System.out.println(s.format(date));
+        
+        int days = 2;
+        for(int i=0;i<days;)
+        {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            //here even sat and sun are added
+            //but at the end it goes to the correct week day.
+            //because i is only increased if it is week day
+            if(calendar.get(Calendar.DAY_OF_WEEK)<=5)
+            {
+                i++;
+            }
+            System.out.println("fut a for");
+        }
+        Date date2 = calendar.getTime(); 
+        s=new SimpleDateFormat("yyyy.MM.dd");
+        
+        hatarido_mezo.setText(s.format(date2));
+        hatarido2_mezo.setText(s.format(date2));
+        hatarido3_mezo.setText(s.format(date2));
+        hatarido4_mezo.setText(s.format(date2));
+        Vevoireklamacio_fejlec.d3_cimke.setText(s.format(date2));
+        System.out.println("D3 dátum");
     }
 
 

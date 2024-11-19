@@ -38,7 +38,7 @@ public class Elokeszitett_anyagkereso extends JPanel {
         setLayout(null);
         
         JLabel lblNewLabel = new JLabel("ME számok megniytása");
-        lblNewLabel.setBounds(441, 166, 123, 14);
+        lblNewLabel.setBounds(441, 166, 183, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Előkészített anyagok ME számból való gyártói adatok visszakeresése");

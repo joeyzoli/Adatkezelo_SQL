@@ -1268,6 +1268,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
                 //System.out.println(fajl.getAbsolutePath());
+                if(fajl != null)
                 if(fajl.getName().contains(".xlsx"))
                 {
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  

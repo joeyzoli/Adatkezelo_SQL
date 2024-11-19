@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Zarolt_frissit_2());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1072,10 +1072,11 @@ public class Torlo extends JPanel
                           + "from ifsapp.C_OPER_TRACY_OVW\n"
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
                           + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
-                  ResultSet rs = stmt.executeQuery("select TRACY_SERIAL_NO, COMPONENT_PART , WAIV_DEV_REJ_NO, CONSUMPTION_DATE \n"
-                          + "from ifsapp.C_MTRL_TRACY_OVW\n"
-                          + "where 3 = 3 and  COMPONENT_PART = '451-413-11-E92' \n"
-                          + "");
+                  ResultSet rs = stmt.executeQuery("SELECT  part_no, ifsapp.inventory_part_api.Get_Description(contract, part_no), date_applied ,location_no, reject_code, transaction,cost, quantity, source, userid\n"
+                          + "from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
+                          + "where\n"
+                          + "upper( ifsapp.Mpccom_System_Event_Api.Get_Description(TRANSACTION_CODE) ) like upper( '%selejt%' ) \n"
+                          + "and DATE_CREATED between to_date( '20240101', 'YYYYMMDD' ) and to_date( '20241031', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) ) and  ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VAVM'");
                   Workbook workbook = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1085,10 +1086,16 @@ public class Torlo extends JPanel
                   Worksheet sheet = workbook.getWorksheets().get(0);
                   //sheet.insertDataTable(datatable, true, 1, 1);
                   int cellaszam = 1;
-                  sheet.getRange().get("A" + cellaszam).setText("Szériaszám");
-                  sheet.getRange().get("B" + cellaszam).setText("Komponens cikk");
-                  sheet.getRange().get("C" + cellaszam).setText("ME szám");
-                  sheet.getRange().get("D" + cellaszam).setText("FElhasználás dátuma");
+                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Megnevezás");
+                  sheet.getRange().get("C" + cellaszam).setText("Dátum");
+                  sheet.getRange().get("D" + cellaszam).setText("Location no");
+                  sheet.getRange().get("E" + cellaszam).setText("Selejt kód");
+                  sheet.getRange().get("F" + cellaszam).setText("Transaction");
+                  sheet.getRange().get("G" + cellaszam).setText("Cost");
+                  sheet.getRange().get("H" + cellaszam).setText("Mennyiség");
+                  sheet.getRange().get("I" + cellaszam).setText("Source");
+                  sheet.getRange().get("J" + cellaszam).setText("User ID");
                   cellaszam++;
                   while(rs.next())
                   { 
@@ -1096,7 +1103,14 @@ public class Torlo extends JPanel
                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
                       sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                      sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                      sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                      sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                      sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
                       cellaszam++;
+                      System.out.println("Fut a while "+ cellaszam);
                   }
                   sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
                   sheet.getAllocatedRange().autoFitColumns();
@@ -1679,11 +1693,14 @@ public class Torlo extends JPanel
                         + "    order by    videoton.fkov.ido asc;";
                 
                 String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
-                String sql = "select *\n"
+                String sql = "select   nev, fkov.* \n"
                         + "from videoton.fkov\n"
-                        + "where\n"
-                        + "videoton.fkov.hely = '49'   and\n"
-                        + " ido > '2024.01.01'";
+                        + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
+                        + "where 3=3\n"
+                        + "and ido > '2024.01.01'\n"
+                        + "and hely in (83,86,87,88,89,119,120,122,156)\n"
+                        + "and failtestnames = 'LEDBacklight'";
+                
                 
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1692,12 +1709,12 @@ public class Torlo extends JPanel
                 cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                 result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
                 datatable = new DataTable();
-                
+                System.out.println("Lefutott");
                 workbook = new Workbook();
                 workbook.setVersion(ExcelVersion.Version2016); 
                 jdbcAdapter = new JdbcAdapter();         
                 jdbcAdapter.fillDataTable(datatable, result);
-             
+                System.out.println("Datatableban");
                 //Get the first worksheet
                 Worksheet sheet = workbook.getWorksheets().get(0);
                 /*

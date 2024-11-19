@@ -37,14 +37,6 @@ public class Loxone_parositas extends JPanel {
     public Loxone_parositas() {
         setLayout(null);
         
-        JLabel lblNewLabel = new JLabel("Excel megniytása");
-        lblNewLabel.setBounds(435, 101, 116, 14);
-        add(lblNewLabel);
-        
-        JButton excel_gomb = new JButton("New button");
-        excel_gomb.setBounds(597, 97, 89, 23);
-        add(excel_gomb);
-        
         JLabel lblNewLabel_1 = new JLabel("Szériaszám");
         lblNewLabel_1.setBounds(435, 150, 96, 14);
         add(lblNewLabel_1);

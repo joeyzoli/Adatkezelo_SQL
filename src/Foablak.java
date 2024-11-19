@@ -221,13 +221,13 @@ public class Foablak extends JFrame
 		JMenuItem ujadat = new JMenuItem("Új alapadat");
 		ujadat.addActionListener(new PanelCsere_uj_adatok());
 		
-		JMenuItem proglove = new JMenuItem("ProGlove");
-		proglove.addActionListener(new PanelCsere_proglove());
+		//JMenuItem proglove = new JMenuItem("ProGlove");
+		//proglove.addActionListener(new PanelCsere_proglove());
 		
 		JMenuItem ellenori_lapok = new JMenuItem("Ellenőri lapok");
 		ellenori_lapok.addActionListener(new Panelcsere_Ellenorilapok());
 		menu.add(ellenori_lapok);
-		menu.add(proglove);
+		//menu.add(proglove);
 		
 		JMenuItem vevoi_reklamaciok = new JMenuItem("Vevői reklamációk");
 		vevoi_reklamaciok.addActionListener(new PanelCsere_vevoi_bevitel());
@@ -306,9 +306,9 @@ public class Foablak extends JFrame
 		JMenuItem retour_lekerdezes = new JMenuItem("Retour");
 		retour_lekerdezes.addActionListener(new PanelCsere_retour_lekerdez());
 		
-		JMenuItem retour_mile = new JMenuItem("Hager Retour");
-		retour_mile.addActionListener(new PanelCsere_retour_mile());
-		lekerdezes.add(retour_mile);
+		//JMenuItem retour_mile = new JMenuItem("Hager Retour");
+		//retour_mile.addActionListener(new PanelCsere_retour_mile());
+		//lekerdezes.add(retour_mile);
 		lekerdezes.add(retour_lekerdezes);
 		
 		JMenuItem folyamatellenorok = new JMenuItem("Gépes folyamatellenőrök");
@@ -460,13 +460,13 @@ public class Foablak extends JFrame
 		jelenleti_osszesito.addActionListener(new Panelcsere_Javitasok());
 		egyeb.add(jelenleti_osszesito);
 		
-		JMenuItem excel_kereso = new JMenuItem("Excel kereső");
-		egyeb.add(excel_kereso);
+		//JMenuItem excel_kereso = new JMenuItem("Excel kereső");
+		//egyeb.add(excel_kereso);
 		
 		JMenuItem hager_adat = new JMenuItem("Hager adatok");
 		hager_adat.addActionListener(new Panelcsere_Hager());
 		egyeb.add(hager_adat);
-		excel_kereso.addActionListener(new Panelcsere_Excel_kereso());
+		//excel_kereso.addActionListener(new Panelcsere_Excel_kereso());
 		
 		ain.addActionListener(new Panelcsere_AIN());
 		JMenu beallitasok = new JMenu("Beállítások");
@@ -1260,7 +1260,7 @@ public class Foablak extends JFrame
          {
             try
             {
-                Desktop.getDesktop().open(new File("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Minőségügy adatbázis kezelő program leírása_v0.docx"));                            //megnyitja az excelben szereplő helyen levő infó fájlt
+                Desktop.getDesktop().open(new File("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\EASQAS program leírása.docx"));                            //megnyitja az excelben szereplő helyen levő infó fájlt
             }
             catch (Exception e1) 
             {

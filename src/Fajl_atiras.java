@@ -85,6 +85,7 @@ public class Fajl_atiras extends JPanel {
                 mentes_helye.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
+                if(fajl != null)
                 hely = fajl.getAbsolutePath();
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 mappa = new File(hely);                                         //mappa beolvasása

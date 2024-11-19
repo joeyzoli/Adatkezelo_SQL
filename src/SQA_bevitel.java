@@ -2117,6 +2117,7 @@ public class SQA_bevitel extends JPanel {
                 String[] egysegar = rs.getString(18).split("\n");
                 for(int szamlalo = 0;szamlalo < cikkszam.length;szamlalo++)
                 {
+                    
                     modell.addRow(new Object[]{cikkszam[szamlalo],megnevezes[szamlalo],gyarto[szamlalo],beszallito[szamlalo],projekt[szamlalo],kontakt[szamlalo],egysegar[szamlalo]});                            
                 }
                 
