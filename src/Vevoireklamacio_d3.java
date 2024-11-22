@@ -439,7 +439,6 @@ public class Vevoireklamacio_d3 extends JPanel {
             {
                 i++;
             }
-            System.out.println("fut a for");
         }
         Date date2 = calendar.getTime(); 
         s=new SimpleDateFormat("yyyy.MM.dd");
@@ -449,7 +448,6 @@ public class Vevoireklamacio_d3 extends JPanel {
         hatarido3_mezo.setText(s.format(date2));
         hatarido4_mezo.setText(s.format(date2));
         Vevoireklamacio_fejlec.d3_cimke.setText(s.format(date2));
-        System.out.println("D3 dátum");
     }
 
 

@@ -369,6 +369,7 @@ public class Vevoireklamacio_d5 extends JPanel {
                 String formatedDate = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
                 System.out.println("formatedDate : " + formatedDate);  
                 */
+                System.out.println("table mérete: "+ table.getRowCount());
                 if(table.getValueAt(szamlalo, 4).toString().equals(""))
                 {
                     sql = "insert into qualitydb.Vevoireklamacio_elo (Feladat,Felelos,Hatarido,Lezaras_datuma,D,Rek_ID) values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+table.getValueAt(szamlalo, 1).toString() +"', "
@@ -513,14 +514,12 @@ public class Vevoireklamacio_d5 extends JPanel {
             {
                 i++;
             }
-            System.out.println("fut a for");
         }
         Date date2 = calendar.getTime(); 
         s=new SimpleDateFormat("yyyy.MM.dd");
         hatarido_mezo.setText(s.format(date2));
         hatarido2_mezo.setText(s.format(date2));      
         Vevoireklamacio_fejlec.d5_cimke.setText(s.format(date2));
-        System.out.println("D5 dátum");
     }
     
     class Torles1 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

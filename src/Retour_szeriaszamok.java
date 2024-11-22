@@ -750,6 +750,7 @@ public class Retour_szeriaszamok extends JPanel {
                             intezkedes_mezo.setText(rs.getString(28));
                         }
                         db_id = rs.getString(1);
+                        System.out.println(db_id);
                         sql = "select * from qualitydb.Retour_kepek where Szeriaszam = '"+ szeriaszam_mezo.getText() +"'";
                         stmt.execute(sql);
                         rs = stmt.getResultSet();
@@ -997,7 +998,7 @@ public class Retour_szeriaszamok extends JPanel {
                     kiszallithato = "NOK";
                 }
                 else {}                
-                
+                System.out.println("ide menti: "+db_id);
                 String sql = "update qualitydb.Retour_szeriaszamok set Vizualis_ell = '"+ vizualis1 +"', Vizualis_jav_elott ='"+ vizualis2 +"', Vizualis_jav_utan = '"+ vizualis3 +"', ICT_ell = '"+ ict1 +"',"
                         + " ICT_jav_elott ='"+ ict2 +"', ICT_jav_utan = '"+ ict3 +"',FCT_ell = '"+ fct1 +"', FCT_jav_elott ='"+ fct2 +"', FCT_jav_utan = '"+ fct3 +"', "
                         + "Meres_ell = '"+ meres1 +"', Meres_jav_elott ='"+ meres2 +"', Meres_jav_utan = '"+ meres3 +"',Rontgen_ell = '"+ rontgen1 +"', Rontgen_jav_elott ='"+ rontgen2 +"', Rontgen_jav_utan = '"+ rontgen3 +"',"

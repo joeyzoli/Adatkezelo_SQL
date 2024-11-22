@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Lekerdezes_IFS());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1072,7 +1072,7 @@ public class Torlo extends JPanel
                           + "from ifsapp.C_OPER_TRACY_OVW\n"
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
                           + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
-                  ResultSet rs = stmt.executeQuery("SELECT  part_no, ifsapp.inventory_part_api.Get_Description(contract, part_no), date_applied ,location_no, reject_code, transaction,cost, quantity, source, userid\n"
+                  ResultSet rs = stmt.executeQuery("SELECT  part_no, ifsapp.inventory_part_api.Get_Description(contract, part_no), date_applied ,location_no, reject_code, transaction,cast(cost as DECIMAL(10,2)), quantity, source, userid\n"
                           + "from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
                           + "where\n"
                           + "upper( ifsapp.Mpccom_System_Event_Api.Get_Description(TRANSACTION_CODE) ) like upper( '%selejt%' ) \n"

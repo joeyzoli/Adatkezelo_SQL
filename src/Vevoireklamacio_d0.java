@@ -538,16 +538,17 @@ public class Vevoireklamacio_d0 extends JPanel {
             {               
                 vevo_box.removeActionListener(valaszto);
                 Vevoireklamacio_fejlec.fajta_box.setSelectedItem(rs.getString(2));
-                sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok \r\n"
+                /*sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok \r\n"
                         + "from ifsapp.PART_REVISION\r\n"
                         + "where 3 = 3\r\n"
                         + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
                         + "-- and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VLOXN'\r\n"
                         + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
                         + "ORDER by part_no";
+                
                 DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<String>(cikkszamok.tombvissza(sql));
                 
-                tipus_box.setModel(model2);
+                tipus_box.setModel(model2);*/
                 vevo_box.setSelectedItem(rs.getString(3));
                 beszallito_mezo.setText(rs.getString(4));
                 //ertesites_mezo.setText(rs.getString(5));
@@ -656,8 +657,12 @@ public class Vevoireklamacio_d0 extends JPanel {
                     felelos_mezo.setText("");
                     felelos_box.setSelectedItem(""); 
                 }
+                
                 String[] cikkszamok = rs.getString(9).split(";");
-                tipus_box.setSelectedItem(cikkszamok[0]);
+                String[] cikkek = {cikkszamok[0]};
+                DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<String>(cikkek);
+                tipus_box.setModel(model2);
+                //tipus_box.setSelectedItem(cikkszamok[0]);
                 
                 int rowCount = modell2.getRowCount();           
                 for (int i = rowCount - 1; i > -1; i--) 

@@ -69,8 +69,8 @@ public class SQA_osszesito extends JPanel {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         modell = new DefaultTableModel();
         szukitett_modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"ID", "Dátum", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
-        szukitett_modell.setColumnIdentifiers(new Object[]{"ID", "Reklamáció száma", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Hibaleírás"});
+        modell.setColumnIdentifiers(new Object[]{"ID", "Dátum", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Utolsó történés","Hibaleírás"});
+        szukitett_modell.setColumnIdentifiers(new Object[]{"ID", "Dátum", "Inditotta", "Űrlap jellege","Cikkszám","Projekt","Lezárás ideje","Nyitva","Utolsó történés","Hibaleírás"});
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setModel(modell);
         
@@ -172,7 +172,7 @@ public class SQA_osszesito extends JPanel {
         conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select id, datum, inditotta, vagy,cikkszam,projekt, lezaras_ido,\r\n"
-                + "if(lezaras_ido is null, DATEDIFF(now(), Datum), DATEDIFF(Lezaras_ido, Datum)) as nyitva,\r\n"
+                + "if(lezaras_ido is null, DATEDIFF(now(), Datum), DATEDIFF(Lezaras_ido, Datum)) as nyitva,if(DATEDIFF(now(), Statusz_ido) is null, DATEDIFF(now(), Datum), DATEDIFF(now(), Statusz_ido)),\r\n"
                 + "Hibaleiras\r\n"
                 + "from qualitydb.SQA_reklamaciok\r\n"
                 + "where 3 = 3";                                        
@@ -184,12 +184,12 @@ public class SQA_osszesito extends JPanel {
             {
                 String[] datum = rs.getString(7).split(" ");
                 String[] datum2 = rs.getString(2).split(" ");
-                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),datum[0],rs.getString(8),rs.getString(9)});                  
+                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),datum[0],rs.getString(8),rs.getString(9),rs.getString(10)});                  
             }
             else
             {
                 String[] datum2 = rs.getString(2).split(" ");
-                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),rs.getString(7),rs.getString(8),rs.getString(9)});
+                modell.addRow(new Object[]{rs.getString(1), datum2[0], rs.getString(3), rs.getString(4),rs.getString(5).replace("\n", "  "),rs.getString(6).replace("\n", "  "),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)});
             }                                     
         }
         TableColumnModel columnModel = table.getColumnModel();
@@ -405,7 +405,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -427,7 +427,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -442,7 +442,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -462,7 +462,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -484,7 +484,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -499,7 +499,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -519,7 +519,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Egyéb"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -541,7 +541,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -556,7 +556,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -579,7 +579,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -593,7 +593,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -611,7 +611,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -626,7 +626,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -646,7 +646,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -660,7 +660,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -678,7 +678,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -693,7 +693,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -713,7 +713,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -727,7 +727,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -745,7 +745,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -760,7 +760,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -783,7 +783,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -797,7 +797,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -815,7 +815,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -830,7 +830,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -850,7 +850,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -864,7 +864,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -882,7 +882,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -897,7 +897,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -917,7 +917,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -931,7 +931,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -949,7 +949,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -964,7 +964,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -987,7 +987,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1001,7 +1001,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1019,7 +1019,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1034,7 +1034,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1054,7 +1054,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1068,7 +1068,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1086,7 +1086,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1101,7 +1101,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1121,7 +1121,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1135,7 +1135,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1153,7 +1153,7 @@ public class SQA_osszesito extends JPanel {
                                 if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
@@ -1168,7 +1168,7 @@ public class SQA_osszesito extends JPanel {
                                 if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
-                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8)});
+                                            table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
                                 }
                             }
                             table.setModel(szukitett_modell);
