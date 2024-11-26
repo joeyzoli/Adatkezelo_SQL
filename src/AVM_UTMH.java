@@ -76,7 +76,7 @@ public class AVM_UTMH extends JPanel {
                betolt.mindenes("insert into qualitydb.Selejt_temp1 select Panelszam\r\n"
                        + "from qualitydb.Beolvasott_panelek\r\n"
                        + "where Panelszam not in (select Selejtek.panel from qualitydb.Selejtek)\r\n"
-                       + "and Projekt = 'AVM'");
+                       + "and Projekt = 'AVM' group by Panelszam");
                System.out.println("Első");
                
                
@@ -89,17 +89,21 @@ public class AVM_UTMH extends JPanel {
                while(rs2.next())
                {
                    betolt.mindenes("insert into qualitydb.Selejt_temp2 (panel) Values('"+ rs2.getString(1) +"')");
-                   System.out.println("Második");
+                   System.out.println("Selejt feltölt");
                }
                
                betolt.mindenes("delete from qualitydb.Selejt_temp3");
                betolt.mindenes("insert into qualitydb.Selejt_temp3 select Selejt_temp1.Panel\r\n"
                                                                  + "from qualitydb.Selejt_temp1\r\n"
-                                                                 + "where Panel not in (select Selejt_temp2.panel from qualitydb.Selejt_temp2)");
-               System.out.println("Második");
-               stmt.execute("select Selejt_temp3.Panel\r\n"
-                       + "from qualitydb.Selejt_temp3\r\n"
-                       + "where Panel not in (select Csomagoltak.panel from qualitydb.Csomagoltak) group by Selejt_temp3.Panel");
+                                                                 + "where Selejt_temp1.Panel not in (select Selejt_temp2.panel from qualitydb.Selejt_temp2)");
+               betolt.mindenes("delete from qualitydb.Selejt_temp4");
+               betolt.mindenes("insert into qualitydb.Selejt_temp4 select Selejt_temp3.Panel\r\n"
+                                                                 + "from qualitydb.Selejt_temp3\r\n"
+                                                                 + "where Selejt_temp3.Panel not in (select Powerpanel.panel from qualitydb.Powerpanel)");
+               System.out.println("Power kiszedve");
+               stmt.execute("select Selejt_temp4.Panel\r\n"
+                       + "from qualitydb.Selejt_temp4\r\n"
+                       + "where Selejt_temp4.Panel not in (select Csomagoltak.panel from qualitydb.Csomagoltak) group by Selejt_temp4.Panel");
        
                ResultSet rs = stmt.getResultSet();
                System.out.println("Lekérdezés kész");
@@ -145,14 +149,14 @@ public class AVM_UTMH extends JPanel {
                                    + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                                    + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                                    + "videoton.fkov.dolgozo \n"
-                                   + "from (select videoton.fkov.panel, max(ido) as 'Datum' from videoton.fkov "
+                                   + "from (select videoton.fkov.panel, max(azon) as 'ID' from videoton.fkov "
                                    + "     where videoton.fkov.panel in ('"+ szeriaszam +"') group by videoton.fkov.panel) belso, videoton.fkov \n"
                                    + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                                   + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum");
+                                   + " where videoton.fkov.panel = belso.panel and videoton.fkov.azon = belso.ID");
                            if(rs2.next())
                            {
                                //System.out.println("Fut az ipei lekérdezés");
-                               if(rs2.getString(3).contains("Csomagolás") || rs2.getString(3).contains("Jelölő") || rs2.getString(3).contains("PrePacking") || rs2.getString(3).contains("Quality") || rs2.getString(3).contains("OQC") || rs2.getString(3).contains("csomagolás"))                                
+                               if(rs2.getString(3).contains("Csomagolás") || rs2.getString(3).contains("Quality") || rs2.getString(3).contains("OQC") || rs2.getString(3).contains("csomagolás"))                                
                                {
                                    betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ rs2.getString(5) +"')");
                                    betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ eredeti +"')");
@@ -190,85 +194,128 @@ public class AVM_UTMH extends JPanel {
                                + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                                + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                                + "videoton.fkov.dolgozo \n"
-                               + "from (select videoton.fkov.panel, max(ido) as 'Datum' from videoton.fkov "
+                               + "from (select videoton.fkov.panel, max(azon) as 'ID' from videoton.fkov "
                                + "     where videoton.fkov.panel in ('"+ szeriaszam +"') group by videoton.fkov.panel) belso, videoton.fkov \n"
                                + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                               + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum");
+                               + " where videoton.fkov.panel = belso.panel and videoton.fkov.azon = belso.ID");
                        if(rs2.next())
                        {
-                           if(rs2.getString(3).contains("Csomagolás") || rs2.getString(3).contains("Jelölő") || rs2.getString(3).contains("PrePacking") || rs2.getString(3).contains("Quality") || rs2.getString(3).contains("OQC") || rs2.getString(3).contains("csomagolás"))                                
+                           if(rs2.getString(3).contains("Csomagolás") || rs2.getString(3).contains("Quality") || rs2.getString(3).contains("OQC") || rs2.getString(3).contains("csomagolás"))                                
                            {
                                betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ rs2.getString(5) +"')");
                                System.out.println("Csomagolt");
                            }
                            else if(rs2.getString(3).contains("Párosító munkahely"))                                
                            {
-                               System.out.println("Párosító megy");
-                               System.out.println(rs2.getString(8));
-                               System.out.println(rs2.getString(5));
-                               if(rs2.getString(8).equals(""))
-                               {
-                                   sheet.getRange().get("A" + cellaszam).setText(rs2.getString(1));
-                                   sheet.getRange().get("B" + cellaszam).setText(rs2.getString(2));
-                                   sheet.getRange().get("C" + cellaszam).setText(rs2.getString(3));  
-                                   sheet.getRange().get("D" + cellaszam).setText(rs2.getString(4));
-                                   sheet.getRange().get("E" + cellaszam).setText(rs2.getString(5));
-                                   sheet.getRange().get("F" + cellaszam).setText(rs2.getString(6));
-                                   sheet.getRange().get("G" + cellaszam).setText(rs2.getString(7));
-                                   sheet.getRange().get("H" + cellaszam).setText(rs2.getString(8));
-                                   sheet.getRange().get("I" + cellaszam).setText(rs2.getString(9));
-                                   sheet.getRange().get("J" + cellaszam).setText(rs2.getString(10));
-                                   sheet.getRange().get("K" + cellaszam).setText(rs2.getString(11));
-                                   sheet.getRange().get("L" + cellaszam).setText(rs2.getString(12));
-                                   sheet.getRange().get("M" + cellaszam).setText(rs2.getString(13));
-                                   sheet.getRange().get("N" + cellaszam).setText(rs2.getString(14));
-                                   sheet.getRange().get("O" + cellaszam).setText(rs2.getString(15));
-                                   sheet.getRange().get("P" + cellaszam).setText(rs2.getString(16));
-                                   sheet.getRange().get("Q" + cellaszam).setText(rs2.getString(17));
-                                   cellaszam++;
+                               if(rs.getString(1).startsWith("111A18090")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }               
+                               else if(rs.getString(1).startsWith("111A18105")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A19022")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A19053")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }                               
+                               else if(rs.getString(1).startsWith("111A19109")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A21133")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A22006")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A21105")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A22087")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
+                               }
+                               else if(rs.getString(1).startsWith("111A23032")) {
+                                   betolt.mindenes("insert into qualitydb.Powerpanel (panel) Values('"+ rs2.getString(5) +"')");
+                                   System.out.println("Powerpanel");
                                }
                                else
-                               {
-                                   rs3 = stmt3.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
-                                           + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
-                                           + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
-                                           + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
-                                           + "videoton.fkov.dolgozo \n"
-                                           + "from (select videoton.fkov.panel, max(ido) as 'Datum' from videoton.fkov "
-                                           + "     where videoton.fkov.panel in ('"+ rs2.getString(8) +"') group by videoton.fkov.panel) belso, videoton.fkov \n"
-                                           + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                                           + " where videoton.fkov.panel = belso.panel and videoton.fkov.ido = belso.datum");
-                                   System.out.println("Lefutott");
-                                   if(rs3.next())
+                               {                                    
+                                   System.out.println("Párosító megy");
+                                   System.out.println(rs2.getString(8));
+                                   System.out.println(rs2.getString(5));
+                                   if(rs2.getString(8).equals(""))
                                    {
-                                       if(rs3.getString(3).contains("Csomagolás") || rs3.getString(3).contains("Jelölő") || rs3.getString(3).contains("PrePacking") || rs3.getString(3).contains("Quality") || rs3.getString(3).contains("OQC") || rs3.getString(3).contains("csomagolás"))                                
+                                       sheet.getRange().get("A" + cellaszam).setText(rs2.getString(1));
+                                       sheet.getRange().get("B" + cellaszam).setText(rs2.getString(2));
+                                       sheet.getRange().get("C" + cellaszam).setText(rs2.getString(3));  
+                                       sheet.getRange().get("D" + cellaszam).setText(rs2.getString(4));
+                                       sheet.getRange().get("E" + cellaszam).setText(rs2.getString(5));
+                                       sheet.getRange().get("F" + cellaszam).setText(rs2.getString(6));
+                                       sheet.getRange().get("G" + cellaszam).setText(rs2.getString(7));
+                                       sheet.getRange().get("H" + cellaszam).setText(rs2.getString(8));
+                                       sheet.getRange().get("I" + cellaszam).setText(rs2.getString(9));
+                                       sheet.getRange().get("J" + cellaszam).setText(rs2.getString(10));
+                                       sheet.getRange().get("K" + cellaszam).setText(rs2.getString(11));
+                                       sheet.getRange().get("L" + cellaszam).setText(rs2.getString(12));
+                                       sheet.getRange().get("M" + cellaszam).setText(rs2.getString(13));
+                                       sheet.getRange().get("N" + cellaszam).setText(rs2.getString(14));
+                                       sheet.getRange().get("O" + cellaszam).setText(rs2.getString(15));
+                                       sheet.getRange().get("P" + cellaszam).setText(rs2.getString(16));
+                                       sheet.getRange().get("Q" + cellaszam).setText(rs2.getString(17));
+                                       cellaszam++;
+                                   }
+                                   else
+                                   {
+                                       rs3 = stmt3.executeQuery("select  videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                                               + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny, "
+                                               + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                                               + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                                               + "videoton.fkov.dolgozo \n"
+                                               + "from (select videoton.fkov.panel, max(azon) as 'ID' from videoton.fkov "
+                                               + "     where videoton.fkov.panel in ('"+ rs2.getString(8) +"') group by videoton.fkov.panel) belso, videoton.fkov \n"
+                                               + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                               + " where videoton.fkov.panel = belso.panel and videoton.fkov.azon = belso.ID");
+                                       System.out.println("Lefutott");
+                                       if(rs3.next())
                                        {
-                                           betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ rs3.getString(5) +"')");
-                                           betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ szeriaszam +"')");
-                                           System.out.println("Csomagolt");
+                                           if(rs3.getString(3).contains("Csomagolás") || rs3.getString(3).contains("Jelölő") || rs3.getString(3).contains("PrePacking") || rs3.getString(3).contains("Quality") || rs3.getString(3).contains("OQC") || rs3.getString(3).contains("csomagolás"))                                
+                                           {
+                                               betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ rs3.getString(5) +"')");
+                                               betolt.mindenes("insert into qualitydb.Csomagoltak (panel) Values('"+ szeriaszam +"')");
+                                               System.out.println("Csomagolt");
+                                           }
+                                           else
+                                           {
+                                               sheet.getRange().get("A" + cellaszam).setText(rs3.getString(1));
+                                               sheet.getRange().get("B" + cellaszam).setText(rs3.getString(2));
+                                               sheet.getRange().get("C" + cellaszam).setText(rs3.getString(3));  
+                                               sheet.getRange().get("D" + cellaszam).setText(rs3.getString(4));
+                                               sheet.getRange().get("E" + cellaszam).setText(rs3.getString(5));
+                                               sheet.getRange().get("F" + cellaszam).setText(rs3.getString(6));
+                                               sheet.getRange().get("G" + cellaszam).setText(rs3.getString(7));
+                                               sheet.getRange().get("H" + cellaszam).setText(rs3.getString(8));
+                                               sheet.getRange().get("I" + cellaszam).setText(rs3.getString(9));
+                                               sheet.getRange().get("J" + cellaszam).setText(rs3.getString(10));
+                                               sheet.getRange().get("K" + cellaszam).setText(rs3.getString(11));
+                                               sheet.getRange().get("L" + cellaszam).setText(rs3.getString(12));
+                                               sheet.getRange().get("M" + cellaszam).setText(rs3.getString(13));
+                                               sheet.getRange().get("N" + cellaszam).setText(rs3.getString(14));
+                                               sheet.getRange().get("O" + cellaszam).setText(rs3.getString(15));
+                                               sheet.getRange().get("P" + cellaszam).setText(rs3.getString(16));
+                                               sheet.getRange().get("Q" + cellaszam).setText(rs3.getString(17));
+                                               cellaszam++;
+                                               //System.out.println("Sima szériaszám");
+                                           }   
                                        }
-                                       else
-                                       {
-                                           sheet.getRange().get("A" + cellaszam).setText(rs3.getString(1));
-                                           sheet.getRange().get("B" + cellaszam).setText(rs3.getString(2));
-                                           sheet.getRange().get("C" + cellaszam).setText(rs3.getString(3));  
-                                           sheet.getRange().get("D" + cellaszam).setText(rs3.getString(4));
-                                           sheet.getRange().get("E" + cellaszam).setText(rs3.getString(5));
-                                           sheet.getRange().get("F" + cellaszam).setText(rs3.getString(6));
-                                           sheet.getRange().get("G" + cellaszam).setText(rs3.getString(7));
-                                           sheet.getRange().get("H" + cellaszam).setText(rs3.getString(8));
-                                           sheet.getRange().get("I" + cellaszam).setText(rs3.getString(9));
-                                           sheet.getRange().get("J" + cellaszam).setText(rs3.getString(10));
-                                           sheet.getRange().get("K" + cellaszam).setText(rs3.getString(11));
-                                           sheet.getRange().get("L" + cellaszam).setText(rs3.getString(12));
-                                           sheet.getRange().get("M" + cellaszam).setText(rs3.getString(13));
-                                           sheet.getRange().get("N" + cellaszam).setText(rs3.getString(14));
-                                           sheet.getRange().get("O" + cellaszam).setText(rs3.getString(15));
-                                           sheet.getRange().get("P" + cellaszam).setText(rs3.getString(16));
-                                           sheet.getRange().get("Q" + cellaszam).setText(rs3.getString(17));
-                                           cellaszam++;
-                                           //System.out.println("Sima szériaszám");
-                                       }   
                                    }
                                }
                            }
