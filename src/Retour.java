@@ -433,19 +433,19 @@ public class Retour extends JPanel
                             {
                                 if(table.getValueAt(szamlalo, 0).toString().equals(""))
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where Vevoi_ID = '"+ table.getValueAt(szamlalo, 1).toString() +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where Vevoi_ID = '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva vevői szerint");
                                 }
                                 else if(table.getValueAt(szamlalo, 1).toString().equals(""))
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString().replace(" ", "") +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva veas szerint");
                                 }
                                 else
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString() +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString().replace(" ", "") +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva veas2 szerint");
                                 }
@@ -454,7 +454,7 @@ public class Retour extends JPanel
                             {
                                 SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+ table.getValueAt(szamlalo, 1).toString() + "',"
+                                sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"', '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") + "',"
                                         + "'"+ id_mezo.getText() +"', '"+ rma_mezo.getText() + "','"+ vevoirma_mezo.getText() +"','"+ table.getValueAt(szamlalo, 2).toString() +"','"+ rogzites.format(timestamp) +"')";
                                 modositas.mindenes(sql);
                                 System.out.println("Nincs ilyen szériaszám");
@@ -464,7 +464,7 @@ public class Retour extends JPanel
                         {
                             SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                            sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+ table.getValueAt(szamlalo, 1).toString() + "',"
+                            sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"', '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") + "',"
                                     + "'"+ id_mezo.getText() +"', '"+ rma_mezo.getText() + "','"+ vevoirma_mezo.getText() +"','"+ table.getValueAt(szamlalo, 2).toString() +"','"+ rogzites.format(timestamp) +"')";
                             modositas.mindenes(sql);
                             System.out.println("Nincs ilyen szériaszám");
