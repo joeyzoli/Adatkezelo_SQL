@@ -503,7 +503,7 @@ public class Vevoireklamacio_d5 extends JPanel {
         
         //System.out.println(s.format(date));
         
-        int days = 2;
+        int days = 14;
         for(int i=0;i<days;)
         {
             calendar.add(Calendar.DAY_OF_MONTH, 1);

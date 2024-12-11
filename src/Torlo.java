@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Lekerdezes_IFS());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1658,7 +1658,7 @@ public class Torlo extends JPanel
                 Workbook workbook;
                 //Registering the Driver
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
-                    
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));     
                 //Getting the connection
                 String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ip címhez való csatlakozás
                 con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszó felhasználóval
@@ -1693,13 +1693,18 @@ public class Torlo extends JPanel
                         + "    order by    videoton.fkov.ido asc;";
                 
                 String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
-                String sql = "select   nev, fkov.* \n"
-                        + "from videoton.fkov\n"
-                        + "inner join  videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\n"
-                        + "where 3=3\n"
-                        + "and ido > '2024.01.01'\n"
-                        + "and hely in (83,86,87,88,89,119,120,122,156)\n"
-                        + "and failtestnames = 'LEDBacklight'";
+                String sql = "select                   tempTable.Week,\n"
+                        + "                                               if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
+                        + "            count(*) as Count\n"
+                        + "from                     videoton.fkov\n"
+                        + "inner join            (select yearweek(ido, 1) as Week,\n"
+                        + "                                                                                              panel,\n"
+                        + "                                                                                              max(ido) as MaxTimestamp\n"
+                        + "                                               from                     videoton.fkov\n"
+                        + "                                               where                  hely = 114 and\n"
+                        + "                                                                                              ido >= \"2024.01.01 00:00:00\"\n"
+                        + "                                               group by             1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
+                        + "group by             1, 2;";
                 
                 
                 Statement cstmt = con.createStatement(
@@ -1751,20 +1756,38 @@ public class Torlo extends JPanel
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
-                File menteshelye = mentes_helye.getSelectedFile();
-                workbook.saveToFile(menteshelye.getAbsolutePath(), ExcelVersion.Version2016);
-                
-                FileInputStream fileStream = new FileInputStream(menteshelye.getAbsolutePath());
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                File fajl = mentes_helye.getSelectedFile();
+                if(fajl.getName().contains(".xlsx"))
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(menteshelye.getAbsolutePath());
-                    workbook2.write(output);
-                    output.close();
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
+                    }
                 }
+                else
+                {
+                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                        workbook2.write(output);
+                        output.close();
+                    }
+                }
+                Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
             }
             catch(Exception e1)
@@ -3655,7 +3678,7 @@ public class Torlo extends JPanel
                       Class.forName("oracle.jdbc.OracleDriver");  //.driver
                                           
                       Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
-                      Statement stmt = con.createStatement();                      
+                      //Statement stmt = con.createStatement();                      
                       int cellaszam = 1;
                       sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
                       sheet2.getRange().get("B" + cellaszam).setText("Tracy Spac Code");
@@ -3667,7 +3690,7 @@ public class Torlo extends JPanel
                       
                       for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                       {
-                          ResultSet rs = stmt.executeQuery("select TRACY_SERIAL_NO, TRACY_SPEC_CODE, NUM_VALUE, MIN_VALUE, MAX_VALUE, PASS  \n"
+                          /*ResultSet rs = stmt.executeQuery("select TRACY_SERIAL_NO, TRACY_SPEC_CODE, NUM_VALUE, MIN_VALUE, MAX_VALUE, PASS  \n"
                                   + "from ifsapp.C_SPEC_TRACY_UNIT_OVW  \n"
                                   + "  where 3 = 3\n"
                                   + "  and TRACY_SERIAL_NO = '"+ datatable.getRows().get(szamlalo).getString(0) +"' and (TRACY_SPEC_CODE like 'TFFK33-Seg1%' or TRACY_SPEC_CODE = 'TFFK33-Mkq')");
@@ -3681,7 +3704,8 @@ public class Torlo extends JPanel
                               sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
                               sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
                               cellaszam++;
-                          }                                            
+                          }                */
+                          System.out.println("Fut..");
                       }
                       
                       sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
@@ -3716,6 +3740,144 @@ public class Torlo extends JPanel
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                              //kiírja a hibaüzenetet
             }  
                                
+         }
+    }
+	
+	class Tracy_kereses_loxone implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection con = null;
+            Statement stmt = null;
+            try
+            {
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                //ResultSet rs;
+                Workbook workbook = new Workbook();;
+                workbook.setVersion(ExcelVersion.Version2016); 
+                workbook.loadFromFile(fajl.getAbsolutePath());
+                //Registering the Driver
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));     
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ip címhez való csatlakozás
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszó felhasználóval
+                System.out.println("Connection established......");
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                //Statement cstmt = con.createStatement(
+                //        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                //        ResultSet.CONCUR_UPDATABLE);
+                for(int szamlalo = 2; szamlalo < sheet.getLastRow(); szamlalo++)
+                {
+                    /*String sql = "select hibakod from videoton.fkov \r\n"
+                            + "WHERE 3 = 3\r\n"
+                            + "and panel = '"+ sheet.getRange().get("A" + szamlalo).getText() +"' and hely = 26 "
+                                    + "and ido = '"+ sheet.getRange().get("B" + szamlalo).getText() +"'";
+                    System.out.println("fut a for: "+szamlalo);
+                    cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                    rs = cstmt.getResultSet();
+                    if(rs.next())
+                    {
+                        try
+                        {
+                            sheet.getRange().get("F" + szamlalo).setText(rs.getString(1).substring(20, 40));
+                            sheet.getRange().get("G" + szamlalo).setText(rs.getString(1).substring(60, 80));
+                        }
+                        catch(Exception e1)
+                        {
+                            System.out.println("Túl hosszú az xml: "+szamlalo); //26 19 25
+                        }
+                    }*/
+                    String[] datum = sheet.getRange().get("F" + szamlalo).getText().split(" ");
+                    String[] datum2 = datum[0].split("\\.");
+                    sheet.getRange().get("F" + szamlalo).setText(datum2[2]+"."+datum2[1]+"."+datum2[0]+ " "+ datum[1]);
+                    
+                    datum = sheet.getRange().get("G" + szamlalo).getText().split(" ");
+                    datum2 = datum[0].split("\\.");
+                    sheet.getRange().get("G" + szamlalo).setText(datum2[2]+"."+datum2[1]+"."+datum2[0]+ " "+ datum[1]);
+                    System.out.println("fut a for: "+sheet.getRange().get("F" + szamlalo).getText());
+                }
+
+                //Get the first worksheet
+                sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                sheet.getAllocatedRange().autoFitColumns();
+                sheet.getAllocatedRange().autoFitRows();
+                    
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
+                 
+                //result.close();
+                //cstmt.close();
+                con.close();
+                //workbook.setActiveSheetIndex(0);
+                //JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                fajl = mentes_helye.getSelectedFile();
+                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                /*if(fajl.getName().contains(".xlsx"))
+                {
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
+                    }
+                }
+                else
+                {
+                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                        workbook2.write(output);
+                        output.close();
+                    }
+                }*/
+                Foablak.frame.setCursor(null); 
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+            finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+            {
+                try 
+                {
+                  if (stmt != null)
+                     con.close();
+                } 
+                catch (SQLException se) {}
+                try 
+                {
+                  if (con != null)
+                     con.close();
+                } 
+                catch (SQLException se) 
+                {
+                  se.printStackTrace();
+                }  
+            }
          }
     }
 }

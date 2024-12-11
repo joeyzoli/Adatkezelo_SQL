@@ -433,19 +433,19 @@ public class Retour extends JPanel
                             {
                                 if(table.getValueAt(szamlalo, 0).toString().equals(""))
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where Vevoi_ID = '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where Vevoi_ID = '"+ table.getValueAt(szamlalo, 1).toString() +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva vevői szerint");
                                 }
                                 else if(table.getValueAt(szamlalo, 1).toString().equals(""))
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString().replace(" ", "") +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString() +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva veas szerint");
                                 }
                                 else
                                 {
-                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString().replace(" ", "") +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"'";
+                                    sql = "update qualitydb.Retour_szeriaszamok set Hiba_leirasa = '"+ table.getValueAt(szamlalo, 2).toString() +"' where VEAS_ID = '"+ table.getValueAt(szamlalo, 0).toString() +"'";
                                     modositas.mindenes(sql);
                                     System.out.println("Modosítva veas2 szerint");
                                 }
@@ -454,7 +454,7 @@ public class Retour extends JPanel
                             {
                                 SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"', '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") + "',"
+                                sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+ table.getValueAt(szamlalo, 1).toString() + "',"
                                         + "'"+ id_mezo.getText() +"', '"+ rma_mezo.getText() + "','"+ vevoirma_mezo.getText() +"','"+ table.getValueAt(szamlalo, 2).toString() +"','"+ rogzites.format(timestamp) +"')";
                                 modositas.mindenes(sql);
                                 System.out.println("Nincs ilyen szériaszám");
@@ -464,7 +464,7 @@ public class Retour extends JPanel
                         {
                             SimpleDateFormat rogzites = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");                                                          //
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                            sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString().replace(" ", "") +"', '"+ table.getValueAt(szamlalo, 1).toString().replace(" ", "") + "',"
+                            sql = "Insert Into qualitydb.Retour_szeriaszamok (VEAS_ID,VEVOI_ID,REtour_ID,RMA,VEvoi_RMA, Hiba_leirasa, Rogzites_ideje) Values('"+ table.getValueAt(szamlalo, 0).toString() +"', '"+ table.getValueAt(szamlalo, 1).toString() + "',"
                                     + "'"+ id_mezo.getText() +"', '"+ rma_mezo.getText() + "','"+ vevoirma_mezo.getText() +"','"+ table.getValueAt(szamlalo, 2).toString() +"','"+ rogzites.format(timestamp) +"')";
                             modositas.mindenes(sql);
                             System.out.println("Nincs ilyen szériaszám");
@@ -705,7 +705,34 @@ public class Retour extends JPanel
                 int key = e.getKeyCode();
                 if (key == KeyEvent.VK_ENTER)                                                                                               //ha az entert nyomják le akkor hívódik meg
                 {
-                    modell.addRow(new Object[]{veas_mezo.getText(), vevo_mezo.getText(), hibaleiras_mezo.getText()});
+                    String veas = "";
+                    String vevo = "";
+                    if(veas_mezo.getText().startsWith(" "))
+                    {
+                        veas = veas_mezo.getText().substring(1, veas_mezo.getText().length());
+                    }
+                    if(veas_mezo.getText().endsWith(" "))
+                    {
+                        veas = veas_mezo.getText().substring(0, veas_mezo.getText().length() -1);
+                    }
+                    else
+                    {
+                        veas = veas_mezo.getText();
+                    }
+                    
+                    if(vevo_mezo.getText().startsWith(" "))
+                    {
+                        vevo = vevo_mezo.getText().substring(1, vevo_mezo.getText().length());
+                    }
+                    if(vevo_mezo.getText().endsWith(" "))
+                    {
+                        vevo = vevo_mezo.getText().substring(0, vevo_mezo.getText().length() -1);
+                    }
+                    else
+                    {
+                        vevo = vevo_mezo.getText();
+                    }
+                    modell.addRow(new Object[]{veas, vevo, hibaleiras_mezo.getText()});
                     table.setModel(modell);
                     int db = Integer.valueOf(db_cimke.getText());
                     db++;
