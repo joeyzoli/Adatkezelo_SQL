@@ -193,13 +193,13 @@ public class Techem_OQC extends JPanel {
                         ResultSet.CONCUR_UPDATABLE);
                 ResultSet rs = stmt.executeQuery("Select contract, part_no, location_no, waiv_dev_rej_no, availability_control_id, to_char(RECEIPT_DATE ,'YYYY.MM.DD') from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
                         + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0\r\n"
-                        + "and location_no like 'TE0%'");
+                        + "and (location_no like 'TE0%' or location_no like 'MR%')");
                 JdbcAdapter jdbcAdapter = new JdbcAdapter();
                 jdbcAdapter.fillDataTable(datatable, rs);
                 sheet2.insertDataTable(datatable, true, 1, 1);
                 
                 stmt.execute("Select location_no from ifsapp.INVENTORY_PART_IN_STOCK_UIV\r\n"
-                        + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0 and (location_no like 'TE0%' or location_no like 'KE%') \r\n"
+                        + "where PART_NO = '"+ String.valueOf(cikk_box.getSelectedItem()) +"' and QTY_ONHAND > 0 and (location_no like 'TE0%' or location_no like 'KE%' or location_no like 'MR%') \r\n"
                         + " group by location_no");          //TE0%                 and location_no like 'TE0%'
                 //int szam = 1;
                 

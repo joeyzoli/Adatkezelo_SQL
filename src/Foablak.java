@@ -101,6 +101,7 @@ public class Foablak extends JFrame
 	private AVM_UTMH utmh;
 	private Hager_adatok hager_adat;
 	private Nyilatkozatbekero nyilatkozat;
+	private AVM_teszterallas allas;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -466,6 +467,10 @@ public class Foablak extends JFrame
 		JMenuItem hager_adat = new JMenuItem("Hager adatok");
 		hager_adat.addActionListener(new Panelcsere_Hager());
 		egyeb.add(hager_adat);
+		
+		JMenuItem avm_allasidok = new JMenuItem("AVM állás");
+		avm_allasidok.addActionListener(new Panelcsere_AVM_allas());
+		egyeb.add(avm_allasidok);
 		//excel_kereso.addActionListener(new Panelcsere_Excel_kereso());
 		
 		ain.addActionListener(new Panelcsere_AIN());
@@ -1243,6 +1248,17 @@ public class Foablak extends JFrame
          }
     }
 	
+	class Panelcsere_AVM_allas implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            allas = new AVM_teszterallas();
+            JScrollPane ablak = new JScrollPane(allas);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
 	class PanelCsere_hatter implements ActionListener																					//menüelem megnyomáskor hívodik meg
 	{
 		public void actionPerformed(ActionEvent e)
@@ -1360,12 +1376,15 @@ public class Foablak extends JFrame
             Calendar calendar = Calendar.getInstance();
             int nap = calendar.get(Calendar.DAY_OF_WEEK);
             System.out.println(System.getProperty("user.name"));
+            //SQA_SQL aron = new SQA_SQL();
+            //aron.Aron_heti();
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();
                 sqa.sqa_email();
                 sqa.retour_email();
                 sqa.uj_rendelesek();
+                sqa.Aron_heti();
                 System.out.println("Lefutott az SQA email");
                 sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
             }

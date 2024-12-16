@@ -1076,7 +1076,8 @@ public class Torlo extends JPanel
                           + "from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
                           + "where\n"
                           + "upper( ifsapp.Mpccom_System_Event_Api.Get_Description(TRANSACTION_CODE) ) like upper( '%selejt%' ) \n"
-                          + "and DATE_CREATED between to_date( '20240101', 'YYYYMMDD' ) and to_date( '20241031', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) ) and  ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VAVM'");
+                          + "and DATE_CREATED > to_date( '20240101', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) ) and  (ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VHASE' or ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VHOBE' or\n"
+                          + "ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VHACO')");
                   Workbook workbook = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1701,7 +1702,7 @@ public class Torlo extends JPanel
                         + "                                                                                              panel,\n"
                         + "                                                                                              max(ido) as MaxTimestamp\n"
                         + "                                               from                     videoton.fkov\n"
-                        + "                                               where                  hely = 114 and\n"
+                        + "                                               where                  hely = 79 and\n"
                         + "                                                                                              ido >= \"2024.01.01 00:00:00\"\n"
                         + "                                               group by             1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
                         + "group by             1, 2;";
