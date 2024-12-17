@@ -1384,7 +1384,7 @@ public class Foablak extends JFrame
                 sqa.sqa_email();
                 sqa.retour_email();
                 sqa.uj_rendelesek();
-                sqa.Aron_heti();
+                //sqa.Aron_heti();
                 System.out.println("Lefutott az SQA email");
                 sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
             }

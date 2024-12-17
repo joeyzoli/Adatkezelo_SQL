@@ -1694,18 +1694,19 @@ public class Torlo extends JPanel
                         + "    order by    videoton.fkov.ido asc;";
                 
                 String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
-                String sql = "select                   tempTable.Week,\n"
-                        + "                                               if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
-                        + "            count(*) as Count\n"
-                        + "from                     videoton.fkov\n"
-                        + "inner join            (select yearweek(ido, 1) as Week,\n"
-                        + "                                                                                              panel,\n"
-                        + "                                                                                              max(ido) as MaxTimestamp\n"
-                        + "                                               from                     videoton.fkov\n"
-                        + "                                               where                  hely = 79 and\n"
-                        + "                                                                                              ido >= \"2024.01.01 00:00:00\"\n"
-                        + "                                               group by             1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
-                        + "group by             1, 2;";
+                String sql = "select  tempTable.Week,\n"
+                        + "        if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
+                        + "        count(*) as Count\n"
+                        + "from   videoton.fkov\n"
+                        + "inner join  (select yearweek(ido, 1) as Week,\n"
+                        + "            panel,\n"
+                        + "            max(ido) as MaxTimestamp\n"
+                        + "            from  videoton.fkov\n"
+                        + "            where hely = 79 and\n"
+                        + "            ido >= \"2024.01.01 00:00:00\"  and (yearweek(ido, 1) - concat('20',SUBSTRING(panel, 12,4))) < 4\n"
+                        + "            group by 1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
+                        + "group by             1, 2;\n"
+                        + "";
                 
                 
                 Statement cstmt = con.createStatement(
