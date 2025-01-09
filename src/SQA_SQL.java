@@ -1124,74 +1124,88 @@ public class SQA_SQL {
             }
             conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = (Statement) conn.createStatement();
-            String sql = "select ID, Datum, Inditotta, vagy, cikkszam, megnevezés, Hibasdb, osszertek, Hibaleiras, Statusz, DATEDIFF(now(),datum) AS 'Nyitva' \r\n"
-                    + "from qualitydb.SQA_reklamaciok\r\n"
-                    + "where 3 = 3 and \r\n"
-                    + "lezaras_ido is null";
+            
+            String sql = "select Ertesitve from qualitydb.Aron_email where id = '1'";
             stmt.execute(sql);
             ResultSet rs = stmt.getResultSet();
             
-            Workbook workbook = new Workbook();
-            JdbcAdapter jdbcAdapter = new JdbcAdapter();
-            jdbcAdapter.fillDataTable(datatable, rs);
-    
-            //Get the first worksheet
-            Worksheet sheet = workbook.getWorksheets().get(0);
-            sheet.insertDataTable(datatable, true, 1, 1);
-            sheet.getAutoFilters().setRange(sheet.getCellRange("A1:AC1"));
-            sheet.getAllocatedRange().autoFitColumns();
-            sheet.getAllocatedRange().autoFitRows();
-            sheet.setName("Beszállító reklamációk");
-            
-            sheet.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-            
-            sql = "select  id, mi, Vevo, felelos, tipus, Miaproblema,  DATEDIFF(now(),ertesites_datuma) AS 'Nyitva' \r\n"
-                    + "from qualitydb.Vevoireklamacio_alap\r\n"
-                    + "where 3 = 3  and Lezaras_datuma = ''\r\n"
-                    + "";
-            stmt.execute(sql);
-            rs = stmt.getResultSet();
-    
-            JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
-            jdbcAdapter2.fillDataTable(datatable2, rs);
-    
-            //Get the first worksheet
-            Worksheet sheet2 = workbook.getWorksheets().get(1);
-            sheet2.insertDataTable(datatable2, true, 1, 1);
-            sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AC1"));
-            sheet2.getAllocatedRange().autoFitColumns();
-            sheet2.getAllocatedRange().autoFitRows();
-            sheet2.setName("Vevői reklamációk");
-            sheet2.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
-    
-            
-            File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Heti reklamációk.xlsx");                                                        //mentes_helye.getSelectedFile();
-            //System.out.println(fajl.getAbsolutePath());
-            workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-            rs.close();
-            stmt.close();
-            conn.close();
-            
-            FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+            if(rs.next())
             {
-                for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                workbook2.write(output);
-                output.close();
+                if(rs.getString(1).equals("nem"))
+                {
+                    sql = "select ID, Datum, Inditotta, vagy, cikkszam, megnevezés, Hibasdb, osszertek, Hibaleiras, Statusz, DATEDIFF(now(),datum) AS 'Nyitva' \r\n"
+                            + "from qualitydb.SQA_reklamaciok\r\n"
+                            + "where 3 = 3 and \r\n"
+                            + "lezaras_ido is null";
+                    stmt.execute(sql);
+                    rs = stmt.getResultSet();
+                    
+                    Workbook workbook = new Workbook();
+                    JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                    jdbcAdapter.fillDataTable(datatable, rs);
+            
+                    //Get the first worksheet
+                    Worksheet sheet = workbook.getWorksheets().get(0);
+                    sheet.insertDataTable(datatable, true, 1, 1);
+                    sheet.getAutoFilters().setRange(sheet.getCellRange("A1:AC1"));
+                    sheet.getAllocatedRange().autoFitColumns();
+                    sheet.getAllocatedRange().autoFitRows();
+                    sheet.setName("Beszállító reklamációk");
+                    
+                    sheet.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    
+                    sql = "select  id, mi, Vevo, felelos, tipus, Miaproblema,  DATEDIFF(now(),ertesites_datuma) AS 'Nyitva' \r\n"
+                            + "from qualitydb.Vevoireklamacio_alap\r\n"
+                            + "where 3 = 3  and Lezaras_datuma = ''\r\n"
+                            + "";
+                    stmt.execute(sql);
+                    rs = stmt.getResultSet();
+            
+                    JdbcAdapter jdbcAdapter2 = new JdbcAdapter();
+                    jdbcAdapter2.fillDataTable(datatable2, rs);
+            
+                    //Get the first worksheet
+                    Worksheet sheet2 = workbook.getWorksheets().get(1);
+                    sheet2.insertDataTable(datatable2, true, 1, 1);
+                    sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AC1"));
+                    sheet2.getAllocatedRange().autoFitColumns();
+                    sheet2.getAllocatedRange().autoFitRows();
+                    sheet2.setName("Vevői reklamációk");
+                    sheet2.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+            
+                    
+                    File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Heti reklamációk.xlsx");                                                        //mentes_helye.getSelectedFile();
+                    //System.out.println(fajl.getAbsolutePath());
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                    
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
+                    }
+                    Email email = new Email();
+                    String level = "Szia Áron!\r\n"
+                            + "\r\n"
+                            + "Csatolmányban találod a nyitott reklamációkat.\r\n"
+                            + "\r\n"
+                            + "Üdvözlettel: EASQAS program\r\n"
+                            + "";
+                    email.mindenes_email_csatolmannyal("makk.aron@veas.videoton.hu", "Nyitott reklamációk", level, fajl);
+                    fajl.delete();
+                    
+                    sql = "update qualitydb.Aron_email set Ertesitve = 'igen' where id = '1'";
+                    stmt.execute(sql);
+                }
             }
-            Email email = new Email();
-            String level = "Szia Áron!\r\n"
-                    + "\r\n"
-                    + "Csatolmányban találod a nyitott reklamációkat.\r\n"
-                    + "\r\n"
-                    + "Üdvözlettel: EASQAS program\r\n"
-                    + "";
-            email.mindenes_email_csatolmannyal("makk.aron@veas.videoton.hu", "Nyitott reklamációk", level, fajl);
-            fajl.delete();
 
         }         
         catch (Exception e) 

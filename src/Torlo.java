@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Norma());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -3434,14 +3434,15 @@ public class Torlo extends JPanel
                                   && datatable.getRows().get(szamlalo).getString(1).equals(datatable.getRows().get(szamlalo2).getString(1))
                                   && datatable.getRows().get(szamlalo).getString(2).equals(datatable.getRows().get(szamlalo2).getString(2))
                                   && datatable.getRows().get(szamlalo).getString(3).equals(datatable.getRows().get(szamlalo2).getString(3))
-                                  && datatable.getRows().get(szamlalo).getString(10).equals(datatable.getRows().get(szamlalo2).getString(10)))
+                                  && datatable.getRows().get(szamlalo).getString(10).equals(datatable.getRows().get(szamlalo2).getString(10))
+                                  && datatable.getRows().get(szamlalo).getString(9).equals(datatable.getRows().get(szamlalo2).getString(9)))
                           {
                               sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(3));
                               sheet2.getRange().get("B" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(9));
                               sheet2.getRange().get("C" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(4));
                               sheet2.getRange().get("D" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(1));
                               sheet2.getRange().get("G" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(10));
-                              if(szamlalo < 5524)
+                              if(szamlalo < 13790)
                               if(datatable.getRows().get(szamlalo).getString(6).equals("KPISMDQTY"))
                               {
                                   sheet2.getRange().get("E" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(7));
@@ -3879,6 +3880,57 @@ public class Torlo extends JPanel
                 {
                   se.printStackTrace();
                 }  
+            }
+         }
+    }
+	
+	class Qualitydb_frissit implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection conn = null;
+            Statement stmt = null;
+          
+            try 
+            {
+               try 
+               {
+                  Class.forName("com.mysql.cj.jdbc.Driver");
+               } 
+               catch (Exception e1) 
+               {
+                  System.out.println(e);
+                  String hibauzenet2 = e.toString();
+                  JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+               }
+               conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+               stmt = (Statement) conn.createStatement();
+               
+               stmt.execute("select * from qualitydb.Retour_szeriaszamok where 3=3 and VEAS_ID like 'BE%'");
+               
+               ResultSet rs = stmt.getResultSet();
+               SQA_SQL frissit = new SQA_SQL();
+               
+               while(rs.next())
+               {
+                   System.out.println(rs.getString(2));
+                   System.out.println(rs.getString(2).substring(0,14)+ " "+ rs.getString(2).substring(14,18)+ " "+ rs.getString(2).substring(18,23));
+                   
+                   
+                   frissit.mindenes("update qualitydb.Retour_szeriaszamok set VEAS_ID = '"+ rs.getString(2).substring(0,14)+ " "+ rs.getString(2).substring(14,18)+ " "+ rs.getString(2).substring(18,23) +"' where "
+                           + "ID = '"+ rs.getString(1) +"'");
+               }              
+               Foablak.frame.setCursor(null);                        
+               stmt.close();
+               conn.close();                
+            }             
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }
     }

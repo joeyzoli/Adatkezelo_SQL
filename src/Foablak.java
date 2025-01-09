@@ -1384,7 +1384,7 @@ public class Foablak extends JFrame
                 sqa.sqa_email();
                 sqa.retour_email();
                 sqa.uj_rendelesek();
-                //sqa.Aron_heti();
+                sqa.Aron_heti();
                 System.out.println("Lefutott az SQA email");
                 sqa.mindenes("update qualitydb.Hetfo set  Lefutott = 'igen' where ID = '1'"); 
             }
@@ -1396,6 +1396,8 @@ public class Foablak extends JFrame
                 sqa.mindenes(modosit);
                 //sqa.uj_rendelesek();
                 modosit = "update qualitydb.Retour set  Ertesitve = 'Nem' where Modositas_datuma is not null";
+                sqa.mindenes(modosit);
+                modosit = "update qualitydb.Aron_email set Ertesitve = 'nem' where id = '1'";
                 sqa.mindenes(modosit);
                 
                 /*if(nap == 3)

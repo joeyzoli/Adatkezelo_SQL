@@ -297,7 +297,7 @@ public class Vevoireklamacio_d0 extends JPanel {
         tipus_box.addActionListener(new Hozzaad());
         add(tipus_box);
         
-        String[] nevsor = {"-","Borbély Szilvia","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina"};
+        String[] nevsor = {"-","Borbély Szilvia","Mile József","Pintér Attila","Reznyák Norbert","Szatmári Edina", "Tisler Péter"};
         
         felelos_box = new JComboBox<String>(nevsor);                                                                                                         //nevsor
         felelos_box.setBounds(618, 159, 162, 22);

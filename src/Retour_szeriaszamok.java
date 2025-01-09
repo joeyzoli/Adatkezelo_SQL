@@ -52,6 +52,15 @@ public class Retour_szeriaszamok extends JPanel {
     private JButton kepmentes_gomb;
     private JCheckBox nff;
     private String db_id = "";
+    
+    private String svizualis1 = ""; private String svizualis2 = "";private String svizualis3 = "";
+    private String sict1 = "";private String sict2 = "";private String sict3 = "";
+    private String sfct1 = "";private String sfct2 = "";private String sfct3 = "";
+    private String smeres1 = "";private String smeres2 = "";private String smeres3 = "";
+    private String srontgen1 = "";private String srontgen2 = "";private String srontgen3 = "";
+    private String segyeb1 = "";private String segyeb2 = "";private String segyeb3 = "";
+    private String shibaeredet = "";private String skiszallithato = "";
+    private String shibakod = "";
 
     /**
      * Create the panel.
@@ -462,6 +471,16 @@ public class Retour_szeriaszamok extends JPanel {
         tortenet_gomb.addActionListener(new Tortenet());
         tortenet_gomb.setBounds(572, 130, 151, 23);
         add(tortenet_gomb);
+        
+        JButton sablonmentes_gomb = new JButton("Sablon mentése");
+        sablonmentes_gomb.addActionListener(new Sablon_mentese());
+        sablonmentes_gomb.setBounds(1009, 130, 144, 23);
+        add(sablonmentes_gomb);
+        
+        JButton sablonbetoltes_gomb = new JButton("Sablon betöltése");
+        sablonbetoltes_gomb.addActionListener(new Sablon_betoltese());
+        sablonbetoltes_gomb.setBounds(1176, 130, 144, 23);
+        add(sablonbetoltes_gomb);
 
     }
     
@@ -1459,6 +1478,336 @@ public class Retour_szeriaszamok extends JPanel {
                 csekkol.minden_excel(sql, "Szériaszám történet.xlsx");
                 Foablak.frame.setCursor(null);
                 JOptionPane.showMessageDialog(null, "Mentve az asztalra Szériaszám történet.xlsx néven!", "Info", 1);
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Sablon_mentese implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                if(vizualis_csekk1.isSelected()) {
+                    svizualis1 = "OK";
+                }                
+                else {if(csekk1.isSelected()) {svizualis1 = "N/A";}}
+                
+                if(vizualis_csekk3.isSelected()) {
+                    svizualis2 = "OK";
+                }
+                else if(vizualis_csekk4.isSelected()) {
+                    svizualis2 = "NOK";
+                }
+                else {if(csekk2.isSelected()) {svizualis2 = "N/A";}}
+                
+                if(vizualis_csekk5.isSelected()) {
+                    svizualis3 = "OK";
+                }
+                else if(vizualis_csekk6.isSelected()) {
+                    svizualis3 = "NOK";
+                }
+                else {if(csekk3.isSelected()) {svizualis3 = "N/A";}}
+                
+                if(ict_csekk1.isSelected()) {
+                    sict1 = "OK";
+                }                
+                else {if(csekk4.isSelected()) { sict1 = "N/A";}}
+                
+                if(ict_csekk3.isSelected()) {
+                    sict2 = "OK";
+                }
+                else if(ict_csekk4.isSelected()) {
+                    sict2 = "NOK";
+                }
+                else {if(csekk5.isSelected()) { sict2 = "N/A";}}
+                
+                if(ict_csekk5.isSelected()) {
+                    sict3 = "OK";
+                }
+                else if(ict_csekk6.isSelected()) {
+                    sict3 = "NOK";
+                }
+                else {if(csekk6.isSelected()) { sict3 = "N/A";}}
+                
+                if(fct_csekk1.isSelected()) {
+                    sfct1 = "OK";
+                }                
+                else {if(csekk7.isSelected()) { sfct1 = "N/A";}}
+                
+                if(fct_csekk3.isSelected()) {
+                    sfct2 = "OK";
+                }
+                else if(fct_csekk4.isSelected()) {
+                    sfct2 = "NOK";
+                }
+                else {if(csekk8.isSelected()) { sfct2 = "N/A";}}
+                
+                if(fct_csekk5.isSelected()) {
+                    sfct3 = "OK";
+                }
+                else if(fct_csekk6.isSelected()) {
+                    sfct3 = "NOK";
+                }
+                else {if(csekk9.isSelected()) { sfct3 = "N/A";}}
+                
+                if(meres_csekk1.isSelected()) {
+                    smeres1 = "OK";
+                }                
+                else {if(csekk10.isSelected()) { smeres1 = "N/A";}}
+                
+                if(meres_csekk3.isSelected()) {
+                    smeres2 = "OK";
+                }
+                else if(meres_csekk4.isSelected()) {
+                    smeres2 = "NOK";
+                }
+                else {if(csekk11.isSelected()) { smeres2 = "N/A";}}
+                
+                if(meres_csekk5.isSelected()) {
+                    smeres3 = "OK";
+                }
+                else if(meres_csekk6.isSelected()) {
+                    smeres3 = "NOK";
+                }
+                else {if(csekk12.isSelected()) { smeres3 = "N/A";}}
+                
+                if(rontgen_csekk1.isSelected()) {
+                    srontgen1 = "OK";
+                }             
+                else {if(csekk13.isSelected()) { srontgen1 = "N/A";}}
+                
+                if(rontgen_csekk3.isSelected()) {
+                    srontgen2 = "OK";
+                }
+                else if(rontgen_csekk4.isSelected()) {
+                    srontgen2 = "NOK";
+                }
+                else {if(csekk14.isSelected()) { srontgen2 = "N/A";}}
+                
+                if(rontgen_csekk5.isSelected()) {
+                    srontgen3 = "OK";
+                }
+                else if(rontgen_csekk6.isSelected()) {
+                    srontgen3 = "NOK";
+                }
+                else {if(csekk15.isSelected()) { srontgen3 = "N/A";}}
+                
+                if(egyeb_csekk1.isSelected()) {
+                    segyeb1 = "OK";
+                }               
+                else {if(csekk16.isSelected()) { segyeb1 = "N/A";}}
+                
+                if(egyeb_csekk3.isSelected()) {
+                    segyeb2 = "OK";
+                }
+                else if(egyeb_csekk4.isSelected()) {
+                    segyeb2 = "NOK";
+                }
+                else {if(csekk17.isSelected()) { segyeb2 = "N/A";}}
+                
+                if(egyeb_csekk5.isSelected()) {
+                    segyeb3 = "OK";
+                }
+                else if(egyeb_csekk6.isSelected()) {
+                    segyeb3 = "NOK";
+                }
+                else {if(csekk18.isSelected()) { segyeb3 = "N/A";}}
+                
+                if(beszallito.isSelected()) {
+                    shibaeredet = "Beszállító";
+                }
+                else if(veas.isSelected()) {
+                    shibaeredet = "VEAS";
+                }
+                else if(vevo.isSelected()) {
+                    shibaeredet = "Vevő";
+                }
+                else if(nff.isSelected()) {
+                    shibaeredet = "NFF";
+                }
+                else {}
+                if(kiszallithato_OK.isSelected()) {
+                    skiszallithato = "OK";
+                }
+                else if(kiszallithato_NOK.isSelected()) {
+                    skiszallithato = "NOK";
+                }
+                else {}
+                shibakod = String.valueOf(hibakod_box.getSelectedItem());
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Sablon_betoltese implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                if(svizualis1.equals("OK")) {
+                     vizualis_csekk1.setSelected(true);
+                }                
+                else {if(svizualis1.equals("N/A")) {csekk1.setSelected(true);}}
+                
+                if(svizualis2.equals("OK")) {
+                    vizualis_csekk3.setSelected(true);
+                }
+                else if(svizualis2.equals("NOK")) {
+                    vizualis_csekk4.setSelected(true);
+                }
+                else {if(svizualis2.equals("N/A")) {csekk2.setSelected(true);}}
+                
+                if(svizualis3.equals("OK")) {
+                    vizualis_csekk5.setSelected(true);
+                }
+                else if(svizualis3.equals("NOK")) {
+                    vizualis_csekk6.setSelected(true);
+                }
+                else {if(svizualis3.equals("N/A")) {csekk3.setSelected(true);}}
+                
+                if(sict1.equals("OK")) {
+                    ict_csekk1.setSelected(true);
+                }                
+                else {if(sict1.equals("N/A")) {csekk4.setSelected(true);}}
+                
+                if(sict2.equals("OK")) {
+                    ict_csekk3.setSelected(true);
+                }
+                else if(sict2.equals("NOK")) {
+                    ict_csekk4.setSelected(true);
+                }
+                else {if(sict2.equals("N/A")) { csekk5.setSelected(true);}}
+                
+                if(sict3.equals("OK")) {
+                    ict_csekk5.setSelected(true);
+                }
+                else if(sict3.equals("NOK")) {
+                    ict_csekk6.setSelected(true);
+                }
+                else {if(sict3.equals("N/A")) { csekk6.setSelected(true);}}
+                
+                if(sfct1.equals("OK")) {
+                    fct_csekk1.setSelected(true);
+                }                
+                else {if(sfct1.equals("N/A")) { csekk7.setSelected(true);}}
+                
+                if(sfct2.equals("OK")) {
+                    fct_csekk3.setSelected(true);
+                }
+                else if(sfct2.equals("NOK")) {
+                    fct_csekk4.setSelected(true);
+                }
+                else {if(sfct2.equals("N/A")) { csekk8.setSelected(true);}}
+                
+                if(sfct3.equals("OK")) {
+                    fct_csekk5.setSelected(true);
+                }
+                else if(sfct3.equals("NOK")) {
+                    fct_csekk6.setSelected(true);
+                }
+                else {if(sfct3.equals("N/A")) { csekk9.setSelected(true);}}
+                
+                if(smeres1.equals("OK")) {
+                    meres_csekk1.setSelected(true);
+                }                
+                else {if(smeres1.equals("N/A")) { csekk10.setSelected(true);}}
+                
+                if(smeres2.equals("OK")) {
+                    meres_csekk3.setSelected(true);
+                }
+                else if(smeres2.equals("NOK")) {
+                    meres_csekk4.setSelected(true);
+                }
+                else {if(smeres2.equals("N/A")) { csekk11.setSelected(true);}}
+                
+                if(smeres3.equals("OK")) {
+                    meres_csekk5.setSelected(true);
+                }
+                else if(smeres3.equals("NOK")) {
+                    meres_csekk6.setSelected(true);
+                }
+                else {if(smeres3.equals("N/A") ) { csekk12.setSelected(true);}} ////
+                
+                if(srontgen1.equals("OK")) {
+                    rontgen_csekk1.setSelected(true);
+                }             
+                else {if(srontgen1.equals("N/A")) { csekk13.setSelected(true);}}
+                
+                if(srontgen2.equals("OK")) {
+                    rontgen_csekk3.setSelected(true);
+                }
+                else if(srontgen2.equals("NOK")) {
+                    rontgen_csekk4.setSelected(true);
+                }
+                else {if(srontgen2.equals("N/A")) { csekk14.setSelected(true);}}
+                
+                if(srontgen3.equals("OK")) {
+                    rontgen_csekk5.setSelected(true);
+                }
+                else if(srontgen3.equals("NOK")) {
+                    rontgen_csekk6.setSelected(true);
+                }
+                else {if(srontgen3.equals("N/A")) { csekk15.setSelected(true);}}
+                
+                if(segyeb1.equals("OK")) {
+                    egyeb_csekk1.setSelected(true);
+                }               
+                else {if(segyeb1.equals("N/A")) { csekk16.setSelected(true);}}
+                
+                if(segyeb2.equals("OK")) {
+                    egyeb_csekk3.setSelected(true);
+                }
+                else if(segyeb2.equals("NOK")) {
+                    egyeb_csekk4.setSelected(true);
+                }
+                else {if(segyeb2.equals("N/A")) { csekk17.setSelected(true);}}
+                
+                if(segyeb3.equals("OK")) {
+                    egyeb_csekk5.setSelected(true);
+                }
+                else if(segyeb3.equals("NOK")) {
+                    egyeb_csekk6.setSelected(true);
+                }
+                else {if(segyeb3.equals("N/A")) { csekk18.setSelected(true);}}
+                
+                if(shibaeredet.equals("Beszállító")) {
+                    beszallito.setSelected(true);
+                }
+                else if(shibaeredet.equals("VEAS")) {
+                    veas.setSelected(true);
+                }
+                else if(shibaeredet.equals("Vevő")) {
+                    vevo.setSelected(true);
+                }
+                else if(shibaeredet.equals("NFF")) {
+                    nff.setSelected(true);
+                }
+                else {}
+                if(skiszallithato.equals("OK")) {
+                    kiszallithato_OK.setSelected(true);
+                }
+                else if(skiszallithato.equals("NOK")) {
+                    kiszallithato_NOK.setSelected(true);
+                }
+                else {}
+                hibakod_box.setSelectedItem(shibakod);
             } 
             catch (Exception e1) 
             {              
