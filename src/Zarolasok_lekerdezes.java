@@ -20,6 +20,7 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.CellRange;
 import com.spire.xls.Chart;
 import com.spire.xls.ExcelVersion;
 import com.spire.xls.LegendPositionType;
@@ -285,6 +286,9 @@ public class Zarolasok_lekerdezes extends JPanel {
                 //sheet.getAllocatedRange().autoFitColumns();
                 sheet.getAllocatedRange().autoFitRows();
                 sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                CellRange range = sheet2.getCellRange(1, 1, sheet2.getLastRow(), sheet2.getLastColumn());
+                //Convert numbers stored as text back to number
+                range.convertToNumber();
                 
                 //String hova = System.getProperty("user.home") + "\\Desktop\\Zárolási kimutatás.xlsx";
                 UIManager.put("FileChooser.openButtonText","Mentés");

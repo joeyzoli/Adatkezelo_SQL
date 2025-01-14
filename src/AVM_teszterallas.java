@@ -178,8 +178,8 @@ public class AVM_teszterallas extends JPanel {
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
                                     if((diff/1000) > 299)
                                     {
-                                        //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        System.out.println((diff/1000)/60);
                                     }
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
@@ -190,11 +190,9 @@ public class AVM_teszterallas extends JPanel {
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
                                     if((diff/1000) > 299)
                                     {
-                                        //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        System.out.println((diff/1000)/60);
                                     }
-                                    
-                                    //System.out.println("Fut az utoló sor");
                                 }
                                 else
                                 {
@@ -204,8 +202,8 @@ public class AVM_teszterallas extends JPanel {
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
                                     if((diff/1000) > 299)
                                     {
-                                        //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        System.out.println((diff/1000)/60);
                                     }
                                 }
             

@@ -41,8 +41,8 @@ public class Sajat_SQL extends JPanel
 		sql_mezo.setText("select * \n"
 		        + "from qualitydb.Beolvasott_panelek\n"
 		        + "where 3 = 3\n"
-		        + "and Idopont >=  '2023.11.30 05:55:00'\n"
-		        + "and Idopont <=  '2024.03.28 05:55:00'");
+		        + "and Idopont >=  '2025.01.01 05:55:00'\n"
+		        + "and Idopont <=  '2025.03.28 05:55:00'");
 		
 		JButton futtat = new JButton("Futtatás");
 		futtat.addActionListener(new SQL_futtat());

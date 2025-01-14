@@ -1177,9 +1177,6 @@ public class SQA_SQL {
                     File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Heti reklamációk.xlsx");                                                        //mentes_helye.getSelectedFile();
                     //System.out.println(fajl.getAbsolutePath());
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-                    rs.close();
-                    stmt.close();
-                    conn.close();
                     
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
                     try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
@@ -1204,6 +1201,11 @@ public class SQA_SQL {
                     
                     sql = "update qualitydb.Aron_email set Ertesitve = 'igen' where id = '1'";
                     stmt.execute(sql);
+                    
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                    
                 }
             }
 

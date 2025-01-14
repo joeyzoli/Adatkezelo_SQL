@@ -378,7 +378,10 @@ public class SQA_bevitel extends JPanel {
         id_mezo.setText(String.valueOf(kovetkezo + 1));
         
         link_mezo = new JTextField();
-        link_mezo.setText("2024\\"+ id_mezo.getText());            //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date();
+        String[] datum = formatter.format(date).split("\\.");                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
+        link_mezo.setText(datum[0] +"\\"+ id_mezo.getText());            //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);
@@ -778,7 +781,7 @@ public class SQA_bevitel extends JPanel {
         add(lblNewLabel_34);
         
         link_mezo = new JTextField();
-        link_mezo.setText("2023\\");                //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
+        link_mezo.setText("2025\\");                //\\10.1.0.11\\minosegbiztositas\\SQA\\reklamációk\\
         link_mezo.setBounds(343, 471, 752, 20);
         add(link_mezo);
         link_mezo.setColumns(10);

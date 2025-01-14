@@ -363,40 +363,43 @@ public class SQL
             mentes_helye.showOpenDialog(mentes_helye);
             File fajl = mentes_helye.getSelectedFile();
             //System.out.println(fajl.getAbsolutePath());
-            if(fajl.getName().contains(".xlsx"))
+            if(fajl != null)
             {
-                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
-                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                if(fajl.getName().contains(".xlsx"))
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                    workbook2.write(output);
-                    output.close();
+                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                        workbook2.write(output);
+                        output.close();
+                    }
                 }
-            }
-            else
-            {
-                workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
-                FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                else
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
-                    workbook2.write(output);
-                    output.close();
+                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                        workbook2.write(output);
+                        output.close();
+                    }
                 }
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
             }
             resultSet.close();
             stmt.close();
-            conn.close();
-            JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);            
+            conn.close();                        
 	    }
 	    else
 	    {
