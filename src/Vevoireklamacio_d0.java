@@ -510,6 +510,14 @@ public class Vevoireklamacio_d0 extends JPanel {
             }*/
             sql = "update qualitydb.Vevoireklamacio_alap set Szinek = '"+ szin1+";"+ szin2+";"+ szin3+";"+ szin4+";"+ szin5+"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
+            
+            int rowCount = modell.getRowCount();
+            
+            for (int i = rowCount - 1; i > -1; i--) 
+            {
+              modell.removeRow(i);
+            }
+            table.setModel(modell);
         } 
         catch (Exception e1) 
         {              

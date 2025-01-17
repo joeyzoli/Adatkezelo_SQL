@@ -428,7 +428,8 @@ public class Vevoireklamacio_d5 extends JPanel {
           modell2.removeRow(i);
         }
         table2.setModel(modell2);
-        
+        elofordulas_mezo.setText("");
+        detektalas_mezo.setText("");
         Connection conn = null;
         Statement stmt = null;        
         try 

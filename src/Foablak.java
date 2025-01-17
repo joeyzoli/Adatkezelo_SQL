@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -589,7 +588,7 @@ public class Foablak extends JFrame
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		pack();
         setLocationRelativeTo(null);
-        sorszamol();
+        //sorszamol();
         
         ImageIcon icon = new ImageIcon("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\easqas.jpg");
         setIconImage(icon.getImage());
@@ -1731,7 +1730,7 @@ public class Foablak extends JFrame
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                               //kiírja a hibaüzenetet
         }
     }*/
-	
+	/*
 	public void sorszamol()
 	{
 	    String hely = "c:\\Users\\kovacs.zoltan\\eclipse-workspace\\Adat kezelo\\src\\";
@@ -1781,6 +1780,6 @@ public class Foablak extends JFrame
             e.printStackTrace();
         }    
 	    
-	}
+	}*/
 	
 }

@@ -118,6 +118,7 @@ public class AVM_teszterallas extends JPanel {
                 con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszó felhasználóval
                 System.out.println("Connection established......");
                 Worksheet sheet = workbook.getWorksheets().get(0);
+                Worksheet sheet2 = workbook.getWorksheets().get(1);
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);           
@@ -132,6 +133,13 @@ public class AVM_teszterallas extends JPanel {
                 cellaszam++;
                 int bs = 0;            
                 int hely = 0;
+                
+                int cellaszam2 = 1;
+                sheet2.getRange().get("A" + cellaszam2).setText("Teszter szám");
+                sheet2.getRange().get("B" + cellaszam2).setText("Folyamat");
+                sheet2.getRange().get("C" + cellaszam2).setText("Állás kezdete");
+                sheet2.getRange().get("D" + cellaszam2).setText("Állás idő");
+                cellaszam2++;
                 
                 //////////////////////////////////////////////////////// délelött
                 for(int szamlalo3 = 1; szamlalo3 < 4; szamlalo3++)
@@ -170,6 +178,19 @@ public class AVM_teszterallas extends JPanel {
                         {
                             for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size() - 1; szamlalo2++)
                             {
+                                String hely2 = "";
+                                if(hely == 112)
+                                {
+                                    hely2 = "BS";
+                                }
+                                else if(hely == 113)
+                                {
+                                    hely2 = "Wlan";
+                                }
+                                else
+                                {
+                                    hely2 = "Life";
+                                }
                                 if(szamlalo2 == 0)
                                 {
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
@@ -180,6 +201,11 @@ public class AVM_teszterallas extends JPanel {
                                     {
                                         bs += (diff/1000)/60;
                                         System.out.println((diff/1000)/60);
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
@@ -192,6 +218,11 @@ public class AVM_teszterallas extends JPanel {
                                     {
                                         bs += (diff/1000)/60;
                                         System.out.println((diff/1000)/60);
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
                                 else
@@ -204,6 +235,11 @@ public class AVM_teszterallas extends JPanel {
                                     {
                                         bs += (diff/1000)/60;
                                         System.out.println((diff/1000)/60);
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
             
@@ -212,21 +248,21 @@ public class AVM_teszterallas extends JPanel {
                             if(szamlalo3 ==1)
                             {
                                 sheet.getRange().get("A" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("B" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("B" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("BS");
                             }
                             else if(szamlalo3 ==2)
                             {
                                 sheet.getRange().get("C" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("D" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("D" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
                             else
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("F" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
                             }                
@@ -284,6 +320,19 @@ public class AVM_teszterallas extends JPanel {
                         {
                             for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size() - 1; szamlalo2++)
                             {
+                                String hely2 = "";
+                                if(hely == 112)
+                                {
+                                    hely2 = "BS";
+                                }
+                                else if(hely == 113)
+                                {
+                                    hely2 = "Wlan";
+                                }
+                                else
+                                {
+                                    hely2 = "Life";
+                                }
                                 if(szamlalo2 == 0)
                                 {
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
@@ -293,7 +342,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
@@ -305,7 +359,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                     
                                     //System.out.println("Fut az utoló sor");
@@ -319,7 +378,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
             
@@ -328,21 +392,21 @@ public class AVM_teszterallas extends JPanel {
                             if(szamlalo3 ==1)
                             {
                                 sheet.getRange().get("A" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("B" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("B" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("BS");
                             }
                             else if(szamlalo3 ==2)
                             {
                                 sheet.getRange().get("C" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("D" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("D" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
                             else
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("F" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
                             }                
@@ -402,6 +466,19 @@ public class AVM_teszterallas extends JPanel {
                         {
                             for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size() - 1; szamlalo2++)
                             {
+                                String hely2 = "";
+                                if(hely == 112)
+                                {
+                                    hely2 = "BS";
+                                }
+                                else if(hely == 113)
+                                {
+                                    hely2 = "Wlan";
+                                }
+                                else
+                                {
+                                    hely2 = "Life";
+                                }
                                 if(szamlalo2 == 0)
                                 {
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
@@ -411,7 +488,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
@@ -423,7 +505,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                     
                                     //System.out.println("Fut az utoló sor");
@@ -437,7 +524,12 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         //System.out.println(diff/1000);
-                                        bs += (diff/1000)/60; 
+                                        bs += (diff/1000)/60;
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        cellaszam2++;
                                     }
                                 }
             
@@ -446,21 +538,21 @@ public class AVM_teszterallas extends JPanel {
                             if(szamlalo3 ==1)
                             {
                                 sheet.getRange().get("A" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("B" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("B" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("BS");
                             }
                             else if(szamlalo3 ==2)
                             {
                                 sheet.getRange().get("C" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("D" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("D" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
                             else
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
-                                sheet.getRange().get("F" + cellaszam).setText(String.valueOf(bs-30));
+                                sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
                             }                
@@ -479,12 +571,38 @@ public class AVM_teszterallas extends JPanel {
                     System.out.println("Fut a legkülső for");
                 }
                 
+                sheet.getRange().get("H" + 1).setText("Folyamat");
+                sheet.getRange().get("H" + 2).setText("BS");
+                sheet.getRange().get("H" + 3).setText("Wlan");
+                sheet.getRange().get("H" + 4).setText("Life");
+                sheet.getRange().get("H" + 13).setText("BS");
+                sheet.getRange().get("H" + 14).setText("Wlan");
+                sheet.getRange().get("H" + 15).setText("Life");
+                sheet.getRange().get("H" + 24).setText("BS");
+                sheet.getRange().get("H" + 25).setText("Wlan");
+                sheet.getRange().get("H" + 26).setText("Life");
+                
+                sheet.getRange().get("I" + 1).setText("Össz állásidő");
+                sheet.getCellRange("I" + 2).setFormula("=SZUM(B2:B6)");
+                sheet.getCellRange("I" + 3).setFormula("=SZUM(D2:D11)");
+                sheet.getCellRange("I" + 4).setFormula("=SZUM(F2:F11)");               
+                sheet.getCellRange("I" + 13).setFormula("=SZUM(B13:B17)");
+                sheet.getCellRange("I" + 14).setFormula("=SZUM(D13:D22)");
+                sheet.getCellRange("I" + 15).setFormula("=SZUM(F13:F22)");
+                sheet.getCellRange("I" + 24).setFormula("=SZUM(B24:B28)");
+                sheet.getCellRange("I" + 25).setFormula("=SZUM(D24:D33)");
+                sheet.getCellRange("I" + 26).setFormula("=SZUM(F24:F33)");
+                
                 //Get the first worksheet
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                 sheet.getAllocatedRange().autoFitColumns();
-                sheet.getAllocatedRange().autoFitRows();
-                    
-                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
+                sheet.getAllocatedRange().autoFitRows();                    
+                sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítása
+                
+                sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                sheet2.getAllocatedRange().autoFitColumns();
+                sheet2.getAllocatedRange().autoFitRows();                    
+                sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítása
                  
                 rs.close();
                 cstmt.close();
@@ -502,7 +620,7 @@ public class AVM_teszterallas extends JPanel {
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
                     try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                     {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
                         {    
                             workbook2.removeSheetAt(i); 
                         }      
@@ -517,7 +635,7 @@ public class AVM_teszterallas extends JPanel {
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
                     try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                     {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
                         {    
                             workbook2.removeSheetAt(i); 
                         }      

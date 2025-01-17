@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Norma());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1693,7 +1693,7 @@ public class Torlo extends JPanel
                         + "                videoton.fkov.hely in (125,126,127,128,129,130)\n"
                         + "    order by    videoton.fkov.ido asc;";
                 
-                String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";*/
+                String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";
                 String sql = "select  tempTable.Week,\n"
                         + "        if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
                         + "        count(*) as Count\n"
@@ -1706,7 +1706,17 @@ public class Torlo extends JPanel
                         + "            ido >= \"2024.01.01 00:00:00\"  and (yearweek(ido, 1) - concat('20',SUBSTRING(panel, 12,4))) < 4\n"
                         + "            group by 1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
                         + "group by             1, 2;\n"
-                        + "";
+                        + "";*/
+                
+                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                        + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
+                        + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                        + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                        + "videoton.fkov.dolgozo \n"
+                        + "from videoton.fkov  \n"
+                        + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
+                        + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
+                        + " where hely = 16 and ido > '2023.01.01' and panel like '%88A457%'";
                 
                 
                 Statement cstmt = con.createStatement(

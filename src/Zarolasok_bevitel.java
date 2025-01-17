@@ -418,7 +418,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_26.setBounds(42, 324, 91, 14);
         add(lblNewLabel_26);
         
-        String[] hibacsoportok = {"alkatrész hiba", "alkatrész sérülés", "azonosítás", "beültetési hiba", "csomagolás", "darabolás", "dokumentáció", "Forrasztási hiba", "Forrasztási hiba / Hiányzó jelölés", "Funkcionális", "Hiányzó jelölés", "Jelölés", "kiöntés", "lakkozás", "nyomtatás", "ragasztás", "szennyeződés", "szerelés", "vegyes", "anyagkezelés" };
+        String[] hibacsoportok = {"","alkatrész hiba", "alkatrész sérülés", "azonosítás", "beültetési hiba", "csomagolás", "darabolás", "dokumentáció", "Forrasztási hiba", "Forrasztási hiba / Hiányzó jelölés", "Funkcionális", "Hiányzó jelölés", "Jelölés", "kiöntés", "lakkozás", "nyomtatás", "ragasztás", "szennyeződés", "szerelés", "vegyes", "anyagkezelés" };
         hibacsoport_box = new JComboBox<String>(hibacsoportok);                                              //hibacsoportok
         hibacsoport_box.setBounds(160, 320, 192, 22);
         add(hibacsoport_box);
@@ -427,7 +427,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_27.setBounds(430, 324, 74, 14);
         add(lblNewLabel_27);
         
-        String[] hibatipusok = {"AOI", "címke", "címke tartalom", "deformálódás", "elcsúszott alkatrész", "elektromos hiba", "FCT", "felcserélt kábel", "ferde", "fordított", "furatkitöltöttség", "hiány", "hiányos", "hiányzó", "hiányzó forr", "hiányzó forrasztás", "hiányzó ragasztás", "hideg forr", "hideg forrasztás, óngolyó", "hosszú láb", "Hűtőpaszta pozíció", "kevés ón", "kiborult", "kupak nincs levéve", "levert alkatrész", "maszkolás", "megolvadt alkatrész", "membrán", "méret eltérés", "nem kötött meg az anyag", "nyitott", "ónfelfutás", "óngolyó", "panel", "PCB felület", "QR kód", "ragasztó a paden", "sérülés", "sok ón", "sorjás alkatrész", "szennyezett címke", "termék azonosító keveredés", "Touch-up jelölés hiányzik", "TUP", "zárlat", "zárlat/TUP"};
+        String[] hibatipusok = {"","AOI", "címke", "címke tartalom", "deformálódás", "elcsúszott alkatrész", "elektromos hiba", "FCT", "felcserélt kábel", "ferde", "fordított", "furatkitöltöttség", "hiány", "hiányos", "hiányzó", "hiányzó forr", "hiányzó forrasztás", "hiányzó ragasztás", "hideg forr", "hideg forrasztás, óngolyó", "hosszú láb", "Hűtőpaszta pozíció", "kevés ón", "kiborult", "kupak nincs levéve", "levert alkatrész", "maszkolás", "megolvadt alkatrész", "membrán", "méret eltérés", "nem kötött meg az anyag", "nyitott", "ónfelfutás", "óngolyó", "panel", "PCB felület", "QR kód", "ragasztó a paden", "sérülés", "sok ón", "sorjás alkatrész", "szennyezett címke", "termék azonosító keveredés", "Touch-up jelölés hiányzik", "TUP", "zárlat", "zárlat/TUP"};
         hibatipus_box = new JComboBox<String>(hibatipusok);                                                //hibatipusok
         hibatipus_box.setBounds(514, 320, 215, 22);
         add(hibatipus_box);

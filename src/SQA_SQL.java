@@ -1154,7 +1154,7 @@ public class SQA_SQL {
                     
                     sheet.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                     
-                    sql = "select  id, mi, Vevo, felelos, tipus, Miaproblema,  DATEDIFF(now(),ertesites_datuma) AS 'Nyitva' \r\n"
+                    sql = "select  id, mi, Vevo, felelos, tipus, hanydb, Miaproblema,  DATEDIFF(now(),ertesites_datuma) AS 'Nyitva' \r\n"
                             + "from qualitydb.Vevoireklamacio_alap\r\n"
                             + "where 3 = 3  and Lezaras_datuma = ''\r\n"
                             + "";
@@ -1174,7 +1174,7 @@ public class SQA_SQL {
                     sheet2.getCellRange("A1:AC1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
             
                     
-                    File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Heti reklamációk.xlsx");                                                        //mentes_helye.getSelectedFile();
+                    File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Nyitott reklamációk.xlsx");                                                        //mentes_helye.getSelectedFile();
                     //System.out.println(fajl.getAbsolutePath());
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
                     

@@ -107,7 +107,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
         add(id_mezo);
         id_mezo.setColumns(10);
         
-        String[] fajtak = {"Reklamáció","Visszajelzés","Törölt"};
+        String[] fajtak = {"Reklamáció - Vevői","Reklamáció - Field kiesés","Visszajelzés","Törölt"};
         fajta_box = new JComboBox<String>(fajtak);                                  //fajtak
         fajta_box.addActionListener(new Mentesgomb_aktival());
         fajta_box.setBounds(72, 64, 199, 22);
@@ -1136,7 +1136,7 @@ public class Vevoireklamacio_fejlec extends JPanel {
 
             // Get the data formats of the dropped item
             DataFlavor[] flavors = transferable.getTransferDataFlavors();
-
+                       
             // Loop through the flavors
             for (DataFlavor flavor : flavors) 
             {

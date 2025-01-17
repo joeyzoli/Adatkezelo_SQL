@@ -632,6 +632,9 @@ public class Techem_OQC extends JPanel {
                                             else
                                             {
                                                 sheet3.getRange().get("D" + megjegyzes2).setText(sorszam +" "+rs3.getString(15));
+                                                sheet.getRange().get("D" + megjegyzes2 +":H"+ megjegyzes2).unMerge();
+                                                sheet.getRange().get("D" + megjegyzes2).autoFitRows();
+                                                sheet.getRange().get("D" + megjegyzes2 +":H"+ megjegyzes2).merge();
                                                 megjegyzes2++;
                                                 sorszam++;
                                             }
@@ -696,6 +699,9 @@ public class Techem_OQC extends JPanel {
                                             else
                                             {
                                                 sheet.getRange().get("D" + megjegyzes2).setText(sorszam +" "+rs3.getString(15));
+                                                sheet.getRange().get("D" + megjegyzes2 +":H"+ megjegyzes2).unMerge();
+                                                sheet.getRange().get("D" + megjegyzes2).autoFitRows();
+                                                sheet.getRange().get("D" + megjegyzes2 +":H"+ megjegyzes2).merge();
                                                 megjegyzes2++;
                                                 sorszam++;
                                                 System.out.println("Van megjegyzés "+ rs3.getString(15));

@@ -65,6 +65,9 @@ public class Nyilatkozatbekero extends JPanel {
     private final String rohs_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\Q-B-006 RoHS declaration for supplier.docx";
     private final String cmrt_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\RMI_CMRT_6.4.xlsx";
     private final String emrt_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\RMI_EMRT_1.3.xlsx";
+    private final String pfas_helye = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Nyilatkozatok\\PFAS Supplier Declaration Form.docx";
+    private JComboBox<String> pfas_box;
+    private JCheckBox pfas_gomb;
 
     /**
      * Create the panel.
@@ -106,12 +109,12 @@ public class Nyilatkozatbekero extends JPanel {
         add(reach_box);
         
         String[] rohs = {"-","0", "2", "3", "3,9"};
-        rohs_box = new JComboBox<String>(rohs);                             //rohs
+        rohs_box = new JComboBox<String>(reach);                             //reach
         rohs_box.setBounds(665, 173, 111, 22);
         add(rohs_box);
         
         String[] cmrt = {"-","0", "60", "62", "63", "64", "69", "70", "72", "73", "74", "79", "80", "84", "85", "99"};
-        cmrt_box = new JComboBox<String>(cmrt);                             //cmrt
+        cmrt_box = new JComboBox<String>(reach);                             //reach
         cmrt_box.setBounds(812, 173, 111, 22);
         add(cmrt_box);
         
@@ -202,6 +205,19 @@ public class Nyilatkozatbekero extends JPanel {
         emrt_gomb = new JCheckBox("EMRT csatolása");
         emrt_gomb.setBounds(962, 392, 126, 23);
         add(emrt_gomb);
+        
+        String[] pfas = {"-","Yes","No"};
+        pfas_box = new JComboBox<String>(pfas);                         //pfas
+        pfas_box.setBounds(962, 173, 111, 22);
+        add(pfas_box);
+        
+        JLabel lblNewLabel_6 = new JLabel("Pfas");
+        lblNewLabel_6.setBounds(992, 148, 46, 14);
+        add(lblNewLabel_6);
+        
+        pfas_gomb = new JCheckBox("Pfas csatolása");
+        pfas_gomb.setBounds(962, 432, 126, 23);
+        add(pfas_gomb);
 
     }
     
