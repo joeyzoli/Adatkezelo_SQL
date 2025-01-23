@@ -206,7 +206,7 @@ public class Nyilatkozatbekero extends JPanel {
         emrt_gomb.setBounds(962, 392, 126, 23);
         add(emrt_gomb);
         
-        String[] pfas = {"-","Yes","No"};
+        String[] pfas = {"-","YES","NO"};
         pfas_box = new JComboBox<String>(pfas);                         //pfas
         pfas_box.setBounds(962, 173, 111, 22);
         add(pfas_box);
@@ -633,7 +633,7 @@ public class Nyilatkozatbekero extends JPanel {
                     if(String.valueOf(cmrt_box.getSelectedItem()).equals("-")) {}
                     else
                     {
-                        if(String.valueOf(cmrt_box.getSelectedItem()).equals("-")) 
+                        if(String.valueOf(cmrt2_box.getSelectedItem()).equals("-")) 
                         {
                             String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
                                     + "from ifsapp.PART_MANUFACTURER\r\n"
@@ -805,6 +805,92 @@ public class Nyilatkozatbekero extends JPanel {
                             }
                         }
                     }
+                    /////////////////////Pfas kezdődik
+                    if(String.valueOf(pfas_box.getSelectedItem()).equals("-")) {}
+                    else
+                    {
+                        String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
+                                + "from ifsapp.PART_MANUFACTURER\r\n"
+                                + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
+                                + "group by MANUFACTURER_NO");
+                        String pfas = "";
+                        for(int szamlalo2 = 0; szamlalo2 < datatable.getRows().size();szamlalo2++)
+                        {
+                            if(datatable.getRows().get(szamlalo2).getString(0).equals(String.valueOf(pfas_box.getSelectedItem())))
+                            {
+                                pfas = datatable.getRows().get(szamlalo2).getString(3);
+                            }
+                        }
+                        System.out.println("PFAS "+pfas);
+                        rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
+                                + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
+                                + "WHERE 3 = 3 and not nyilatkozatok.CF$_pfas = '"+ pfas +"'\r\n"
+                                + "and manufacturer_no = '"+ gyarto +"' or (manufacturer_no = '"+ gyarto +"' and nyilatkozatok.CF$_cmrt is null)");
+                        Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                        int cellaszam = 1;
+                        sheet2.getRange().get("A" + cellaszam).setText("VEAS Part No");
+                        sheet2.getRange().get("B" + cellaszam).setText("Description");
+                        sheet2.getRange().get("C" + cellaszam).setText("Manufacturer Part No");
+                        cellaszam++;
+                        int van = 0;
+                        while(rs.next())
+                        {
+                            String cikkszam = rs.getString(1);
+                            String megnevezes = rs.getString(2);
+                            String gyartoicikk = rs.getString(3);
+                            rs2 = stmt2.executeQuery("Select TO_DATE(CURRENT_DATE,'YYYY.MM.DD') - TO_DATE(rendeles.Utolso_rendeles,'YYYY.MM.DD')\r\n"
+                                    + "from\r\n"
+                                    + "(select\r\n"
+                                    + "max(DATE_ENTERED) as Utolso_rendeles\r\n"
+                                    + "from ifsapp.PURCHASE_ORDER_LINE_ALL\r\n"
+                                    + "where\r\n"
+                                    + "(OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Visszaigazolt') from dual) or \r\n"
+                                    + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Átvéve') from dual) or \r\n"
+                                    + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
+                                    + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
+                                    + "and part_no = '"+ cikkszam +"') rendeles");
+                            if(rs2.next())
+                            {
+                                if(rs2.getInt(1) < 720)
+                                {
+                                    sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                    sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                    sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                    cellaszam++;
+                                    van++;
+                                }
+                            }
+                        }
+                        if(van > 0)
+                        {
+                            sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:C1"));
+                            sheet2.getAllocatedRange().autoFitColumns();
+                            sheet2.getAllocatedRange().autoFitRows();
+                            
+                            sheet2.getCellRange("A1:C1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                            
+                            String menteshelye = System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+ table.getValueAt(szamlalo, 0).toString() +" PFAS parts list.xlsx";
+                            workbook2.saveToFile(menteshelye, ExcelVersion.Version2016);
+                            
+                            
+                            FileInputStream fileStream = new FileInputStream(menteshelye);
+                            try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                            {
+                                for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                {    
+                                    workbook3.removeSheetAt(i); 
+                                }      
+                                FileOutputStream output = new FileOutputStream(menteshelye);
+                                workbook3.write(output);
+                                output.close();
+                            } 
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak, nincs a beállított PFAS értéktől eltérő cikkszáma:"+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                    }
+                    
                     
                     File fajl = new File(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\");
                     if(fajl.exists()) {}
@@ -888,6 +974,7 @@ public class Nyilatkozatbekero extends JPanel {
                             MimeBodyPart attachmentPart3 = new MimeBodyPart();
                             MimeBodyPart attachmentPart4 = new MimeBodyPart();
                             MimeBodyPart attachmentPart5 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart6 = new MimeBodyPart();
                             
                             attachmentPart.attachFile(torlendofajlok[0]);
                             multipart.addBodyPart(attachmentPart);
@@ -916,8 +1003,98 @@ public class Nyilatkozatbekero extends JPanel {
                                 attachmentPart5.attachFile(fajl1);
                                 multipart.addBodyPart(attachmentPart5);
                             }
+                            if(pfas_gomb.isSelected())
+                            {
+                                File fajl1 = new File(pfas_helye);
+                                attachmentPart6.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart6);
+                            }
                             
-                            textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            if(String.valueOf(pfas_box.getSelectedItem()).equals("-"))
+                            {
+                                textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            }
+                            else
+                            {
+                                String uzenet = "";
+                                
+                                if(System.getProperty("user.name").equals("jenei.erika"))          //tatai.mihaly
+                                {
+                                    uzenet = "<br>Dear Supplier,</br>\r\n"
+                                            + "\r\n"
+                                            + "<br>We are writing to you to ensure that you are informed about the upcoming legislatives requirements relating to per- and polyfluorinated alkyl substances (PFAS). The EU is currently developing a ‘global’ PFAS restriction under Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)  1907/2006/EC. The restriction proposes to ban the manufacture, use, sale and import of most PFAS substances within the European Union. If passed, this restriction would apply to all applications and is expected to take effect in mid-2026. For full information on the proposed restriction this can be found at https://echa.europa.eu/restrictions-under-consideration/-/substance-rev/72301/term. Other restrictions or bans are also expected to be enforced globally in the future. There are over 10,000 substances included in the PFAS group and PFAS are used for a variety of applications. A small number of PFAS are already identified as REACH restricted substances and substances on the Candidate List as well as EU Persistent Organic Pollutants Regulation and the International Stockholm Convention.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>We will be requiring all our suppliers to provide information on if PFAS are contained within the parts, materials or packagings that are supplied to us. The concerned parts are listed in the attachment. It is important that we receive a response from your company <b><i>within two weeks.</i></b>\r\n"
+                                            + "</br>\r\n"
+                                            + "<br>Please complete and return the attached PFAS declaration form or send us your own declaration or other documentation concerning PFAS. If you source materials for your products from another supplier, you will need to gather the appropriate information from your supply chain.\r\n"
+                                            + "/<br>\r\n"
+                                            + "<br>Thank you in advance for supplying the requested information.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>Best regards,\r\n"
+                                            +  "<br><b>Erika Jenei</b> \r\n"                         //"Erika Jenei\r\n"
+                                            + "<br>Environmental engineer\r\n"
+                                            + "<br>jenei.erika@veas.videoton.hu\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>VIDEOTON EAS Kft.\r\n"
+                                            + "<br>H-8000 Székesfehérvár, Berényi út 72-100.\r\n"
+                                            + "<br>Tel.:    +36 22 533 861\r\n"
+                                            + "<br>Mobil: +36 20 227 2750\r\n"
+                                            + "<br>www.videoton.hu\r\n"
+                                            + "<br>Before printing, think about Environment.</br>\r\n";
+                                }
+                                if(System.getProperty("user.name").equals("meszaros.agnes"))          //tatai.mihaly
+                                {
+                                    uzenet = "<br>Dear Supplier,</br>\r\n"
+                                            + "\r\n"
+                                            + "<br>We are writing to you to ensure that you are informed about the upcoming legislatives requirements relating to per- and polyfluorinated alkyl substances (PFAS). The EU is currently developing a ‘global’ PFAS restriction under Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)  1907/2006/EC. The restriction proposes to ban the manufacture, use, sale and import of most PFAS substances within the European Union. If passed, this restriction would apply to all applications and is expected to take effect in mid-2026. For full information on the proposed restriction this can be found at https://echa.europa.eu/restrictions-under-consideration/-/substance-rev/72301/term. Other restrictions or bans are also expected to be enforced globally in the future. There are over 10,000 substances included in the PFAS group and PFAS are used for a variety of applications. A small number of PFAS are already identified as REACH restricted substances and substances on the Candidate List as well as EU Persistent Organic Pollutants Regulation and the International Stockholm Convention.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>We will be requiring all our suppliers to provide information on if PFAS are contained within the parts, materials or packagings that are supplied to us. The concerned parts are listed in the attachment. It is important that we receive a response from your company <b><i>within two weeks.</i></b>\r\n"
+                                            + "</br>\r\n"
+                                            + "<br>Please complete and return the attached PFAS declaration form or send us your own declaration or other documentation concerning PFAS. If you source materials for your products from another supplier, you will need to gather the appropriate information from your supply chain.\r\n"
+                                            + "/<br>\r\n"
+                                            + "<br>Thank you in advance for supplying the requested information.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>Best regards,\r\n"
+                                            +  "<br><b>Ágnes Mészáros</b> \r\n"                         //"Erika Jenei\r\n"
+                                            + "<br>Environmental engineer\r\n"
+                                            + "<br>meszaros.agnes@veas.videoton.hu\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>VIDEOTON EAS Kft.\r\n"
+                                            + "<br>H-8000 Székesfehérvár, Berényi út 72-100.\r\n"
+                                            + "<br>Tel.:    +36 22 533 861\r\n"
+                                            + "<br>Mobil: +36 20 359 3902\r\n"
+                                            + "<br>www.videoton.hu\r\n"
+                                            + "<br>Before printing, think about Environment.</br>\r\n";
+                                }
+                                if(System.getProperty("user.name").equals("kovacs.zoltan"))          //tatai.mihaly
+                                {
+                                    uzenet = "<br>Dear Supplier,</br>\r\n"
+                                            + "\r\n"
+                                            + "<br>We are writing to you to ensure that you are informed about the upcoming legislatives requirements relating to per- and polyfluorinated alkyl substances (PFAS). The EU is currently developing a ‘global’ PFAS restriction under Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)  1907/2006/EC. The restriction proposes to ban the manufacture, use, sale and import of most PFAS substances within the European Union. If passed, this restriction would apply to all applications and is expected to take effect in mid-2026. For full information on the proposed restriction this can be found at https://echa.europa.eu/restrictions-under-consideration/-/substance-rev/72301/term. Other restrictions or bans are also expected to be enforced globally in the future. There are over 10,000 substances included in the PFAS group and PFAS are used for a variety of applications. A small number of PFAS are already identified as REACH restricted substances and substances on the Candidate List as well as EU Persistent Organic Pollutants Regulation and the International Stockholm Convention.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>We will be requiring all our suppliers to provide information on if PFAS are contained within the parts, materials or packagings that are supplied to us. The concerned parts are listed in the attachment. It is important that we receive a response from your company <b><i>within two weeks.</i></b>\r\n"
+                                            + "</br>\r\n"
+                                            + "<br>Please complete and return the attached PFAS declaration form or send us your own declaration or other documentation concerning PFAS. If you source materials for your products from another supplier, you will need to gather the appropriate information from your supply chain.\r\n"
+                                            + "/<br>\r\n"
+                                            + "<br>Thank you in advance for supplying the requested information.\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>Best regards,\r\n"
+                                            +  "<br><b>Ágnes Mészáros</b> \r\n"                         //"Erika Jenei\r\n"
+                                            + "<br>Environmental engineer\r\n"
+                                            + "<br>meszaros.agnes@veas.videoton.hu\r\n"
+                                            + "<br>\r\n"
+                                            + "<br>VIDEOTON EAS Kft.\r\n"
+                                            + "<br>H-8000 Székesfehérvár, Berényi út 72-100.\r\n"
+                                            + "<br>Tel.:    +36 22 533 861\r\n"
+                                            + "<br>Mobil: +36 20 359 3902\r\n"
+                                            + "<br>www.videoton.hu\r\n"
+                                            + "<br>Before printing, think about Environment.</br>\r\n";
+                                }
+                                
+                                //System.out.println(String.format("\u001B[1mTeszt kiírás\u001B[0m"));
+                                //message.setContent(uzenet, "text/html; charset=utf-8");        
+                                textPart.setText(uzenet,"UTF-8", "html");                                          //levél tartalmának csatolása 
+                            }
                             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
                                    
                             message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
@@ -1044,6 +1221,12 @@ public class Nyilatkozatbekero extends JPanel {
                                 attachmentPart6.attachFile(fajl1);
                                 multipart.addBodyPart(attachmentPart6);
                             }
+                            if(pfas_gomb.isSelected())
+                            {
+                                File fajl1 = new File(pfas_helye);
+                                attachmentPart6.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart6);
+                            }
                             
                             textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
                             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
@@ -1138,6 +1321,7 @@ public class Nyilatkozatbekero extends JPanel {
                             MimeBodyPart attachmentPart5 = new MimeBodyPart();
                             MimeBodyPart attachmentPart6 = new MimeBodyPart();
                             MimeBodyPart attachmentPart7 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart8 = new MimeBodyPart();
                             attachmentPart.attachFile(torlendofajlok[0]);
                             attachmentPart2.attachFile(torlendofajlok[1]);
                             attachmentPart3.attachFile(torlendofajlok[2]);
@@ -1169,9 +1353,195 @@ public class Nyilatkozatbekero extends JPanel {
                                 attachmentPart7.attachFile(fajl1);
                                 multipart.addBodyPart(attachmentPart7);
                             }
+                            if(pfas_gomb.isSelected())
+                            {
+                                File fajl1 = new File(pfas_helye);
+                                attachmentPart8.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart8);
+                            }
                             
                             textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
                             multipart.addBodyPart(textPart);                                            //csatolmány osztály           
+                                   
+                            message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
+                            
+                            Transport.send(message);                                                        //levél küldése
+                            voltlevel++; 
+                            System.out.println("Done");                                                     //kiírja, ha lefutott minden rendben
+                        }
+                        else
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártónak nincs a beállított Email címe, nem tudom elküldeni a levelet: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                    }
+                    
+                    if(torlendofajlok.length == 4)
+                    {
+                        if(emailcim == null)
+                        {
+                            for(int szamlalo2 = 0; szamlalo2 < torlendofajlok.length; szamlalo2++)
+                            {
+                                Workbook workbook4 = new Workbook();
+                                String menteshelye = System.getProperty("user.home") + "\\Desktop\\El nem küldött fájlok\\"+torlendofajlok[szamlalo2].getName();
+                                workbook4.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Cikkszámok nyilatkozathoz\\"+torlendofajlok[szamlalo2].getName());                               
+                                workbook4.saveToFile(menteshelye, ExcelVersion.Version2016);
+                                FileInputStream fileStream = new FileInputStream(menteshelye);
+                                try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                                {
+                                    for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                                    {    
+                                        workbook3.removeSheetAt(i); 
+                                    }      
+                                    FileOutputStream output = new FileOutputStream(menteshelye);
+                                    workbook3.write(output);
+                                    output.close();
+                                }                                                              
+                                torlendofajlok[szamlalo2].delete();
+                            }
+                            JOptionPane.showMessageDialog(null, "Az alábbi gyártó nincs felvéve a kontaktlistára: "+ table.getValueAt(szamlalo, 0).toString() , "Info", 1);
+                        }
+                        else if(emailcim.contains("@"))
+                        {
+                            Properties props = new Properties(); //new Properties();     System.getProperties();
+                            
+                            props.put("mail.smtp.host", "172.20.22.254");                   //smtp.gmail.com                    //172.20.22.254 belső levelezés      //smtp-mail.outlook.com
+                            props.put("mail.smtp.port", "25");                                      //587 TLS       //465  SSL          //25 Outlook                            //587
+                            Session session = Session.getInstance(props, null);                                 //session létrehozűsa a megadott paraméterekkel
+                            Message message = new MimeMessage(session);
+                            message.setFrom(new InternetAddress("easqas@veas.videoton.hu"));                                  //feladó beállítása
+                            if(System.getProperty("user.name").equals("meszaros.agnes"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("meszaros.agnes@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("jenei.erika"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("jenei.erika@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("kovacs.zoltan"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));
+                            }
+                            if(System.getProperty("user.name").equals("recepcio"))          //tatai.mihaly
+                            {
+                                message.setFrom(new InternetAddress("kovacs.zoltan@veas.videoton.hu"));
+                                message.setRecipients(Message.RecipientType.CC,
+                                        InternetAddress.parse("kovacs.zoltan@veas.videoton.hu,recepcio@veas.videoton.hu,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu"));
+                            }
+                            message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse("kovacs.zoltan@veas.videoton.hu"));                                                //címzett beállítása  ,jenei.erika@veas.videoton.hu,meszaros.agnes@veas.videoton.hu                            
+                            message.setSubject(targy_mezo.getText()+ " "+ emailcim);                                              //tárgy beállítása
+                           
+                            Multipart multipart = new MimeMultipart();                                          //csatoló osztály példányosítása
+                           
+                            MimeBodyPart textPart = new MimeBodyPart();                                         //levél szövegények osztály példányosítása
+                            MimeBodyPart attachmentPart = new MimeBodyPart();
+                            MimeBodyPart attachmentPart2= new MimeBodyPart();
+                            MimeBodyPart attachmentPart3 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart4 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart5 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart6 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart7 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart8 = new MimeBodyPart();
+                            MimeBodyPart attachmentPart9 = new MimeBodyPart();
+                            attachmentPart.attachFile(torlendofajlok[0]);
+                            attachmentPart2.attachFile(torlendofajlok[1]);
+                            attachmentPart3.attachFile(torlendofajlok[2]);
+                            attachmentPart9.attachFile(torlendofajlok[3]);
+                            multipart.addBodyPart(attachmentPart);
+                            multipart.addBodyPart(attachmentPart2);
+                            multipart.addBodyPart(attachmentPart3);
+                            multipart.addBodyPart(attachmentPart9);
+                            
+                            if(reach_gomb.isSelected())
+                            {
+                                File fajl1 = new File(reach_helye);
+                                attachmentPart4.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart4);
+                            }
+                            if(rohs_gomb.isSelected())
+                            {
+                                File fajl1 = new File(rohs_helye);
+                                attachmentPart5.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart5);
+                            }
+                            if(cmrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(cmrt_helye);
+                                attachmentPart6.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart6);
+                            }
+                            if(emrt_gomb.isSelected())
+                            {
+                                File fajl1 = new File(emrt_helye);
+                                attachmentPart7.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart7);
+                            }
+                            if(pfas_gomb.isSelected())
+                            {
+                                File fajl1 = new File(pfas_helye);
+                                attachmentPart8.attachFile(fajl1);
+                                multipart.addBodyPart(attachmentPart8);
+                            }
+                            
+                            
+                            if(String.valueOf(pfas_box.getSelectedItem()).equals("-"))
+                            {
+                                textPart.setText(uzenet_mezo.getText());                                          //levél tartalmának csatolása
+                            }
+                            else
+                            {
+                                
+                                String uzenet = "Dear Supplier,\r\n"
+                                        + "\r\n"
+                                        + "We are writing to you to ensure that you are informed about the upcoming legislatives requirements relating to per- and polyfluorinated alkyl substances (PFAS). The EU is currently developing a ‘global’ PFAS restriction under Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)  1907/2006/EC. The restriction proposes to ban the manufacture, use, sale and import of most PFAS substances within the European Union. If passed, this restriction would apply to all applications and is expected to take effect in mid-2026. For full information on the proposed restriction this can be found at https://echa.europa.eu/restrictions-under-consideration/-/substance-rev/72301/term. Other restrictions or bans are also expected to be enforced globally in the future. There are over 10,000 substances included in the PFAS group and PFAS are used for a variety of applications. A small number of PFAS are already identified as REACH restricted substances and substances on the Candidate List as well as EU Persistent Organic Pollutants Regulation and the International Stockholm Convention.\r\n"
+                                        + "\r\n"
+                                        + "We will be requiring all our suppliers to provide information on if PFAS are contained within the parts, materials or packagings that are supplied to us. The concerned parts are listed in the attachment. It is important that we receive a response from your company within two weeks.\r\n"
+                                        + "\r\n"
+                                        + "Please complete and return the attached PFAS declaration form or send us your own declaration or other documentation concerning PFAS. If you source materials for your products from another supplier, you will need to gather the appropriate information from your supply chain.\r\n"
+                                        + "\r\n"
+                                        + "Thank you in advance for supplying the requested information.\r\n"
+                                        + "\r\n"
+                                        + "Best regards,\r\n"
+                                        + "Erika Jenei \r\n"
+                                        + "Environmental engineer\r\n"
+                                        + "jenei.erika@veas.videoton.hu\r\n"
+                                        + "\r\n"
+                                        + "\r\n"
+                                        + "VIDEOTON EAS Kft.\r\n"
+                                        + "H-8000 Székesfehérvár, Berényi út 72-100.\r\n"
+                                        + "Tel.:    +36 22 533 861\r\n"
+                                        + "Mobil: +36 20 227 2750\r\n"
+                                        + "www.videoton.hu\r\n"
+                                        + " Before printing, think about Environment.\r\n"
+                                        + "";
+                                textPart.setText(uzenet);                                          //levél tartalmának csatolása 
+                            }
+                            multipart.addBodyPart(textPart);                                            //csatolmány osztály       
                                    
                             message.setContent(multipart);                                                  //message üzenethez mindent hozzáad
                             
