@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,6 +24,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
+
 import javax.swing.JComboBox;
 
 public class Retour_lekerdez extends JPanel 
@@ -35,6 +41,10 @@ public class Retour_lekerdez extends JPanel
     private ComboBox combobox_tomb;
     private JComboBox<String> vevo_box;
     private JTextField rma_mezo;
+    private JComboBox<String> cikk_box;
+    private SQA_SQL cikkszamok = new SQA_SQL();
+    private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
+    
     /**
      * Create the panel.
      */
@@ -71,13 +81,13 @@ public class Retour_lekerdez extends JPanel
         datumig.setColumns(10);
         
         JButton keres_gomb = new JButton("Keresés");
-        keres_gomb.setBounds(520, 232, 89, 23);
+        keres_gomb.setBounds(517, 267, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
         table = new JTable();
         JScrollPane pane = new JScrollPane(table);
-        pane.setBounds(54, 288, 1806, 226);
+        pane.setBounds(54, 312, 1806, 238);
         add(pane);
         
         id_mezo = new JTextField();
@@ -121,6 +131,7 @@ public class Retour_lekerdez extends JPanel
         
         combobox_tomb = new ComboBox();
         vevo_box = new JComboBox<String>(combobox_tomb.getCombobox(ComboBox.projekt));               //combobox_tomb.getCombobox(ComboBox.projekt)
+        vevo_box.addActionListener(new Kivalaszt());
         vevo_box.setBounds(520, 191, 225, 22);
         add(vevo_box);
         
@@ -169,6 +180,16 @@ public class Retour_lekerdez extends JPanel
         modosit_gomb.addActionListener(new Modosit());
         modosit_gomb.setBounds(975, 614, 89, 23);
         add(modosit_gomb);
+        
+        cikk_box = new JComboBox<String>();
+        cikk_box.setBounds(520, 234, 320, 22);
+        add(cikk_box);
+        
+        JLabel lblNewLabel_12 = new JLabel("Cikkszám");
+        lblNewLabel_12.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_12.setBounds(420, 238, 90, 14);
+        add(lblNewLabel_12);
+
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
@@ -178,6 +199,15 @@ public class Retour_lekerdez extends JPanel
             try 
             {
                 lekerdezes.lekerdez_retour(datumtol.getText(), datumig.getText(), id_mezo.getText(), String.valueOf(vevo_box.getSelectedItem()), rma_mezo.getText());
+                if(String.valueOf(vevo_box.getSelectedItem()).equals("-"))
+                        {
+                            System.out.println(String.valueOf(vevo_box.getSelectedItem()));
+                            System.out.println("siker");
+                        }
+                else
+                {
+                    System.out.println("Nem nyert hangszórót");
+                }
             } 
             catch (Exception e1) 
             {              
@@ -538,6 +568,59 @@ public class Retour_lekerdez extends JPanel
                 String hibauzenet = e1.toString();
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+            }
+         }
+    }
+    
+    class Kivalaszt implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
+                DefaultComboBoxModel<String> model;
+                String keresett = String.valueOf(vevo_box.getSelectedItem());
+                String vevo = "";
+                
+                Workbook workbook = new Workbook();
+                workbook.loadFromFile(excelhelye2);
+                workbook.setVersion(ExcelVersion.Version2016);
+                Worksheet sheet = workbook.getWorksheets().get(0);
+                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow(); szamlalo++)
+                {
+                    if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
+                    {
+                        vevo =  sheet.getRange().get("A"+szamlalo).getText();
+                        System.out.println(vevo);
+                    }
+                }
+                String sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
+                        + "from ifsapp.PART_REVISION\r\n"
+                        + "where 3 = 3\r\n"
+                        + "and ifsapp.inventory_part_api.Get_Part_Product_Code(contract,part_no) = '1'\r\n"
+                        + "and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = '"+ vevo +"'\r\n"
+                        + "group by part_no, REVISION_TEXT, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO)\r\n"
+                        + "ORDER by part_no";
+                
+                String[] cikkek = cikkszamok.tombvissza(sql);                
+                String[] ujmodell = new String[cikkek.length];
+                for(int szamlalo = 0; szamlalo <cikkek.length; szamlalo++)
+                {
+                    ujmodell[szamlalo] = cikkek[szamlalo];
+                }               
+                model = new DefaultComboBoxModel<>(ujmodell);
+                   
+                cikk_box.setModel(model);
+                Foablak.frame.setCursor(null);                                                //egér mutató alaphelyzetbe állítása
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
          }

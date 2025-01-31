@@ -53,11 +53,11 @@ public class Vevoireklamacio_d5 extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Korrektív Intézkedések:");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lblNewLabel.setBounds(148, 46, 195, 14);
+        lblNewLabel.setBounds(150, 11, 195, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Előfordulásra");
-        lblNewLabel_1.setBounds(148, 84, 91, 14);
+        lblNewLabel_1.setBounds(148, 41, 91, 14);
         add(lblNewLabel_1);
         
         elofordulas_mezo = new JTextArea();
@@ -65,26 +65,26 @@ public class Vevoireklamacio_d5 extends JPanel {
         elofordulas_mezo.setLineWrap(true);
         elofordulas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto3 = new JScrollPane(elofordulas_mezo);
-        gorgeto3.setBounds(249, 78, 367, 99);
+        gorgeto3.setBounds(249, 40, 367, 99);
         add(gorgeto3);
         
         JLabel lblNewLabel_2 = new JLabel("Felelős");
-        lblNewLabel_2.setBounds(688, 84, 65, 14);
+        lblNewLabel_2.setBounds(688, 41, 65, 14);
         add(lblNewLabel_2);
         
         felelos_mezo = new JTextField();
         felelos_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        felelos_mezo.setBounds(763, 81, 177, 20);
+        felelos_mezo.setBounds(763, 41, 177, 20);
         add(felelos_mezo);
         felelos_mezo.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Határidő");
-        lblNewLabel_3.setBounds(999, 84, 65, 14);
+        lblNewLabel_3.setBounds(999, 41, 65, 14);
         add(lblNewLabel_3);
         
         hatarido_mezo = new JTextField();
         hatarido_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        hatarido_mezo.setBounds(1063, 81, 86, 20);
+        hatarido_mezo.setBounds(1063, 41, 86, 20);
         add(hatarido_mezo);
         hatarido_mezo.setColumns(10);
         
@@ -105,16 +105,16 @@ public class Vevoireklamacio_d5 extends JPanel {
         modell.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table.setModel(modell);        
         JScrollPane gorgeto = new JScrollPane(table);
-        gorgeto.setBounds(238, 188, 1018, 133);
+        gorgeto.setBounds(238, 150, 1018, 171);
         add(gorgeto);
         
         JLabel lblNewLabel_4 = new JLabel("Nem detektálhatóságra");
-        lblNewLabel_4.setBounds(100, 374, 146, 14);
+        lblNewLabel_4.setBounds(102, 335, 146, 14);
         add(lblNewLabel_4);
         
         JButton intezkedes_gomb = new JButton("Hozzáad");
         intezkedes_gomb.addActionListener(new Hozzaad());
-        intezkedes_gomb.setBounds(676, 154, 89, 23);
+        intezkedes_gomb.setBounds(676, 116, 89, 23);
         add(intezkedes_gomb);
         
         detektalas_mezo = new JTextArea();
@@ -122,26 +122,26 @@ public class Vevoireklamacio_d5 extends JPanel {
         detektalas_mezo.setLineWrap(true);
         detektalas_mezo.setWrapStyleWord(true);
         JScrollPane gorgeto4 = new JScrollPane(detektalas_mezo);
-        gorgeto4.setBounds(249, 374, 367, 99);
+        gorgeto4.setBounds(249, 335, 367, 99);
         add(gorgeto4);
         
         JLabel lblNewLabel_5 = new JLabel("Felelős");
-        lblNewLabel_5.setBounds(688, 374, 65, 14);
+        lblNewLabel_5.setBounds(688, 335, 65, 14);
         add(lblNewLabel_5);
         
         felelos2_mezo = new JTextField();
         felelos2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        felelos2_mezo.setBounds(763, 371, 177, 20);
+        felelos2_mezo.setBounds(763, 335, 177, 20);
         add(felelos2_mezo);
         felelos2_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Határidő");
-        lblNewLabel_6.setBounds(999, 374, 75, 14);
+        lblNewLabel_6.setBounds(999, 341, 75, 14);
         add(lblNewLabel_6);
         
         hatarido2_mezo = new JTextField();
         hatarido2_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        hatarido2_mezo.setBounds(1063, 371, 86, 20);
+        hatarido2_mezo.setBounds(1063, 335, 86, 20);
         add(hatarido2_mezo);
         hatarido2_mezo.setColumns(10);
         
@@ -161,17 +161,17 @@ public class Vevoireklamacio_d5 extends JPanel {
         modell2.setColumnIdentifiers(new Object[]{"Feladat","Felelős","Határidő","Lezárás dátuma","Futó ID"});
         table2.setModel(modell2);        
         JScrollPane gorgeto2 = new JScrollPane(table2);
-        gorgeto2.setBounds(238, 499, 1018, 133);
+        gorgeto2.setBounds(238, 467, 1018, 171);
         add(gorgeto2);
         
         JButton detektalas_gomb = new JButton("Hozzáad");
         detektalas_gomb.addActionListener(new Hozzaad2());
-        detektalas_gomb.setBounds(676, 465, 89, 23);
+        detektalas_gomb.setBounds(676, 408, 89, 23);
         add(detektalas_gomb);
         
         JButton d5zaras_gomb = new JButton("D5 zárása");
         d5zaras_gomb.addActionListener(new Mentes());
-        d5zaras_gomb.setBounds(676, 673, 89, 23);
+        d5zaras_gomb.setBounds(676, 663, 108, 23);
         add(d5zaras_gomb);
         
         JLabel lblNewLabel_7 = new JLabel("Sor törlés");
@@ -184,12 +184,12 @@ public class Vevoireklamacio_d5 extends JPanel {
         add(torles_gomb);
         
         JLabel lblNewLabel_8 = new JLabel("Sor törlés");
-        lblNewLabel_8.setBounds(1324, 523, 75, 14);
+        lblNewLabel_8.setBounds(1324, 552, 75, 14);
         add(lblNewLabel_8);
         
         JButton torles2_gomb = new JButton("Törlés");
         torles2_gomb.addActionListener(new Torles2());
-        torles2_gomb.setBounds(1306, 562, 89, 23);
+        torles2_gomb.setBounds(1306, 588, 89, 23);
         add(torles2_gomb);  
         
         /*DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
@@ -445,8 +445,34 @@ public class Vevoireklamacio_d5 extends JPanel {
             {
                 modell.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});             //rs.getString(6)
             }
-            table.setModel(modell);
+            /*table.getColumnModel().getColumn(1).setMinWidth(80);
+            table.getColumnModel().getColumn(2).setMinWidth(80);
+            table.getColumnModel().getColumn(3).setMinWidth(80);
+            table.getColumnModel().getColumn(4).setMinWidth(80);*/
             
+            //table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
+            TableColumnModel columnModel = table.getColumnModel();
+            for (int column = 0; column < table.getColumnCount(); column++) {
+                int width = 15; // Min width
+                for (int row = 0; row < table.getRowCount(); row++) {
+                    TableCellRenderer renderer = table.getCellRenderer(row, column);
+                    Component comp = table.prepareRenderer(renderer, row, column);
+                    width = Math.max(comp.getPreferredSize().width +1 , width);
+                }
+                if(width > 300)
+                    width=300;
+                columnModel.getColumn(column).setPreferredWidth(width);
+            }
+            table.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();                                                   //szöveg középre igazítása
+            centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+            table.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+            table.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
+            table.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
+            table.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
+            
+            
+            //table.setModel(modell);
             sql = "select * from qualitydb.Vevoireklamacio_det where REk_id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"' and D = 'D5'";
             stmt.execute(sql);
             rs = stmt.getResultSet();
@@ -455,7 +481,28 @@ public class Vevoireklamacio_d5 extends JPanel {
             {
                 modell2.addRow(new Object[]{rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(1)});
             }
-            table2.setModel(modell2);
+            //table2.setModel(modell2);
+            
+            TableColumnModel columnModel2 = table2.getColumnModel();
+            for (int column = 0; column < table2.getColumnCount(); column++) {
+                int width = 15; // Min width
+                for (int row = 0; row < table2.getRowCount(); row++) {
+                    TableCellRenderer renderer = table2.getCellRenderer(row, column);
+                    Component comp = table2.prepareRenderer(renderer, row, column);
+                    width = Math.max(comp.getPreferredSize().width +1 , width);
+                }
+                if(width > 300)
+                    width=300;
+                columnModel2.getColumn(column).setPreferredWidth(width);
+            }
+            table2.getColumnModel().getColumn(0).setCellRenderer(new WordWrapCellRenderer());
+            DefaultTableCellRenderer centerRenderer2 = new DefaultTableCellRenderer();                                          //szöveg középre igazítása
+            centerRenderer2.setHorizontalAlignment( JLabel.CENTER );
+            table2.getColumnModel().getColumn(1).setCellRenderer( centerRenderer2 );
+            table2.getColumnModel().getColumn(2).setCellRenderer( centerRenderer2 );
+            table2.getColumnModel().getColumn(3).setCellRenderer( centerRenderer2 );
+            table2.getColumnModel().getColumn(4).setCellRenderer( centerRenderer2 );
+            
             hatarido();
             stmt.close();
             conn.close();        

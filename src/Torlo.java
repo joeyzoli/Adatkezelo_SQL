@@ -1072,14 +1072,13 @@ public class Torlo extends JPanel
                           + "from ifsapp.C_OPER_TRACY_OVW\n"
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
                           + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
-                  ResultSet rs = stmt.executeQuery("select to_char(MANUF_DATE, 'YYYY.MM.DD'), PART_NO, COUNT(TRACY_SERIAL_NO)\n"
-                          + "FROM ifsapp.C_OPER_TRACY_OVW\n"
-                          + "WHERE 3 = 3 \n"
-                          + "and OPERATION_NO = 30 \n"
-                          + "and MANUF_DATE > to_date( '20241106000000', 'YYYYMMDDHH24:MI:SS' ) \n"
-                          + "and PART_NO = '891754108-AB'\n"
-                          + "group by MANUF_DATE, PART_NO\n"
-                          + "");
+                  ResultSet rs = stmt.executeQuery("select part_no, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok, date_created,\n"
+                          + "location_no, reject_code, transaction, cast(cost as decimal(12,2)), quantity, source, userid\n"
+                          + "from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
+                          + "where\n"
+                          + "upper( ifsapp.Mpccom_System_Event_Api.Get_Description(TRANSACTION_CODE) ) like upper( '%selejt%' ) \n"
+                          + "and  DATE_CREATED between to_date( '20240101', 'YYYYMMDD' ) and to_date( '20241231', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) ) \n"
+                          + "and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VPRGL'");
                   Workbook workbook = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1089,29 +1088,29 @@ public class Torlo extends JPanel
                   Worksheet sheet = workbook.getWorksheets().get(0);
                   //sheet.insertDataTable(datatable, true, 1, 1);
                   int cellaszam = 1;
-                  sheet.getRange().get("A" + cellaszam).setText("Dátum");
-                  sheet.getRange().get("B" + cellaszam).setText("Cikkszám");
-                  sheet.getRange().get("C" + cellaszam).setText("Db");
-                  /*sheet.getRange().get("D" + cellaszam).setText("Location no");
+                  sheet.getRange().get("A" + cellaszam).setText("Cikkszám");
+                  sheet.getRange().get("B" + cellaszam).setText("Megnevezés");
+                  sheet.getRange().get("C" + cellaszam).setText("Dátum");
+                  sheet.getRange().get("D" + cellaszam).setText("Location no");
                   sheet.getRange().get("E" + cellaszam).setText("Selejt kód");
                   sheet.getRange().get("F" + cellaszam).setText("Transaction");
                   sheet.getRange().get("G" + cellaszam).setText("Cost");
                   sheet.getRange().get("H" + cellaszam).setText("Mennyiség");
                   sheet.getRange().get("I" + cellaszam).setText("Source");
-                  sheet.getRange().get("J" + cellaszam).setText("User ID");*/
+                  sheet.getRange().get("J" + cellaszam).setText("User ID");
                   cellaszam++;
                   while(rs.next())
                   { 
                       sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
-                     /* sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                      sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
                       sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
                       sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
-                      sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
-                      sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                      sheet.getRange().get("G" + cellaszam).setNumberValue(rs.getInt(7));
+                      sheet.getRange().get("H" + cellaszam).setNumberValue(rs.getInt(8));
                       sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
-                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));*/
+                      sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
                       cellaszam++;
                       System.out.println("Fut a while "+ cellaszam);
                   }
@@ -1710,7 +1709,7 @@ public class Torlo extends JPanel
                         + "group by             1, 2;\n"
                         + "";*/
                 
-                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
                         + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                         + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
@@ -1718,7 +1717,27 @@ public class Torlo extends JPanel
                         + "from videoton.fkov  \n"
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
-                        + " where hely = 16 and ido > '2023.01.01' and panel like '%88A457%'";
+                        + " where hely = 116 and ido > '2025.01.28'";*/
+                
+                String sql = "select    videoton.fkov.azon, videoton.fkov.hely, videoton.fkov.ido, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                        + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
+                        + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                        + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
+                        + "videoton.fkov.dolgozo \n"
+                        + "from videoton.fkov  \n"
+                        + "    where   3 = 3 and\r\n"
+                        + "            videoton.fkov.ido >= replace(concat('2025.01.28' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
+                        + "            videoton.fkov.ido < replace(concat('2025.01.28' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                        + "            hely = '"+ 116 +"' and alsor = '1' order by  teststarttime asc";
+
+                
+                sql = "select videoton.fkov.ido, cast(videoton.fkov.ido as CHAR), videoton.fkov.alsor as teszterszam     -- testfinishtime\r\n"
+                        + "    from    videoton.fkov\r\n"
+                        + "    where   3 = 3 and\r\n"
+                        + "            videoton.fkov.ido >= replace(concat('2025.01.28' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
+                        + "            videoton.fkov.ido < replace(concat('2025.01.28' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                        + "            hely = '"+ 116 +"' and alsor = '1' order by  teststarttime asc";
+
                 
                 
                 Statement cstmt = con.createStatement(

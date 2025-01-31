@@ -275,7 +275,7 @@ public class Nyilatkozatbekero extends JPanel {
                     {
                         if(String.valueOf(reach2_box.getSelectedItem()).equals("-")) 
                         {
-                            System.out.println("Kiválasztott reach "+String.valueOf(reach_box.getSelectedItem()));
+                            //System.out.println("Kiválasztott reach "+String.valueOf(reach_box.getSelectedItem()));
                             String gyarto = gyarto_szama.beszallito("select MANUFACTURER_NO\r\n"
                                     + "from ifsapp.PART_MANUFACTURER\r\n"
                                     + "WHERE 3 = 3 and ifsapp.MANUFACTURER_INFO_API.Get_Name(MANUFACTURER_NO) = '"+ table.getValueAt(szamlalo, 0).toString() +"'\r\n"
@@ -290,7 +290,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 }
                                 
                             }
-                            System.out.println("Reach "+reach);                             
+                            //System.out.println("Reach "+reach);                             
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"'\r\n"
@@ -318,18 +318,29 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Beérkezett') from dual) or \r\n"
                                         + "OBJSTATE = (select ifsapp.PURCHASE_ORDER_LINE_API.FINITE_STATE_ENCODE__('Lezárt') from dual)) \r\n"
                                         + "and part_no = '"+ cikkszam +"') rendeles");
-                                System.out.println(cikkszam);
-                                System.out.println(megnevezes);
-                                System.out.println(gyartoicikk);
+                                //System.out.println(cikkszam);
+                                //System.out.println(megnevezes);
+                                //System.out.println(gyartoicikk);
                                 if(rs2.next())
-                                {                                    
-                                    if(rs2.getInt(1) < 720)
+                                {
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" reach");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" reach");
                                     }
                                 }                               
                             }
@@ -381,8 +392,8 @@ public class Nyilatkozatbekero extends JPanel {
                                     reach2 = datatable.getRows().get(szamlalo2).getString(3);
                                 }
                             }
-                            System.out.println("Reach "+reach);
-                            System.out.println("Reach2 "+reach2);
+                            //System.out.println("Reach "+reach);
+                            //System.out.println("Reach2 "+reach2);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_reach = '"+ reach +"' and not nyilatkozatok.CF$_reach = '"+ reach2 +"'\r\n"
@@ -412,13 +423,24 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "and part_no = '"+ cikkszam +"') rendeles");
                                 if(rs2.next())
                                 {
-                                    if(rs2.getInt(1) < 720)
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" reach");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" reach");
                                     }
                                 }
                             }
@@ -470,7 +492,7 @@ public class Nyilatkozatbekero extends JPanel {
                                     rohs = datatable.getRows().get(szamlalo2).getString(3);
                                 }
                             }
-                            System.out.println("Rohs "+rohs);
+                            //System.out.println("Rohs "+rohs);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_Rohs = '"+ rohs +"'\r\n"
@@ -500,13 +522,24 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "and part_no = '"+ cikkszam +"') rendeles");
                                 if(rs2.next())
                                 {
-                                    if(rs2.getInt(1) < 720)
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" rohs");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" rohs");
                                     }
                                 }
                             }
@@ -558,8 +591,8 @@ public class Nyilatkozatbekero extends JPanel {
                                     rohs2 = datatable.getRows().get(szamlalo2).getString(3);
                                 }
                             }
-                            System.out.println("Rohs "+rohs);
-                            System.out.println("Rohs2 "+rohs2);
+                            //System.out.println("Rohs "+rohs);
+                            //System.out.println("Rohs2 "+rohs2);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_Rohs = '"+ rohs +"' and not nyilatkozatok.CF$_Rohs = '"+ rohs2 +"'\r\n"
@@ -589,13 +622,24 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "and part_no = '"+ cikkszam +"') rendeles");
                                 if(rs2.next())
                                 {
-                                    if(rs2.getInt(1) < 720)
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" rohs");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" rohs");
                                     }
                                 }
                             }
@@ -647,7 +691,7 @@ public class Nyilatkozatbekero extends JPanel {
                                     cmrt = datatable.getRows().get(szamlalo2).getString(3);
                                 }
                             }
-                            System.out.println("CMRT "+cmrt);
+                            //System.out.println("CMRT "+cmrt);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_cmrt = '"+ cmrt +"'\r\n"
@@ -677,13 +721,24 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "and part_no = '"+ cikkszam +"') rendeles");
                                 if(rs2.next())
                                 {
-                                    if(rs2.getInt(1) < 720)
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" cmrt");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" cmrt");
                                     }
                                 }
                             }
@@ -735,8 +790,8 @@ public class Nyilatkozatbekero extends JPanel {
                                     cmrt2 = datatable.getRows().get(szamlalo2).getString(3);
                                 }
                             }
-                            System.out.println("CMRT "+cmrt);
-                            System.out.println("CMRT2 "+cmrt2);
+                            //System.out.println("CMRT "+cmrt);
+                            //System.out.println("CMRT2 "+cmrt2);
                             rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                     + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                     + "WHERE 3 = 3 and not nyilatkozatok.CF$_cmrt = '"+ cmrt +"' and not nyilatkozatok.CF$_cmrt = '"+ cmrt2 +"'\r\n"
@@ -766,13 +821,24 @@ public class Nyilatkozatbekero extends JPanel {
                                         + "and part_no = '"+ cikkszam +"') rendeles");
                                 if(rs2.next())
                                 {
-                                    if(rs2.getInt(1) < 720)
+                                    if(rs2.getString(1)!= null)
                                     {
-                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                        cellaszam++;
-                                        van++;
+                                        if(rs2.getInt(1) < 720)
+                                        {
+                                            sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                            sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                            sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                            cellaszam++;
+                                            van++;
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Régi anyag "+ cikkszam +" cmrt");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Még sosem rendeltünk "+ cikkszam +" cmrt");
                                     }
                                 }
                             }
@@ -821,7 +887,7 @@ public class Nyilatkozatbekero extends JPanel {
                                 pfas = datatable.getRows().get(szamlalo2).getString(3);
                             }
                         }
-                        System.out.println("PFAS "+pfas);
+                        //System.out.println("PFAS "+pfas);
                         rs = stmt.executeQuery("select part_no, ifsapp.Inventory_Part_API.Get_Description('VEAS',PART_NO), Manu_part_no\r\n"
                                 + "from ifsapp.part_manu_part_no_cfv nyilatkozatok\r\n"
                                 + "WHERE 3 = 3 and not nyilatkozatok.CF$_pfas = '"+ pfas +"'\r\n"
@@ -851,13 +917,24 @@ public class Nyilatkozatbekero extends JPanel {
                                     + "and part_no = '"+ cikkszam +"') rendeles");
                             if(rs2.next())
                             {
-                                if(rs2.getInt(1) < 720)
+                                if(rs2.getString(1)!= null)
                                 {
-                                    sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
-                                    sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
-                                    sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
-                                    cellaszam++;
-                                    van++;
+                                    if(rs2.getInt(1) < 720)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam).setText(cikkszam);
+                                        sheet2.getRange().get("B" + cellaszam).setText(megnevezes);
+                                        sheet2.getRange().get("C" + cellaszam).setText(gyartoicikk);
+                                        cellaszam++;
+                                        van++;
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Régi anyag "+ cikkszam +" pfas");
+                                    }
+                                }
+                                else
+                                {
+                                    System.out.println("Még sosem rendeltünk "+ cikkszam +" pfas");
                                 }
                             }
                         }

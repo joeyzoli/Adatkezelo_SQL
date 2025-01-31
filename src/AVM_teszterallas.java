@@ -15,7 +15,6 @@ import com.spire.xls.Worksheet;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -33,7 +32,6 @@ import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class AVM_teszterallas extends JPanel {
@@ -130,6 +128,10 @@ public class AVM_teszterallas extends JPanel {
                 sheet.getRange().get("D" + cellaszam).setText("Wlan");
                 sheet.getRange().get("E" + cellaszam).setText("Teszter szám");
                 sheet.getRange().get("F" + cellaszam).setText("Life");
+                sheet.getRange().get("G" + cellaszam).setText("Teszter szám");
+                sheet.getRange().get("H" + cellaszam).setText("Jelölő");
+                sheet.getRange().get("I" + cellaszam).setText("Teszter szám");
+                sheet.getRange().get("J" + cellaszam).setText("Csomagolás");
                 cellaszam++;
                 int bs = 0;            
                 int hely = 0;
@@ -142,7 +144,7 @@ public class AVM_teszterallas extends JPanel {
                 cellaszam2++;
                 
                 //////////////////////////////////////////////////////// délelött
-                for(int szamlalo3 = 1; szamlalo3 < 4; szamlalo3++)
+                for(int szamlalo3 = 1; szamlalo3 < 6; szamlalo3++)
                 {
                     if(szamlalo3 ==1)
                     {
@@ -154,19 +156,43 @@ public class AVM_teszterallas extends JPanel {
                         hely = 113;
                         cellaszam = 2;
                     }
-                    else
+                    else if(szamlalo3 ==3)
                     {
                         hely = 114;
                         cellaszam = 2;
                     }
-                    for(int szamlalo = 1; szamlalo < 11; szamlalo++)
+                    else if(szamlalo3 ==4)
                     {
-                        String sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
-                                + "    from    videoton.fkov\r\n"
-                                + "    where   3 = 3 and\r\n"
-                                + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
-                                + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
-                                + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        hely = 115;
+                        cellaszam = 2;
+                    }
+                    else
+                    {
+                        hely = 116;
+                        cellaszam = 2;
+                    }
+                    for(int szamlalo = 1; szamlalo < 12; szamlalo++)
+                    {
+                        String sql = "";
+                        if(hely == 116)
+                        {
+                            sql = "select    ido, cast(ido as char), alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  ido asc";
+                        }
+                        else
+                        {
+                            sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        }
+                        
                         
                         cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                         rs = cstmt.getResultSet();
@@ -187,9 +213,17 @@ public class AVM_teszterallas extends JPanel {
                                 {
                                     hely2 = "Wlan";
                                 }
-                                else
+                                else if(hely == 114)
                                 {
                                     hely2 = "Life";
+                                }
+                                else if(hely == 115)
+                                {
+                                    hely2 = "Jelölő";
+                                }
+                                else
+                                {
+                                    hely2 = "Csomagolás";
                                 }
                                 if(szamlalo2 == 0)
                                 {
@@ -200,7 +234,7 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         bs += (diff/1000)/60;
-                                        System.out.println((diff/1000)/60);
+                                        //System.out.println((diff/1000)/60);
                                         sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
                                         sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
                                         sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
@@ -217,7 +251,7 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         bs += (diff/1000)/60;
-                                        System.out.println((diff/1000)/60);
+                                        //System.out.println((diff/1000)/60);
                                         sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
                                         sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
                                         sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
@@ -234,7 +268,7 @@ public class AVM_teszterallas extends JPanel {
                                     if((diff/1000) > 299)
                                     {
                                         bs += (diff/1000)/60;
-                                        System.out.println((diff/1000)/60);
+                                        //System.out.println((diff/1000)/60);
                                         sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
                                         sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
                                         sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
@@ -259,13 +293,27 @@ public class AVM_teszterallas extends JPanel {
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
-                            else
+                            else if(szamlalo3 ==3)
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
                                 sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
-                            }                
+                            }
+                            else if(szamlalo3 ==4)
+                            {
+                                sheet.getRange().get("G" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("H" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Jelölő");
+                            }
+                            else
+                            {
+                                sheet.getRange().get("I" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("J" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Csomagolás");
+                            }
         
                             //System.out.println(bs/60);
                             
@@ -281,34 +329,57 @@ public class AVM_teszterallas extends JPanel {
                     System.out.println("Fut a legkülső for");
                 }
                 bs = 0;
-                sheet.getRange().get("A" + 12).setText("Délután");
+                sheet.getRange().get("A" + 13).setText("Délután");
                 ////////////////////////////////////////////////////////////////////// délután
                 
-                for(int szamlalo3 = 1; szamlalo3 < 4; szamlalo3++)
+                for(int szamlalo3 = 1; szamlalo3 < 6; szamlalo3++)
                 {
                     if(szamlalo3 == 1)
                     {
                         hely = 112;
-                        cellaszam = 13;
+                        cellaszam = 14;
                     }
                     else if(szamlalo3 == 2)
                     {
                         hely = 113;
-                        cellaszam = 13;
+                        cellaszam = 14;
+                    }
+                    else if(szamlalo3 == 3)
+                    {
+                        hely = 114;
+                        cellaszam = 14;
+                    }
+                    else if(szamlalo3 == 4)
+                    {
+                        hely = 115;
+                        cellaszam = 14;
                     }
                     else
                     {
-                        hely = 114;
-                        cellaszam = 13;
+                        hely = 116;
+                        cellaszam = 14;
                     }
-                    for(int szamlalo = 1; szamlalo < 11; szamlalo++)
+                    for(int szamlalo = 1; szamlalo < 12; szamlalo++)
                     {
-                        String sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
-                                + "    from    videoton.fkov\r\n"
-                                + "    where   3 = 3 and\r\n"
-                                + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
-                                + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
-                                + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        String sql = "";
+                        if(hely == 116)
+                        {
+                            sql = "select    ido, cast(ido as char), alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  ido asc";
+                        }
+                        else
+                        {
+                            sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        }                      
                         
                         cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                         rs = cstmt.getResultSet();
@@ -329,9 +400,17 @@ public class AVM_teszterallas extends JPanel {
                                 {
                                     hely2 = "Wlan";
                                 }
-                                else
+                                else if(hely == 114)
                                 {
                                     hely2 = "Life";
+                                }
+                                else if(hely == 115)
+                                {
+                                    hely2 = "Jelölő";
+                                }
+                                else
+                                {
+                                    hely2 = "Csomagolás";
                                 }
                                 if(szamlalo2 == 0)
                                 {
@@ -403,13 +482,27 @@ public class AVM_teszterallas extends JPanel {
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
-                            else
+                            else if(szamlalo3 ==3)
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
                                 sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
-                            }                
+                            }
+                            else if(szamlalo3 ==4)
+                            {
+                                sheet.getRange().get("G" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("H" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Jelölő");
+                            }   
+                            else
+                            {
+                                sheet.getRange().get("I" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("J" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Csomagolás");
+                            }   
         
                             //System.out.println(bs/60);
                             
@@ -427,34 +520,58 @@ public class AVM_teszterallas extends JPanel {
                 
                 
                 bs = 0;
-                sheet.getRange().get("A" + 23).setText("Éjszaka");
+                sheet.getRange().get("A" + 25).setText("Éjszaka");
                 ////////////////////////////////////////////////////////////////////// Éjszaka
                 
-                for(int szamlalo3 = 1; szamlalo3 < 4; szamlalo3++)
+                for(int szamlalo3 = 1; szamlalo3 < 6; szamlalo3++)
                 {
                     if(szamlalo3 == 1)
                     {
                         hely = 112;
-                        cellaszam = 24;
+                        cellaszam = 26;
                     }
                     else if(szamlalo3 == 2)
                     {
                         hely = 113;
-                        cellaszam = 24;
+                        cellaszam = 26;
+                    }
+                    else if(szamlalo3 == 3)
+                    {
+                        hely = 114;
+                        cellaszam = 26;
+                    }
+                    else if(szamlalo3 == 4)
+                    {
+                        hely = 115;
+                        cellaszam = 26;
                     }
                     else
                     {
-                        hely = 114;
-                        cellaszam = 24;
+                        hely = 116;
+                        cellaszam = 26;
                     }
-                    for(int szamlalo = 1; szamlalo < 11; szamlalo++)
+                    for(int szamlalo = 1; szamlalo < 12; szamlalo++)
                     {
-                        String sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
-                                + "    from    videoton.fkov\r\n"
-                                + "    where   3 = 3 and\r\n"
-                                + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
-                                + "            videoton.fkov.ido < replace(concat(date_add('"+ datum.getJFormattedTextField().getText() +"' , interval 1 day), \" \", \"05:55:00 \"), \"-\", \".\" ) and \r\n"
-                                + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        String sql = "";
+                        if(hely == 116)
+                        {
+                            sql = "select    ido, cast(ido as char), alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat(date_add('"+ datum.getJFormattedTextField().getText() +"' , interval 1 day), \" \", \"05:55:00 \"), \"-\", \".\" ) and \r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        }
+                        else
+                        {
+                            sql = "select    teststarttime, testfinishtime, alsor as teszterszam     -- testfinishtime\r\n"
+                                    + "    from    videoton.fkov\r\n"
+                                    + "    where   3 = 3 and\r\n"
+                                    + "            videoton.fkov.ido >= replace(concat('"+ datum.getJFormattedTextField().getText() +"' , \" \", \"21:55:00\"), \"-\", \".\") and\r\n"
+                                    + "            videoton.fkov.ido < replace(concat(date_add('"+ datum.getJFormattedTextField().getText() +"' , interval 1 day), \" \", \"05:55:00 \"), \"-\", \".\" ) and \r\n"
+                                    + "            hely = '"+ hely +"' and alsor = '"+ szamlalo +"' order by  teststarttime asc";
+                        }
+                        
                         
                         cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
                         rs = cstmt.getResultSet();
@@ -475,9 +592,17 @@ public class AVM_teszterallas extends JPanel {
                                 {
                                     hely2 = "Wlan";
                                 }
-                                else
+                                else if(hely == 114)
                                 {
                                     hely2 = "Life";
+                                }
+                                else if(hely == 115)
+                                {
+                                    hely2 = "Jelölő";
+                                }
+                                else
+                                {
+                                    hely2 = "Csomagolás";
                                 }
                                 if(szamlalo2 == 0)
                                 {
@@ -549,13 +674,27 @@ public class AVM_teszterallas extends JPanel {
                                 cellaszam++;
                                 System.out.println("Wlan");
                             }
-                            else
+                            else if(szamlalo3 ==3)
                             {
                                 sheet.getRange().get("E" + cellaszam).setText(String.valueOf(szamlalo));
                                 sheet.getRange().get("F" + cellaszam).setNumberValue(bs-30);
                                 cellaszam++;
                                 System.out.println("Life");
-                            }                
+                            }
+                            else if(szamlalo3 ==4)
+                            {
+                                sheet.getRange().get("G" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("H" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Jelölő");
+                            }
+                            else
+                            {
+                                sheet.getRange().get("I" + cellaszam).setText(String.valueOf(szamlalo));
+                                sheet.getRange().get("J" + cellaszam).setNumberValue(bs-30);
+                                cellaszam++;
+                                System.out.println("Csomagolás");
+                            }
         
                             //System.out.println(bs/60);
                             
@@ -571,27 +710,32 @@ public class AVM_teszterallas extends JPanel {
                     System.out.println("Fut a legkülső for");
                 }
                 
-                sheet.getRange().get("H" + 1).setText("Folyamat");
-                sheet.getRange().get("H" + 2).setText("BS");
-                sheet.getRange().get("H" + 3).setText("Wlan");
-                sheet.getRange().get("H" + 4).setText("Life");
-                sheet.getRange().get("H" + 13).setText("BS");
-                sheet.getRange().get("H" + 14).setText("Wlan");
-                sheet.getRange().get("H" + 15).setText("Life");
-                sheet.getRange().get("H" + 24).setText("BS");
-                sheet.getRange().get("H" + 25).setText("Wlan");
-                sheet.getRange().get("H" + 26).setText("Life");
+                sheet.getRange().get("L" + 1).setText("Folyamat");
+                sheet.getRange().get("L" + 2).setText("BS");
+                sheet.getRange().get("L" + 3).setText("Wlan");
+                sheet.getRange().get("L" + 4).setText("Life");
+                sheet.getRange().get("L" + 13).setText("BS");
+                sheet.getRange().get("L" + 14).setText("Wlan");
+                sheet.getRange().get("L" + 15).setText("Life");
+                sheet.getRange().get("L" + 24).setText("BS");
+                sheet.getRange().get("L" + 25).setText("Wlan");
+                sheet.getRange().get("L" + 26).setText("Life");
                 
-                sheet.getRange().get("I" + 1).setText("Össz állásidő");
-                sheet.getCellRange("I" + 2).setFormula("=SZUM(B2:B6)");
-                sheet.getCellRange("I" + 3).setFormula("=SZUM(D2:D11)");
-                sheet.getCellRange("I" + 4).setFormula("=SZUM(F2:F11)");               
-                sheet.getCellRange("I" + 13).setFormula("=SZUM(B13:B17)");
-                sheet.getCellRange("I" + 14).setFormula("=SZUM(D13:D22)");
-                sheet.getCellRange("I" + 15).setFormula("=SZUM(F13:F22)");
-                sheet.getCellRange("I" + 24).setFormula("=SZUM(B24:B28)");
-                sheet.getCellRange("I" + 25).setFormula("=SZUM(D24:D33)");
-                sheet.getCellRange("I" + 26).setFormula("=SZUM(F24:F33)");
+                sheet.getRange().get("M" + 1).setText("Össz állásidő");
+                sheet.getCellRange("M" + 2).setFormula("=SZUM(B2:B7)");
+                sheet.getCellRange("M" + 3).setFormula("=SZUM(D2:D12)");
+                sheet.getCellRange("M" + 4).setFormula("=SZUM(F2:F12)");               
+                sheet.getCellRange("M" + 13).setFormula("=SZUM(B14:B19)");
+                sheet.getCellRange("M" + 14).setFormula("=SZUM(D14:D24)");
+                sheet.getCellRange("M" + 15).setFormula("=SZUM(F14:F24)");
+                sheet.getCellRange("M" + 24).setFormula("=SZUM(B26:B31)");
+                sheet.getCellRange("M" + 25).setFormula("=SZUM(D26:D35)");
+                sheet.getCellRange("M" + 26).setFormula("=SZUM(F26:F35)");
+                
+                sheet.getRange().get("O" + 1).setText("SUM");
+                sheet.getCellRange("O" + 2).setFormula("=M2+M13+M24");
+                sheet.getCellRange("O" + 3).setFormula("=M3+M14+M25");
+                sheet.getCellRange("O" + 4).setFormula("=M4+M15+M26");
                 
                 //Get the first worksheet
                 sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
@@ -608,41 +752,22 @@ public class AVM_teszterallas extends JPanel {
                 cstmt.close();
                 con.close();
                 //workbook.setActiveSheetIndex(0);
-                JFileChooser mentes_helye = new JFileChooser();
+                /*JFileChooser mentes_helye = new JFileChooser();
                 mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                mentes_helye.showOpenDialog(mentes_helye);
-                File fajl = mentes_helye.getSelectedFile();
-                
-                if(fajl.getName().contains(".xlsx"))
+                mentes_helye.showOpenDialog(mentes_helye);*/
+                String mentes_helye = System.getProperty("user.home") + "\\Desktop\\állásidők "+ datum.getJFormattedTextField().getText() +".xlsx";
+                workbook.saveToFile(mentes_helye, ExcelVersion.Version2016);  
+                FileInputStream fileStream = new FileInputStream(mentes_helye);
+                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                 {
-                    workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
-                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
-                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-                    {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
-                        {    
-                            workbook2.removeSheetAt(i); 
-                        }      
-                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
-                        workbook2.write(output);
-                        output.close();
-                    }
-                }
-                else
-                {
-                    workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
-                    FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
-                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-                    {
-                        for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
-                        {    
-                            workbook2.removeSheetAt(i); 
-                        }      
-                        FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
-                        workbook2.write(output);
-                        output.close();
-                    }
+                    for(int i = workbook2.getNumberOfSheets()-1; i>1 ;i--)
+                    {    
+                        workbook2.removeSheetAt(i); 
+                    }      
+                    FileOutputStream output = new FileOutputStream(mentes_helye);
+                    workbook2.write(output);
+                    output.close();
                 }
                 Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);

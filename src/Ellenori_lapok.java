@@ -255,7 +255,7 @@ public class Ellenori_lapok extends JPanel {
         add(du9);
         
         ej9 = new JCheckBox("");
-        ej9.setBounds(656, 502, 29, 23);
+        ej9.setBounds(656, 506, 29, 23);
         add(ej9);
         
         de10 = new JCheckBox("");
@@ -292,6 +292,11 @@ public class Ellenori_lapok extends JPanel {
         JLabel lblNewLabel_16 = new JLabel("Jelenléti csatolása");
         lblNewLabel_16.setBounds(968, 59, 107, 14);
         add(lblNewLabel_16);
+        
+        JButton pipal_gomb = new JButton("Mind bepipál");
+        pipal_gomb.addActionListener(new Minden_papal());
+        pipal_gomb.setBounds(968, 118, 137, 23);
+        add(pipal_gomb);
         
         try 
         {
@@ -708,7 +713,7 @@ public class Ellenori_lapok extends JPanel {
                 String[] het = evhet.split(ev[0]);
                 stmt.close();
                 conn.close();
-                
+                System.out.println(het[1]);
                 for (Object sheet2: excel.getWorksheets()) {
                     String sheetName = ((Worksheet) sheet2).getName();                            
                     if(sheetName.contains(het[1]))
@@ -720,7 +725,7 @@ public class Ellenori_lapok extends JPanel {
                 for(int szamlalo = 9; szamlalo < 15; szamlalo++)
                 {
                     CellRange cell2 = sheet.getCellRange(1, szamlalo);
-                    SimpleDateFormat rovid = new SimpleDateFormat("yyyy.mm.dd");
+                    SimpleDateFormat rovid = new SimpleDateFormat("yyyy.MM.dd");
                     String[] koztes = cell2.getValue().toString().split(" ");
                     if(koztes.length > 1)
                     {
@@ -1138,6 +1143,30 @@ public class Ellenori_lapok extends JPanel {
                     writer.close();
                 }
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                JOptionPane.showMessageDialog(null,getClass()+" "+ hibauzenet, "Hiba üzenet", 2);                                                   //kivétel esetén kiírja a hibaüzenetet
+            }
+         }
+    }
+    
+    class Minden_papal implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {
+                de1.setSelected(true);de2.setSelected(true);de3.setSelected(true);de4.setSelected(true);de5.setSelected(true);de6.setSelected(true);de7.setSelected(true);de8.setSelected(true);de9.setSelected(true);
+                de10.setSelected(true);de11.setSelected(true);
+                du1.setSelected(true);du2.setSelected(true);du3.setSelected(true);du4.setSelected(true);du5.setSelected(true);du6.setSelected(true);du7.setSelected(true);du8.setSelected(true);du9.setSelected(true);
+                du10.setSelected(true);du11.setSelected(true);
+                ej1.setSelected(true);ej2.setSelected(true);ej3.setSelected(true);ej4.setSelected(true);ej5.setSelected(true);ej6.setSelected(true);ej7.setSelected(true);ej8.setSelected(true);ej9.setSelected(true);
+                ej10.setSelected(true);ej11.setSelected(true);
             }
             catch (Exception e1) 
             {

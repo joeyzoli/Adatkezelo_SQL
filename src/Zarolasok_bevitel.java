@@ -93,7 +93,7 @@ public class Zarolasok_bevitel extends JPanel {
     public Zarolasok_bevitel() {
         setLayout(null);
         
-        this.setPreferredSize(new Dimension(1237, 800));
+        this.setPreferredSize(new Dimension(1268, 800));
         Foablak.meretek.setSize(1250, 900);
         
         JLabel lblNewLabel = new JLabel("Zárolás felvitele");
@@ -125,7 +125,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_3);
         
         String[] info = {"Válassz projektet"};
-        tipus_box = new JComboBox<String>(info);                      //cikkszamok()
+        tipus_box = new JComboBox<String>(info);                      //cikkszamok()            //info
         tipus_box.setBounds(362, 84, 283, 22);
         add(tipus_box);
         
@@ -204,16 +204,16 @@ public class Zarolasok_bevitel extends JPanel {
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_12 = new JLabel("Zároló papír sorszáma");
-        lblNewLabel_12.setBounds(792, 233, 129, 14);
+        lblNewLabel_12.setBounds(792, 216, 129, 14);
         add(lblNewLabel_12);
         
         sorszam_mezo = new JTextField();
-        sorszam_mezo.setBounds(936, 230, 86, 20);
+        sorszam_mezo.setBounds(938, 213, 86, 20);
         add(sorszam_mezo);
         sorszam_mezo.setColumns(10);
         
         zarolta_box = new JComboBox<String>(ellenori_nevsor());                           //ellenori_nevsor()
-        zarolta_box.setBounds(1024, 176, 184, 22);
+        zarolta_box.setBounds(1024, 176, 200, 22);
         add(zarolta_box);
         
         JLabel lblNewLabel_13 = new JLabel("Zárolta");
@@ -249,12 +249,12 @@ public class Zarolasok_bevitel extends JPanel {
         add(ido_mezo);
         ido_mezo.setColumns(10);
         
-        technikus_csekk = new JCheckBox("Technikusi beavatkozást igényel");
-        technikus_csekk.setBounds(42, 420, 220, 23);
+        technikus_csekk = new JCheckBox("Technikusi beavatkozást nem igényel");
+        technikus_csekk.setBounds(784, 249, 240, 23);
         add(technikus_csekk);
         
         JLabel lblNewLabel_17 = new JLabel("Felelős terület");
-        lblNewLabel_17.setBounds(268, 424, 82, 14);
+        lblNewLabel_17.setBounds(1024, 253, 82, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
@@ -368,7 +368,7 @@ public class Zarolasok_bevitel extends JPanel {
         
         String[] terulet = {"Gépes", "Kézi","Végszerelés"};
         felelosterulet_box = new JComboBox<String>(terulet);                         //terulet
-        felelosterulet_box.setBounds(362, 420, 102, 22);
+        felelosterulet_box.setBounds(1122, 249, 102, 22);
         add(felelosterulet_box);
         
         JLabel lblNewLabel_23 = new JLabel("Gyökérokra hozott intézkedés visszaellenőrzése");
@@ -392,7 +392,7 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         meszam_mezo = new JTextField();
-        meszam_mezo.setBounds(1044, 111, 164, 20);
+        meszam_mezo.setBounds(1044, 111, 180, 20);
         add(meszam_mezo);
         meszam_mezo.setColumns(10);
         
@@ -400,7 +400,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_24.setBounds(943, 114, 102, 14);
         add(lblNewLabel_24);
         
-        JLabel lblNewLabel_25 = new JLabel("Ellenőrzött menyniség:");
+        JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
         lblNewLabel_25.setBounds(268, 375, 129, 14);
         add(lblNewLabel_25);
         
@@ -484,7 +484,7 @@ public class Zarolasok_bevitel extends JPanel {
     public Zarolasok_bevitel(String id) {
         setLayout(null);
         
-        this.setPreferredSize(new Dimension(1237, 800));
+        this.setPreferredSize(new Dimension(1268, 800));
         Foablak.meretek.setSize(1250, 900);
         
         JLabel lblNewLabel = new JLabel("Zárolás felvitele");
@@ -515,7 +515,8 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_3.setBounds(306, 88, 46, 14);
         add(lblNewLabel_3);
         
-        tipus_box = new JComboBox<String>();                      //cikkszamok()
+        String[] info = {"Válassz projektet"};
+        tipus_box = new JComboBox<String>(info);                      //cikkszamok()            //info
         tipus_box.setBounds(362, 84, 283, 22);
         add(tipus_box);
         
@@ -594,16 +595,16 @@ public class Zarolasok_bevitel extends JPanel {
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_12 = new JLabel("Zároló papír sorszáma");
-        lblNewLabel_12.setBounds(792, 233, 129, 14);
+        lblNewLabel_12.setBounds(792, 216, 129, 14);
         add(lblNewLabel_12);
         
         sorszam_mezo = new JTextField();
-        sorszam_mezo.setBounds(936, 230, 86, 20);
+        sorszam_mezo.setBounds(938, 213, 86, 20);
         add(sorszam_mezo);
         sorszam_mezo.setColumns(10);
         
         zarolta_box = new JComboBox<String>(ellenori_nevsor());                           //ellenori_nevsor()
-        zarolta_box.setBounds(1024, 176, 184, 22);
+        zarolta_box.setBounds(1024, 176, 200, 22);
         add(zarolta_box);
         
         JLabel lblNewLabel_13 = new JLabel("Zárolta");
@@ -639,12 +640,12 @@ public class Zarolasok_bevitel extends JPanel {
         add(ido_mezo);
         ido_mezo.setColumns(10);
         
-        technikus_csekk = new JCheckBox("Technikusi beavatkozást igényel");
-        technikus_csekk.setBounds(42, 420, 220, 23);
+        technikus_csekk = new JCheckBox("Technikusi beavatkozást nem igényel");
+        technikus_csekk.setBounds(784, 249, 240, 23);
         add(technikus_csekk);
         
         JLabel lblNewLabel_17 = new JLabel("Felelős terület");
-        lblNewLabel_17.setBounds(268, 424, 82, 14);
+        lblNewLabel_17.setBounds(1024, 253, 82, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
@@ -758,7 +759,7 @@ public class Zarolasok_bevitel extends JPanel {
         
         String[] terulet = {"Gépes", "Kézi","Végszerelés"};
         felelosterulet_box = new JComboBox<String>(terulet);                         //terulet
-        felelosterulet_box.setBounds(362, 420, 102, 22);
+        felelosterulet_box.setBounds(1122, 249, 102, 22);
         add(felelosterulet_box);
         
         JLabel lblNewLabel_23 = new JLabel("Gyökérokra hozott intézkedés visszaellenőrzése");
@@ -782,7 +783,7 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         meszam_mezo = new JTextField();
-        meszam_mezo.setBounds(1044, 111, 164, 20);
+        meszam_mezo.setBounds(1044, 111, 180, 20);
         add(meszam_mezo);
         meszam_mezo.setColumns(10);
         
@@ -790,7 +791,7 @@ public class Zarolasok_bevitel extends JPanel {
         lblNewLabel_24.setBounds(943, 114, 102, 14);
         add(lblNewLabel_24);
         
-        JLabel lblNewLabel_25 = new JLabel("Ellenőrzött menyniség:");
+        JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
         lblNewLabel_25.setBounds(268, 375, 129, 14);
         add(lblNewLabel_25);
         
@@ -831,7 +832,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(separator);
         
         JLabel lblNewLabel_28 = new JLabel("Határidő");
-        lblNewLabel_28.setBounds(837, 512, 55, 14);
+        lblNewLabel_28.setBounds(837, 512, 46, 14);
         add(lblNewLabel_28);
         
         hatarido_mezo = new JTextField();
@@ -1052,22 +1053,14 @@ public class Zarolasok_bevitel extends JPanel {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
                 Connection conn = null;
                 Statement stmt = null;        
-                try 
-                {
-                   Class.forName("com.mysql.cj.jdbc.Driver");
-                } 
-                catch (Exception e1) 
-                {
-                   System.out.println(e);
-                   String hibauzenet2 = e.toString();
-                   JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-                }
+                
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                 stmt = (Statement) conn.createStatement();
                 String SQL = "select * from qualitydb.Zarolasok where id = '"+ id_mezo.getText() +"'";
                 ResultSet rs = stmt.executeQuery(SQL);
                 String sql = "";
-                String technikus = "Nem";
+                String technikus = "Igen";
                 
                 if(ido_mezo.getText().equals(""))
                 {
@@ -1089,13 +1082,14 @@ public class Zarolasok_bevitel extends JPanel {
                     
                     if(Integer.valueOf(ellenorzott_mezo.getText()) != 0)
                     {
-                        if(Integer.valueOf(ellenorzott_mezo.getText()) == Integer.valueOf(zaroltdb_mezo.getText()))
+                        if(ellenorzott_mezo.getText().equals(zaroltdb_mezo.getText()))
                         {
+                            System.out.println("egyezik");
                             if(rs.next())
                             {
                                 if(technikus_csekk.isSelected())
                                 {
-                                    technikus = "Igen";                                    
+                                    technikus = "Nem";                                    
                                 }
                                 sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
@@ -1113,6 +1107,10 @@ public class Zarolasok_bevitel extends JPanel {
                             else
                             {
                                 if(technikus_csekk.isSelected())
+                                {
+                                    technikus = "Nem";                                                                              
+                                }
+                                else
                                 {
                                     technikus = "Igen";
                                     Email uzenet = new Email();
@@ -1133,7 +1131,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                                 zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
-                                    }                                               
+                                    }   
                                 }
                                 sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
                                         + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
@@ -1379,21 +1377,17 @@ public class Zarolasok_bevitel extends JPanel {
                             {
                                 visszaallit();
                             }
-                            
-                            
+                                                       
                             int kovetkezo = Integer.parseInt(id_mezo.getText());
                             id_mezo.setText(String.valueOf(kovetkezo + 1));
                         }
                         else
-                        {
-                            JOptionPane.showMessageDialog(null, "Nem egyezik a zárolt db és az ellenőrzött db!", "Hiba üzenet", 2);
-                            
+                        {                           
                             if(rs.next())
                             {
                                 if(technikus_csekk.isSelected())
                                 {
-                                    technikus = "Igen";
-                                    
+                                    technikus = "Nem";                                    
                                 }
                                 sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
@@ -1411,6 +1405,10 @@ public class Zarolasok_bevitel extends JPanel {
                             else
                             {
                                 if(technikus_csekk.isSelected())
+                                {
+                                    technikus = "Nem";                                                                              
+                                }
+                                else
                                 {
                                     technikus = "Igen";
                                     Email uzenet = new Email();
@@ -1431,7 +1429,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                                 zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
-                                    }                                               
+                                    }
                                 }
                                 sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
                                         + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
@@ -1688,7 +1686,7 @@ public class Zarolasok_bevitel extends JPanel {
                         {
                             if(technikus_csekk.isSelected())
                             {
-                                technikus = "Igen";
+                                technikus = "Nem";
                                 
                             }
                             sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
@@ -1707,6 +1705,10 @@ public class Zarolasok_bevitel extends JPanel {
                         else
                         {
                             if(technikus_csekk.isSelected())
+                            {
+                                technikus = "Nem";                                                                            
+                            }
+                            else
                             {
                                 technikus = "Igen";
                                 Email uzenet = new Email();
@@ -1727,7 +1729,7 @@ public class Zarolasok_bevitel extends JPanel {
                                     uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                             zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                     zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
-                                }                                               
+                                } 
                             }
                             sql = "insert into qualitydb.Zarolasok (ID,Projekt,Tipus,Eszleles_helye,Muszak,Zarolo_mernok,Zarolt_db,Hol_van,Zarolas_oka,Azonnali_intezkedes,Zarolas_datuma,"
                                     + "Papir_sorszama,Zarolta,Valogatas_eredmenye,Ujraellenorzes_datuma,\r\n"
@@ -2083,7 +2085,7 @@ public class Zarolasok_bevitel extends JPanel {
                 eredmeny_mezo.setText(rs.getString(14));
                 ujradatum_mezo.setText(rs.getString(15));
                 ido_mezo.setText(rs.getString(16));
-                if(rs.getString(17).equals("Igen"))
+                if(rs.getString(17).equals("Nem"))
                 {
                     technikus_csekk.setSelected(true);
                 }
