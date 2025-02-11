@@ -365,7 +365,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                 stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String sql = "SELECT DATE_FORMAT(Ertesites_Datuma,'%Y%m'), sum(if(mi = 'Reklamáció',1,0)) as reklamacio, sum(if(mi = 'Visszajelzés',1,0)) as visszajelzes FROM  qualitydb.Vevoireklamacio_alap where   Ertesites_Datuma >= '"+ datumtol.getText() 
+                String sql = "SELECT DATE_FORMAT(Ertesites_Datuma,'%Y%m'), sum(if(mi = 'Visszajelzés',0,1)) as reklamacio, sum(if(mi = 'Visszajelzés',1,0)) as visszajelzes FROM  qualitydb.Vevoireklamacio_alap where   Ertesites_Datuma >= '"+ datumtol.getText() 
                         +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' group by DATE_FORMAT(Ertesites_Datuma,'%Y%m')\n"
                                 + "order by DATE_FORMAT(Ertesites_Datuma,'%Y%m') asc";
                 stmt.execute(sql);
@@ -531,7 +531,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 
                 sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',\n"
                         + "Vevo, \n"
-                        + "sum(if(mi = 'Reklamáció', 1, 0)) as 'Reklamáció', \n"
+                        + "sum(if(mi = 'Visszajelzés', 0, 1)) as 'Reklamáció', \n"
                         + "sum(if(mi = 'Visszajelzés', 1, 0)) as 'Visszajelzés'\n"
                         + "from qualitydb.Vevoireklamacio_alap\n"
                         + " where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"'\n"
@@ -701,8 +701,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 /**********************************************Negyedik diagramm******************************************/
                 
                 sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',            \n"
-                        + "        sum(if(mi = 'Reklamáció' && Lezaras_datuma = '', 1,0)) as 'Nyitott reklamáció',\n"
-                        + "        sum(if(mi = 'Reklamáció' && not Lezaras_datuma = '', 1,0)) as 'Lezárt reklamáció',\n"
+                        + "        sum(if(mi = 'Reklamáció - Vevői' && Lezaras_datuma = '', 1,if(mi = 'Reklamáció - Field kiesés' && Lezaras_datuma = '', 1,0))) as 'Nyitott reklamáció',\n"
+                        + "        sum(if(mi = 'Reklamáció - Vevői' && not Lezaras_datuma = '', 1,if(mi = 'Reklamáció - Field kiesés' && not Lezaras_datuma = '', 1,0))) as 'Lezárt reklamáció',\n"
                         + "        sum(if(mi = 'Visszajelzés' && Lezaras_datuma = '', 1,0)) as 'Nyitott visszajelzés',\n"
                         + "        sum(if(mi = 'Visszajelzés' && not Lezaras_datuma = '', 1,0)) as 'Lezárt visszajelzés'\n"
                         + "                from qualitydb.Vevoireklamacio_alap\n"
@@ -1127,7 +1127,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         sql = "select  cast(AVG(if(Lezaras_datuma = '', DATEDIFF('"+ ig +".12.31', Ertesites_Datuma), \n"
                                 + "if(Lezaras_datuma  > '"+ ig +".12.31',DATEDIFF('"+ ig +".12.31', Ertesites_Datuma ), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) ) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                                 + "from qualitydb.Vevoireklamacio_alap\n"
-                                + "where 3=3 and Ertesites_Datuma >= '"+ tol +".01.01' and Ertesites_Datuma <= '"+ ig +".12.31' and Figyelem = 'igen'";
+                                + "where 3=3 and Ertesites_Datuma >= '"+ ig +".01.01' and Ertesites_Datuma <= '"+ ig +".12.31' and Figyelem = 'igen'";
                         stmt.execute(sql);
                         resultSet = stmt.getResultSet();
                         if(resultSet.next())
@@ -1283,6 +1283,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         workbook2.write(output);
                         output.close();
                     }
+                    JOptionPane.showMessageDialog(null, "Menetve a megadott helyre", "Info", 1);
                 }
                 else
                 {
@@ -1298,6 +1299,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         workbook2.write(output);
                         output.close();
                     }
+                    JOptionPane.showMessageDialog(null, "Menetve a megadott helyre", "Info", 1);
                 }
                            
                 rs.close();

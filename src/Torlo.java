@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Lekerdezes_IFS());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1598,7 +1598,7 @@ public class Torlo extends JPanel
          {
             try
             {
-                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\alapadat.xlsx";                             
+                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\panelek.xlsx";                             
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
                 Workbook workbook = new Workbook();
                 workbook.loadFromFile(excelfile1);              
@@ -1624,7 +1624,8 @@ public class Torlo extends JPanel
                 
                 for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                 {
-                    stmt.executeUpdate("update qualitydb.Vevoireklamacio_alapadat set Rek_db ='"+ datatable.getRows().get(szamlalo).getString(1) +"' where ID = '"+ datatable.getRows().get(szamlalo).getString(0) +"'");
+                    //stmt.executeUpdate("update qualitydb.Vevoireklamacio_alapadat set Rek_db ='"+ datatable.getRows().get(szamlalo).getString(1) +"' where ID = '"+ datatable.getRows().get(szamlalo).getString(0) +"'");
+                    stmt.executeUpdate("delete from qualitydb.Beolvasott_panelek where panelszam ='"+ datatable.getRows().get(szamlalo).getString(0) +"' ");
                     System.out.println(datatable.getRows().get(szamlalo).getString(0));
                 }
                 
@@ -1719,27 +1720,17 @@ public class Torlo extends JPanel
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
                         + " where hely = 116 and ido > '2025.01.28'";*/
                 
-                String sql = "select    videoton.fkov.azon, videoton.fkov.hely, videoton.fkov.ido, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
-                        + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
+                        + "videoton.fkov.kod2, videoton.fkov.torolt, "
                         + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
                         + "videoton.fkov.dolgozo \n"
                         + "from videoton.fkov  \n"
-                        + "    where   3 = 3 and\r\n"
-                        + "            videoton.fkov.ido >= replace(concat('2025.01.28' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
-                        + "            videoton.fkov.ido < replace(concat('2025.01.28' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
-                        + "            hely = '"+ 116 +"' and alsor = '1' order by  teststarttime asc";
+                        + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
+                        + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
+                        + " where ido > '2024.11.01' and nev like 'Loxone%'";
 
-                
-                sql = "select videoton.fkov.ido, cast(videoton.fkov.ido as CHAR), videoton.fkov.alsor as teszterszam     -- testfinishtime\r\n"
-                        + "    from    videoton.fkov\r\n"
-                        + "    where   3 = 3 and\r\n"
-                        + "            videoton.fkov.ido >= replace(concat('2025.01.28' , \" \", \"05:55:00\"), \"-\", \".\") and\r\n"
-                        + "            videoton.fkov.ido < replace(concat('2025.01.28' , \" \", \"13:55:00\"), \"-\", \".\") and\r\n"
-                        + "            hely = '"+ 116 +"' and alsor = '1' order by  teststarttime asc";
-
-                
-                
+                                
                 Statement cstmt = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);
@@ -1790,7 +1781,8 @@ public class Torlo extends JPanel
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                if(fajl.getName().contains(".xlsx"))
+                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                /*if(fajl.getName().contains(".xlsx"))
                 {
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
@@ -1819,7 +1811,7 @@ public class Torlo extends JPanel
                         workbook2.write(output);
                         output.close();
                     }
-                }
+                }*/
                 Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
             }

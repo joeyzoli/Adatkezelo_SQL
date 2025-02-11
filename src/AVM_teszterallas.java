@@ -231,7 +231,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 05:55:00");
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         bs += (diff/1000)/60;
                                         //System.out.println((diff/1000)/60);
@@ -241,6 +241,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
                                 {
@@ -248,7 +258,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse((datatable.getRows().get(datatable.getRows().size() - 1)).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 13:54:59");
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         bs += (diff/1000)/60;
                                         //System.out.println((diff/1000)/60);
@@ -258,6 +268,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
                                 else
                                 {
@@ -265,7 +285,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datatable.getRows().get(szamlalo2).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2+1)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         bs += (diff/1000)/60;
                                         //System.out.println((diff/1000)/60);
@@ -275,6 +295,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
             
                             }
@@ -428,6 +458,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
                                 {
@@ -445,6 +485,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                     
                                     //System.out.println("Fut az utoló sor");
                                 }
@@ -464,6 +514,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
             
                             }
@@ -620,6 +680,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
                                 else if(szamlalo2 == datatable.getRows().size() - 2)
                                 {
@@ -637,6 +707,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                     
                                     //System.out.println("Fut az utoló sor");
                                 }
@@ -656,6 +736,16 @@ public class AVM_teszterallas extends JPanel {
                                         sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
                                         cellaszam2++;
                                     }
+                                    else if((diff/1000) > 2699)
+                                    {
+                                        sheet2.getRange().get("A" + cellaszam2).setText(String.valueOf(szamlalo));
+                                        sheet2.getRange().get("B" + cellaszam2).setText(String.valueOf(hely2));
+                                        sheet2.getRange().get("C" + cellaszam2).setText(dateFormat.format(firstParsedDate));
+                                        sheet2.getRange().get("D" + cellaszam2).setText(String.valueOf((diff/1000)/60));
+                                        sheet2.getRange().get("E" + cellaszam2).setText("Hosszabb teszterállás");
+                                        cellaszam2++;
+                                    }
+                                    else{}
                                 }
             
                             }

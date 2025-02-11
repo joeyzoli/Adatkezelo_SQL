@@ -467,7 +467,7 @@ public class SQA_SQL {
         stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);       
         String sql = "select * \r\n"
                 + "from qualitydb.Retour\r\n"
-                + "where 3 = 3 and modositas_datuma is not null and Raktar_datum is null and Ertesitve = 'Nem'\r\n"
+                + "where 3 = 3 and Raktar_datum = '' and Ertesitve = 'Nem'\r\n"
                 + "and DATEDIFF(now(), Modositas_datuma) >= 14\r\n"
                 + "order by Vevo asc";                                        
         stmt.execute(sql);      
@@ -493,19 +493,21 @@ public class SQA_SQL {
         sheet2.getRange().get("G" + cellaszam).setText("Eltérés");
         sheet2.getRange().get("H" + cellaszam).setText("RMA");
         sheet2.getRange().get("I" + cellaszam).setText("Megjegyzés");
-        sheet2.getRange().get("J" + cellaszam).setText("Hova");
-        sheet2.getRange().get("K" + cellaszam).setText("Hova dátum");
-        sheet2.getRange().get("L" + cellaszam).setText("Hova felelős");
-        sheet2.getRange().get("M" + cellaszam).setText("TEszt dátum");
-        sheet2.getRange().get("N" + cellaszam).setText("Teszt felelős");
-        sheet2.getRange().get("O" + cellaszam).setText("Végellenőrzés ideje");
-        sheet2.getRange().get("P" + cellaszam).setText("Végellenőrzés felelős");
-        sheet2.getRange().get("Q" + cellaszam).setText("Raktárra adás dátuma");
-        sheet2.getRange().get("R" + cellaszam).setText("Raktárra adott db");
-        sheet2.getRange().get("S" + cellaszam).setText("Selejt");
-        sheet2.getRange().get("T" + cellaszam).setText("Vevői RMA");
-        sheet2.getRange().get("U" + cellaszam).setText("Vevői hibalírás");        
-        sheet2.getRange().get("V" + cellaszam).setText("Módosítás dátuma");
+        sheet2.getRange().get("J" + cellaszam).setText("Analizis dátum");
+        sheet2.getRange().get("K" + cellaszam).setText("Felelős");
+        sheet2.getRange().get("L" + cellaszam).setText("Gépes dátum");
+        sheet2.getRange().get("M" + cellaszam).setText("Felelős");
+        sheet2.getRange().get("N" + cellaszam).setText("Kézi dátum");
+        sheet2.getRange().get("O" + cellaszam).setText("Felelős");
+        sheet2.getRange().get("P" + cellaszam).setText("Teszt dátum");
+        sheet2.getRange().get("Q" + cellaszam).setText("Felelős");
+        sheet2.getRange().get("R" + cellaszam).setText("Végellenőrzés dátum");
+        sheet2.getRange().get("S" + cellaszam).setText("Felelős");
+        sheet2.getRange().get("T" + cellaszam).setText("Raktár dátum");
+        sheet2.getRange().get("U" + cellaszam).setText("Raktár db");        
+        sheet2.getRange().get("V" + cellaszam).setText("Selejt");
+        sheet2.getRange().get("W" + cellaszam).setText("Vevői RMA");        
+        sheet2.getRange().get("X" + cellaszam).setText("Módosítás dátuma");
         cellaszam++;
         String id = "";
         for(int szamlalo = 0; szamlalo < datatable2.getRows().size();szamlalo++)
@@ -536,6 +538,8 @@ public class SQA_SQL {
                     sheet2.getRange().get("T" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(19));
                     sheet2.getRange().get("U" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(20));
                     sheet2.getRange().get("V" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(21));
+                    sheet2.getRange().get("W" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(22));        
+                    sheet2.getRange().get("X" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(23));
                     cellaszam++;
                     id += datatable2.getRows().get(szamlalo).getString(0)+",";
                 }
@@ -563,6 +567,8 @@ public class SQA_SQL {
                     sheet2.getRange().get("T" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(19));
                     sheet2.getRange().get("U" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(20));
                     sheet2.getRange().get("V" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(21));
+                    sheet2.getRange().get("W" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(22));        
+                    sheet2.getRange().get("X" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(23));
                     id += datatable2.getRows().get(szamlalo).getString(0)+",";
                     
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
@@ -628,6 +634,8 @@ public class SQA_SQL {
                     sheet2.getRange().get("T" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(19));
                     sheet2.getRange().get("U" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(20));
                     sheet2.getRange().get("V" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(21));
+                    sheet2.getRange().get("W" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(22));        
+                    sheet2.getRange().get("X" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(23));
                     
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
                     sheet2.getAllocatedRange().autoFitColumns();
@@ -688,6 +696,8 @@ public class SQA_SQL {
                     sheet2.getRange().get("T" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(19));
                     sheet2.getRange().get("U" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(20));
                     sheet2.getRange().get("V" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(21));
+                    sheet2.getRange().get("W" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(22));        
+                    sheet2.getRange().get("X" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(23));
                     id += datatable2.getRows().get(szamlalo).getString(0)+",";
                     
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
@@ -749,6 +759,8 @@ public class SQA_SQL {
                     sheet2.getRange().get("T" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(19));
                     sheet2.getRange().get("U" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(20));
                     sheet2.getRange().get("V" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(21));
+                    sheet2.getRange().get("W" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(22));        
+                    sheet2.getRange().get("X" + cellaszam).setText(datatable2.getRows().get(szamlalo).getString(23));
                     id += datatable2.getRows().get(szamlalo).getString(0)+",";
                     
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));

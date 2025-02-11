@@ -106,7 +106,8 @@ public class Cmrt_adatok extends JPanel {
                               + "(select bom.*,\r\n"
                               + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
                               + "nyilatkozatok.CF$_reach as Reach,\r\n"
-                              + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                              + "nyilatkozatok.CF$_Rohs as Rohs,\r\n"
+                              + "nyilatkozatok.CF$_Pfas as Pfas\r\n"
                               + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
                               + "(select b.* from\r\n"
                               + "(select \r\n"
@@ -153,7 +154,7 @@ public class Cmrt_adatok extends JPanel {
                               + "group by minden.Part_no,    minden.Part_Description ,minden.Revision    ,minden.REvision_text   ,minden.PartProdCode,   minden.PARTACCGROUP,    minden.PARTSECCOMM, minden.COMPONENT_PART_NO,   \r\n"
                               + "minden.COMP_DESCRIPTION,    minden.QTY_PER_ASSEMBLY,    minden.UNIT_MEAS,   minden.COMPPARTPRODCODE,    minden.COMPPARTACCGROUP,    minden.COMPARTSECCOMM,  minden.MANUFACTURER_NO, minden.NAME,    \r\n"
                               + "minden.PREFERRED_MANUFACTURER,  minden.MANU_PART_NO,    minden.PREFERRED_MANU_PART, minden.PRIMARY_SUPPLIER,    minden.SUPPLIER_NAME,   minden.ACTUAL_ENG_CHG,  \r\n"
-                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS -- , max(rendeles.DATE_ENTERED)\r\n"
+                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS, minden.PFAS -- , max(rendeles.DATE_ENTERED)\r\n"
                               + "");
                   }
                   if(termek_mezo.getText().equals(""))
@@ -164,7 +165,8 @@ public class Cmrt_adatok extends JPanel {
                               + "(select bom.*,\r\n"
                               + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
                               + "nyilatkozatok.CF$_reach as Reach,\r\n"
-                              + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                              + "nyilatkozatok.CF$_Rohs as Rohs,\r\n"
+                              + "nyilatkozatok.CF$_Pfas as Pfas\r\n"
                               + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
                               + "(select b.* from\r\n"
                               + "(select \r\n"
@@ -211,7 +213,7 @@ public class Cmrt_adatok extends JPanel {
                               + "group by minden.Part_no,    minden.Part_Description ,minden.Revision    ,minden.REvision_text   ,minden.PartProdCode,   minden.PARTACCGROUP,    minden.PARTSECCOMM, minden.COMPONENT_PART_NO,   \r\n"
                               + "minden.COMP_DESCRIPTION,    minden.QTY_PER_ASSEMBLY,    minden.UNIT_MEAS,   minden.COMPPARTPRODCODE,    minden.COMPPARTACCGROUP,    minden.COMPARTSECCOMM,  minden.MANUFACTURER_NO, minden.NAME,    \r\n"
                               + "minden.PREFERRED_MANUFACTURER,  minden.MANU_PART_NO,    minden.PREFERRED_MANU_PART, minden.PRIMARY_SUPPLIER,    minden.SUPPLIER_NAME,   minden.ACTUAL_ENG_CHG,  \r\n"
-                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS -- , max(rendeles.DATE_ENTERED)");
+                              + "minden.CONTRACT,    minden.CMRT,    minden.REACH,   minden.ROHS, minden.PFAS -- , max(rendeles.DATE_ENTERED)");
                   }
                   /*JdbcAdapter jdbcAdapter = new JdbcAdapter();
                   jdbcAdapter.fillDataTable(datatable, rs);
@@ -243,7 +245,8 @@ public class Cmrt_adatok extends JPanel {
                   sheet.getRange().get("X" + cellaszam).setText("CMRT");
                   sheet.getRange().get("Y" + cellaszam).setText("REACH");
                   sheet.getRange().get("Z" + cellaszam).setText("ROHS");
-                  sheet.getRange().get("AA" + cellaszam).setText("Utolsó rendelés dátuma");
+                  sheet.getRange().get("AA" + cellaszam).setText("PFAS");
+                  sheet.getRange().get("AB" + cellaszam).setText("Utolsó rendelés dátuma");
                   
                   cellaszam++;
                   while(rs.next())
@@ -275,6 +278,7 @@ public class Cmrt_adatok extends JPanel {
                       sheet.getRange().get("Y" + cellaszam).setText(rs.getString(25));
                       sheet.getRange().get("Z" + cellaszam).setText(rs.getString(26));
                       sheet.getRange().get("AA" + cellaszam).setText(rs.getString(27));
+                      sheet.getRange().get("AB" + cellaszam).setText(rs.getString(28));
                       cellaszam++;
                   }
                   
@@ -331,7 +335,8 @@ public class Cmrt_adatok extends JPanel {
                   ResultSet rs = stmt.executeQuery("select majdnem.*,\r\n"
                           + "nyilatkozatok.CF$_cmrt as CMRT,\r\n"
                           + "nyilatkozatok.CF$_reach as Reach,\r\n"
-                          + "nyilatkozatok.CF$_Rohs as Rohs\r\n"
+                          + "nyilatkozatok.CF$_Rohs as Rohs,\r\n"
+                          + "nyilatkozatok.CF$_Pfas as Pfas\r\n"
                           + "from ifsapp.part_manu_part_no_cfv nyilatkozatok,\r\n"
                           + "(select alap.*,\r\n"
                           + "raktar.SECOND_COMMODITY as Projekt\r\n"
@@ -435,6 +440,7 @@ public class Cmrt_adatok extends JPanel {
                   sheet.getRange().get("I" + cellaszam).setText("CMRT");
                   sheet.getRange().get("J" + cellaszam).setText("REACH");
                   sheet.getRange().get("K" + cellaszam).setText("ROHS");
+                  sheet.getRange().get("L" + cellaszam).setText("PFAS");
                   
                   cellaszam++;
                   while(rs.next())
@@ -450,6 +456,7 @@ public class Cmrt_adatok extends JPanel {
                       sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
                       sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
                       sheet.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                      sheet.getRange().get("L" + cellaszam).setText(rs.getString(12));
                       cellaszam++;
                   }
                   
