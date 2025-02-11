@@ -80,7 +80,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new Loxone_megnevezes());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -3955,6 +3955,103 @@ public class Torlo extends JPanel
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
             }
+         }
+    }
+	
+	class Loxone_megnevezes implements ActionListener                                                                                      //csv-t gyárt a gomb
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            String hiba = "";
+            try
+            {              
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                
+                Workbook workbook = new Workbook();
+                if(fajl != null)
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    workbook.loadFromFile(fajl.getAbsolutePath());
+                    Worksheet sheet = workbook.getWorksheets().get(0);
+                    DataTable datatable = new DataTable();
+                    datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                    
+                    Workbook workbook2 = new Workbook();
+                    workbook2.setVersion(ExcelVersion.Version2016);
+                    Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                     
+                      DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+                      Class.forName("oracle.jdbc.OracleDriver");  //.driver
+                                          
+                      Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
+                      Statement stmt = con.createStatement();                      
+                      int cellaszam = 1;
+                      sheet2.getRange().get("A" + cellaszam).setText("Szériaszám");
+                      sheet2.getRange().get("B" + cellaszam).setText("Cikkszám");
+                      sheet2.getRange().get("C" + cellaszam).setText("Megnevezés");                     
+                      cellaszam++;
+                      
+                      for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                      {
+                          ResultSet rs = stmt.executeQuery("select part_no, ifsapp.INVENTORY_PART_API.Get_Description(CONTRACT, part_no)\n"
+                                  + "from ifsapp.C_TRACY\n"
+                                  + "where\n"
+                                  + "TRACY_SERIAL_NO = '"+ datatable.getRows().get(szamlalo).getString(0) +"'");
+                          System.out.println("Fut.."+ szamlalo );
+                          if(rs.next())
+                          {
+                              hiba = rs.getString(1) +" "+ rs.getString(2);
+                              sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));
+                              sheet2.getRange().get("B" + cellaszam).setText(rs.getString(1));
+                              sheet2.getRange().get("C" + cellaszam).setText(rs.getString(2));                            
+                              cellaszam++;
+                              System.out.println(rs.getString(1) +" "+ rs.getString(2));
+                          }
+                          else
+                          {
+                              sheet2.getRange().get("A" + cellaszam).setText(datatable.getRows().get(szamlalo).getString(0));                          
+                              cellaszam++;
+                          }
+                          
+                      }
+                      
+                      sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:P1"));
+                      sheet2.getAllocatedRange().autoFitColumns();
+                      sheet2.getAllocatedRange().autoFitRows();
+                      sheet2.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                      String hova = System.getProperty("user.home") + "\\Desktop\\IFS utolsó folyamat.xlsx";
+                      workbook2.saveToFile(hova, ExcelVersion.Version2016);
+                      FileInputStream fileStream = new FileInputStream(hova);
+                      try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                      {
+                          for(int i = workbook3.getNumberOfSheets()-1; i > 0 ;i--)
+                          {    
+                              workbook3.removeSheetAt(i); 
+                          }      
+                          FileOutputStream output = new FileOutputStream(hova);
+                          workbook3.write(output);
+                          output.close();
+                      }
+                      JOptionPane.showMessageDialog(null, "Kész! \n Mentve az asztalra IFS utolsó folyamat.xlsx néven!", "Info", 1); 
+                      con.close(); 
+                }
+                Foablak.frame.setCursor(null);  
+            }           
+            catch(Exception e1)
+            { 
+                System.out.println(e1);
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
+                System.out.println(hiba);
+                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                              //kiírja a hibaüzenetet
+            }  
+                               
          }
     }
 }

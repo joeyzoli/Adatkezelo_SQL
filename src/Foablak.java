@@ -102,6 +102,7 @@ public class Foablak extends JFrame
 	private Hager_adatok hager_adat;
 	private Nyilatkozatbekero nyilatkozat;
 	private AVM_teszterallas allas;
+	private Valogatasok_osszesito valogatas;
 	private String kep = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz.jpg";
 	//private String kep2 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt.jpg";
 	//private String kep3 = "\\\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\osz_alt_11.jpg";
@@ -256,6 +257,10 @@ public class Foablak extends JFrame
 		retour_szeriaszamok.addActionListener(new Panelcsere_Retour_szeriaszam());
 		menu.add(retour_szeriaszamok);
 		menu.add(zarolasok);
+		
+		JMenuItem valogat = new JMenuItem("Válogatások");
+		valogat.addActionListener(new Panelcsere_Valogatas());
+		menu.add(valogat);
 		menu.add(ellenori_nevsor);
 		menu.add(ujadat);
 		menu.add(adat_torles);
@@ -1254,6 +1259,17 @@ public class Foablak extends JFrame
          {
             allas = new AVM_teszterallas();
             JScrollPane ablak = new JScrollPane(allas);
+            setContentPane(ablak);
+            pack();
+         }
+    }
+	
+	class Panelcsere_Valogatas implements ActionListener                                                                                   //menüelem megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            valogatas = new Valogatasok_osszesito();
+            JScrollPane ablak = new JScrollPane(valogatas);
             setContentPane(ablak);
             pack();
          }

@@ -225,7 +225,10 @@ public class Zarolasok_lekerdezes extends JPanel {
                     sheet.getRange().get("M" + 3).setText("euró");
                 }
                 ///////////////////////////////////////////////// minden adat
-                sql = "select * from qualitydb.Zarolasok\r\n"
+                sql = "select ID, Papir_sorszama,   Projekt, Tipus, Eszleles_helye, Muszak, Zarolo_mernok,  Zarolt_db, Hol_van, Zarolas_oka,\r\n"
+                        + "Azonnali_intezkedes, Zarolas_datuma, Zarolta, Valogatas_eredmenye, Ujraellenorzes_datuma, Ellenorzes_ido,\r\n"
+                        + "Technikusi_beavatkozas, Felelos_terulet, Felelos, Hiba_gyokeroka, Gyokerok_intezkedes, B2_zarolas, Visszaellenorzes,\r\n"
+                        + "Lezaras_datuma, ME_szam, Ellenorzott_db, Hibacsoport, Hibatipus, Email, Email2, Hatarido, Email3, Email4, Email5, Email6 from qualitydb.Zarolasok\r\n"
                         + "where 3 = 3 \r\n"
                         + "and Zarolas_datuma >= '"+ dateFormat.format(datum_tol.getDate()) +"' and Zarolas_datuma <= '"+ dateFormat.format(datum_ig.getDate()) +"' \r\n"
                         + "order by zarolas_datuma asc \r\n";
