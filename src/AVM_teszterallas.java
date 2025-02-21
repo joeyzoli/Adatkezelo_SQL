@@ -448,7 +448,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 13:55:00");
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;
@@ -475,7 +475,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse((datatable.getRows().get(datatable.getRows().size() - 1)).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 21:54:59");
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;
@@ -504,7 +504,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datatable.getRows().get(szamlalo2).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2+1)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;
@@ -670,7 +670,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 21:55:00");
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;
@@ -697,7 +697,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse((datatable.getRows().get(datatable.getRows().size() - 1)).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datum.getJFormattedTextField().getText() +" 05:54:59");
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;
@@ -726,7 +726,7 @@ public class AVM_teszterallas extends JPanel {
                                     Date firstParsedDate = dateFormat.parse(datatable.getRows().get(szamlalo2).getString(1));
                                     Date secondParsedDate = dateFormat.parse(datatable.getRows().get((szamlalo2+1)).getString(0));
                                     long diff = secondParsedDate.getTime() - firstParsedDate.getTime();
-                                    if((diff/1000) > 299)
+                                    if((diff/1000) > 299 && (diff/1000) < 2700)
                                     {
                                         //System.out.println(diff/1000);
                                         bs += (diff/1000)/60;

@@ -70,11 +70,11 @@ public class SQL
             sheet.getAllocatedRange().autoFitColumns();
             sheet.getAllocatedRange().autoFitRows();
             
-            if(System.getProperty("user.name").equals("csader.zsolt"))
+            if(System.getProperty("user.name").equals("csader.zsolt"))                  //csader.zsolt
             {
                 UIManager.put("FileChooser.openButtonText","Mentés");
                 JFileChooser mentes_helye = new JFileChooser();
-                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setCurrentDirectory(new java.io.File("\\\\\\172.20.22.7\\kozos\\Gyártási_minőség_követése\\Kézi_hibák_követése\\2025\\Heti ppm, tup 2025"));
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
@@ -3682,7 +3682,7 @@ public class SQL
                 while(resultSet.next())
                 {
                     Gepes_ellenorok.modell.addRow(new Object[]{resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6),
-                            resultSet.getString(7),resultSet.getString(8),resultSet.getString(9),resultSet.getString(10) +";"+resultSet.getString(11) +";"+ resultSet.getString(12),resultSet.getString(13),
+                            resultSet.getString(7),resultSet.getString(8),resultSet.getString(9),resultSet.getString(10), resultSet.getString(11), resultSet.getString(12),resultSet.getString(13),
                             resultSet.getString(14),resultSet.getString(15),resultSet.getString(16),resultSet.getString(17),resultSet.getString(18)});
                 }
                 

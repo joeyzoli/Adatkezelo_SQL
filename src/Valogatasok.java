@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -23,6 +25,7 @@ import javax.swing.JTable;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JSeparator;
 
 public class Valogatasok extends JPanel {
     private JTextField kezdet_mezo;
@@ -43,6 +46,9 @@ public class Valogatasok extends JPanel {
     private JRadioButton zarolasnelkül_gomb;
     private DefaultTableModel modell;
     private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu";
+    private JTextField egyebnok_mezo;
+    private JTextField egyeballnok_mezo;
+    private JTextField egyebnok_leiras_mezo;
     //private String cc = "kovacs.zoltan@veas.videoton.hu";
 
 
@@ -54,8 +60,8 @@ public class Valogatasok extends JPanel {
         
         setBackground(Foablak.hatter_szine);
         
-        this.setPreferredSize(new Dimension(1245, 759));
-        Foablak.meretek.setSize(1245, 750);
+        this.setPreferredSize(new Dimension(1278, 759));
+        Foablak.meretek.setSize(1310, 750);
         
         JLabel lblNewLabel = new JLabel("Válogatás eredményének rögzítése");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -189,7 +195,7 @@ public class Valogatasok extends JPanel {
                 "borbely.szilvia@veas.videoton.hu","mile.jozsef@veas.videoton.hu","reznyak.norbert@veas.videoton.hu","szatmari.edina@veas.videoton.hu","tisler.peter@veas.videoton.hu","pinter.attila@veas.videoton.hu",
                 "ternak.sandor@veas.videoton.hu","kadar.zoltan@veas.videoton.hu","etl.csaba@veas.videoton.hu","nagy.balint@veas.videoton.hu","molnar.jozsef@veas.videoton.hu","csader.zsolt@veas.videoton.hu",
                 "QA-Assy@veas.videoton.hu","kovacs.zoltan@veas.videoton.hu","tatai.mihaly@veas.videoton.hu"};
-        email_box = new JComboBox<String>(emailcimek);
+        email_box = new JComboBox<String>(emailcimek);                //emailcimek
         email_box.setBounds(87, 278, 268, 22);
         email_box.addActionListener(new Hozzaad());
         add(email_box);
@@ -238,6 +244,41 @@ public class Valogatasok extends JPanel {
         G.add(zarolasmiatt_gomb);
         G.add(zarolasnelkül_gomb);
         
+        JLabel lblNewLabel_14 = new JLabel("Egyéb NOK");
+        lblNewLabel_14.setBounds(606, 144, 77, 14);
+        add(lblNewLabel_14);
+        
+        egyebnok_mezo = new JTextField();
+        egyebnok_mezo.setBounds(669, 141, 86, 20);
+        add(egyebnok_mezo);
+        egyebnok_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_15 = new JLabel("Egyéb All NOK");
+        lblNewLabel_15.setBounds(1131, 96, 86, 14);
+        add(lblNewLabel_15);
+        
+        egyeballnok_mezo = new JTextField();
+        egyeballnok_mezo.setBounds(1222, 93, 46, 20);
+        add(egyeballnok_mezo);
+        egyeballnok_mezo.setColumns(10);
+        
+        egyebnok_leiras_mezo = new JTextField();
+        egyebnok_leiras_mezo.setBounds(888, 141, 380, 20);
+        add(egyebnok_leiras_mezo);
+        egyebnok_leiras_mezo.setColumns(10);
+        
+        JLabel lblNewLabel_16 = new JLabel("Egyéb NOK leírás");
+        lblNewLabel_16.setBounds(775, 144, 120, 14);
+        add(lblNewLabel_16);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(11, 179, 1257, 15);
+        add(separator);
+        
+        JSeparator separator_1 = new JSeparator();
+        separator_1.setBounds(11, 126, 1257, 14);
+        add(separator_1);
+        
         cikkszamok();
       
         if(szam == 1)
@@ -250,7 +291,15 @@ public class Valogatasok extends JPanel {
             int kovetkezo = Integer.parseInt(sorszam.utolso("qualitydb.Valogatasok_alap"));
             id_mezo.setText(String.valueOf(kovetkezo + 1));
         }
-
+        
+        ido();
+    }
+    
+    public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date();
+        datum_mezo.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
     }
     
     class Mentes implements ActionListener                                                                                      //csv-t gyárt a gomb
@@ -297,16 +346,16 @@ public class Valogatasok extends JPanel {
                            + "Db = '"+ ossz_mezo.getText() +"',Oka = '"+ mi +"',sorszam = '"+ oka +"',"
                            + "Cimzettek = '"+ cimzettek +"' where id = '"+ id_mezo.getText() +"'");
                    
-                   stmt2.execute("insert into qualitydb.Valogatasok_adatok (Valogatas_ID, Datum, Muszak, OK, NOK) Values('"+ id_mezo.getText() +"','"+ datum_mezo.getText() +"',"
-                           + " '"+ muszak_mezo.getText() +"','"+ ok_mezo.getText() +"','"+ nok_mezo.getText() +"')");
+                   stmt2.execute("insert into qualitydb.Valogatasok_adatok (Valogatas_ID, Datum, Muszak, OK, NOK, Egyeb_NOK, Egyeb_NOK_leiras) Values('"+ id_mezo.getText() +"','"+ datum_mezo.getText() +"',"
+                           + " '"+ muszak_mezo.getText() +"','"+ ok_mezo.getText() +"','"+ nok_mezo.getText() +"','"+ egyebnok_mezo.getText() +"','"+ egyebnok_leiras_mezo.getText() +"')");
                }
                else
                {
                    stmt2.execute("insert into qualitydb.Valogatasok_alap (Cikkszam, Kezdet, Db, Oka, Sorszam, Cimzettek) Values('"+ String.valueOf(cikk_box.getSelectedItem()) +"','"+ kezdet_mezo.getText() +"',"
                            + " '"+ ossz_mezo.getText() +"','"+ mi +"','"+ oka +"','"+ cimzettek +"')");
                    
-                   stmt2.execute("insert into qualitydb.Valogatasok_adatok (Valogatas_ID, Datum, Muszak, OK, NOK) Values('"+ id_mezo.getText() +"','"+ datum_mezo.getText() +"',"
-                           + " '"+ muszak_mezo.getText() +"','"+ ok_mezo.getText() +"','"+ nok_mezo.getText() +"')");
+                   stmt2.execute("insert into qualitydb.Valogatasok_adatok (Valogatas_ID, Datum, Muszak, OK, NOK, Egyeb_NOK, Egyeb_NOK_leiras) Values('"+ id_mezo.getText() +"','"+ datum_mezo.getText() +"',"
+                           + " '"+ muszak_mezo.getText() +"','"+ ok_mezo.getText() +"','"+ nok_mezo.getText() +"','"+ egyebnok_mezo.getText() +"','"+ egyebnok_leiras_mezo.getText() +"')");
                }
                
                cimzettek = "";
@@ -328,6 +377,8 @@ public class Valogatasok extends JPanel {
                        + "A válogatás eddigi eredménye:\r\n"
                        + "Össz OK: "+ allok_mezo.getText() +"\r\n"
                        + "Össz NOK: "+ allnok_mezo.getText() +"\r\n"
+                       + "Össz egyéb NOK: "+ egyebnok_mezo.getText() +"\r\n"
+                       + "Egyéb NOK leírása: "+ egyebnok_leiras_mezo.getText() +"\r\n"
                        + "\r\n"
                        + "Üdvözlettel: EASQAS program";
                
@@ -429,11 +480,19 @@ public class Valogatasok extends JPanel {
                    table.setModel(modell);
                }
                
-               rs = stmt.executeQuery("select cast(sum(OK) as decimal(15,0)), cast(sum(NOK) as decimal(15,0)) from qualitydb.Valogatasok_adatok where Valogatas_ID = '"+ id_mezo.getText() +"'");
+               rs = stmt.executeQuery("select cast(sum(OK) as decimal(15,0)), cast(sum(NOK) as decimal(15,0)), cast(sum(Egyeb_NOK) as decimal(15,0)) from qualitydb.Valogatasok_adatok where Valogatas_ID = '"+ id_mezo.getText() +"'");
                if(rs.next())
                {
                    allok_mezo.setText(rs.getString(1));
                    allnok_mezo.setText(rs.getString(2));
+                   if(rs.getString(3) == null)
+                   {
+                       egyeballnok_mezo.setText("0");
+                   }
+                   else
+                   {
+                       egyeballnok_mezo.setText(rs.getString(3));
+                   }
                }
                
                

@@ -90,7 +90,7 @@ public class Gepes_ellenorok extends JPanel
         
         modell = new DefaultTableModel();
         modell.setColumnIdentifiers(new Object[]{"Ellenőr","Dátum","NXT sor","Cikkszám","Műveleti utasítás", "Panel jelölés", "Ónpaszta típusa", "Ónpaszta poziciója","Ónpaszta vastagsága","Ragasztó típusa","Ragasztó poziciója","Hőprofil érvényesség",
-                "Tárazás ell.","Panel alátámasztás","N2 gáz","Első darab ellenőrzés","Ragasztott alkatrész nyomaték","Tétel kísérő lap"});
+                "Tárazás ell.","Panel alátámasztás","N2 gáz","Első darab ellenőrzés","Ragasztott alkatrész nyomaték","Tétel kísérő lap","Megjegyzés"});
         table.setModel(modell);
         
         JLabel lblNewLabel_5 = new JLabel("Cikkszám");
@@ -157,7 +157,7 @@ public class Gepes_ellenorok extends JPanel
                 else {
                     cikk = String.valueOf(cikkszam_mezo.getText());
                 }
-                String sql = "select * from qualitydb.Folyamatellenori_gyartas where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                String sql = "select Nev, Datum, NXT, Cikkszam, Csekk1, Csekk2, Csekk3, Csekk4, Csekk5, concat(Csekk6,' ',Csekk7,' ',Csekk8) , Csekk9, Csekk10, Csekk11, Csekk12, Csekk13, Csekk14, Csekk15, Csekk16, Megjegyzes from qualitydb.Folyamatellenori_gyartas where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";                                                                 
                 String sql2 = "select * from qualitydb.Folyamatellenori_nxt where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() + "' and Nev like '"+ ellenor +                       
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
@@ -209,7 +209,7 @@ public class Gepes_ellenorok extends JPanel
                 else {
                     cikk = String.valueOf(cikkszam_mezo.getText());
                 }
-                String sql = "select * from qualitydb.Folyamatellenori_gyartas where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
+                String sql = "select Nev, Datum,    NXT, Cikkszam, Csekk1, Csekk2, Csekk3, Csekk4, Csekk5, concat(Csekk6,' ',Csekk7,' ',Csekk8) , Csekk9, Csekk10, Csekk11, Csekk12, Csekk13, Csekk14, Csekk15, Csekk16, Megjegyzes from qualitydb.Folyamatellenori_gyartas where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() +"' and Nev like '"+ ellenor +
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";                                                                 
                 String sql2 = "select * from qualitydb.Folyamatellenori_nxt where Datum >= '"+ datumtol_mezo.getText() +"' and Datum <= '"+ datumig_mezo.getText() + "' and Nev like '"+ ellenor +                       
                                 "' and NXT like '"+ nxt +"' and cikkszam like '"+ cikk +"'";
