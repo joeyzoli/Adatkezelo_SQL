@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -45,8 +46,8 @@ public class Torlo extends JPanel
 	 */
 	private static final long serialVersionUID = 1L;
 	private String hova = System.getProperty("user.home") + "\\Desktop\\log_0201_15.xlsx";
-    private Workbook workbook = new Workbook();
-    private Worksheet sheet;
+    //private Workbook workbook = new Workbook();
+    //private Worksheet sheet;
 
 	/**
 	 * Ez a panel csak adtbázi törlésére van meg tesztelni, a végső változsatban nem lesz benne, nehogy valaki véletlen kitörölje az egész adatbázist
@@ -81,7 +82,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Beolvasott_atnez());
+		feltolt.addActionListener(new Tracy_kereses());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -256,6 +257,8 @@ public class Torlo extends JPanel
          {
             try
              {
+                Workbook workbook = new Workbook();
+                Worksheet sheet;
                 workbook.setVersion(ExcelVersion.Version2016);
                 workbook.loadFromFile("c:\\Users\\kovacs.zoltan\\Desktop\\0201_15.xlsx");
                 sheet  = workbook.getWorksheets().get(0);
@@ -1697,7 +1700,8 @@ public class Torlo extends JPanel
                         + "    order by    videoton.fkov.ido asc;";
                 
                 String sql = "select group_concat(azon separator ',') as helyAVM from videoton.fkovsor where nev like \"PROGLOVE%\" or nev like \"Instagrid%\" or nev like \"AVM%\" or nev like \"TECHEM%\"";
-                String sql = "select  tempTable.Week,\n"
+                */
+                /*String sql = "select  tempTable.Week,\n"
                         + "        if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
                         + "        count(*) as Count\n"
                         + "from   videoton.fkov\n"
@@ -1705,13 +1709,13 @@ public class Torlo extends JPanel
                         + "            panel,\n"
                         + "            max(ido) as MaxTimestamp\n"
                         + "            from  videoton.fkov\n"
-                        + "            where hely = 79 and\n"
-                        + "            ido >= \"2024.01.01 00:00:00\"  and (yearweek(ido, 1) - concat('20',SUBSTRING(panel, 12,4))) < 4\n"
+                        + "            where hely = 39 and\n"
+                        + "            ido >= \"2025.01.01 00:00:00\"  and (yearweek(ido, 1) - concat('20',SUBSTRING(panel, 12,4))) < 4\n"
                         + "            group by 1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
                         + "group by             1, 2;\n"
                         + "";*/
                 
-                /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
                         + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                         + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
@@ -1719,9 +1723,9 @@ public class Torlo extends JPanel
                         + "from videoton.fkov  \n"
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
-                        + " where hely = 116 and ido > '2025.01.28'";*/
+                        + " where (hely = '49'  or  hely = '16') and ido > '2024.01.01' and panel like '111A21045%'";
                 
-                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
                         + "videoton.fkov.kod2, videoton.fkov.torolt, "
                         + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
@@ -1729,7 +1733,7 @@ public class Torlo extends JPanel
                         + "from videoton.fkov  \n"
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
-                        + " where ido > '2024.11.01' and nev like 'Loxone%'";
+                        + " where ido > '2024.11.01' and nev like 'Loxone%'";*/
 
                                 
                 Statement cstmt = con.createStatement(
@@ -1782,8 +1786,8 @@ public class Torlo extends JPanel
                 mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 mentes_helye.showOpenDialog(mentes_helye);
                 File fajl = mentes_helye.getSelectedFile();
-                workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-                /*if(fajl.getName().contains(".xlsx"))
+                //workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
+                if(fajl.getName().contains(".xlsx"))
                 {
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
@@ -1812,7 +1816,7 @@ public class Torlo extends JPanel
                         workbook2.write(output);
                         output.close();
                     }
-                }*/
+                }
                 Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
             }
@@ -2685,10 +2689,10 @@ public class Torlo extends JPanel
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                Workbook workbook2 = new Workbook();
+               Workbook workbook = new Workbook();
                workbook2.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Rendelések.xlsx");
                Worksheet sheet2 = workbook.getWorksheets().get(0);
                
-               Workbook workbook = new Workbook();
                workbook.loadFromFile(System.getProperty("user.home") + "\\Desktop\\Központi.xlsx");
                Worksheet sheet = workbook.getWorksheets().get(0);
                int cserelve = 0;
@@ -4096,26 +4100,651 @@ public class Torlo extends JPanel
 	
 	class Beolvasott_atnez implements ActionListener                                                                                      //csv-t gyárt a gomb
     {
+
+        @SuppressWarnings("resource")
         public void actionPerformed(ActionEvent e)
-         {          
+         {  
+            Connection con = null;
+            Connection conn = null;
+            Statement stmt = null;
+            int javitasokszama = 0;
+            String kizarando = "899";
+            String kizarando2 = "1299";
+            String kizarando3 = "A";
+            String kizarando4 = "1250";
+            int egyformakezi = 0;
+            int egyformagepes = 0;
+            Workbook workbook = new Workbook();
+            workbook.setVersion(ExcelVersion.Version2016);
+            //workbook.loadFromFile(excelfile1);
+            Worksheet sheet = workbook.getWorksheets().get(0);
             try 
-            {               
-               String excelfile1 = System.getProperty("user.home") + "\\Desktop\\panelek.xlsx";                             
+            {
+                ResultSet result = null;
+                ResultSet result2 = null;
+                ResultSet rs = null;
+                JdbcAdapter jdbcAdapter;
+                JdbcAdapter jdbcAdapter2;
+                DataTable datatable;
+                //DataTable datatable2;
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa   
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
+               
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!"); 
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                Statement cstmt = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                
+                Statement cstmt2 = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                stmt = (Statement) conn.createStatement();
+                
+                //Registering the Driver
+ 
+               //String excelfile1 = System.getProperty("user.home") + "\\Desktop\\panelek.xlsx";                             
                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                
-               Workbook workbook = new Workbook();
-               workbook.loadFromFile(excelfile1);
-               Worksheet sheet = workbook.getWorksheets().get(0);
-               Workbook workbook2 = new Workbook();
-               Worksheet sheet2 = workbook2.getWorksheets().get(0);
-               DataTable datatable = new DataTable();
-               datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );  
-               for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
+               
+               int cellaszam = 1;
+               sheet.getRange().get("A" + cellaszam).setText("Szériaszám");
+               sheet.getRange().get("B" + cellaszam).setText("Beolvasás ideje");
+               sheet.getRange().get("C" + cellaszam).setText("Eredmény");
+               sheet.getRange().get("D" + cellaszam).setText("Új eredmény");
+               sheet.getRange().get("E" + cellaszam).setText("Utolsó beolvasás helye");
+               cellaszam++;
+               
+               String sql3 = "select * from qualitydb.Beolvasott_panelek where 3 = 3 and Projekt = 'AVM' order by id asc";
+               rs = stmt.executeQuery(sql3);
+               int szamlalo3 = 1;
+               while(rs.next())
                {
-                   javitas_kereses(datatable.getRows().get(szamlalo).getString(0));
+                   javitasokszama = 0;
+                   egyformakezi = 0;
+                   egyformagepes = 0;
+                   String panelszam = rs.getString(2);
+                   String sql = "select fkovsor.nev, videoton.fkov.panel, "                   
+                           + "videoton.fkov.hibakod, videoton.fkov.poz, videoton.fkov.ido \n"                   
+                           + "from videoton.fkov \n"
+                           + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                           + " where panel = '"+ panelszam + "' and  fkovsor.nev like 'Javítás%' order by ido asc";            //panelszam       
+                   
+                   /*String sql = "select fkovsor.nev as 'Folyamat',\r\n"
+                           + " videoton.fkov.ido as 'Időpont',\r\n"
+                           + " videoton.fkov.panel as 'Panelszám',\r\n"
+                           + "    if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as 'eredmény',\r\n"
+                           + "    videoton.fkov.failtestnames as 'Hibakód'\r\n"
+                           + "from videoton.fkov\r\n"
+                           + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\r\n"
+                           + " where   videoton.fkov.panel = '"+ panelszam + "'\r\n"
+                           + " and fkovsor.nev = 'INSTAGRID FCT'"; */    
+                   String sql2 = "select fkovsor.nev, videoton.fkov.panel, videoton.fkov.error, videoton.fkov.ido \n"                                                      
+                           + "from videoton.fkov \n"
+                           + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                           + " where panel = '"+ panelszam + "' order by videoton.fkov.ido desc limit 1";           
+                   
+                   //con2 = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                   //String sql3 = "select Panelszam from qualitydb.Beolvasott_panelek where 3 = 3";
                    
                    
-                   System.out.println("Fut a For");
-               }              
+                   cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                   result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+                   datatable = new DataTable();
+                   //Ablak.eredmeny_mezo.setText("");
+                   jdbcAdapter = new JdbcAdapter();
+                   jdbcAdapter2 = new JdbcAdapter(); 
+                   jdbcAdapter.fillDataTable(datatable, result);
+                   //String alkatresz = "";
+                   //int bennevan = 0;
+                   //String szoveg ="Folyamat                    Időpont           Erdedmény         Hibakód  \n";
+                   /*for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                   {
+                       szoveg += datatable.getRows().get(szamlalo).getString(0)+"       "+datatable.getRows().get(szamlalo).getString(1)
+                               +"       "+datatable.getRows().get(szamlalo).getString(3)+"       "+datatable.getRows().get(szamlalo).getString(4) +"\n";
+                       /*if(panelszam.equals(datatable.getRows().get(szamlalo).getString(0)))                  
+                       {
+                            bennevan++;
+                       }
+                   }
+                   Ablak.eredmeny_mezo.setText(szoveg);
+                   */
+                   //System.out.println(panelszam.substring(11,13));
+                   if(panelszam.length() > 12) {
+                    if(panelszam.substring(11,13).equals("20")) {
+                           //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár!! \n Túl öreg temék!! \n Selejtezhető");
+                        System.out.println("Selejt találva "+ panelszam);
+                        sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                        sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                        sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                        sheet.getRange().get("D" + cellaszam).setText("Gazdasági Totálkár!! \n Túl öreg temék!! \n Selejtezhető");
+                        cstmt2.execute(sql2); 
+                        result2 = cstmt2.getResultSet();                            
+                        DataTable datatable2 = new DataTable();
+                        jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                        if(datatable.getRows().size() > 0)
+                        {
+                            sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                        }                      
+                        cellaszam++;
+                    }
+                   }
+                   if(panelszam.startsWith("891593000GE")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20095AB")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("891593000GD")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20042AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20168AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20141AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20095AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A20020AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("891593000GC")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A21125AA")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("891593000GB")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2); 
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }
+                   else if(panelszam.startsWith("111A19106AD")) {
+                       //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
+                       System.out.println("Selejt találva "+ panelszam);
+                       sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                       sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                       sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                       sheet.getRange().get("D" + cellaszam).setText("Kifutott termék!! \n Selejtezhető");
+                       cstmt2.execute(sql2);
+                       result2 = cstmt2.getResultSet();                            
+                       DataTable datatable2 = new DataTable();
+                       jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                       if(datatable.getRows().size() > 0)
+                       {
+                           sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                       }                      
+                       cellaszam++;
+                   }               
+                   else
+                   {     
+                       if(datatable.getRows().size() > 0)
+                       {
+                           /*if(bennevan > 0)
+                           {
+                               Ablak.eredmeny_mezo.setText("1x már beolvastad a panleszámot!");
+                               Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 255)); 
+                           }*/                     
+                           for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+                           {
+                               if(szamlalo < datatable.getRows().size()-1)
+                               {
+                                   if(datatable.getRows().get(szamlalo).getString(2) != null)
+                                   {
+                                       char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
+                                       String keresett = new String(data);
+                                       String[] datum = datatable.getRows().get(szamlalo).getString(0).split(" ");
+                                       String[] datum2 = datatable.getRows().get(szamlalo+1).getString(0).split(" ");
+                                       if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                       {
+                                           //System.out.println(kizarando);                
+                                       }
+                                       else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                       {
+                                           //System.out.println(kizarando2);                      
+                                       }
+                                       else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                       {
+                                           //System.out.println(kizarando4);                   
+                                       }
+                                       else if(kizarando3.equals(keresett))
+                                       {
+                                           //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
+                                       }
+                                       else if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás SMD") && datatable.getRows().get(szamlalo+1).getString(0).equals("Javítás SMD") && datum[0].equals(datum2[0]))
+                                       {
+                                           //System.out.println("Egyformák");
+                                           if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando);                
+                                           }
+                                           else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando2);                      
+                                           }
+                                           else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando4);                   
+                                           }
+                                           else if(kizarando3.equals(keresett))
+                                           {
+                                               //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
+                                           }
+                                           else
+                                           {
+                                               
+                                               //System.out.println("Javítás gépes"+ datatable.getRows().get(szamlalo).getString(2));
+                                               //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                                               egyformagepes++;
+                                           }
+                                       }
+                                       else if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás kézi") && datatable.getRows().get(szamlalo+1).getString(0).equals("Javítás kézi") && datum[0].equals(datum2[0]))
+                                       {
+                                           //System.out.println("Egyformák");
+                                           if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando);                
+                                           }
+                                           else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando2);                      
+                                           }
+                                           else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                           {
+                                               //System.out.println(kizarando4);                   
+                                           }
+                                           else if(kizarando3.equals(keresett))
+                                           {
+                                               //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
+                                           }
+                                           else
+                                           {
+                                               //System.out.println("Javítás kézi"+ datatable.getRows().get(szamlalo).getString(2));
+                                               //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                                               egyformakezi++;
+                                           }
+                                       }
+                                       else
+                                       {
+                                           System.out.println("számláló "+ szamlalo);
+                                           if(szamlalo > 0)
+                                           {
+                                               if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás SMD") && datatable.getRows().get(szamlalo-1).getString(0).equals("Javítás SMD") && datum[0].equals(datum2[0]))
+                                               {
+                                                   
+                                               }
+                                               else if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás SMD") && datatable.getRows().get(szamlalo-1).getString(0).equals("Javítás SMD") && datum[0].equals(datum2[0]))
+                                               {
+                                                   
+                                               }
+                                               else
+                                               {
+                                                   System.out.println("Javítás kódja "+ datatable.getRows().get(szamlalo).getString(2));
+                                                   javitasokszama++;
+                                               }
+                                           }
+                                           else
+                                           {
+                                               System.out.println("Javítás kódja "+ datatable.getRows().get(szamlalo).getString(2));
+                                               javitasokszama++;
+                                           }
+                                           
+                                           //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                                       }
+                                   }
+                               }
+                               else
+                               {
+                                   char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
+                                   String keresett = new String(data);                             
+                                   if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                   {
+                                                              
+                                   }
+                                   else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                   {
+                                                              
+                                   }
+                                   else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                   {
+                                                              
+                                   }
+                                   else if(kizarando3.equals(keresett))
+                                   {
+                                                              
+                                   }                               
+                                   else
+                                   {
+                                       javitasokszama++;
+                                       //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                                   }
+                               }
+                           }
+                           if(egyformakezi > 0)
+                           {
+                               javitasokszama++;
+                           }
+                           if(egyformagepes > 0)
+                           {
+                               javitasokszama++;
+                           }
+                           //sheet.getRange().get("B" + szamlalo2).setNumberValue(javitasokszama);
+                           System.out.println("Javítások száma: "+ javitasokszama);
+                           if(javitasokszama >= 5)
+                           {
+                               //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");                                  
+                               sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                               sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                               sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                               sheet.getRange().get("D" + cellaszam).setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");
+                               cstmt2.execute(sql2); 
+                               result2 = cstmt2.getResultSet();                            
+                               DataTable datatable2 = new DataTable();
+                               jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                               if(datatable.getRows().size() > 0)
+                               {
+                                   sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                               }                               
+                               cellaszam++;
+                               System.out.println("Selejt találva "+ panelszam +" "+ datatable2.getRows().get(0).getString(0));
+                           }
+                           
+                       }
+                       else
+                       {
+                           String levagva = panelszam.substring(0,panelszam.length()-1);
+                           sql = "select panel\r\n"
+                                   + "from videoton.fkovavm\r\n"
+                                   + "WHERE ain = '"+ levagva + "'"; 
+                           cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                           result = cstmt.getResultSet();
+                           String szeriaszam = null;
+                           if(result.next())
+                           {
+                               szeriaszam = result.getString(1);
+                           }
+                           sql = "select fkovsor.nev, videoton.fkov.panel, "                   
+                                   + "videoton.fkov.hibakod, videoton.fkov.poz \n"                   
+                                   + "from videoton.fkov \n"
+                                   + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
+                                   + " where panel = '"+ szeriaszam + "' and  fkovsor.nev like 'Javítás%'";
+                           jdbcAdapter.fillDataTable(datatable, result);
+                           if(szeriaszam == null){}
+                           else
+                           {
+                               //Ablak.panelszam_mezo.setText(szeriaszam);
+                           }
+                           
+                           if(datatable.getRows().size() > 0)
+                           {
+                               /*if(bennevan > 0)
+                               {
+                                   Ablak.eredmeny_mezo.setText("1x már beolvastad a panleszámot!");
+                                   Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 255)); 
+                               }*/
+                               
+                               for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
+                               {
+                                   if(datatable.getRows().get(szamlalo).getString(2) != null)
+                                   {
+                                       char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
+                                       String keresett = new String(data);
+                                       if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                       {
+                                                                  
+                                       }
+                                       else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
+                                       {
+                                                                  
+                                       }
+                                       else if(kizarando3.equals(keresett))
+                                       {
+                                                                  
+                                       }
+                                       else
+                                       {
+                                           javitasokszama++;
+                                           //alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
+                                       }
+                                   }
+                               }
+                               //sheet.getRange().get("B" + szamlalo2).setNumberValue(javitasokszama);
+                               
+                               if(javitasokszama >= 5)
+                               {
+                                   //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");                                  
+                                   sheet.getRange().get("A" + cellaszam).setText(panelszam);
+                                   sheet.getRange().get("B" + cellaszam).setText(rs.getString(3));
+                                   sheet.getRange().get("C" + cellaszam).setText(rs.getString(6));
+                                   sheet.getRange().get("D" + cellaszam).setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");
+                                   cstmt2.execute(sql2); 
+                                   result2 = cstmt2.getResultSet();                            
+                                   DataTable datatable2 = new DataTable();
+                                   jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
+                                   if(datatable.getRows().size() > 0)
+                                   {
+                                       sheet.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(0).getString(0));
+                                   }                               
+                                   cellaszam++;
+                                   System.out.println("Selejt találva "+ panelszam +" "+ datatable2.getRows().get(0).getString(0));
+                               }
+                               
+                           }
+                           else
+                           {                           
+                               //Ablak.eredmeny_mezo.setText("Nincs még a panelnak javítós bejegyzése!");
+                           }
+                       }
+                   }                 
+                   System.out.println("Fut a For "+ szamlalo3);
+                   szamlalo3++;
+               }
+               
+               sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+               sheet.getAllocatedRange().autoFitColumns();
+               sheet.getAllocatedRange().autoFitRows();
+               
+               sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+               
+               UIManager.put("FileChooser.openButtonText","Mentés");
+               JFileChooser mentes_helye = new JFileChooser();
+               mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+               mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+               mentes_helye.showOpenDialog(mentes_helye);
+               File fajl = mentes_helye.getSelectedFile();
+               //System.out.println(fajl.getAbsolutePath());
+               if(fajl != null)
+               {
+                   if(fajl.getName().contains(".xlsx"))
+                   {
+                       workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
+                       FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                       try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                       {
+                           for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                           {    
+                               workbook2.removeSheetAt(i); 
+                           }      
+                           FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                           workbook2.write(output);
+                           output.close();
+                       }
+                   }
+                   else
+                   {
+                       workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                       FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                       try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                       {
+                           for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                           {    
+                               workbook2.removeSheetAt(i); 
+                           }      
+                           FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                           workbook2.write(output);
+                           output.close();
+                       }
+                   }
+                   JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
+               }
+               con.close();
                Foablak.frame.setCursor(null);                                                      
             }             
             catch (Exception e1) 
@@ -4125,427 +4754,57 @@ public class Torlo extends JPanel
                 Email hibakuldes = new Email();
                 hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet);
                 JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
-            }
-         }
-    }
-	
-	void javitas_kereses(String panelszam)
-    {
-        Connection con = null;
-        //Connection con2 = null;
-        Statement stmt = null;
-        int javitasokszama = 0;
-        String kizarando = "899";
-        String kizarando2 = "1299";
-        String kizarando3 = "A";
-        String kizarando4 = "1250";
-        int egyformakezi = 0;
-        int egyformagepes = 0;
-        try
-        {
-            ResultSet result = null;
-            ResultSet result2 = null;
-            JdbcAdapter jdbcAdapter;
-            JdbcAdapter jdbcAdapter2;
-            DataTable datatable;
-            DataTable datatable2;
-            //Registering the Driver
-            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa   
-            //Getting the connection
-            String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ipcÃ­mÃ©hez valÃ³ csatlakozÃ¡s
-           
-            con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszÃ³ felhasznÃ¡lÃ³ nÃ©vvel
-
-            //Workbook excel = new Workbook();
-            //excel.loadFromFile(System.getProperty("user.home") + "\\Desktop\\utmh.xlsx");                                                                                          //infot tartalamzó excel betöltése
-            //Worksheet sheet = excel.getWorksheets().get(0);                                                                         //excel tábla létrehozása
-            //int hanyszor = 0;
-            //for(int szamlalo2 = 2; szamlalo2 < sheet.getLastRow(); szamlalo2++)
-            //{
-                javitasokszama = 0;
-                if(panelszam.startsWith("4TCH"))
+                try
                 {
-                    panelszam = panelszam.substring(0, 14);
-                }
-                
-                //hanyszor++;
-                //System.out.println(hanyszor);
-                String sql = "select fkovsor.nev, videoton.fkov.panel, "                   
-                        + "videoton.fkov.hibakod, videoton.fkov.poz, videoton.fkov.ido \n"                   
-                        + "from videoton.fkov \n"
-                        + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                        + " where panel = '"+ panelszam + "' and  fkovsor.nev like 'Javítás%' order by ido asc";            //panelszam       
-                
-                /*String sql = "select fkovsor.nev as 'Folyamat',\r\n"
-                        + " videoton.fkov.ido as 'Időpont',\r\n"
-                        + " videoton.fkov.panel as 'Panelszám',\r\n"
-                        + "    if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as 'eredmény',\r\n"
-                        + "    videoton.fkov.failtestnames as 'Hibakód'\r\n"
-                        + "from videoton.fkov\r\n"
-                        + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely\r\n"
-                        + " where   videoton.fkov.panel = '"+ panelszam + "'\r\n"
-                        + " and fkovsor.nev = 'INSTAGRID FCT'"; */    
-                String sql2 = "select fkovsor.nev, videoton.fkov.panel, videoton.fkov.error, videoton.fkov.ido \n"                                                      
-                        + "from videoton.fkov \n"
-                        + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                        + " where panel = '"+ panelszam + "' order by videoton.fkov.ido desc limit 1";           
-                
-                //con2 = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-                //String sql3 = "select Panelszam from qualitydb.Beolvasott_panelek where 3 = 3";
-                
-                Statement cstmt = con.createStatement(
-                        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                        ResultSet.CONCUR_UPDATABLE);
-                
-                Statement cstmt2 = con.createStatement(
-                        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                        ResultSet.CONCUR_UPDATABLE);
-                
-                cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
-                result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
-                datatable = new DataTable();
-                //Ablak.eredmeny_mezo.setText("");
-                jdbcAdapter = new JdbcAdapter();
-                jdbcAdapter2 = new JdbcAdapter(); 
-                jdbcAdapter.fillDataTable(datatable, result);
-                //String alkatresz = "";
-                //int bennevan = 0;
-                //String szoveg ="Folyamat                    Időpont           Erdedmény         Hibakód  \n";
-                /*for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
+                UIManager.put("FileChooser.openButtonText","Mentés");
+                JFileChooser mentes_helye = new JFileChooser();
+                mentes_helye.setCurrentDirectory(new java.io.File(System.getProperty("user.home") + "\\Desktop\\"));
+                mentes_helye.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                mentes_helye.showOpenDialog(mentes_helye);
+                File fajl = mentes_helye.getSelectedFile();
+                //System.out.println(fajl.getAbsolutePath());
+                if(fajl != null)
                 {
-                    szoveg += datatable.getRows().get(szamlalo).getString(0)+"       "+datatable.getRows().get(szamlalo).getString(1)
-                            +"       "+datatable.getRows().get(szamlalo).getString(3)+"       "+datatable.getRows().get(szamlalo).getString(4) +"\n";
-                    /*if(panelszam.equals(datatable.getRows().get(szamlalo).getString(0)))                  
+                    if(fajl.getName().contains(".xlsx"))
                     {
-                         bennevan++;
-                    }
-                }
-                Ablak.eredmeny_mezo.setText(szoveg);
-                */
-                //System.out.println(panelszam.substring(11,13));
-                if(panelszam.length() > 12) {
-                 if(panelszam.substring(11,13).equals("20")) {
-                        //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár!! \n Túl öreg temék!! \n Selejtezhető");
-                 }
-                }
-                if(panelszam.startsWith("891593000GE")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20095AB")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("891593000GD")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20042AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20168AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20141AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20095AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A20020AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("891593000GC")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A21125AA")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("891593000GB")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }
-                else if(panelszam.startsWith("111A19106AD")) {
-                    //Ablak.eredmeny_mezo.setText("Kifutott termék!! \n Selejtezhető");
-                }               
-                else
-                {     
-                    if(datatable.getRows().size() > 0)
-                    {
-                        /*if(bennevan > 0)
+                        workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
+                        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
+                        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                         {
-                            Ablak.eredmeny_mezo.setText("1x már beolvastad a panleszámot!");
-                            Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 255)); 
-                        }*/                     
-                        for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
-                        {
-                            if(szamlalo < datatable.getRows().size()-1)
-                            {
-                                char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
-                                String keresett = new String(data);
-                                String[] datum = datatable.getRows().get(szamlalo).getString(0).split(" ");
-                                String[] datum2 = datatable.getRows().get(szamlalo+1).getString(0).split(" ");
-                                if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                    //System.out.println(kizarando);                
-                                }
-                                else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                    //System.out.println(kizarando2);                      
-                                }
-                                else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                    //System.out.println(kizarando4);                   
-                                }
-                                else if(kizarando3.equals(keresett))
-                                {
-                                    //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
-                                }
-                                else if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás SMD") && datatable.getRows().get(szamlalo+1).getString(0).equals("Javítás SMD") && datum[0].equals(datum2[0]))
-                                {
-                                    //System.out.println("Egyformák");
-                                    if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando);                
-                                    }
-                                    else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando2);                      
-                                    }
-                                    else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando4);                   
-                                    }
-                                    else if(kizarando3.equals(keresett))
-                                    {
-                                        //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
-                                    }
-                                    else
-                                    {
-                                        //System.out.println("Javítás "+ datatable.getRows().get(szamlalo).getString(2));
-                                        alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
-                                        egyformagepes++;
-                                    }
-                                }
-                                else if(datatable.getRows().get(szamlalo).getString(0).equals("Javítás kézi") && datatable.getRows().get(szamlalo+1).getString(0).equals("Javítás kézi") && datum[0].equals(datum2[0]))
-                                {
-                                    //System.out.println("Egyformák");
-                                    if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando);                
-                                    }
-                                    else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando2);                      
-                                    }
-                                    else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                    {
-                                        //System.out.println(kizarando4);                   
-                                    }
-                                    else if(kizarando3.equals(keresett))
-                                    {
-                                        //System.out.println(datatable.getRows().get(szamlalo).getString(2));                 
-                                    }
-                                    else
-                                    {
-                                        //System.out.println("Javítás "+ datatable.getRows().get(szamlalo).getString(2));
-                                        alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
-                                        egyformakezi++;
-                                    }
-                                }
-                                else
-                                {
-                                    //System.out.println("Javítás "+ datatable.getRows().get(szamlalo).getString(2));
-                                    javitasokszama++;
-                                    alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
-                                }
-                            }
-                            else
-                            {
-                                char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
-                                String keresett = new String(data);                             
-                                if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                                           
-                                }
-                                else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                                           
-                                }
-                                else if(kizarando4.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                                           
-                                }
-                                else if(kizarando3.equals(keresett))
-                                {
-                                                           
-                                }                               
-                                else
-                                {
-                                    javitasokszama++;
-                                    alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
-                                }
-                            }
-                        }
-                        if(egyformakezi > 0)
-                        {
-                            javitasokszama++;
-                        }
-                        if(egyformagepes > 0)
-                        {
-                            javitasokszama++;
-                        }
-                        //sheet.getRange().get("B" + szamlalo2).setNumberValue(javitasokszama);
-                        
-                        if(javitasokszama >= 5)
-                        {
-                            //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");    
-                            System.out.println("Selejt találva");
-                        }
-                        else
-                        {                           
-                            cstmt2.execute(sql2); 
-                            result2 = cstmt2.getResultSet();                            
-                            datatable2 = new DataTable();
-                            jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
-                            if(datatable.getRows().size() > 0)
-                            {
-                                
-                                //Ablak.eredmeny_mezo.setText("Eddigi tényleges javítás: "+javitasokszama+ "\nEddig javított alaktrészek:"+ alkatresz +"\nUtolsó mérés helye: " + datatable2.getRows().get(0).getString(0) +" \n"
-                                //        + "Amivel kiesett Hibakód: " + datatable2.getRows().get(0).getString(2));
-                                //Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 0)); datatable2.getRows().get(0).getString(0)   datatable2.getRows().get(0).getString(2)
-                            }
-                            else
-                            {
-                                //Ablak.eredmeny_mezo.setText("Nincs Tracy adat a panelszámról!");
-                            }
-                                    
+                            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                            {    
+                                workbook2.removeSheetAt(i); 
+                            }      
+                            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath());
+                            workbook2.write(output);
+                            output.close();
                         }
                     }
                     else
                     {
-                        String levagva = panelszam.substring(0,panelszam.length()-1);
-                        sql = "select panel\r\n"
-                                + "from videoton.fkovavm\r\n"
-                                + "WHERE ain = '"+ levagva + "'"; 
-                        cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
-                        result = cstmt.getResultSet();
-                        String szeriaszam = null;
-                        if(result.next())
+                        workbook.saveToFile(fajl.getAbsolutePath()+".xlsx", ExcelVersion.Version2016);  
+                        FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath()+".xlsx");
+                        try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
                         {
-                            szeriaszam = result.getString(1);
-                        }
-                        sql = "select fkovsor.nev, videoton.fkov.panel, "                   
-                                + "videoton.fkov.hibakod, videoton.fkov.poz \n"                   
-                                + "from videoton.fkov \n"
-                                + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely \n"
-                                + " where panel = '"+ szeriaszam + "' and  fkovsor.nev like 'Javítás%'";
-                        jdbcAdapter.fillDataTable(datatable, result);
-                        if(szeriaszam == null){}
-                        else
-                        {
-                            //Ablak.panelszam_mezo.setText(szeriaszam);
-                        }
-                        
-                        if(datatable.getRows().size() > 0)
-                        {
-                            /*if(bennevan > 0)
-                            {
-                                Ablak.eredmeny_mezo.setText("1x már beolvastad a panleszámot!");
-                                Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 255)); 
-                            }*/
-                            
-                            for (int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++) 
-                            {
-                                char[] data = {datatable.getRows().get(szamlalo).getString(2).charAt(0)};
-                                String keresett = new String(data);
-                                if(kizarando.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                                           
-                                }
-                                else if(kizarando2.equals(datatable.getRows().get(szamlalo).getString(2)))
-                                {
-                                                           
-                                }
-                                else if(kizarando3.equals(keresett))
-                                {
-                                                           
-                                }
-                                else
-                                {
-                                    javitasokszama++;
-                                    alkatresz += datatable.getRows().get(szamlalo).getString(3) + " ";
-                                }
-                            }
-                            //sheet.getRange().get("B" + szamlalo2).setNumberValue(javitasokszama);
-                            
-                            if(javitasokszama >= 5)
-                            {
-                                //Ablak.eredmeny_mezo.setText("Gazdasági Totálkár a sok javítás miatt!! \n Selejtezhető");
-                                System.out.println("Selejt találva");
-                            }
-                            else
-                            {                           
-                                cstmt2.execute(sql2); 
-                                result2 = cstmt2.getResultSet();                            
-                                datatable2 = new DataTable();
-                                jdbcAdapter2.fillDataTable(datatable2, result2);            //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak
-                                if(datatable.getRows().size() > 0)
-                                {
-                                    
-                                    //Ablak.eredmeny_mezo.setText("Eddigi tényleges javítás: "+javitasokszama+ "\nEddig javított alaktrészek:"+ alkatresz +"\nUtolsó mérés helye: " + datatable2.getRows().get(0).getString(0) +" \n"
-                                    //        + "Amivel kiesett Hibakód: " + datatable2.getRows().get(0).getString(2));
-                                    //Ablak.eredmeny_mezo.setForeground(new Color(0, 0, 0)); datatable2.getRows().get(0).getString(0)   datatable2.getRows().get(0).getString(2)
-                                }
-                                else
-                                {
-                                    //Ablak.eredmeny_mezo.setText("Nincs Tracy adat a panelszámról!");
-                                }
-                                        
-                            }
-                        }
-                        else
-                        {                           
-                            //Ablak.eredmeny_mezo.setText("Nincs még a panelnak javítós bejegyzése!");
+                            for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                            {    
+                                workbook2.removeSheetAt(i); 
+                            }      
+                            FileOutputStream output = new FileOutputStream(fajl.getAbsolutePath()+".xlsx");
+                            workbook2.write(output);
+                            output.close();
                         }
                     }
+                    JOptionPane.showMessageDialog(null, "Mentés sikeres", "Info", 1);
                 }
-            //}     //for vége
-            //excel.saveToFile(System.getProperty("user.home") + "\\Desktop\\utmh.xlsx", ExcelVersion.Version2016);
-            
-            /*
-            FileInputStream fileStream = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\utmh.xlsx");
-            try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
-            {
-                for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                {    
-                    workbook2.removeSheetAt(i); 
-                }      
-                FileOutputStream output = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\utmh.xlsx");
-                workbook2.write(output);
-                output.close();
-            }      */
-                con.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            String hibauzenet2 = e.toString();
-            JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-        }
-        finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
-        {
-            try 
-            {
-              if (stmt != null)
-                 con.close();
-            } 
-            catch (SQLException se){}
-            try 
-            {
-              if (con != null)
-                 con.close();
-            } 
-            catch (SQLException se) 
-            {
-              se.printStackTrace();
-            }  
-        }   
+                }             
+                catch (Exception e2) 
+                {
+                    e2.printStackTrace();
+                }
+            }
+         }
     }
+	
+	
 }

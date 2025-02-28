@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+import org.jdesktop.swingx.JXDatePicker;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -33,10 +34,15 @@ import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import java.awt.Font;
 
 public class AVM_teszterallas extends JPanel {
     
     private JDatePickerImpl datum;
+    private JXDatePicker datum_tol;
+    private JXDatePicker datum_ig;
 
     /**
      * Create the panel.
@@ -46,7 +52,7 @@ public class AVM_teszterallas extends JPanel {
         
         JButton start_gomb = new JButton("Start");
         start_gomb.addActionListener(new AVM());
-        start_gomb.setBounds(478, 212, 89, 23);
+        start_gomb.setBounds(488, 121, 89, 23);
         add(start_gomb);
         
         setBackground(Foablak.hatter_szine);
@@ -69,8 +75,43 @@ public class AVM_teszterallas extends JPanel {
 
         datum = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         
-        datum.setBounds(478, 161, 120, 20);
+        datum.setBounds(478, 81, 120, 20);
         add(datum);
+        
+        JLabel lblNewLabel = new JLabel("AVM teszterállás");
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblNewLabel.setBounds(488, 45, 160, 14);
+        add(lblNewLabel);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(28, 153, 1139, 14);
+        add(separator);
+        
+        JLabel lblNewLabel_1 = new JLabel("AVM Succes Rate");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblNewLabel_1.setBounds(488, 195, 160, 14);
+        add(lblNewLabel_1);
+        
+        datum_tol = new JXDatePicker();
+        datum_tol.setBounds(502, 233, 110, 20);
+        add(datum_tol);
+        
+        datum_ig = new JXDatePicker();
+        datum_ig.setBounds(502, 280, 110, 20);
+        add(datum_ig);
+        
+        JLabel lblNewLabel_2 = new JLabel("Dátum -tól");
+        lblNewLabel_2.setBounds(403, 236, 89, 14);
+        add(lblNewLabel_2);
+        
+        JLabel lblNewLabel_3 = new JLabel("Dátum -ig");
+        lblNewLabel_3.setBounds(403, 283, 89, 14);
+        add(lblNewLabel_3);
+        
+        JButton start2_gomb = new JButton("Start");
+        start2_gomb.addActionListener(new Succes_rate());
+        start2_gomb.setBounds(488, 336, 89, 23);
+        add(start2_gomb);
 
     }
     
@@ -859,6 +900,139 @@ public class AVM_teszterallas extends JPanel {
                     workbook2.write(output);
                     output.close();
                 }
+                Foablak.frame.setCursor(null); 
+                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
+            }
+            catch(Exception e1)
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", hibauzenet2);
+                JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+            }
+            finally                                                                     //finally rÃ©sz mindenkÃ©ppen lefut, hogy hiba esetÃ©n is lezÃ¡rja a kacsolatot
+            {
+                try 
+                {
+                  if (stmt != null)
+                     con.close();
+                } 
+                catch (SQLException se) {}
+                try 
+                {
+                  if (con != null)
+                     con.close();
+                } 
+                catch (SQLException se) 
+                {
+                  se.printStackTrace();
+                }  
+            }
+         }
+    }
+    
+    class Succes_rate implements ActionListener                                                                                      
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            Connection con = null;
+            Statement stmt = null;
+            try
+            {
+                ResultSet result = null;
+                JdbcAdapter jdbcAdapter;
+                DataTable datatable;
+                Workbook workbook;
+                //Registering the Driver
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
+                Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));     
+                //Getting the connection
+                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ip címhez való csatlakozás
+                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszó felhasználóval
+                System.out.println("Connection established......");
+                Statement cstmt = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                
+                String excelfile1 = System.getProperty("user.home") + "\\Desktop\\AVM helyek.xlsx"; 
+                Workbook workbook2 = new Workbook();
+                workbook2.loadFromFile(excelfile1);
+                Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                DataTable datatable2 = new DataTable();
+                datatable2 = sheet2.exportDataTable(sheet2.getAllocatedRange(), false, false );
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                
+                for(int szamlalo = 1; szamlalo < datatable2.getRows().size(); szamlalo++)          //datatable2.getRows().size()
+                {
+                    String sql = "select  tempTable.Week,\n"
+                            + "        if(fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as Result,\n"
+                            + "        count(*) as Count\n"
+                            + "from   videoton.fkov\n"
+                            + "inner join  (select yearweek(ido, 1) as Week,\n"
+                            + "            panel,\n"
+                            + "            max(ido) as MaxTimestamp\n"
+                            + "            from  videoton.fkov\n"
+                            + "            where hely = '"+ datatable2.getRows().get(szamlalo).getString(1) +"' and\n"
+                            + "            ido >= '"+ dateFormat.format(datum_tol.getDate()) +"' and ido <= '"+ dateFormat.format(datum_ig.getDate()) +"' and (yearweek(ido, 1) - concat('20',SUBSTRING(panel, 12,4))) < 4\n"
+                            + "            group by 1, 2) as tempTable on tempTable.panel = fkov.panel and tempTable.MaxTimestamp = fkov.ido\n"
+                            + "group by             1, 2;\n"
+                            + "";
+                
+                    cstmt.execute(sql);                                                                                                     //sql llekérdezés futtatása                    
+                    result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
+                    datatable = new DataTable();
+                    System.out.println("Lefutott");
+                    workbook = new Workbook();
+                    workbook.setVersion(ExcelVersion.Version2016); 
+                    jdbcAdapter = new JdbcAdapter();         
+                    jdbcAdapter.fillDataTable(datatable, result);
+                    System.out.println("Datatableban");
+                    //Get the first worksheet
+                    Worksheet sheet = workbook.getWorksheets().get(0);
+                    
+                    
+                    sheet.insertDataTable(datatable, true, 1, 1);
+                    sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
+                    sheet.getAllocatedRange().autoFitColumns();
+                    sheet.getAllocatedRange().autoFitRows();
+                        
+                    sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
+                     
+                    
+                    
+                    //workbook.setActiveSheetIndex(0);
+                    String path = System.getProperty("user.home") + "\\Desktop\\AVM Succes Rate\\"+ datatable2.getRows().get(szamlalo).getString(0) +".xlsx";
+                    Workbook workbook4 = new Workbook();
+                    workbook2.loadFromFile(excelfile1);
+                    Worksheet sheet4 = workbook2.getWorksheets().get(0);
+                    
+                    int sor = sheet4.getLastRow()+1;
+                    sheet4.getRange().get("A" + sor).setText("Válogatásra fordított idő");
+                    //sheet4.getRange().get("B" + sor).setNumberValue(resultset.getInt(1));
+                    sheet4.getRange().get("C" + sor).setText("óra");
+                    sheet4.getRange().get("D" + sor).setText("Válogatás költsége");
+                    //sheet4.getRange().get("E" + sor).setNumberValue(resultset.getInt(2));
+                    sheet4.getRange().get("F" + sor).setText("euró");
+                    
+                    
+                    workbook4.saveToFile(path, ExcelVersion.Version2016);  
+                    FileInputStream fileStream = new FileInputStream(path);
+                    try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook3.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(path);
+                        workbook3.write(output);
+                        output.close();
+                    }
+                }
+                
+                result.close();
+                cstmt.close();
+                con.close();
                 Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
             }

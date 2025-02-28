@@ -780,17 +780,18 @@ public class Vevoireklamacio_d0 extends JPanel {
                 DefaultComboBoxModel<String> model;
                 String keresett = String.valueOf(vevo_box.getSelectedItem());
                 String vevo = "";
-
+                System.out.println(keresett);
                 workbook.loadFromFile(excelhelye2);
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
-                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow(); szamlalo++)
+                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow()+1; szamlalo++)
                 {
                     if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
                     {
                         vevo =  sheet.getRange().get("A"+szamlalo).getText();
                         System.out.println(vevo);
                     }
+                    System.out.println(sheet.getRange().get("B"+szamlalo).getText().toUpperCase());
                 }
                 sql = "select part_no || '  ' || REVISION_TEXT || '  ' || ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok\r\n"
                         + "from ifsapp.PART_REVISION\r\n"

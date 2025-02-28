@@ -98,16 +98,16 @@ public class Zarolasok_bevitel extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Zárolás felvitele");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblNewLabel.setBounds(579, 33, 170, 14);
+        lblNewLabel.setBounds(579, 11, 170, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("ID");
-        lblNewLabel_1.setBounds(42, 48, 46, 14);
+        lblNewLabel_1.setBounds(42, 12, 46, 14);
         add(lblNewLabel_1);
         
         id_mezo = new JTextField();
         id_mezo.addKeyListener(new Enter());
-        id_mezo.setBounds(98, 45, 46, 20);
+        id_mezo.setBounds(98, 11, 46, 20);
         add(id_mezo);
         id_mezo.setColumns(10);
         
@@ -121,56 +121,56 @@ public class Zarolasok_bevitel extends JPanel {
         add(projekt_box);
         
         JLabel lblNewLabel_3 = new JLabel("Típus");
-        lblNewLabel_3.setBounds(306, 88, 46, 14);
+        lblNewLabel_3.setBounds(286, 88, 46, 14);
         add(lblNewLabel_3);
         
         String[] info = {"Válassz projektet"};
         tipus_box = new JComboBox<String>(info);                      //cikkszamok()            //info
-        tipus_box.setBounds(362, 84, 283, 22);
+        tipus_box.setBounds(329, 84, 283, 22);
         add(tipus_box);
         
         JLabel lblNewLabel_4 = new JLabel("Észlelés helye");
-        lblNewLabel_4.setBounds(664, 88, 85, 14);
+        lblNewLabel_4.setBounds(770, 180, 85, 14);
         add(lblNewLabel_4);
         
         eszleleshelye_mezo = new JTextField();
-        eszleleshelye_mezo.setBounds(784, 85, 184, 20);
+        eszleleshelye_mezo.setBounds(865, 177, 184, 20);
         add(eszleleshelye_mezo);
         eszleleshelye_mezo.setColumns(10);
         
         JLabel lblNewLabel_5 = new JLabel("Műszak");
-        lblNewLabel_5.setBounds(995, 88, 46, 14);
+        lblNewLabel_5.setBounds(471, 48, 46, 14);
         add(lblNewLabel_5);
         
         muszak_mezo = new JTextField();
-        muszak_mezo.setBounds(1051, 85, 46, 20);
+        muszak_mezo.setBounds(527, 45, 46, 20);
         add(muszak_mezo);
         muszak_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Zárolást kezdeményező mérnök");
-        lblNewLabel_6.setBounds(42, 136, 198, 14);
+        lblNewLabel_6.setBounds(770, 216, 184, 14);
         add(lblNewLabel_6);
         
         mernok_mezo = new JTextField();
-        mernok_mezo.setBounds(245, 133, 164, 20);
+        mernok_mezo.setBounds(955, 213, 164, 20);
         add(mernok_mezo);
         mernok_mezo.setColumns(10);
         
         JLabel lblNewLabel_7 = new JLabel("Zárolt mennyiség");
-        lblNewLabel_7.setBounds(430, 136, 99, 14);
+        lblNewLabel_7.setBounds(45, 136, 99, 14);
         add(lblNewLabel_7);
         
         zaroltdb_mezo = new JTextField();
-        zaroltdb_mezo.setBounds(539, 133, 46, 20);
+        zaroltdb_mezo.setBounds(154, 133, 46, 20);
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
         JLabel lblNewLabel_8 = new JLabel("Hol van");
-        lblNewLabel_8.setBounds(621, 136, 85, 14);
+        lblNewLabel_8.setBounds(539, 136, 85, 14);
         add(lblNewLabel_8);
         
         zarolas_helye = new JTextField();
-        zarolas_helye.setBounds(716, 133, 184, 20);
+        zarolas_helye.setBounds(596, 133, 184, 20);
         add(zarolas_helye);
         zarolas_helye.setColumns(10);
         
@@ -195,29 +195,29 @@ public class Zarolasok_bevitel extends JPanel {
         add(intezkedes_mezo);
         
         JLabel lblNewLabel_11 = new JLabel("Zárolás dátuma");
-        lblNewLabel_11.setBounds(792, 180, 91, 14);
+        lblNewLabel_11.setBounds(268, 48, 91, 14);
         add(lblNewLabel_11);
         
         datum_mezo = new JTextField();
-        datum_mezo.setBounds(893, 177, 86, 20);
+        datum_mezo.setBounds(362, 45, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_12 = new JLabel("Zároló papír sorszáma");
-        lblNewLabel_12.setBounds(792, 216, 129, 14);
+        lblNewLabel_12.setBounds(42, 48, 129, 14);
         add(lblNewLabel_12);
         
         sorszam_mezo = new JTextField();
-        sorszam_mezo.setBounds(938, 213, 86, 20);
+        sorszam_mezo.setBounds(176, 45, 86, 20);
         add(sorszam_mezo);
         sorszam_mezo.setColumns(10);
         
         zarolta_box = new JComboBox<String>(ellenori_nevsor());                           //ellenori_nevsor()
-        zarolta_box.setBounds(1024, 176, 200, 22);
+        zarolta_box.setBounds(690, 84, 200, 22);
         add(zarolta_box);
         
         JLabel lblNewLabel_13 = new JLabel("Zárolta");
-        lblNewLabel_13.setBounds(1089, 151, 46, 14);
+        lblNewLabel_13.setBounds(634, 88, 46, 14);
         add(lblNewLabel_13);
         
         JLabel lblNewLabel_14 = new JLabel("Válogatás/ellenőrzés eredménye:");
@@ -250,11 +250,11 @@ public class Zarolasok_bevitel extends JPanel {
         ido_mezo.setColumns(10);
         
         technikus_csekk = new JCheckBox("Technikusi beavatkozást nem igényel");
-        technikus_csekk.setBounds(784, 249, 240, 23);
+        technikus_csekk.setBounds(924, 132, 240, 23);
         add(technikus_csekk);
         
         JLabel lblNewLabel_17 = new JLabel("Felelős terület");
-        lblNewLabel_17.setBounds(1024, 253, 82, 14);
+        lblNewLabel_17.setBounds(924, 88, 82, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
@@ -368,7 +368,7 @@ public class Zarolasok_bevitel extends JPanel {
         
         String[] terulet = {"Gépes", "Kézi","Végszerelés"};
         felelosterulet_box = new JComboBox<String>(terulet);                         //terulet
-        felelosterulet_box.setBounds(1122, 249, 102, 22);
+        felelosterulet_box.setBounds(1028, 84, 124, 22);
         add(felelosterulet_box);
         
         JLabel lblNewLabel_23 = new JLabel("Gyökérokra hozott intézkedés visszaellenőrzése");
@@ -392,12 +392,12 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         meszam_mezo = new JTextField();
-        meszam_mezo.setBounds(1044, 111, 180, 20);
+        meszam_mezo.setBounds(329, 133, 180, 20);
         add(meszam_mezo);
         meszam_mezo.setColumns(10);
         
         JLabel lblNewLabel_24 = new JLabel("Raklap ME szám");
-        lblNewLabel_24.setBounds(943, 114, 102, 14);
+        lblNewLabel_24.setBounds(227, 136, 102, 14);
         add(lblNewLabel_24);
         
         JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
@@ -441,7 +441,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(separator);
         
         JLabel lblNewLabel_28 = new JLabel("Határidő");
-        lblNewLabel_28.setBounds(837, 512, 46, 14);
+        lblNewLabel_28.setBounds(837, 512, 64, 14);
         add(lblNewLabel_28);
         
         hatarido_mezo = new JTextField();
@@ -489,16 +489,16 @@ public class Zarolasok_bevitel extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Zárolás felvitele");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblNewLabel.setBounds(579, 33, 170, 14);
+        lblNewLabel.setBounds(579, 11, 170, 14);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("ID");
-        lblNewLabel_1.setBounds(42, 48, 46, 14);
+        lblNewLabel_1.setBounds(42, 12, 46, 14);
         add(lblNewLabel_1);
         
         id_mezo = new JTextField();
         id_mezo.addKeyListener(new Enter());
-        id_mezo.setBounds(98, 45, 46, 20);
+        id_mezo.setBounds(98, 11, 46, 20);
         add(id_mezo);
         id_mezo.setColumns(10);
         
@@ -512,56 +512,56 @@ public class Zarolasok_bevitel extends JPanel {
         add(projekt_box);
         
         JLabel lblNewLabel_3 = new JLabel("Típus");
-        lblNewLabel_3.setBounds(306, 88, 46, 14);
+        lblNewLabel_3.setBounds(286, 88, 46, 14);
         add(lblNewLabel_3);
         
         String[] info = {"Válassz projektet"};
         tipus_box = new JComboBox<String>(info);                      //cikkszamok()            //info
-        tipus_box.setBounds(362, 84, 283, 22);
+        tipus_box.setBounds(329, 84, 283, 22);
         add(tipus_box);
         
         JLabel lblNewLabel_4 = new JLabel("Észlelés helye");
-        lblNewLabel_4.setBounds(664, 88, 85, 14);
+        lblNewLabel_4.setBounds(770, 180, 85, 14);
         add(lblNewLabel_4);
         
         eszleleshelye_mezo = new JTextField();
-        eszleleshelye_mezo.setBounds(784, 85, 184, 20);
+        eszleleshelye_mezo.setBounds(865, 177, 184, 20);
         add(eszleleshelye_mezo);
         eszleleshelye_mezo.setColumns(10);
         
         JLabel lblNewLabel_5 = new JLabel("Műszak");
-        lblNewLabel_5.setBounds(995, 88, 46, 14);
+        lblNewLabel_5.setBounds(471, 48, 46, 14);
         add(lblNewLabel_5);
         
         muszak_mezo = new JTextField();
-        muszak_mezo.setBounds(1051, 85, 46, 20);
+        muszak_mezo.setBounds(527, 45, 46, 20);
         add(muszak_mezo);
         muszak_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Zárolást kezdeményező mérnök");
-        lblNewLabel_6.setBounds(42, 136, 198, 14);
+        lblNewLabel_6.setBounds(770, 216, 184, 14);
         add(lblNewLabel_6);
         
         mernok_mezo = new JTextField();
-        mernok_mezo.setBounds(245, 133, 164, 20);
+        mernok_mezo.setBounds(955, 213, 164, 20);
         add(mernok_mezo);
         mernok_mezo.setColumns(10);
         
         JLabel lblNewLabel_7 = new JLabel("Zárolt mennyiség");
-        lblNewLabel_7.setBounds(430, 136, 99, 14);
+        lblNewLabel_7.setBounds(45, 136, 99, 14);
         add(lblNewLabel_7);
         
         zaroltdb_mezo = new JTextField();
-        zaroltdb_mezo.setBounds(539, 133, 46, 20);
+        zaroltdb_mezo.setBounds(154, 133, 46, 20);
         add(zaroltdb_mezo);
         zaroltdb_mezo.setColumns(10);
         
         JLabel lblNewLabel_8 = new JLabel("Hol van");
-        lblNewLabel_8.setBounds(621, 136, 85, 14);
+        lblNewLabel_8.setBounds(539, 136, 85, 14);
         add(lblNewLabel_8);
         
         zarolas_helye = new JTextField();
-        zarolas_helye.setBounds(716, 133, 184, 20);
+        zarolas_helye.setBounds(596, 133, 184, 20);
         add(zarolas_helye);
         zarolas_helye.setColumns(10);
         
@@ -586,29 +586,29 @@ public class Zarolasok_bevitel extends JPanel {
         add(intezkedes_mezo);
         
         JLabel lblNewLabel_11 = new JLabel("Zárolás dátuma");
-        lblNewLabel_11.setBounds(792, 180, 91, 14);
+        lblNewLabel_11.setBounds(268, 48, 91, 14);
         add(lblNewLabel_11);
         
         datum_mezo = new JTextField();
-        datum_mezo.setBounds(893, 177, 86, 20);
+        datum_mezo.setBounds(362, 45, 86, 20);
         add(datum_mezo);
         datum_mezo.setColumns(10);
         
         JLabel lblNewLabel_12 = new JLabel("Zároló papír sorszáma");
-        lblNewLabel_12.setBounds(792, 216, 129, 14);
+        lblNewLabel_12.setBounds(42, 48, 129, 14);
         add(lblNewLabel_12);
         
         sorszam_mezo = new JTextField();
-        sorszam_mezo.setBounds(938, 213, 86, 20);
+        sorszam_mezo.setBounds(176, 45, 86, 20);
         add(sorszam_mezo);
         sorszam_mezo.setColumns(10);
         
         zarolta_box = new JComboBox<String>(ellenori_nevsor());                           //ellenori_nevsor()
-        zarolta_box.setBounds(1024, 176, 200, 22);
+        zarolta_box.setBounds(690, 84, 200, 22);
         add(zarolta_box);
         
         JLabel lblNewLabel_13 = new JLabel("Zárolta");
-        lblNewLabel_13.setBounds(1089, 151, 46, 14);
+        lblNewLabel_13.setBounds(634, 88, 46, 14);
         add(lblNewLabel_13);
         
         JLabel lblNewLabel_14 = new JLabel("Válogatás/ellenőrzés eredménye:");
@@ -641,11 +641,11 @@ public class Zarolasok_bevitel extends JPanel {
         ido_mezo.setColumns(10);
         
         technikus_csekk = new JCheckBox("Technikusi beavatkozást nem igényel");
-        technikus_csekk.setBounds(784, 249, 240, 23);
+        technikus_csekk.setBounds(924, 132, 240, 23);
         add(technikus_csekk);
         
         JLabel lblNewLabel_17 = new JLabel("Felelős terület");
-        lblNewLabel_17.setBounds(1024, 253, 82, 14);
+        lblNewLabel_17.setBounds(924, 88, 82, 14);
         add(lblNewLabel_17);
         
         JLabel lblNewLabel_18 = new JLabel("Felelős");
@@ -759,7 +759,7 @@ public class Zarolasok_bevitel extends JPanel {
         
         String[] terulet = {"Gépes", "Kézi","Végszerelés"};
         felelosterulet_box = new JComboBox<String>(terulet);                         //terulet
-        felelosterulet_box.setBounds(1122, 249, 102, 22);
+        felelosterulet_box.setBounds(1028, 84, 124, 22);
         add(felelosterulet_box);
         
         JLabel lblNewLabel_23 = new JLabel("Gyökérokra hozott intézkedés visszaellenőrzése");
@@ -783,12 +783,12 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         meszam_mezo = new JTextField();
-        meszam_mezo.setBounds(1044, 111, 180, 20);
+        meszam_mezo.setBounds(329, 133, 180, 20);
         add(meszam_mezo);
         meszam_mezo.setColumns(10);
         
         JLabel lblNewLabel_24 = new JLabel("Raklap ME szám");
-        lblNewLabel_24.setBounds(943, 114, 102, 14);
+        lblNewLabel_24.setBounds(227, 136, 102, 14);
         add(lblNewLabel_24);
         
         JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
@@ -832,7 +832,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(separator);
         
         JLabel lblNewLabel_28 = new JLabel("Határidő");
-        lblNewLabel_28.setBounds(837, 512, 46, 14);
+        lblNewLabel_28.setBounds(837, 512, 64, 14);
         add(lblNewLabel_28);
         
         hatarido_mezo = new JTextField();
@@ -1966,6 +1966,44 @@ public class Zarolasok_bevitel extends JPanel {
                                     sql2 = "update qualitydb.Zarolasok set Email6 = 'igen' where ID = '"+ id_mezo.getText() +"'";
                                     lekerdezes.mindenes(sql2);
                                 }
+                            }
+                        }
+                        
+                        if(intezkedes_mezo.getText().equals("")) {}
+                        else
+                        {
+                            String sql2 = "select Email from qualitydb.Zarolasok where ID = '"+ id_mezo.getText() +"'";
+                            if(lekerdezes.tombvissza_sajat(sql2).length > 0)
+                            if(lekerdezes.tombvissza_sajat(sql2)[0].equals("nem"))
+                            {
+                                 
+                                if(felelosterulet_box.getSelectedItem().equals("Gépes"))
+                                {
+                                    cimzettek = gepes;
+                                }
+                                else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
+                                {
+                                    cimzettek = kezi;
+                                }
+                                else
+                                {
+                                    cimzettek = vegszereles;
+                                }     
+                                String uzenet = "Sziasztok! \n \n"
+                                        + "Zárolva lett az alábbi tétel: \n"
+                                        + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
+                                        + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
+                                        + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
+                                        + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                        + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
+                                        + "Dátum: "+ datum_mezo.getText() +"\n"
+                                        + "Műszak: "+ muszak_mezo.getText()+"\n"
+                                        + "Raklap ME száma: "+ meszam_mezo.getText()+"\n\n"
+                                        + "A zárolásra hozott azonnali intézkedés: "+ intezkedes_mezo.getText()  +"\n\nÜdvözlettel: EASQAS program";
+                                Email email = new Email();
+                                email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Zárolásra hozott intézkedés. Zárolos papír sorszáma: "+ sorszam_mezo.getText(), uzenet);
+                                sql2 = "update qualitydb.Zarolasok set Email = 'igen' where ID = '"+ id_mezo.getText() +"'";
+                                lekerdezes.mindenes(sql2);
                             }
                         }
                         
