@@ -42,7 +42,7 @@ public class Valogatasok_osszesito extends JPanel {
         table = new JTable();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         modell = new DefaultTableModel();
-        modell.setColumnIdentifiers(new Object[]{"ID", "Cikkszám", "Válogatás kezdete", "Válogatandó db szám","Papír sorszám/Válogatás oka", "OK", "NOK"});
+        modell.setColumnIdentifiers(new Object[]{"ID", "Cikkszám", "Válogatás kezdete", "Válogatandó db szám","Papír sorszám/Válogatás oka", "All OK", "All NOK"});
         table.setModel(modell);
         JScrollPane gorgeto = new JScrollPane(table);
         gorgeto.setBounds(68, 119, 1467, 356);

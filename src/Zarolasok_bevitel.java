@@ -74,7 +74,7 @@ public class Zarolasok_bevitel extends JPanel {
     private Workbook workbook = new Workbook();
     private String excelhelye2 = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\CCS2.xlsx";
     private Kivalaszt valaszto = new Kivalaszt();
-    private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu";
+    private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu,kurgya.edina@veas.videoton.hu";
     private String gepes = "gepesfolyamatellenor@veas.videoton.hu";
     private String kezi = "quality.control@veas.videoton.hu,quality.inspection@veas.videoton.hu,folyamatellenor.163@veas.videoton.hu,hager.security.oqc@veas.videoton.hu,loxoneoqc@veas.videoton.hu";
     private String vegszereles = "avmoqc@veas.videoton.hu,osram_vegellenorzes@veas.videoton.hu,loxoneoqc@veas.videoton.hu,\r\n"
@@ -86,6 +86,8 @@ public class Zarolasok_bevitel extends JPanel {
     private JTextField hatarido4_mezo;
     private JTextField hatarido5_mezo;
     private JComboBox<String> gyokerokvalaszto_box;
+    private JLabel lblNewLabel_29;
+    private JComboBox<String> zarolasoka_box;
 
     /**
      * Create the panel.
@@ -130,11 +132,11 @@ public class Zarolasok_bevitel extends JPanel {
         add(tipus_box);
         
         JLabel lblNewLabel_4 = new JLabel("Észlelés helye");
-        lblNewLabel_4.setBounds(770, 180, 85, 14);
+        lblNewLabel_4.setBounds(770, 211, 85, 14);
         add(lblNewLabel_4);
         
         eszleleshelye_mezo = new JTextField();
-        eszleleshelye_mezo.setBounds(865, 177, 184, 20);
+        eszleleshelye_mezo.setBounds(865, 205, 184, 20);
         add(eszleleshelye_mezo);
         eszleleshelye_mezo.setColumns(10);
         
@@ -148,11 +150,11 @@ public class Zarolasok_bevitel extends JPanel {
         muszak_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Zárolást kezdeményező mérnök");
-        lblNewLabel_6.setBounds(770, 216, 184, 14);
+        lblNewLabel_6.setBounds(770, 261, 184, 14);
         add(lblNewLabel_6);
         
         mernok_mezo = new JTextField();
-        mernok_mezo.setBounds(955, 213, 164, 20);
+        mernok_mezo.setBounds(964, 258, 164, 20);
         add(mernok_mezo);
         mernok_mezo.setColumns(10);
         
@@ -175,23 +177,23 @@ public class Zarolasok_bevitel extends JPanel {
         zarolas_helye.setColumns(10);
         
         JLabel lblNewLabel_9 = new JLabel("Zárolás oka");
-        lblNewLabel_9.setBounds(42, 180, 74, 14);
+        lblNewLabel_9.setBounds(42, 211, 74, 14);
         add(lblNewLabel_9);
         
         JLabel lblNewLabel_10 = new JLabel("Azonnali intézkedés");
-        lblNewLabel_10.setBounds(387, 180, 113, 14);
+        lblNewLabel_10.setBounds(388, 211, 113, 14);
         add(lblNewLabel_10);
         
         zarolasoka_mezo = new JTextArea();
         zarolasoka_mezo.setLineWrap(true);
         zarolasoka_mezo.setWrapStyleWord(true);
-        zarolasoka_mezo.setBounds(113, 180, 238, 92);
+        zarolasoka_mezo.setBounds(111, 211, 238, 92);
         add(zarolasoka_mezo);
         
         intezkedes_mezo = new JTextArea();
         intezkedes_mezo.setLineWrap(true);
         intezkedes_mezo.setWrapStyleWord(true);
-        intezkedes_mezo.setBounds(510, 175, 238, 97);
+        intezkedes_mezo.setBounds(511, 206, 238, 97);
         add(intezkedes_mezo);
         
         JLabel lblNewLabel_11 = new JLabel("Zárolás dátuma");
@@ -221,31 +223,31 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_13);
         
         JLabel lblNewLabel_14 = new JLabel("Válogatás/ellenőrzés eredménye:");
-        lblNewLabel_14.setBounds(42, 375, 198, 14);
+        lblNewLabel_14.setBounds(42, 388, 198, 14);
         add(lblNewLabel_14);
         
         eredmeny_mezo = new JTextField();
         eredmeny_mezo.setText("0");
-        eredmeny_mezo.setBounds(579, 372, 46, 20);
+        eredmeny_mezo.setBounds(578, 385, 46, 20);
         add(eredmeny_mezo);
         eredmeny_mezo.setColumns(10);
         
         JLabel lblNewLabel_15 = new JLabel("Újraellenőrzés dátuma");
-        lblNewLabel_15.setBounds(664, 375, 129, 14);
+        lblNewLabel_15.setBounds(664, 388, 129, 14);
         add(lblNewLabel_15);
         
         ujradatum_mezo = new JTextField();
-        ujradatum_mezo.setBounds(803, 372, 86, 20);
+        ujradatum_mezo.setBounds(804, 385, 86, 20);
         add(ujradatum_mezo);
         ujradatum_mezo.setColumns(10);
         
         JLabel lblNewLabel_16 = new JLabel("Ellenőrzésre fordított idő");
-        lblNewLabel_16.setBounds(908, 375, 148, 14);
+        lblNewLabel_16.setBounds(911, 388, 148, 14);
         add(lblNewLabel_16);
         
         ido_mezo = new JTextField();
         ido_mezo.setText("0");
-        ido_mezo.setBounds(1066, 372, 86, 20);
+        ido_mezo.setBounds(1059, 385, 91, 20);
         add(ido_mezo);
         ido_mezo.setColumns(10);
         
@@ -343,7 +345,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_21);
         
         b2_mezo = new JTextField();
-        b2_mezo.setBounds(1066, 421, 86, 20);
+        b2_mezo.setBounds(1059, 421, 93, 20);
         add(b2_mezo);
         b2_mezo.setColumns(10);
         
@@ -401,35 +403,35 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_24);
         
         JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
-        lblNewLabel_25.setBounds(268, 375, 129, 14);
+        lblNewLabel_25.setBounds(271, 388, 129, 14);
         add(lblNewLabel_25);
         
         ellenorzott_mezo = new JTextField();
         ellenorzott_mezo.setText("0");
-        ellenorzott_mezo.setBounds(407, 372, 39, 20);
+        ellenorzott_mezo.setBounds(409, 385, 39, 20);
         add(ellenorzott_mezo);
         ellenorzott_mezo.setColumns(10);
         
         JLabel hibas_db = new JLabel("Hibás db");
-        hibas_db.setBounds(499, 375, 72, 14);
+        hibas_db.setBounds(501, 388, 72, 14);
         add(hibas_db);
         
         JLabel lblNewLabel_26 = new JLabel("Hiba csoport");
-        lblNewLabel_26.setBounds(42, 324, 91, 14);
+        lblNewLabel_26.setBounds(42, 350, 91, 14);
         add(lblNewLabel_26);
         
         String[] hibacsoportok = {"","alkatrész hiba", "alkatrész sérülés", "azonosítás", "beültetési hiba", "csomagolás", "darabolás", "dokumentáció", "Forrasztási hiba", "Forrasztási hiba / Hiányzó jelölés", "Funkcionális", "Hiányzó jelölés", "Jelölés", "kiöntés", "lakkozás", "nyomtatás", "ragasztás", "szennyeződés", "szerelés", "vegyes", "anyagkezelés" };
         hibacsoport_box = new JComboBox<String>(hibacsoportok);                                              //hibacsoportok
-        hibacsoport_box.setBounds(160, 320, 192, 22);
+        hibacsoport_box.setBounds(159, 342, 192, 22);
         add(hibacsoport_box);
         
         JLabel lblNewLabel_27 = new JLabel("Hiba típus");
-        lblNewLabel_27.setBounds(430, 324, 74, 14);
+        lblNewLabel_27.setBounds(427, 347, 74, 14);
         add(lblNewLabel_27);
         
         String[] hibatipusok = {"","AOI", "címke", "címke tartalom", "deformálódás", "elcsúszott alkatrész", "elektromos hiba", "FCT", "felcserélt kábel", "ferde", "fordított", "furatkitöltöttség", "hiány", "hiányos", "hiányzó", "hiányzó forr", "hiányzó forrasztás", "hiányzó ragasztás", "hideg forr", "hideg forrasztás, óngolyó", "hosszú láb", "Hűtőpaszta pozíció", "kevés ón", "kiborult", "kupak nincs levéve", "levert alkatrész", "maszkolás", "megolvadt alkatrész", "membrán", "méret eltérés", "nem kötött meg az anyag", "nyitott", "ónfelfutás", "óngolyó", "panel", "PCB felület", "QR kód", "ragasztó a paden", "sérülés", "sok ón", "sorjás alkatrész", "szennyezett címke", "termék azonosító keveredés", "Touch-up jelölés hiányzik", "TUP", "zárlat", "zárlat/TUP"};
         hibatipus_box = new JComboBox<String>(hibatipusok);                                                //hibatipusok
-        hibatipus_box.setBounds(514, 320, 215, 22);
+        hibatipus_box.setBounds(515, 339, 215, 22);
         add(hibatipus_box);
         
         ido();
@@ -437,7 +439,7 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         JSeparator separator = new JSeparator();
-        separator.setBounds(45, 286, 1163, 27);
+        separator.setBounds(42, 314, 1163, 14);
         add(separator);
         
         JLabel lblNewLabel_28 = new JLabel("Határidő");
@@ -478,6 +480,15 @@ public class Zarolasok_bevitel extends JPanel {
         gyokerokvalaszto_box.setBounds(676, 428, 73, 22);
         gyokerokvalaszto_box.addActionListener(new Gyokerok_valaszto());
         add(gyokerokvalaszto_box);
+        
+        lblNewLabel_29 = new JLabel("Zárolás oka");
+        lblNewLabel_29.setBounds(42, 181, 74, 14);
+        add(lblNewLabel_29);
+        
+        String[] okok = {"-", "Hiányzó TUP jelölés"};
+        zarolasoka_box = new JComboBox<String>(okok);
+        zarolasoka_box.setBounds(126, 178, 274, 22);
+        add(zarolasoka_box);
 
     }
     
@@ -521,11 +532,11 @@ public class Zarolasok_bevitel extends JPanel {
         add(tipus_box);
         
         JLabel lblNewLabel_4 = new JLabel("Észlelés helye");
-        lblNewLabel_4.setBounds(770, 180, 85, 14);
+        lblNewLabel_4.setBounds(770, 211, 85, 14);
         add(lblNewLabel_4);
         
         eszleleshelye_mezo = new JTextField();
-        eszleleshelye_mezo.setBounds(865, 177, 184, 20);
+        eszleleshelye_mezo.setBounds(865, 205, 184, 20);
         add(eszleleshelye_mezo);
         eszleleshelye_mezo.setColumns(10);
         
@@ -539,11 +550,11 @@ public class Zarolasok_bevitel extends JPanel {
         muszak_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Zárolást kezdeményező mérnök");
-        lblNewLabel_6.setBounds(770, 216, 184, 14);
+        lblNewLabel_6.setBounds(770, 261, 184, 14);
         add(lblNewLabel_6);
         
         mernok_mezo = new JTextField();
-        mernok_mezo.setBounds(955, 213, 164, 20);
+        mernok_mezo.setBounds(964, 258, 164, 20);
         add(mernok_mezo);
         mernok_mezo.setColumns(10);
         
@@ -566,23 +577,23 @@ public class Zarolasok_bevitel extends JPanel {
         zarolas_helye.setColumns(10);
         
         JLabel lblNewLabel_9 = new JLabel("Zárolás oka");
-        lblNewLabel_9.setBounds(42, 180, 74, 14);
+        lblNewLabel_9.setBounds(42, 211, 74, 14);
         add(lblNewLabel_9);
         
         JLabel lblNewLabel_10 = new JLabel("Azonnali intézkedés");
-        lblNewLabel_10.setBounds(387, 180, 113, 14);
+        lblNewLabel_10.setBounds(388, 211, 113, 14);
         add(lblNewLabel_10);
         
         zarolasoka_mezo = new JTextArea();
         zarolasoka_mezo.setLineWrap(true);
         zarolasoka_mezo.setWrapStyleWord(true);
-        zarolasoka_mezo.setBounds(113, 180, 238, 92);
+        zarolasoka_mezo.setBounds(111, 211, 238, 92);
         add(zarolasoka_mezo);
         
         intezkedes_mezo = new JTextArea();
         intezkedes_mezo.setLineWrap(true);
         intezkedes_mezo.setWrapStyleWord(true);
-        intezkedes_mezo.setBounds(510, 175, 238, 97);
+        intezkedes_mezo.setBounds(511, 206, 238, 97);
         add(intezkedes_mezo);
         
         JLabel lblNewLabel_11 = new JLabel("Zárolás dátuma");
@@ -612,31 +623,31 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_13);
         
         JLabel lblNewLabel_14 = new JLabel("Válogatás/ellenőrzés eredménye:");
-        lblNewLabel_14.setBounds(42, 375, 198, 14);
+        lblNewLabel_14.setBounds(42, 388, 198, 14);
         add(lblNewLabel_14);
         
         eredmeny_mezo = new JTextField();
         eredmeny_mezo.setText("0");
-        eredmeny_mezo.setBounds(579, 372, 46, 20);
+        eredmeny_mezo.setBounds(578, 385, 46, 20);
         add(eredmeny_mezo);
         eredmeny_mezo.setColumns(10);
         
         JLabel lblNewLabel_15 = new JLabel("Újraellenőrzés dátuma");
-        lblNewLabel_15.setBounds(664, 375, 129, 14);
+        lblNewLabel_15.setBounds(664, 388, 129, 14);
         add(lblNewLabel_15);
         
         ujradatum_mezo = new JTextField();
-        ujradatum_mezo.setBounds(803, 372, 86, 20);
+        ujradatum_mezo.setBounds(804, 385, 86, 20);
         add(ujradatum_mezo);
         ujradatum_mezo.setColumns(10);
         
         JLabel lblNewLabel_16 = new JLabel("Ellenőrzésre fordított idő");
-        lblNewLabel_16.setBounds(908, 375, 148, 14);
+        lblNewLabel_16.setBounds(911, 388, 148, 14);
         add(lblNewLabel_16);
         
         ido_mezo = new JTextField();
         ido_mezo.setText("0");
-        ido_mezo.setBounds(1066, 372, 86, 20);
+        ido_mezo.setBounds(1059, 385, 91, 20);
         add(ido_mezo);
         ido_mezo.setColumns(10);
         
@@ -734,7 +745,7 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_21);
         
         b2_mezo = new JTextField();
-        b2_mezo.setBounds(1066, 421, 86, 20);
+        b2_mezo.setBounds(1059, 421, 93, 20);
         add(b2_mezo);
         b2_mezo.setColumns(10);
         
@@ -792,35 +803,35 @@ public class Zarolasok_bevitel extends JPanel {
         add(lblNewLabel_24);
         
         JLabel lblNewLabel_25 = new JLabel("Ellenőrzött mennyiség:");
-        lblNewLabel_25.setBounds(268, 375, 129, 14);
+        lblNewLabel_25.setBounds(271, 388, 129, 14);
         add(lblNewLabel_25);
         
         ellenorzott_mezo = new JTextField();
         ellenorzott_mezo.setText("0");
-        ellenorzott_mezo.setBounds(407, 372, 39, 20);
+        ellenorzott_mezo.setBounds(409, 385, 39, 20);
         add(ellenorzott_mezo);
         ellenorzott_mezo.setColumns(10);
         
         JLabel hibas_db = new JLabel("Hibás db");
-        hibas_db.setBounds(499, 375, 72, 14);
+        hibas_db.setBounds(501, 388, 72, 14);
         add(hibas_db);
         
         JLabel lblNewLabel_26 = new JLabel("Hiba csoport");
-        lblNewLabel_26.setBounds(42, 324, 91, 14);
+        lblNewLabel_26.setBounds(42, 350, 91, 14);
         add(lblNewLabel_26);
         
         String[] hibacsoportok = {"","alkatrész hiba", "alkatrész sérülés", "azonosítás", "beültetési hiba", "csomagolás", "darabolás", "dokumentáció", "Forrasztási hiba", "Forrasztási hiba / Hiányzó jelölés", "Funkcionális", "Hiányzó jelölés", "Jelölés", "kiöntés", "lakkozás", "nyomtatás", "ragasztás", "szennyeződés", "szerelés", "vegyes", "anyagkezelés" };
         hibacsoport_box = new JComboBox<String>(hibacsoportok);                                              //hibacsoportok
-        hibacsoport_box.setBounds(160, 320, 192, 22);
+        hibacsoport_box.setBounds(159, 342, 192, 22);
         add(hibacsoport_box);
         
         JLabel lblNewLabel_27 = new JLabel("Hiba típus");
-        lblNewLabel_27.setBounds(430, 324, 74, 14);
+        lblNewLabel_27.setBounds(427, 347, 74, 14);
         add(lblNewLabel_27);
         
         String[] hibatipusok = {"","AOI", "címke", "címke tartalom", "deformálódás", "elcsúszott alkatrész", "elektromos hiba", "FCT", "felcserélt kábel", "ferde", "fordított", "furatkitöltöttség", "hiány", "hiányos", "hiányzó", "hiányzó forr", "hiányzó forrasztás", "hiányzó ragasztás", "hideg forr", "hideg forrasztás, óngolyó", "hosszú láb", "Hűtőpaszta pozíció", "kevés ón", "kiborult", "kupak nincs levéve", "levert alkatrész", "maszkolás", "megolvadt alkatrész", "membrán", "méret eltérés", "nem kötött meg az anyag", "nyitott", "ónfelfutás", "óngolyó", "panel", "PCB felület", "QR kód", "ragasztó a paden", "sérülés", "sok ón", "sorjás alkatrész", "szennyezett címke", "termék azonosító keveredés", "Touch-up jelölés hiányzik", "TUP", "zárlat", "zárlat/TUP"};
         hibatipus_box = new JComboBox<String>(hibatipusok);                                                //hibatipusok
-        hibatipus_box.setBounds(514, 320, 215, 22);
+        hibatipus_box.setBounds(515, 339, 215, 22);
         add(hibatipus_box);
         
         ido();
@@ -828,7 +839,7 @@ public class Zarolasok_bevitel extends JPanel {
         setBackground(Foablak.hatter_szine);
         
         JSeparator separator = new JSeparator();
-        separator.setBounds(45, 286, 1163, 27);
+        separator.setBounds(42, 314, 1163, 14);
         add(separator);
         
         JLabel lblNewLabel_28 = new JLabel("Határidő");
@@ -869,6 +880,16 @@ public class Zarolasok_bevitel extends JPanel {
         gyokerokvalaszto_box.setBounds(676, 428, 73, 22);
         gyokerokvalaszto_box.addActionListener(new Gyokerok_valaszto());
         add(gyokerokvalaszto_box);
+        
+        lblNewLabel_29 = new JLabel("Zárolás oka");
+        lblNewLabel_29.setBounds(42, 181, 74, 14);
+        add(lblNewLabel_29);
+        
+        String[] okok = {"-", "Hiányzó TUP jelölés"};
+        zarolasoka_box = new JComboBox<String>(okok);
+        zarolasoka_box.setBounds(126, 178, 274, 22);
+        add(zarolasoka_box);
+
 
         visszatolt(id);
 
@@ -1080,6 +1101,18 @@ public class Zarolasok_bevitel extends JPanel {
                     String feleloss = felelos_mezo.getText()+";"+felelos_mezo2.getText()+";"+felelos_mezo3.getText()+";"+felelos_mezo4.getText()+";"+felelos_mezo5.getText();
                     String hataridoo = hatarido_mezo.getText()+";"+hatarido2_mezo.getText()+";"+hatarido3_mezo.getText()+";"+hatarido4_mezo.getText()+";"+hatarido5_mezo.getText();
                     
+                    String zarolasoka = zarolasoka_mezo.getText() +";"+ String.valueOf(zarolasoka_box.getSelectedItem());
+                    String email_hibaok = "";
+                    
+                    if(String.valueOf(zarolasoka_box.getSelectedItem()).equals("-"))
+                    {
+                        email_hibaok = zarolasoka_mezo.getText();
+                    }
+                    else
+                    {
+                        email_hibaok = String.valueOf(zarolasoka_box.getSelectedItem()) +" "+zarolasoka_mezo.getText();
+                    }
+                    
                     if(Integer.valueOf(ellenorzott_mezo.getText()) != 0)
                     {
                         if(ellenorzott_mezo.getText().equals(zaroltdb_mezo.getText()))
@@ -1094,7 +1127,7 @@ public class Zarolasok_bevitel extends JPanel {
                                 sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
                                         + "muszak ='"+ muszak_mezo.getText() +"',Zarolo_mernok = '"+ mernok_mezo.getText() +"',Zarolt_db ='"+Integer.parseInt(zaroltdb_mezo.getText())+"',Hol_van ='"+ zarolas_helye.getText() +"',"
-                                        + "Zarolas_oka ='"+ zarolasoka_mezo.getText() +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
+                                        + "Zarolas_oka ='"+ zarolasoka +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
                                         + "Zarolta ='"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                         + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
                                         + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
@@ -1117,19 +1150,19 @@ public class Zarolasok_bevitel extends JPanel {
                                     if(felelosterulet_box.getSelectedItem().equals("Gépes"))
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                 zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText()) ;
                                     }
                                     else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }
                                     else
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }   
                                 }
@@ -1138,7 +1171,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam, Ellenorzott_db,Hibacsoport,Hibatipus) "
                                         + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
-                                        + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
+                                        + "'"+ zarolasoka +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                         + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
                                         + "'"+ feleloss +"','"+ gyokerok_mezo.getText() +"','"+ intezkedess +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
@@ -1170,7 +1203,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1209,7 +1242,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1246,7 +1279,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1284,7 +1317,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1321,7 +1354,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1358,7 +1391,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1392,7 +1425,7 @@ public class Zarolasok_bevitel extends JPanel {
                                 sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
                                         + "muszak ='"+ muszak_mezo.getText() +"',Zarolo_mernok = '"+ mernok_mezo.getText() +"',Zarolt_db ='"+Integer.parseInt(zaroltdb_mezo.getText())+"',Hol_van ='"+ zarolas_helye.getText() +"',"
-                                        + "Zarolas_oka ='"+ zarolasoka_mezo.getText() +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
+                                        + "Zarolas_oka ='"+ zarolasoka +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
                                         + "Zarolta ='"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                         + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
                                         + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
@@ -1415,19 +1448,19 @@ public class Zarolasok_bevitel extends JPanel {
                                     if(felelosterulet_box.getSelectedItem().equals("Gépes"))
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                 zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText()) ;
                                     }
                                     else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }
                                     else
                                     {
                                         uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                                zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                                zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }
                                 }
@@ -1436,7 +1469,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam, Ellenorzott_db,Hibacsoport,Hibatipus) "
                                         + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                         + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
-                                        + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
+                                        + "'"+ zarolasoka +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                         + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
                                         + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
                                                 + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
@@ -1467,7 +1500,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1506,7 +1539,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1543,7 +1576,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1581,7 +1614,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1618,7 +1651,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1655,7 +1688,7 @@ public class Zarolasok_bevitel extends JPanel {
                                                 + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                                 + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                                 + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                                + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                                + "Zárolás oka: "+ email_hibaok +"\n"
                                                 + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                                 + "Dátum: "+ datum_mezo.getText() +"\n"
                                                 + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1692,7 +1725,7 @@ public class Zarolasok_bevitel extends JPanel {
                             sql = "update qualitydb.Zarolasok set  Projekt ='"+ String.valueOf(projekt_box.getSelectedItem()) +"',Tipus = '"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                     + "Eszleles_helye ='"+ eszleleshelye_mezo.getText() +"',"
                                     + "muszak ='"+ muszak_mezo.getText() +"',Zarolo_mernok = '"+ mernok_mezo.getText() +"',Zarolt_db ='"+Integer.parseInt(zaroltdb_mezo.getText())+"',Hol_van ='"+ zarolas_helye.getText() +"',"
-                                    + "Zarolas_oka ='"+ zarolasoka_mezo.getText() +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
+                                    + "Zarolas_oka ='"+ zarolasoka +"',Azonnali_intezkedes ='"+ intezkedes_mezo.getText() +"',Zarolas_datuma ='"+ datum_mezo.getText() +"',Papir_sorszama ='"+ sorszam_mezo.getText() +"',"
                                     + "Zarolta ='"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                     + "Valogatas_eredmenye ='"+ eredmeny_mezo.getText() +"',Ujraellenorzes_datuma ='"+ ujradatum_mezo.getText() +"',Ellenorzes_ido ='"+ ido_mezo.getText() +"',Technikusi_beavatkozas ='"+ technikus +"',"
                                     + "Felelos_terulet ='"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
@@ -1715,19 +1748,19 @@ public class Zarolasok_bevitel extends JPanel {
                                 if(felelosterulet_box.getSelectedItem().equals("Gépes"))
                                 {
                                     uzenet.zarolas_email("easqas@veas.videoton.hu", "ternak.sandor@veas.videoton.hu, kadar.zoltan@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                            zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                            zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                             zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText()) ;
                                 }
                                 else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                 {
                                     uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                            zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                            zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                     zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                 }
                                 else
                                 {
                                     uzenet.zarolas_email("easqas@veas.videoton.hu", "babud.imre@veas.videoton.hu, meszaros.hajnalka@veas.videoton.hu, serebrianska.kateryna@veas.videoton.hu, tatai.mihaly@veas.videoton.hu, fekete.mercedesz@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
-                                            zaroltdb_mezo.getText(), zarolasoka_mezo.getText(), String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
+                                            zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                     zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                 } 
                             }
@@ -1736,7 +1769,7 @@ public class Zarolasok_bevitel extends JPanel {
                                     + "Ellenorzes_ido,Technikusi_beavatkozas,Felelos_terulet,Felelos,Hiba_gyokeroka,Gyokerok_intezkedes,B2_zarolas,visszaellenorzes,ME_szam, Ellenorzott_db,Hibacsoport,Hibatipus) "
                                     + "Values('"+ id_mezo.getText()+"','"+ String.valueOf(projekt_box.getSelectedItem()) +"','"+ String.valueOf(tipus_box.getSelectedItem()) +"',"
                                     + "'"+ eszleleshelye_mezo.getText() +"','"+ muszak_mezo.getText() +"','"+ mernok_mezo.getText() +"','"+Integer.parseInt(zaroltdb_mezo.getText())+"','"+ zarolas_helye.getText() +"',"
-                                    + "'"+ zarolasoka_mezo.getText() +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
+                                    + "'"+ zarolasoka +"','"+ intezkedes_mezo.getText() +"','"+ datum_mezo.getText() +"','"+ sorszam_mezo.getText() +"','"+ String.valueOf(zarolta_box.getSelectedItem()) +"',"
                                     + "'"+ eredmeny_mezo.getText() +"','"+ ujradatum_mezo.getText() +"','"+ ido_mezo.getText() +"','"+ technikus +"','"+ String.valueOf(felelosterulet_box.getSelectedItem()) +"',"
                                     + "'"+ felelos_mezo.getText() +"','"+ gyokerok_mezo.getText() +"','"+ gyokerintezkedes_mezo.getText() +"','"+ b2_mezo.getText() +"','"+ visszaellenorzes_mezo.getText() +"'"
                                             + ",'"+ meszam_mezo.getText() +"','"+ ellenorzott_mezo.getText() +"','"+ String.valueOf(hibacsoport_box.getSelectedItem()) +"','"+ String.valueOf(hibatipus_box.getSelectedItem()) +"')";
@@ -1766,7 +1799,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                         + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                         + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                        + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                        + "Zárolás oka: "+ email_hibaok +"\n"
                                         + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                         + "Dátum: "+ datum_mezo.getText() +"\n"
                                         + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1805,7 +1838,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1842,7 +1875,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1880,7 +1913,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1917,7 +1950,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1954,7 +1987,7 @@ public class Zarolasok_bevitel extends JPanel {
                                             + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                             + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                             + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                            + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                            + "Zárolás oka: "+ email_hibaok +"\n"
                                             + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                             + "Dátum: "+ datum_mezo.getText() +"\n"
                                             + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -1994,7 +2027,7 @@ public class Zarolasok_bevitel extends JPanel {
                                         + "Projekt: "+ String.valueOf(projekt_box.getSelectedItem())+ "\n"
                                         + "Cikkszám: "+ String.valueOf(tipus_box.getSelectedItem()) + "\n"
                                         + "Zárolt db: "+ zaroltdb_mezo.getText() +"\n"
-                                        + "Zárolás oka: "+ zarolasoka_mezo.getText() +"\n"
+                                        + "Zárolás oka: "+ email_hibaok +"\n"
                                         + "Zárolta: "+ String.valueOf(zarolta_box.getSelectedItem()) +"\n"
                                         + "Dátum: "+ datum_mezo.getText() +"\n"
                                         + "Műszak: "+ muszak_mezo.getText()+"\n"
@@ -2074,6 +2107,7 @@ public class Zarolasok_bevitel extends JPanel {
         ellenorzott_mezo.setText("0");
         projekt_box.addActionListener(valaszto);
         gyokerokvalaszto_box.setSelectedIndex(0);
+        zarolasoka_box.setSelectedIndex(0);
     }
     
     public void visszatolt(String id)
@@ -2114,7 +2148,9 @@ public class Zarolasok_bevitel extends JPanel {
                 mernok_mezo.setText(rs.getString(6));
                 zaroltdb_mezo.setText(rs.getString(7));
                 zarolas_helye.setText(rs.getString(8));
-                zarolasoka_mezo.setText(rs.getString(9));
+                String[] zarolasoka =  rs.getString(9).split(";");
+                zarolasoka_mezo.setText(zarolasoka[0]);
+                zarolasoka_box.setSelectedItem(zarolasoka[1]);
                 intezkedes_mezo.setText(rs.getString(10));
                 String[] datum = rs.getString(11).split(" "); 
                 datum_mezo.setText(datum[0]);

@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Calendar;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -594,12 +595,18 @@ public class Foablak extends JFrame
 		pack();
         setLocationRelativeTo(null);
         //sorszamol();
-        
         ImageIcon icon = new ImageIcon("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\easqas.jpg");
-        setIconImage(icon.getImage());
+        
+        
+        //new ImageIcon(getClass().getResource("\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\easqas.jpg"));
+        // ImageIcon icon = new ImageIcon(myImg);
+        setIconImage(icon.getImage());                                 //icon.getImage()
+        //System.setProperty("sun.java2d.uiScale", "1.0");
         
 
 	}
+	
+	
 	
 /******************************************************************  Menü elemek közötti lépegetés *********************************************************************************************************/
 	
@@ -1447,16 +1454,9 @@ public class Foablak extends JFrame
             /*Email email = new Email();
             for(int szamlalo = 0; szamlalo < 1; szamlalo++)
             {                
-                email.mindenes_email("easqas@veas.videoton.hu", "reznyak.norbert.zoltan@veas.videoton.hu", "", "Lejárt D3", "<br>Tisztelt Reznyák Norbert!</br> "
-                        + "<br>Lejárt a D3 határideje az alábbi reklamációnál: \nID: 1</br>"
-                + "<br>Vevő:</br>" 
-                + "<br>Típus: "+"</br>" 
-                + "<br>Mi a probléma: </br>"
-                + "<br>Kérem, minél előbb zárja le!</br>"
-                + "<br>Link: <a href='\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\bat fájlok\\indito1.bat'>Reklamáció link</a> </br>"
-                + "<br>Üdvözlettel: EASQAS program</br>");
-            }*/
-            
+                email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "email", "https://www.youtube.com/watch?v=njEkyDmyr1s");
+            }
+            */
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
             //email.mindenes_email("reznyak.norbert@veas.videoton.hu", "schweighardt.robert@veas.videoton.hu", "Coming out", "Szia Robi! \n Be kell valljam MELEG VAGYOK!! \n Ha van kedved lehetnénk segglyuk tesók ;) \n Üdv: Norbi");
             /*String kerdojel = "";
@@ -1505,10 +1505,7 @@ public class Foablak extends JFrame
             
         }
     }
-	
-	
-	
-	
+
 	/*
 	static float fb7530 = (float) 0.00;
 	static float fb7530ax = (float) 0.00;

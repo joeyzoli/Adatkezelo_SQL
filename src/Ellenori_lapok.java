@@ -752,7 +752,7 @@ public class Ellenori_lapok extends JPanel {
                             {
                                 if(sheet.getRange().get(szamlalo, oszlopszam).getText().equals("de"))
                                 {
-                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
+                                    email.ellenori_email("automataemail@veas.videoton.hu", "juhasz.iren@veas.videoton.hu", "sagi.szilvia@veas.videoton.hu,kurgya.edina@veas.videoton.hu", "egyedne.adrienn@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu",
                                             sheet.getRange().get("A"+ szamlalo).getText(), sheet.getRange().get(szamlalo, szamlalo2).getText(),
                                             datum[0], sheet.getRange().get(szamlalo, oszlopszam).getText());
                                 }

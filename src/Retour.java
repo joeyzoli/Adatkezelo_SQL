@@ -779,7 +779,7 @@ public class Retour extends JPanel
                 workbook.loadFromFile(excelhelye2);
                 workbook.setVersion(ExcelVersion.Version2016);
                 Worksheet sheet = workbook.getWorksheets().get(0);
-                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow(); szamlalo++)
+                for(int szamlalo = 1; szamlalo < sheet.getLastDataRow()+1; szamlalo++)
                 {
                     if(keresett.toUpperCase().equals(sheet.getRange().get("B"+szamlalo).getText().toUpperCase()))
                     {

@@ -660,7 +660,8 @@ public class Zarolasok_osszesito extends JPanel {
                 //System.out.println(String.valueOf(mireszur_box.getSelectedItem()));
                 if(nyitott_gomb.isSelected())
                 {
-                    if(String.valueOf(mireszur_box.getSelectedItem()) == null)
+                    System.out.println(String.valueOf(mireszur_box.getSelectedItem()));
+                    if(String.valueOf(mireszur_box.getSelectedItem()) == null || String.valueOf(mireszur_box.getSelectedItem()).equals("null"))
                     {
                         System.out.println("nincs kiválasztav semmi");
                         sql = "select Id,Papir_sorszama, projekt, tipus,Felelos_terulet, eszleles_helye,zarolt_db,hol_van, zarolas_oka,\r\n"

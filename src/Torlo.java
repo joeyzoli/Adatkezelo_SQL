@@ -1723,7 +1723,7 @@ public class Torlo extends JPanel
                         + "from videoton.fkov  \n"
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
-                        + " where (hely = '49'  or  hely = '16') and ido > '2024.01.01' and panel like '111A21045%'";
+                        + " where hely = '26' and ido > '2024.12.01' and panel like '%LOX-0045%'";
                 
                 /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
@@ -3937,18 +3937,18 @@ public class Torlo extends JPanel
                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                stmt = (Statement) conn.createStatement();
                
-               stmt.execute("select * from qualitydb.Retour_szeriaszamok where 3=3 and VEAS_ID like 'BE%'");
+               stmt.execute("select id, zarolas_oka from qualitydb.Zarolasok where 3 = 3 order by id asc");
                
                ResultSet rs = stmt.getResultSet();
                SQA_SQL frissit = new SQA_SQL();
                
                while(rs.next())
                {
+                   System.out.println(rs.getString(1));
                    System.out.println(rs.getString(2));
-                   System.out.println(rs.getString(2).substring(0,14)+ " "+ rs.getString(2).substring(14,18)+ " "+ rs.getString(2).substring(18,23));
                    
                    
-                   frissit.mindenes("update qualitydb.Retour_szeriaszamok set VEAS_ID = '"+ rs.getString(2).substring(0,14)+ " "+ rs.getString(2).substring(14,18)+ " "+ rs.getString(2).substring(18,23) +"' where "
+                   frissit.mindenes("update qualitydb.Zarolasok set zarolas_oka = '"+ rs.getString(2) + ";-" +"' where "
                            + "ID = '"+ rs.getString(1) +"'");
                }              
                Foablak.frame.setCursor(null);                        

@@ -45,7 +45,7 @@ public class Valogatasok extends JPanel {
     private JRadioButton zarolasmiatt_gomb;
     private JRadioButton zarolasnelkül_gomb;
     private DefaultTableModel modell;
-    private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu";
+    private String cc = "rabine.anita@veas.videoton.hu,sagi.szilvia@veas.videoton.hu,juhasz.iren@veas.videoton.hu,tatai.mihaly@veas.videoton.hu,kurgya.edina@veas.videoton.hu";
     private JTextField egyebnok_mezo;
     private JTextField egyeballnok_mezo;
     private JTextField egyebnok_leiras_mezo;
@@ -366,6 +366,14 @@ public class Valogatasok extends JPanel {
                cimzettek = cimzettek.substring(0, cimzettek.length() - 1);
                
                Email email = new Email();
+               int egyebnok = 0;
+               if(egyebnok_mezo.getText().equals("")) {}
+               else
+               {
+                   egyebnok = Integer.valueOf(egyebnok_mezo.getText());
+               }
+               int allok = Integer.valueOf(ok_mezo.getText()) + Integer.valueOf(allok_mezo.getText());
+               int allnok = Integer.valueOf(nok_mezo.getText()) + Integer.valueOf(allnok_mezo.getText()) + egyebnok;
                String tartalom = "Sziasztok!\r\n"
                        + "\r\n"
                        + "Az alábbi eredmény született a tárgyban szereplő cikkszámra:\r\n"
@@ -375,8 +383,8 @@ public class Valogatasok extends JPanel {
                        + "NOK: "+ nok_mezo.getText() +"\r\n"
                        + "\r\n"
                        + "A válogatás eddigi eredménye:\r\n"
-                       + "Össz OK: "+ allok_mezo.getText() +"\r\n"
-                       + "Össz NOK: "+ allnok_mezo.getText() +"\r\n"
+                       + "Össz OK: "+ allok +"\r\n"
+                       + "Össz NOK: "+ allnok +"\r\n"
                        + "Össz egyéb NOK: "+ egyebnok_mezo.getText() +"\r\n"
                        + "Egyéb NOK leírása: "+ egyebnok_leiras_mezo.getText() +"\r\n"
                        + "\r\n"
@@ -384,9 +392,30 @@ public class Valogatasok extends JPanel {
                
                email.mindenes_email("easqas@veas.videoton.hu", cimzettek, cc, "Válogatás eredménye "+ String.valueOf(cikk_box.getSelectedItem()), tartalom);
                
+               muszak_mezo.setText("");
+               ok_mezo.setText("");
+               nok_mezo.setText("");
+               egyebnok_mezo.setText("");
+               egyebnok_leiras_mezo.setText("");
+               allok_mezo.setText("");
+               allnok_mezo.setText("");
+               sorszam_mezo.setText("");
+               valogatasoka_mezo.setText("");
+               kezdet_mezo.setText("");
+               ossz_mezo.setText("");
+               
+               int rowCount = modell.getRowCount();
+               
+               for (int i = rowCount - 1; i > -1; i--) 
+               {
+                 modell.removeRow(i);
+               }
+               table.setModel(modell);
+               
                Foablak.frame.setCursor(null);                        
                stmt.close();
-               conn.close();                
+               conn.close();
+               JOptionPane.showMessageDialog(null, "Mentve, Email elküldve!", "Info", 1);
             }             
             catch (Exception e1) 
             {

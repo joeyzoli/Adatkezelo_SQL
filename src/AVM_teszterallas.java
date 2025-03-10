@@ -860,7 +860,7 @@ public class AVM_teszterallas extends JPanel {
                 sheet.getCellRange("M" + 14).setFormula("=SZUM(D14:D24)");
                 sheet.getCellRange("M" + 15).setFormula("=SZUM(F14:F24)");
                 sheet.getCellRange("M" + 24).setFormula("=SZUM(B26:B31)");
-                sheet.getCellRange("M" + 25).setFormula("=SZUM(D26:D35)");
+                sheet.getCellRange("M" + 25).setFormula("=SZUM(D26:D36)");
                 sheet.getCellRange("M" + 26).setFormula("=SZUM(F26:F35)");
                 
                 sheet.getRange().get("O" + 1).setText("SUM");
@@ -989,32 +989,43 @@ public class AVM_teszterallas extends JPanel {
                     jdbcAdapter.fillDataTable(datatable, result);
                     System.out.println("Datatableban");
                     //Get the first worksheet
-                    Worksheet sheet = workbook.getWorksheets().get(0);
-                    
+                    Worksheet sheet = workbook.getWorksheets().get(0);                   
                     
                     sheet.insertDataTable(datatable, true, 1, 1);
                     sheet.getAutoFilters().setRange(sheet.getCellRange("A1:P1"));
                     sheet.getAllocatedRange().autoFitColumns();
                     sheet.getAllocatedRange().autoFitRows();
                         
-                    sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
-                     
+                    sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s                                       
                     
+                    String path = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\AVM Succes Rate\\"+ datatable2.getRows().get(szamlalo).getString(0) + ".xlsx";
                     
                     //workbook.setActiveSheetIndex(0);
-                    String path = System.getProperty("user.home") + "\\Desktop\\AVM Succes Rate\\"+ datatable2.getRows().get(szamlalo).getString(0) +".xlsx";
+                    //String path = System.getProperty("user.home") + "\\Desktop\\AVM Succes Rate\\"+ datatable2.getRows().get(szamlalo).getString(0) +".xlsx";
                     Workbook workbook4 = new Workbook();
-                    workbook2.loadFromFile(excelfile1);
-                    Worksheet sheet4 = workbook2.getWorksheets().get(0);
+                    workbook4.loadFromFile(path);
+                    Worksheet sheet4 = workbook4.getWorksheets().get(0);                   
+                    
                     
                     int sor = sheet4.getLastRow()+1;
-                    sheet4.getRange().get("A" + sor).setText("Válogatásra fordított idő");
-                    //sheet4.getRange().get("B" + sor).setNumberValue(resultset.getInt(1));
-                    sheet4.getRange().get("C" + sor).setText("óra");
-                    sheet4.getRange().get("D" + sor).setText("Válogatás költsége");
-                    //sheet4.getRange().get("E" + sor).setNumberValue(resultset.getInt(2));
-                    sheet4.getRange().get("F" + sor).setText("euró");
-                    
+                    if(sheet.getRange().get("B" + 2).getText().equals("Hiba"))
+                    {
+                        sheet4.getRange().get("D" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
+                        sheet4.getRange().get("E" + sor).setText(sheet.getRange().get("B" + 2).getText());
+                        sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                        sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 3).getNumberText());
+                        sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 3).getText());
+                        sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 3).getNumberText()));                            
+                    }
+                    else
+                    {
+                        sheet4.getRange().get("D" + sor).setText(sheet.getRange().get("A" + 3).getNumberText());
+                        sheet4.getRange().get("E" + sor).setText(sheet.getRange().get("B" + 3).getText());
+                        sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 3).getNumberText()));
+                        sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
+                        sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 2).getText());
+                        sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                    }                                      
                     
                     workbook4.saveToFile(path, ExcelVersion.Version2016);  
                     FileInputStream fileStream = new FileInputStream(path);
@@ -1034,7 +1045,7 @@ public class AVM_teszterallas extends JPanel {
                 cstmt.close();
                 con.close();
                 Foablak.frame.setCursor(null); 
-                JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
+                JOptionPane.showMessageDialog(null, "Mentés sikeres \nMentve az alábbi helyre: minosegbiztositas\\Fájlok\\AVM Succes Rate\\ ", "Infó", 1);
             }
             catch(Exception e1)
             {
