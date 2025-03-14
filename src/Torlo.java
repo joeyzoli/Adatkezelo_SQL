@@ -82,7 +82,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new Tracy_kereses());
+		feltolt.addActionListener(new TXT_keszito());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1077,12 +1077,12 @@ public class Torlo extends JPanel
                           + "where OPERATION_NO = 30 and MANUF_DATE between to_date( '20240301000000', 'YYYYMMDDHH24:MI:SS' ) and to_date( '20240617235959', 'YYYYMMDDHH24:MI:SS' ) and (PART_NO like 'PROD%' or PART_NO like 'BORD%')\n"
                           + "group by MANUF_DATE , TRACY_SERIAL_NO");*/
                   ResultSet rs = stmt.executeQuery("select part_no, ifsapp.INVENTORY_PART_API.Get_Description(contract,PART_NO) as cikkszamok, date_created,\n"
-                          + "location_no, reject_code, transaction, cast(cost as decimal(12,2)), quantity, source, userid\n"
+                          + "location_no, reject_code, transaction, cost, quantity, source, userid\n"
                           + "from ifsapp.INVENTORY_TRANSACTION_HIST2\n"
                           + "where\n"
                           + "upper( ifsapp.Mpccom_System_Event_Api.Get_Description(TRANSACTION_CODE) ) like upper( '%selejt%' ) \n"
                           + "and  DATE_CREATED between to_date( '20240101', 'YYYYMMDD' ) and to_date( '20241231', 'YYYYMMDD' ) + ( 1 - 1/ ( 60*60*24 ) ) \n"
-                          + "and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VPRGL'");
+                          + "and ifsapp.inventory_part_api.Get_Second_Commodity(contract, Part_no) = 'VAVM'");
                   Workbook workbook = new Workbook();
                   workbook.setVersion(ExcelVersion.Version2016);
                   //JdbcAdapter jdbcAdapter = new JdbcAdapter();
@@ -1111,12 +1111,24 @@ public class Torlo extends JPanel
                       sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
                       sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
                       sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
-                      sheet.getRange().get("G" + cellaszam).setNumberValue(rs.getInt(7));
+                      /*String[] lebego = rs.getString(7).split("\\.");
+                      String ossze = "";
+                      if(lebego.length > 1)
+                      {
+                          ossze = lebego[0] + "." + lebego[1].substring(0, 2);
+                      }
+                      else
+                      {
+                          ossze = lebego[0]+ ".00";
+                      }*/
+                      System.out.println(rs.getString(7));
+                      sheet.getRange().get("G" + cellaszam).setNumberValue(Float.valueOf(rs.getString(7)));
                       sheet.getRange().get("H" + cellaszam).setNumberValue(rs.getInt(8));
                       sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
                       sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
                       cellaszam++;
                       System.out.println("Fut a while "+ cellaszam);
+                      //System.out.println(ossze);
                   }
                   sheet.getAutoFilters().setRange(sheet.getCellRange("A1:J1"));
                   sheet.getAllocatedRange().autoFitColumns();

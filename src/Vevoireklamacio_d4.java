@@ -368,9 +368,13 @@ public class Vevoireklamacio_d4 extends JPanel {
                     {
                         eloember_gomb.setSelected(true);
                     }
-                    else
+                    else if(gyokerok[szamlalo].equals("mod"))
                     {
                         elomod_gomb.setSelected(true);
+                    }
+                    else
+                    {
+                        
                     }
                 }
                 
@@ -389,9 +393,13 @@ public class Vevoireklamacio_d4 extends JPanel {
                     {
                         detember_gomb.setSelected(true);
                     }
-                    else
+                    else if(gyokerok2[szamlalo].equals("mod"))
                     {
                         detmod_gomb.setSelected(true);
+                    }
+                    else
+                    {
+                        
                     }
                 }
             }

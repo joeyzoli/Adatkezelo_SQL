@@ -6,17 +6,30 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 public class Vevoireklamacio_d8 extends JPanel {
     static JTextField lezaras_datuma;
     private JTextArea megelozo_mezo;
     private JLabel lblNewLabel_2;
     private JTextField felelos_mezo;
+    private JDatePickerImpl lezaras;
+    private UtilDateModel model;
     /**
      * Create the panel.
      */
@@ -38,10 +51,19 @@ public class Vevoireklamacio_d8 extends JPanel {
         lblNewLabel_1.setBounds(590, 527, 106, 14);
         add(lblNewLabel_1);
         
+        
+        model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Ma");
+        p.put("text.month", "Hónap");
+        p.put("text.year", "Év");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        lezaras = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        
         lezaras_datuma = new JTextField();
         lezaras_datuma.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        lezaras_datuma.setBounds(706, 524, 86, 20);
-        add(lezaras_datuma);
+        lezaras.setBounds(706, 524, 130, 20);
+        add(lezaras);
         lezaras_datuma.setColumns(10);
         
         lblNewLabel_2 = new JLabel("Felelős");
@@ -60,7 +82,10 @@ public class Vevoireklamacio_d8 extends JPanel {
         try 
         {
             SQA_SQL ment = new SQA_SQL();
-            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"', D8_felelos = '"+ felelos_mezo.getText() +"' "
+            SimpleDateFormat rogzites = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");                                                          //
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String sql = "update qualitydb.Vevoireklamacio_alap set Megelozointezkedes = '"+ megelozo_mezo.getText() +"', Lezaras_datuma = '"+ lezaras_datuma.getText() +"', "
+                    + "D8_felelos = '"+ felelos_mezo.getText() +"', Modositas_ideje = '"+ rogzites.format(timestamp) + " "+ System.getProperty("user.name") +"' "
                     + "where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";
             ment.mindenes(sql);
             if(lezaras_datuma.getText().equals("")) {}
@@ -106,6 +131,19 @@ public class Vevoireklamacio_d8 extends JPanel {
                 megelozo_mezo.setText(rs.getString(1));
                 lezaras_datuma.setText(rs.getString(2));
                 felelos_mezo.setText(rs.getString(3));
+                if(rs.getString(2).equals("")) {}
+                else
+                {
+                    Date date3 = null;
+                    String dateValue = rs.getString(2);
+                    try {
+                        date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    model.setValue(date3);
+                }
             }
             stmt.close();
             conn.close();                
@@ -140,6 +178,31 @@ public class Vevoireklamacio_d8 extends JPanel {
            }  
         }
         //JOptionPane.showMessageDialog(null, "Kész", "Info", 1);
+    }
+    
+    public class DateLabelFormatter extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;                   
+                
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                lezaras_datuma.setText(dateFormatter.format(cal.getTime()));
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }
+
     }
 
 }

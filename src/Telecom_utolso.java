@@ -195,7 +195,7 @@ public class Telecom_utolso extends JPanel {
                     workbook.loadFromFile(fajl.getAbsolutePath());
                     Worksheet sheet = workbook.getWorksheets().get(0);
                     DataTable datatable = new DataTable();
-                    DataTable datatable2 = new DataTable();
+                    //DataTable datatable2 = new DataTable();
                     datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );                
                     Workbook workbook2 = new Workbook();
                     workbook2.setVersion(ExcelVersion.Version2016);
@@ -204,7 +204,7 @@ public class Telecom_utolso extends JPanel {
                     Class.forName("oracle.jdbc.OracleDriver");  //.driver                                    
                     Connection con = DriverManager.getConnection("jdbc:oracle:thin:@IFSORA.IFS.videoton.hu:1521/IFSPROD","ZKOVACS","ZKOVACS");                                      
                     Statement stmt = con.createStatement();
-                    String osszefuzott = "";
+                    //String osszefuzott = "";
                     int cellaszam = 1;
                     sheet2.getRange().get("A" + cellaszam).setText("Contract");
                     sheet2.getRange().get("B" + cellaszam).setText("Part no");
@@ -229,9 +229,9 @@ public class Telecom_utolso extends JPanel {
                     ResultSet rs = null;
                     for(int szamlalo = 0; szamlalo < datatable.getRows().size(); szamlalo++)
                     {
-                        osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
-                    }
-                        osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
+                        //osszefuzott += "'"+ datatable.getRows().get(szamlalo).getString(0) +"',";
+                    
+                        //osszefuzott = osszefuzott.substring(0, osszefuzott.length() - 1);
                         rs = stmt.executeQuery("select ot.contract,\r\n"
                                 + "       ct.part_no,\r\n"
                                 + "       ot.tracy_id,\r\n"
@@ -254,7 +254,7 @@ public class Telecom_utolso extends JPanel {
                                 + "       ifsapp.C_SPEC_TRACY_UNIT_OVW so,\r\n"
                                 + "       ifsapp.C_TRACY_HIST_OVW      ct\r\n"
                                 + " where 3 = 3\r\n"
-                                + "   and ot.TRACY_SERIAL_NO in ("+ osszefuzott +")\r\n"
+                                + "   and ot.TRACY_SERIAL_NO = '"+ datatable.getRows().get(szamlalo).getString(0) +"' \r\n"
                                 + "   and ot.contract = so.contract(+)\r\n"
                                 + "   and ot.tracy_id = so.tracy_id(+)\r\n"
                                 + "   and ot.oper_tracy_id = so.oper_tracy_id(+)\r\n"
@@ -266,34 +266,35 @@ public class Telecom_utolso extends JPanel {
                                 + "      --and nvl(ot.manuf_date, ot.process_date) >= trunc(SYSDATE)\r\n"                       
                                 + " order by ot.manuf_date asc ");
                         
-                        JdbcAdapter jdbcAdapter = new JdbcAdapter();
-                        jdbcAdapter.fillDataTable(datatable2, rs);
+                        //JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                        //jdbcAdapter.fillDataTable(datatable2, rs);
                         //sheet2.insertDataTable(datatable2, true, 1, 1);
                         
-                        for(int szamlalo2 = 0; szamlalo2 < datatable2.getRows().size(); szamlalo2++)
+                        while(rs.next())
                         {                           
-                            sheet2.getRange().get("A" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(0));
-                            sheet2.getRange().get("B" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(1));
-                            sheet2.getRange().get("C" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(2));
-                            sheet2.getRange().get("D" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(3));
-                            sheet2.getRange().get("E" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(4));
-                            sheet2.getRange().get("F" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(5));
-                            sheet2.getRange().get("G" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(6));
-                            sheet2.getRange().get("H" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(7));
-                            sheet2.getRange().get("I" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(8));
-                            sheet2.getRange().get("J" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(9));
-                            sheet2.getRange().get("K" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(10));
-                            sheet2.getRange().get("L" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(11));
-                            sheet2.getRange().get("M" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(12));
-                            sheet2.getRange().get("N" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(13));
-                            sheet2.getRange().get("O" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(14));
-                            sheet2.getRange().get("P" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(15));
-                            sheet2.getRange().get("Q" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(16));
-                            sheet2.getRange().get("R" + cellaszam).setText(datatable2.getRows().get(szamlalo2).getString(17));
+                            sheet2.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                            sheet2.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                            sheet2.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                            sheet2.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                            sheet2.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                            sheet2.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                            sheet2.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                            sheet2.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                            sheet2.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                            sheet2.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                            sheet2.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                            sheet2.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                            sheet2.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                            sheet2.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                            sheet2.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                            sheet2.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                            sheet2.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                            sheet2.getRange().get("R" + cellaszam).setText(rs.getString(18));
                             cellaszam++;
-                            
+                            System.out.println("fut a while");
                         }
-                    
+                        System.out.println("fut a for");
+                    }
                     //sheet2.insertDataTable(datatable2, true, 1, 1);
                     sheet2.getAutoFilters().setRange(sheet2.getCellRange("A1:AD1"));
                     sheet2.getAllocatedRange().autoFitColumns();

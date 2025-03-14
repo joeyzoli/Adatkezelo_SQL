@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -307,9 +308,222 @@ public class SQA_osszesito extends JPanel {
             try
             {
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));                                                //egér mutató változtatása munka a háttérbenre
-                SQA_SQL lekerdez = new SQA_SQL();
                 String sql = "select *,if(lezaras_ido is null, DATEDIFF(now(), Datum), DATEDIFF(Lezaras_ido, Datum)) as nyitva from qualitydb.SQA_reklamaciok where 3=3";
-                lekerdez.minden_excel(sql, "SQA Reklamáció-k.xlsx");
+                Connection conn = null;
+                Statement stmt = null;        
+                try 
+                {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                    stmt = (Statement) conn.createStatement();
+                    stmt.execute(sql);
+                    ResultSet rs = stmt.getResultSet();
+                    Workbook workbook = new Workbook();
+                    Worksheet sheet = workbook.getWorksheets().get(0);
+                    int cellaszam = 1;
+                    sheet.getRange().get("A" + cellaszam).setText("ID");
+                    sheet.getRange().get("B" + cellaszam).setText("Futó ID");
+                    sheet.getRange().get("C" + cellaszam).setText("Dátum");
+                    sheet.getRange().get("D" + cellaszam).setText("Inditotta");
+                    sheet.getRange().get("E" + cellaszam).setText("Mi");
+                    sheet.getRange().get("F" + cellaszam).setText("Cikkszám");
+                    sheet.getRange().get("G" + cellaszam).setText("Fajta");
+                    sheet.getRange().get("H" + cellaszam).setText("Gyártó");
+                    sheet.getRange().get("I" + cellaszam).setText("Beszállító");
+                    sheet.getRange().get("J" + cellaszam).setText("Projekt");
+                    sheet.getRange().get("K" + cellaszam).setText("Kontakt");
+                    sheet.getRange().get("L" + cellaszam).setText("Hibaleírás");
+                    sheet.getRange().get("M" + cellaszam).setText("Belső intézkedés");
+                    sheet.getRange().get("N" + cellaszam).setText("Hibás db");
+                    sheet.getRange().get("O" + cellaszam).setText("Megjelenés idő");
+                    sheet.getRange().get("P" + cellaszam).setText("Reklamáció idő");
+                    sheet.getRange().get("Q" + cellaszam).setText("Deviza");
+                    sheet.getRange().get("R" + cellaszam).setText("Egységár");
+                    sheet.getRange().get("S" + cellaszam).setText("Összérték");
+                    sheet.getRange().get("T" + cellaszam).setText("Beszállító válasza");
+                    sheet.getRange().get("U" + cellaszam).setText("Gyökérok");
+                    sheet.getRange().get("V" + cellaszam).setText("Beszállítói kártérítés");
+                    sheet.getRange().get("X" + cellaszam).setText("Belső költség");
+                    sheet.getRange().get("Y" + cellaszam).setText("Veszteség");
+                    sheet.getRange().get("Z" + cellaszam).setText("Mappa helye");
+                    sheet.getRange().get("AA" + cellaszam).setText("8D");
+                    sheet.getRange().get("AB" + cellaszam).setText("Credit Note");
+                    sheet.getRange().get("AC" + cellaszam).setText("Státusz");
+                    sheet.getRange().get("AD" + cellaszam).setText("Státusz idő");
+                    sheet.getRange().get("AE" + cellaszam).setText("Lezárás ideje");
+                    sheet.getRange().get("AF" + cellaszam).setText("Értesítve");
+                    sheet.getRange().get("AG" + cellaszam).setText("Megnevezés");
+                    sheet.getRange().get("AH" + cellaszam).setText("Reklamáció értéke");
+                    sheet.getRange().get("AI" + cellaszam).setText("Csere dátum");
+                    sheet.getRange().get("AJ" + cellaszam).setText("Értesítve 2");
+                    sheet.getRange().get("AK" + cellaszam).setText("Nyitva");
+                    sheet.getRange().get("W" + cellaszam).setText("Össz kártérítés");
+                    sheet.getRange().get("AL" + cellaszam).setText("Össz reklamált db");
+                    sheet.getRange().get("AM" + cellaszam).setText("Össz belső költség");
+                    sheet.getRange().get("AN" + cellaszam).setText("Össz veszteség");
+                    cellaszam++;
+                    
+                    while(rs.next())
+                    {
+                        sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
+                        sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
+                        sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                        sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
+                        sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
+                        sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
+                        sheet.getRange().get("G" + cellaszam).setText(rs.getString(7));
+                        sheet.getRange().get("H" + cellaszam).setText(rs.getString(8));
+                        sheet.getRange().get("I" + cellaszam).setText(rs.getString(9));
+                        sheet.getRange().get("J" + cellaszam).setText(rs.getString(10));
+                        sheet.getRange().get("K" + cellaszam).setText(rs.getString(11));
+                        sheet.getRange().get("L" + cellaszam).setText(rs.getString(12));
+                        sheet.getRange().get("M" + cellaszam).setText(rs.getString(13));
+                        sheet.getRange().get("N" + cellaszam).setText(rs.getString(14));
+                        sheet.getRange().get("O" + cellaszam).setText(rs.getString(15));
+                        sheet.getRange().get("P" + cellaszam).setText(rs.getString(16));
+                        sheet.getRange().get("Q" + cellaszam).setText(rs.getString(17));
+                        sheet.getRange().get("R" + cellaszam).setText(rs.getString(18));
+                        sheet.getRange().get("S" + cellaszam).setText(rs.getString(19));
+                        sheet.getRange().get("T" + cellaszam).setText(rs.getString(20));
+                        sheet.getRange().get("U" + cellaszam).setText(rs.getString(21));
+                        
+                        sheet.getRange().get("V" + cellaszam).setText(rs.getString(22));
+                        String[] szamok = rs.getString(22).split("\n");
+                        int szam = 0;
+                        for(int szamlalo = 0; szamlalo < szamok.length; szamlalo++)
+                        {
+                            try 
+                            {
+                                szam += Integer.valueOf(szamok[szamlalo]);
+                            }
+                            catch (Exception e1) 
+                            {
+                                
+                            }
+                        }
+                        sheet.getRange().get("W" + cellaszam).setNumberValue(szam);
+                        sheet.getRange().get("X" + cellaszam).setText(rs.getString(23));
+                        sheet.getRange().get("Y" + cellaszam).setText(rs.getString(24));
+                        sheet.getRange().get("Z" + cellaszam).setText(rs.getString(25));
+                        sheet.getRange().get("AA" + cellaszam).setText(rs.getString(26));
+                        sheet.getRange().get("AB" + cellaszam).setText(rs.getString(27));
+                        sheet.getRange().get("AC" + cellaszam).setText(rs.getString(28));
+                        sheet.getRange().get("AD" + cellaszam).setText(rs.getString(29));
+                        sheet.getRange().get("AE" + cellaszam).setText(rs.getString(30));
+                        sheet.getRange().get("AF" + cellaszam).setText(rs.getString(31));
+                        sheet.getRange().get("AG" + cellaszam).setText(rs.getString(32));
+                        if(rs.getString(33).equals(""))
+                        {
+                            sheet.getRange().get("AH" + cellaszam).setNumberValue(0);
+                        }
+                        else
+                        {
+                            sheet.getRange().get("AH" + cellaszam).setNumberValue(rs.getInt(33));
+                        }
+                        sheet.getRange().get("AI" + cellaszam).setText(rs.getString(34));
+                        sheet.getRange().get("AJ" + cellaszam).setText(rs.getString(35));
+                        sheet.getRange().get("AK" + cellaszam).setText(rs.getString(36));
+                        
+                        szamok = rs.getString(14).split("\n");
+                        szam = 0;
+                        for(int szamlalo = 0; szamlalo < szamok.length; szamlalo++)
+                        {
+                            try 
+                            {
+                                szam += Integer.valueOf(szamok[szamlalo]);
+                            }
+                            catch (Exception e1) 
+                            {
+                                
+                            }
+                        }
+                        sheet.getRange().get("AL" + cellaszam).setNumberValue(szam);
+                        
+                        szamok = rs.getString(18).split("\n");
+                        szam = 0;
+                        for(int szamlalo = 0; szamlalo < szamok.length; szamlalo++)
+                        {
+                            try 
+                            {
+                                szam += Integer.valueOf(szamok[szamlalo]);
+                            }
+                            catch (Exception e1) 
+                            {
+                                
+                            }
+                        }
+                        sheet.getRange().get("AM" + cellaszam).setNumberValue(szam);
+                        
+                        szamok = rs.getString(24).split("\n");
+                        szam = 0;
+                        for(int szamlalo = 0; szamlalo < szamok.length; szamlalo++)
+                        {
+                            try 
+                            {
+                                szam += Integer.valueOf(szamok[szamlalo]);
+                            }
+                            catch (Exception e1) 
+                            {
+                                
+                            }
+                        }
+                        sheet.getRange().get("AN" + cellaszam).setNumberValue(szam);
+                        cellaszam++;
+                        System.out.println("fut a while");
+                    }
+                    stmt.close();
+                    conn.close();    
+                    
+                    sheet.getAutoFilters().setRange(sheet.getCellRange("A1:AN1"));
+                    sheet.getAllocatedRange().autoFitColumns();
+                    sheet.getAllocatedRange().autoFitRows();
+                    
+                    sheet.getCellRange("A1:AN1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                    String menteshelye = System.getProperty("user.home") + "\\Desktop\\SQA Reklamáció-k.xlsx";
+                    workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                    
+                    FileInputStream fileStream = new FileInputStream(menteshelye);
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(menteshelye);
+                        workbook2.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra SQA Reklamáció-k.xlsx néven!", "Info", 1); 
+                    }          
+                    catch (Exception e1) 
+                    {
+                        e1.printStackTrace();
+                        String hibauzenet = e1.toString();
+                        Email hibakuldes = new Email();
+                        hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+                        JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                     //kivétel esetén kiírja a hibaüzenetet
+                    } finally 
+                {
+                   try 
+                   {
+                      if (stmt != null)
+                         conn.close();
+                   } 
+                   catch (SQLException se) {}
+                   try 
+                   {
+                      if (conn != null)
+                         conn.close();
+                   } 
+                   catch (SQLException se) 
+                   {
+                       se.printStackTrace();
+                       String hibauzenet = se.toString();
+                       Email hibakuldes = new Email();
+                       hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet);
+                       JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);                                                //kivétel esetén kiírja a hibaüzenetet
+                   }  
+                }
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
             catch (Exception e1) 

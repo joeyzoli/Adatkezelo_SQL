@@ -104,19 +104,51 @@ public class SQL
             }
             else
             {
-                System.out.println("Ez a szál is fut");
-                workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
-                FileInputStream fileStream = new FileInputStream(menteshelye);
-                try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                try 
                 {
-                    for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
-                    {    
-                        workbook2.removeSheetAt(i); 
-                    }      
-                    FileOutputStream output = new FileOutputStream(menteshelye);
-                    workbook2.write(output);
-                    output.close();
-                }               
+                    System.out.println("Ez a szál is fut");
+                    workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
+                    FileInputStream fileStream = new FileInputStream(menteshelye);
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(menteshelye);
+                        workbook2.write(output);
+                        output.close();
+                    }
+                }
+                catch (Exception e2) 
+                {
+                    System.out.println("Új szál is fut");
+                    if(menteshelye.contains("ProjektPPM"))
+                    {
+                        menteshelye = System.getProperty("user.home") + "\\Desktop\\ProjektPPM1.xlsx";
+                    }
+                    else if(menteshelye.contains("ProjektPPM"))
+                    {
+                        menteshelye = System.getProperty("user.home") + "\\Desktop\\TermékPPM1.xlsx";
+                    }
+                    else
+                    {
+                        menteshelye = System.getProperty("user.home") + "\\Desktop\\Hibák_adatai1.xlsx";
+                    }
+                    workbook.saveToFile(menteshelye, ExcelVersion.Version2016);          
+                    FileInputStream fileStream = new FileInputStream(menteshelye);
+                    try (XSSFWorkbook workbook2 = new XSSFWorkbook(fileStream)) 
+                    {
+                        for(int i = workbook2.getNumberOfSheets()-1; i>0 ;i--)
+                        {    
+                            workbook2.removeSheetAt(i); 
+                        }      
+                        FileOutputStream output = new FileOutputStream(menteshelye);
+                        workbook2.write(output);
+                        output.close();
+                    }
+                    JOptionPane.showMessageDialog(null, "Mentve az asztalra a végén egy 1-el mert nyitva volt a fájl!", "Info", 1);
+                }
             }
             resultSet.close();
             statement.close();

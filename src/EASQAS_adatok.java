@@ -5,6 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,9 +23,16 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+
+import com.spire.data.table.DataTable;
+import com.spire.data.table.common.JdbcAdapter;
+import com.spire.xls.ExcelVersion;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -53,7 +67,7 @@ public class EASQAS_adatok extends JPanel
 	 */
 	public EASQAS_adatok()
 	{
-		this.setPreferredSize(new Dimension(1222, 650));
+		this.setPreferredSize(new Dimension(1224, 679));
 		UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Ma");
@@ -171,6 +185,15 @@ public class EASQAS_adatok extends JPanel
 		gorgeto = new JScrollPane(table);
 		gorgeto.setBounds(10, 379, 1164, 224);
 		add(gorgeto);
+		
+		JLabel lblNewLabel_8 = new JLabel("Touch Up riport");
+		lblNewLabel_8.setBounds(377, 637, 110, 14);
+		add(lblNewLabel_8);
+		
+		JButton touchup_gomb = new JButton("Start");
+		touchup_gomb.addActionListener(new Touc_Up());
+		touchup_gomb.setBounds(497, 633, 89, 23);
+		add(touchup_gomb);
 
 	}
 	
@@ -786,5 +809,121 @@ public class EASQAS_adatok extends JPanel
         {
             // TODO Auto-generated method stub           
         }    
-    }   
+    }
+	
+	class Touc_Up implements ActionListener                                                                                         //hiba gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try
+            {               
+                if(datum_tol.getJFormattedTextField().getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "Nem adtál meg dátom-tól dátumot!", "Hiba üzenet", 2);
+                }                
+                else
+                {
+                    Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    Connection conn = null;
+                    Statement stmt = null;
+                    DataTable datatable = new DataTable();
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                    stmt = (Statement) conn.createStatement();
+                    String sajat = "SELECT Vevo, datum, muszak, Ellenor_neve as 'Dolgozó száma'\n"
+                            + "FROM qualitydb.Gyartasi_adatok \n"
+                            + "WHERE\n"
+                            + "    3 = 3 -- AND Vevo = 'Loxone robot'\n"
+                            + "    and Hibagyujtes_helye = 'Kézi TouchUp'\n"
+                            + "    and datum = '"+ datum_tol.getJFormattedTextField().getText() +"'\n"
+                            + "    group by Vevo, datum, muszak, Ellenor_neve\n"
+                            + "    order by muszak asc";
+                    stmt.execute(sajat);
+                    ResultSet rs = stmt.getResultSet();
+                    String kodok = "\\\\10.1.0.11\\minosegbiztositas\\Fájlok\\Touch up számok.xlsx";
+                    if(rs != null)
+                    {
+                        Workbook workbook = new Workbook();
+                        workbook.setVersion(ExcelVersion.Version2016);
+                        JdbcAdapter jdbcAdapter = new JdbcAdapter();
+                        jdbcAdapter.fillDataTable(datatable, rs);
+                
+                        //Get the first worksheet
+                        Worksheet sheet = workbook.getWorksheets().get(0);
+                        sheet.insertDataTable(datatable, true, 1, 1);
+                        
+                        Workbook workbook2 = new Workbook();
+                        workbook2.loadFromFile(kodok);
+                        Worksheet sheet2 = workbook2.getWorksheets().get(0);
+                        sheet.getRange().get("E" + 1).setText("Dolgozó neve");
+                        for(int szamlalo = 2; szamlalo < sheet.getLastRow() +1; szamlalo++)
+                        {
+                            try
+                            {
+                                Integer.parseInt(sheet.getRange().get("D" + szamlalo).getText());
+                                for(int szamlalo2 = 1; szamlalo2 < sheet2.getLastRow() +1; szamlalo2++)
+                                {
+                                    if(sheet.getRange().get("D" + szamlalo).getText().equals(sheet2.getRange().get("A" + szamlalo2).getNumberText()))
+                                    {
+                                        sheet.getRange().get("E" + szamlalo).setText(sheet2.getRange().get("B" + szamlalo2).getText());
+                                        System.out.println("Találat");
+                                    }
+                                    //System.out.println(sheet2.getRange().get("A" + szamlalo2).getNumberText());
+                                    //System.out.println(sheet2.getRange().get("B" + szamlalo2).getText());
+                                }
+                            }
+                            catch (Exception e2) 
+                            {
+                                System.out.println("Kivétel keletkezett");
+                                sheet.getRange().get("E" + szamlalo).setText(sheet.getRange().get("D" + szamlalo).getText());
+                                sheet.getRange().get("D" + szamlalo).setText("");
+                            }
+                        }
+                        
+                        sheet.getAutoFilters().setRange(sheet.getCellRange("A1:Z1"));
+                        sheet.getAllocatedRange().autoFitColumns();
+                        sheet.getAllocatedRange().autoFitRows();
+                        
+                        sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
+                        String menteshelye = System.getProperty("user.home") + "\\Desktop\\Touch Up lapok.xlsx";
+                        workbook.saveToFile(menteshelye, ExcelVersion.Version2016);
+                        rs.close();
+                        stmt.close();
+                        conn.close();    
+                        FileInputStream fileStream = new FileInputStream(menteshelye);
+                        try (XSSFWorkbook workbook3 = new XSSFWorkbook(fileStream)) 
+                        {
+                            for(int i = workbook3.getNumberOfSheets()-1; i>0 ;i--)
+                            {    
+                                workbook3.removeSheetAt(i); 
+                            }      
+                            FileOutputStream output = new FileOutputStream(menteshelye);
+                            workbook3.write(output);
+                            output.close();
+                        }
+                        
+                        File excel = new File(menteshelye);
+                        
+                        Email uzenet = new Email();              //"nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu"
+                        String szoveg = "Sziasztok!\t\n\nA csatolmányban találjátok mely operátorok adtak le Touch Up papírt.\t\n\n"                           
+                                         +"Üdvözlettel: EASQAS program";
+                        
+                        uzenet.mindenes_email_csatolmannyal_cc("kovacs.zoltan@veas.videoton.hu", "",
+                                "Leadott Touch Up lapok "+ datum_tol.getJFormattedTextField().getText() ,szoveg,excel);
+                        excel.delete();
+                        Foablak.frame.setCursor(null);
+                        JOptionPane.showMessageDialog(null, "Email elküldve", "Info", 1);
+                    }
+                }
+            }
+            catch (Exception e1) 
+            {
+                e1.printStackTrace();
+                String hibauzenet2 = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", this.getClass().getSimpleName()+" "+ hibauzenet2);
+                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet2, "Hiba üzenet", 2);
+            }
+         }
+    }
 }
