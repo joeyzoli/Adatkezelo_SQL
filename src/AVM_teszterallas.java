@@ -983,6 +983,7 @@ public class AVM_teszterallas extends JPanel {
                     result = cstmt.getResultSet();                                                                                              //az sql lekÃ©rdezÃ©s tartalmÃ¡t odaadja egy result set vÃ¡ltozÃ³nak           
                     datatable = new DataTable();
                     System.out.println("Lefutott");
+                    System.out.println(datatable2.getRows().get(szamlalo).getString(1));
                     workbook = new Workbook();
                     workbook.setVersion(ExcelVersion.Version2016); 
                     jdbcAdapter = new JdbcAdapter();         
@@ -1005,7 +1006,8 @@ public class AVM_teszterallas extends JPanel {
                     Workbook workbook4 = new Workbook();
                     workbook4.loadFromFile(path);
                     Worksheet sheet4 = workbook4.getWorksheets().get(0);                   
-                    
+                    System.out.println(sheet.getRange().get("A" + 2).getNumberText());
+                    System.out.println(sheet.getRange().get("B" + 2).getText());
                     
                     int sor = sheet4.getLastRow()+1;
                     if(sheet.getRange().get("B" + 2).getText().equals("Hiba"))

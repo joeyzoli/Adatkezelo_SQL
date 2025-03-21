@@ -863,7 +863,7 @@ public class EASQAS_adatok extends JPanel
                                 Integer.parseInt(sheet.getRange().get("D" + szamlalo).getText());
                                 for(int szamlalo2 = 1; szamlalo2 < sheet2.getLastRow() +1; szamlalo2++)
                                 {
-                                    if(sheet.getRange().get("D" + szamlalo).getText().equals(sheet2.getRange().get("A" + szamlalo2).getNumberText()))
+                                    if(sheet.getRange().get("D" + szamlalo).getText().equals(sheet2.getRange().get("A" + szamlalo2).getNumberText()) || sheet.getRange().get("D" + szamlalo).getText().equals(sheet2.getRange().get("C" + szamlalo2).getNumberText()))
                                     {
                                         sheet.getRange().get("E" + szamlalo).setText(sheet2.getRange().get("B" + szamlalo2).getText());
                                         System.out.println("Találat");
@@ -908,7 +908,9 @@ public class EASQAS_adatok extends JPanel
                         String szoveg = "Sziasztok!\t\n\nA csatolmányban találjátok mely operátorok adtak le Touch Up papírt.\t\n\n"                           
                                          +"Üdvözlettel: EASQAS program";
                         
-                        uzenet.mindenes_email_csatolmannyal_cc("kovacs.zoltan@veas.videoton.hu", "",
+                        //magyarne.eva@veas.videoton.hu,kozar.eva@veas.videoton.hu,szeghalmi.zsolt@veas.videoton.hu,kutassy.jozsef@veas.videoton.hu,frey.janos@veas.videoton.hu,godri.zita@veas.videoton.hu,szidor.olimer@veas.videoton.hu
+                        uzenet.mindenes_email_csatolmannyal_cc("kovacs.zoltan@veas.videoton.hu", 
+                                "",     //hidi.szilard@veas.videoton.hu,tinka.melinda@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu
                                 "Leadott Touch Up lapok "+ datum_tol.getJFormattedTextField().getText() ,szoveg,excel);
                         excel.delete();
                         Foablak.frame.setCursor(null);
