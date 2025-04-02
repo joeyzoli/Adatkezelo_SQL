@@ -367,7 +367,8 @@ public class SQA_osszesito extends JPanel {
                     {
                         sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
                         sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
-                        sheet.getRange().get("C" + cellaszam).setText(rs.getString(3));
+                        String[] datum = rs.getString(3).split(" ");
+                        sheet.getRange().get("C" + cellaszam).setText(datum[0].replace("-", "."));
                         sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
                         sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
                         sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
@@ -408,8 +409,16 @@ public class SQA_osszesito extends JPanel {
                         sheet.getRange().get("AA" + cellaszam).setText(rs.getString(26));
                         sheet.getRange().get("AB" + cellaszam).setText(rs.getString(27));
                         sheet.getRange().get("AC" + cellaszam).setText(rs.getString(28));
-                        sheet.getRange().get("AD" + cellaszam).setText(rs.getString(29));
-                        sheet.getRange().get("AE" + cellaszam).setText(rs.getString(30));
+                        if(rs.getString(29) != null)
+                        {
+                            datum = rs.getString(29).split(" ");
+                            sheet.getRange().get("AD" + cellaszam).setText(datum[0].replace("-", "."));
+                        }
+                        if(rs.getString(30) != null)
+                        {
+                            datum = rs.getString(30).split(" ");
+                            sheet.getRange().get("AE" + cellaszam).setText(datum[0].replace("-", "."));
+                        }
                         sheet.getRange().get("AF" + cellaszam).setText(rs.getString(31));
                         sheet.getRange().get("AG" + cellaszam).setText(rs.getString(32));
                         if(rs.getString(33).equals(""))
@@ -422,7 +431,7 @@ public class SQA_osszesito extends JPanel {
                         }
                         sheet.getRange().get("AI" + cellaszam).setText(rs.getString(34));
                         sheet.getRange().get("AJ" + cellaszam).setText(rs.getString(35));
-                        sheet.getRange().get("AK" + cellaszam).setText(rs.getString(36));
+                        sheet.getRange().get("AK" + cellaszam).setNumberValue(rs.getInt(36));
                         
                         szamok = rs.getString(14).split("\n");
                         szam = 0;

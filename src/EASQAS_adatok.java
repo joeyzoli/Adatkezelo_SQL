@@ -909,8 +909,8 @@ public class EASQAS_adatok extends JPanel
                                          +"Üdvözlettel: EASQAS program";
                         
                         //magyarne.eva@veas.videoton.hu,kozar.eva@veas.videoton.hu,szeghalmi.zsolt@veas.videoton.hu,kutassy.jozsef@veas.videoton.hu,frey.janos@veas.videoton.hu,godri.zita@veas.videoton.hu,szidor.olimer@veas.videoton.hu
-                        uzenet.mindenes_email_csatolmannyal_cc("kovacs.zoltan@veas.videoton.hu", 
-                                "",     //hidi.szilard@veas.videoton.hu,tinka.melinda@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu
+                        uzenet.mindenes_email_csatolmannyal_cc("magyarne.eva@veas.videoton.hu,kozar.eva@veas.videoton.hu,szeghalmi.zsolt@veas.videoton.hu,kutassy.jozsef@veas.videoton.hu,frey.janos@veas.videoton.hu,godri.zita@veas.videoton.hu,szidor.olimer@veas.videoton.hu", 
+                                "hidi.szilard@veas.videoton.hu,tinka.melinda@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu",     //hidi.szilard@veas.videoton.hu,tinka.melinda@veas.videoton.hu,kovacs.zoltan@veas.videoton.hu
                                 "Leadott Touch Up lapok "+ datum_tol.getJFormattedTextField().getText() ,szoveg,excel);
                         excel.delete();
                         Foablak.frame.setCursor(null);

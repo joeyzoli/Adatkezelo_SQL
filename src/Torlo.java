@@ -82,7 +82,7 @@ public class Torlo extends JPanel
 		
 		JButton feltolt = new JButton("Bármi");
 		feltolt.setBounds(412, 268, 77, 23);
-		feltolt.addActionListener(new TXT_keszito());
+		feltolt.addActionListener(new Tracy_kereses_loxone());
 		setBackground(Foablak.hatter_szine);
 		setLayout(null);
 		add(lblNewLabel);
@@ -1727,7 +1727,7 @@ public class Torlo extends JPanel
                         + "group by             1, 2;\n"
                         + "";*/
                 
-                String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
+                /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
                         + "videoton.fkov.hibakod, videoton.fkov.kod2, videoton.fkov.torolt, "
                         + "videoton.fkov.szeriaszam, videoton.fkov.tesztszam, videoton.fkov.poz, videoton.fkov.teljesszam, videoton.fkov.failtestnames, videoton.fkov.error,"
@@ -1735,7 +1735,8 @@ public class Torlo extends JPanel
                         + "from videoton.fkov  \n"
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
-                        + " where hely = '26' and ido > '2024.12.01' and panel like '%LOX-0045%'";
+                        + " where hely = '52'\n"
+                        + "  and ido > '2024.06.28 00:00:00' and ido < '2024.06.28 23:59:59'";
                 
                 /*String sql = "select    videoton.fkov.azon, videoton.fkov.hely,videoton.fkovsor.nev, videoton.fkov.ido, videoton.fkov.panel, cast(videoton.fkov.alsor as char(5)) as Teszterszam,"
                         + "if(videoton.fkov.ok in ('-1', '1'), \"Rendben\", \"Hiba\") as eredmeny,"
@@ -1746,6 +1747,14 @@ public class Torlo extends JPanel
                         + "inner join videoton.fkovsor on videoton.fkovsor.azon = videoton.fkov.hely "
                         + "left join videoton.FKOVADAT on videoton.FKOVADAT.FKOV = videoton.fkov.azon "                 
                         + " where ido > '2024.11.01' and nev like 'Loxone%'";*/
+                
+                String sql = "select panel,  count(panel) \n"
+                        + "from videoton.fkov\n"
+                        + "where 3 = 3  \n"
+                        + "    and hely = '50'\n"
+                        + "    and ido > '2025.03.20 00:00:00' and ido < '2025.03.20 23:59:59'\n"
+                        + "    and  panel like '111A%'     \n"
+                        + "  group by panel";
 
                                 
                 Statement cstmt = con.createStatement(
@@ -3810,14 +3819,17 @@ public class Torlo extends JPanel
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());                                                       //jdbc mysql driver meghÃ­vÃ¡sa
                 Foablak.frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));     
                 //Getting the connection
-                String mysqlUrl = "jdbc:mysql://192.168.5.145/";                                                                        //mysql szerver ip címhez való csatlakozás
-                con = DriverManager.getConnection(mysqlUrl, "quality", "Qua25!");                                           //a megadott ip-re csatlakozik a jelszó felhasználóval
+                
+                con = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) con.createStatement();
                 System.out.println("Connection established......");
                 Worksheet sheet = workbook.getWorksheets().get(0);
-                //Statement cstmt = con.createStatement(
-                //        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                //        ResultSet.CONCUR_UPDATABLE);
-                for(int szamlalo = 2; szamlalo < sheet.getLastRow(); szamlalo++)
+                Statement cstmt = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                DataTable datatable = new DataTable();
+                datatable = sheet.exportDataTable(sheet.getAllocatedRange(), false, false );
+                for(int szamlalo = 1; szamlalo < datatable.getRows().size(); szamlalo++)
                 {
                     /*String sql = "select hibakod from videoton.fkov \r\n"
                             + "WHERE 3 = 3\r\n"
@@ -3837,7 +3849,7 @@ public class Torlo extends JPanel
                         {
                             System.out.println("Túl hosszú az xml: "+szamlalo); //26 19 25
                         }
-                    }*/
+                    }
                     String[] datum = sheet.getRange().get("F" + szamlalo).getText().split(" ");
                     String[] datum2 = datum[0].split("\\.");
                     sheet.getRange().get("F" + szamlalo).setText(datum2[2]+"."+datum2[1]+"."+datum2[0]+ " "+ datum[1]);
@@ -3845,7 +3857,43 @@ public class Torlo extends JPanel
                     datum = sheet.getRange().get("G" + szamlalo).getText().split(" ");
                     datum2 = datum[0].split("\\.");
                     sheet.getRange().get("G" + szamlalo).setText(datum2[2]+"."+datum2[1]+"."+datum2[0]+ " "+ datum[1]);
-                    System.out.println("fut a for: "+sheet.getRange().get("F" + szamlalo).getText());
+                    System.out.println("fut a for: "+sheet.getRange().get("F" + szamlalo).getText());*/
+                    
+                    String sql = "update qualitydb.Zarolasok set "
+                            + "Projekt = '"+ datatable.getRows().get(szamlalo).getString(1) +"', "
+                            + "Tipus = '"+ datatable.getRows().get(szamlalo).getString(2) +"', "
+                            + "Eszleles_helye = '"+ datatable.getRows().get(szamlalo).getString(3) +"', "
+                            + "Muszak = '"+ datatable.getRows().get(szamlalo).getString(4) +"', "
+                            + "Zarolo_mernok = '"+ datatable.getRows().get(szamlalo).getString(5) +"', "
+                            + "Zarolt_db = '"+ datatable.getRows().get(szamlalo).getString(6) +"', "
+                            + "Hol_van = '"+ datatable.getRows().get(szamlalo).getString(7) +"', "
+                            + "Zarolas_oka = '"+ datatable.getRows().get(szamlalo).getString(8) +"', "
+                            + "Azonnali_intezkedes = '"+ datatable.getRows().get(szamlalo).getString(9) +"', "
+                            + "Zarolas_datuma = '"+ datatable.getRows().get(szamlalo).getString(10) +"', "
+                            + "Papir_sorszama = '"+ datatable.getRows().get(szamlalo).getString(11) +"', "
+                            + "Zarolta = '"+ datatable.getRows().get(szamlalo).getString(12) +"', "
+                            + "Valogatas_eredmenye = '"+ datatable.getRows().get(szamlalo).getString(13) +"', "
+                            + "Ujraellenorzes_datuma = '"+ datatable.getRows().get(szamlalo).getString(14) +"', "
+                            + "Ellenorzes_ido = '"+ datatable.getRows().get(szamlalo).getString(15) +"', "
+                            + "Technikusi_beavatkozas = '"+ datatable.getRows().get(szamlalo).getString(16) +"', "
+                            + "Felelos_terulet = '"+ datatable.getRows().get(szamlalo).getString(17) +"', "
+                            + "Felelos = '"+ datatable.getRows().get(szamlalo).getString(18) +"', "
+                            + "Hiba_gyokeroka = '"+ datatable.getRows().get(szamlalo).getString(19) +"', "
+                            + "Gyokerok_intezkedes = '"+ datatable.getRows().get(szamlalo).getString(20) +"', "
+                            + "B2_zarolas = '"+ datatable.getRows().get(szamlalo).getString(21) +"', "
+                            + "Visszaellenorzes = '"+ datatable.getRows().get(szamlalo).getString(22) +"', "
+                            + "Lezaras_datuma = '"+ datatable.getRows().get(szamlalo).getString(23) +"', "
+                            + "ME_szam = '"+ datatable.getRows().get(szamlalo).getString(24) +"', "
+                            + "Ellenorzott_db = '"+ datatable.getRows().get(szamlalo).getString(25) +"', "
+                            + "Hibacsoport = '"+ datatable.getRows().get(szamlalo).getString(26) +"', "
+                            + "Hibatipus = '"+ datatable.getRows().get(szamlalo).getString(27) +"', "
+                            + "Email = '"+ datatable.getRows().get(szamlalo).getString(28) +"', "
+                            + "Email2 = '"+ datatable.getRows().get(szamlalo).getString(29) +"', "
+                            + "Hatarido = '"+ datatable.getRows().get(szamlalo).getString(30) +"' "
+                            + "where id = '"+ datatable.getRows().get(szamlalo).getString(0) +"' ";
+                    System.out.println("fut a for: "+szamlalo);
+                    cstmt.execute(sql);     
+                    
                 }
 
                 //Get the first worksheet
@@ -3856,7 +3904,7 @@ public class Torlo extends JPanel
                 sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // fÃ©lkÃ¶vÃ©r beÃ¡llÃ­tÃ¡s
                  
                 //result.close();
-                //cstmt.close();
+                cstmt.close();
                 con.close();
                 //workbook.setActiveSheetIndex(0);
                 //JFileChooser mentes_helye = new JFileChooser();
@@ -3865,7 +3913,7 @@ public class Torlo extends JPanel
                 mentes_helye.showOpenDialog(mentes_helye);
                 fajl = mentes_helye.getSelectedFile();
                 workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);
-                /*if(fajl.getName().contains(".xlsx"))
+                if(fajl.getName().contains(".xlsx"))
                 {
                     workbook.saveToFile(fajl.getAbsolutePath(), ExcelVersion.Version2016);  
                     FileInputStream fileStream = new FileInputStream(fajl.getAbsolutePath());
@@ -3894,7 +3942,7 @@ public class Torlo extends JPanel
                         workbook2.write(output);
                         output.close();
                     }
-                }*/
+                }
                 Foablak.frame.setCursor(null); 
                 JOptionPane.showMessageDialog(null, "Mentés sikeres", "Infó", 1);
             }

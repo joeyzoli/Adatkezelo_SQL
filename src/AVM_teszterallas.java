@@ -1023,10 +1023,20 @@ public class AVM_teszterallas extends JPanel {
                     {
                         sheet4.getRange().get("D" + sor).setText(sheet.getRange().get("A" + 3).getNumberText());
                         sheet4.getRange().get("E" + sor).setText(sheet.getRange().get("B" + 3).getText());
-                        sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 3).getNumberText()));
-                        sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
-                        sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 2).getText());
-                        sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                        if(sheet.getRange().get("C" + 3).getNumberText().equals(""))
+                        {
+                            sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf("0"));
+                            sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
+                            sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 2).getText());
+                            sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                        }
+                        else
+                        {
+                            sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 3).getNumberText()));
+                            sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
+                            sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 2).getText());
+                            sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                        }
                     }                                      
                     
                     workbook4.saveToFile(path, ExcelVersion.Version2016);  
