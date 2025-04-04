@@ -41,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -92,7 +93,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         datumtol = new JTextField();
         datumtol.setBounds(520, 90, 86, 20);
-        datumtol.setText("2025.03.01");
+        datumtol.setText("2025.02.01");
         add(datumtol);
         datumtol.setColumns(10);
         
@@ -115,7 +116,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         add(nyitott_gomb);
         
         JButton keres_gomb = new JButton("Keresés");
-        keres_gomb.setBounds(520, 262, 89, 23);
+        keres_gomb.setBounds(517, 262, 89, 23);
         keres_gomb.addActionListener(new Kereses());
         add(keres_gomb);
         
@@ -184,53 +185,104 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
             {
                 Connection conn = null;
                 Statement stmt = null;
+                Statement stmt2 = null;
                 String[] szoveg = {"Reklamáció dátuma","Projekt","Termék típusa","Vevőnél talált hibás db szám","Hiba leírása:","Gyökérok","Intézkedés"};
                 PrintWriter out = null;
                 Class.forName("com.mysql.cj.jdbc.Driver");   
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                 stmt = (Statement) conn.createStatement();
-                String sql = "select ID, ertesites_datuma, vevo, Tipus, hanydb, miaproblema, anyag, gep, ember, mod_ from qualitydb.Vevoireklamacio_alap "
+                stmt2 = (Statement) conn.createStatement();
+                String sql = "select ID, ertesites_datuma, vevo, Tipus, hanydb, miaproblema, anyag, gep, ember, mod_, Lezaras_datuma from qualitydb.Vevoireklamacio_alap "
                         + "where ertesites_datuma >= '"+ datumtol.getText() +"' and ertesites_datuma <= '"+ datumig.getText() +"'";
                 stmt.execute(sql);
                 ResultSet rs = stmt.getResultSet();
                 
+                File f = new File(System.getProperty("user.home") + "\\Desktop\\TXT\\");
+                f.mkdir();
+                //f.getParentFile().mkdirs(); 
+                //f.createNewFile();
                 int szam = 2;
+                String id = "";
+                String lezaras = "";
                 while(rs.next())
                 {
+                    id = rs.getString(1);
                     szam = 2;
-                    out = new PrintWriter(new FileWriter(System.getProperty("user.home") + "\\Desktop\\ID_"+ rs.getString(1) +".txt"));
+                    out = new PrintWriter(new FileWriter(System.getProperty("user.home") + "\\Desktop\\TXT\\ID_"+ id +".txt", StandardCharsets.UTF_8), true);
                     for (String s : szoveg) {
                         StringBuilder underlined = new StringBuilder();
                         for (char c : s.toCharArray()) {
                             underlined.append(c).append('\u0332');
                         }
-                        if(szam < 6)
+                        if(szam < 7)
                         {
-                            out.println(underlined+ ": "+ rs.getString(szam));
-                            szam++;
+                            if(szam == 5)
+                            {
+                                out.println(underlined+ ": "+ rs.getString(szam) +" db");
+                                szam++;
+                                out.println();
+                            }
+                            else
+                            {
+                                out.println(underlined+ ": "+ rs.getString(szam));
+                                szam++;
+                            }
                         }
                         else
                         {
-                            String gyokerok = "";
-                            szam--;
-                            for(int szamlalo = 0; szamlalo < 4; szamlalo++)
+                            if(szam == 7)
                             {
-                                String[] tomb = rs.getString(szam).split(";");
-                                for(int szamlalo2 = 0; szamlalo2 < tomb.length; szamlalo2++)
+                                out.println();
+                                String gyokerok = "";
+                                for(int szamlalo = 7; szamlalo < 11; szamlalo++)
                                 {
-                                    gyokerok += tomb[szamlalo2];
-                                    System.out.println("Fut a belső for");
+                                    String[] tomb = rs.getString(szamlalo).split(";");
+                                    for(int szamlalo2 = 0; szamlalo2 < tomb.length; szamlalo2++)
+                                    {
+                                        gyokerok += tomb[szamlalo2]+"\n";
+                                    }
                                 }
+                                out.println(underlined+ ": "+ gyokerok);
                                 szam++;
-                                System.out.println("Fut a külső for");
                             }
-                            out.println(underlined+ ": "+ gyokerok);
+                            else
+                            {
+                                System.out.println("Fut az intézkedés");
+                                //out.println();
+                                String intezkedes = "";
+                                sql = "select feladat, felelos, hatarido from qualitydb.Vevoireklamacio_elo where rek_id = '"+ id +"'";
+                                stmt2.execute(sql);
+                                ResultSet rs2 = stmt2.getResultSet();
+                                while(rs2.next())
+                                {
+                                    intezkedes += rs2.getString(1)+ " -> "+ rs2.getString(2)+ ",Hi.: "+ rs2.getString(3) +"\n";
+                                }
+                                
+                                sql = "select feladat, felelos, hatarido from qualitydb.Vevoireklamacio_det where rek_id = '"+ id +"'";
+                                stmt2.execute(sql);
+                                rs2 = stmt2.getResultSet();
+                                while(rs2.next())
+                                {
+                                    intezkedes += rs2.getString(1)+ " -> "+ rs2.getString(2)+ ",Hi.: "+ rs2.getString(3) +"\n";
+                                }
+                                out.println(underlined+ ": "+ intezkedes);
+                            }
                         }
-                    }                                
+                    }
+                    out.println();
+                    lezaras = rs.getString(11);
+                    if(lezaras.equals(""))
+                    {
+                        out.println("Lezárás dátuma: Analizálás alatt.");
+                    }
+                    else
+                    {
+                        out.println("Lezárás dátuma: "+ lezaras);
+                    }
                     out.flush();
                     out.close();
                 }
-                       
+                JOptionPane.showMessageDialog(null, "Mentve az asztalra TXT mappába", "Info", 1);       
             } 
             catch (Exception e1) 
             {              
