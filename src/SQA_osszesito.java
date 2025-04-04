@@ -24,6 +24,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -51,7 +54,9 @@ public class SQA_osszesito extends JPanel {
     private String beallitasok = System.getProperty("user.home") + "\\sqa_szures.txt";
     private JComboBox<String> honap_box;
     private int honap = 0;
+    private int ev = 0;
     private JTextField cikkszam_mezo;
+    private JComboBox<String> ev_box;
 
     /**
      * Create the panel.
@@ -128,7 +133,7 @@ public class SQA_osszesito extends JPanel {
         String[] honapok = {"-","Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"};
         honap_box = new JComboBox<String>(honapok);                                     //honapok
         honap_box.addActionListener(new Szukito());
-        honap_box.setBounds(696, 73, 154, 22);
+        honap_box.setBounds(773, 73, 154, 22);
         add(honap_box);
         
         JLabel lblNewLabel_4 = new JLabel("Raktári cikkek típussal");
@@ -150,14 +155,21 @@ public class SQA_osszesito extends JPanel {
         add(torles_gomb);
         
         cikkszam_mezo = new JTextField();
-        cikkszam_mezo.setBounds(916, 74, 211, 20);
+        cikkszam_mezo.setBounds(974, 74, 154, 20);
         cikkszam_mezo.addKeyListener(new Enter());
         add(cikkszam_mezo);
         cikkszam_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Cikkszám szerinti kereső");
-        lblNewLabel_6.setBounds(950, 56, 161, 14);
+        lblNewLabel_6.setBounds(983, 49, 161, 14);
         add(lblNewLabel_6);
+        
+        
+        String[] ev ={"2024","2025","2026","2027","2028","2029","2030"};
+        ev_box = new JComboBox<String>(ev);
+        ev_box.setBounds(685, 73, 64, 22);
+        ev_box.addActionListener(new Szukito());
+        add(ev_box);
         adatok();
         
     }
@@ -225,6 +237,7 @@ public class SQA_osszesito extends JPanel {
                 {
                     honap_box.setSelectedItem(adatok[3]);
                 }
+                ev_box.setSelectedItem(adatok[4]);
                 //valaszto();
                 Foablak.frame.setCursor(null);                                                                                          //egér mutató alaphelyzetbe állítása
             }
@@ -368,7 +381,8 @@ public class SQA_osszesito extends JPanel {
                         sheet.getRange().get("A" + cellaszam).setText(rs.getString(1));
                         sheet.getRange().get("B" + cellaszam).setText(rs.getString(2));
                         String[] datum = rs.getString(3).split(" ");
-                        sheet.getRange().get("C" + cellaszam).setText(datum[0].replace("-", "."));
+                        Date date =  new SimpleDateFormat("yyyy.MM.dd").parse(datum[0].replace("-", "."));
+                        sheet.getRange().get("C" + cellaszam).setDateTimeValue(date);               // (datum[0].replace("-", "."));
                         sheet.getRange().get("D" + cellaszam).setText(rs.getString(4));
                         sheet.getRange().get("E" + cellaszam).setText(rs.getString(5));
                         sheet.getRange().get("F" + cellaszam).setText(rs.getString(6));
@@ -575,39 +589,51 @@ public class SQA_osszesito extends JPanel {
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             if(honap_box.getSelectedItem().equals("Január")){              
                 honap = 1;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Február")){              
                 honap = 2;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Március")){              
                 honap = 3;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Április")){              
                 honap = 4;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Május")){              
                 honap = 5;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Június")){              
                 honap = 6;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Július")){              
                 honap = 7;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Augusztus")){              
                 honap = 8;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Szeptember")){              
                 honap = 9;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("Október")){              
                 honap = 10;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("November")){              
                 honap = 11;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else if(honap_box.getSelectedItem().equals("December")){              
                 honap = 12;
+                ev = Integer.valueOf(String.valueOf(ev_box.getSelectedItem()));
             }
             else{
                 honap = 0;
@@ -647,7 +673,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap)
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -662,7 +688,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap)
+                                if(Integer.valueOf(datum[1]) == honap && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -704,7 +730,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -719,7 +745,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -761,7 +787,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -776,7 +802,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -831,7 +857,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -846,7 +872,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -898,7 +924,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -913,7 +939,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -965,7 +991,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -980,7 +1006,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Schweighardt Róbert") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1035,7 +1061,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1050,7 +1076,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1102,7 +1128,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1117,7 +1143,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1169,7 +1195,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1184,7 +1210,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Tóth Zoltán") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1239,7 +1265,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1254,7 +1280,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1306,7 +1332,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1321,7 +1347,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Reklamáció") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1373,7 +1399,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(table.getValueAt(szamlalo, 6) == null && Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1388,7 +1414,7 @@ public class SQA_osszesito extends JPanel {
                             for(int szamlalo = 0; szamlalo < table.getRowCount(); szamlalo++)
                             {
                                 String[] datum = table.getValueAt(szamlalo, 1).toString().split("-");
-                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs"))
+                                if(Integer.valueOf(datum[1]) == honap && table.getValueAt(szamlalo, 3).toString().equals("Egyéb") && table.getValueAt(szamlalo, 2).toString().equals("Horváth Balázs") && Integer.valueOf(datum[0]) == ev)
                                 {
                                     szukitett_modell.addRow(new Object[]{table.getValueAt(szamlalo, 0),table.getValueAt(szamlalo, 1), table.getValueAt(szamlalo, 2), table.getValueAt(szamlalo, 3),
                                             table.getValueAt(szamlalo, 4),table.getValueAt(szamlalo, 5),table.getValueAt(szamlalo, 6),table.getValueAt(szamlalo, 7),table.getValueAt(szamlalo, 8),table.getValueAt(szamlalo, 9)});
@@ -1415,7 +1441,7 @@ public class SQA_osszesito extends JPanel {
             try
             {
                 PrintWriter writer = new PrintWriter(beallitasok, "UTF-8");
-                writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected()+";"+String.valueOf(honap_box.getSelectedItem()));
+                writer.print(String.valueOf(nev_box.getSelectedItem())+";"+String.valueOf(vagy_box.getSelectedItem())+";"+csak_gomb.isSelected()+";"+String.valueOf(honap_box.getSelectedItem())+";"+String.valueOf(ev_box.getSelectedItem()));
                 writer.close();
             }
             catch (Exception e1) 

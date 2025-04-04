@@ -356,21 +356,12 @@ public class SQL
 	    DataTable datatable = new DataTable();
 	    try 
 	    {
-	       try 
-	       {
-	          Class.forName("com.mysql.cj.jdbc.Driver");
-	       } 
-	       catch (Exception e) 
-	       {
-	          System.out.println(e);
-	          String hibauzenet2 = e.toString();
-		      JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
-	    }
-	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
-	    stmt = (Statement) conn.createStatement();
-	    String sajat = SQL;
-	    stmt.execute(sajat);
-	    ResultSet resultSet = stmt.getResultSet();
+	        Class.forName("com.mysql.cj.jdbc.Driver");   
+    	    conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+    	    stmt = (Statement) conn.createStatement();
+    	    String sajat = SQL;
+    	    stmt.execute(sajat);
+    	    ResultSet resultSet = stmt.getResultSet();
 	    
 	    if(resultSet != null)
 	    {

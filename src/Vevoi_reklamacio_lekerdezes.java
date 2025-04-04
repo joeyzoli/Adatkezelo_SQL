@@ -39,6 +39,8 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -90,7 +92,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         
         datumtol = new JTextField();
         datumtol.setBounds(520, 90, 86, 20);
-        datumtol.setText("2024.01.01");
+        datumtol.setText("2025.03.01");
         add(datumtol);
         datumtol.setColumns(10);
         
@@ -105,11 +107,11 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         datumig.setColumns(10);
         
         lezart_gomb = new JRadioButton("Nyitott");
-        lezart_gomb.setBounds(481, 220, 66, 14);
+        lezart_gomb.setBounds(481, 192, 66, 14);
         add(lezart_gomb);
         
         nyitott_gomb = new JRadioButton("Lezárt");
-        nyitott_gomb.setBounds(587, 216, 80, 23);
+        nyitott_gomb.setBounds(591, 188, 80, 23);
         add(nyitott_gomb);
         
         JButton keres_gomb = new JButton("Keresés");
@@ -167,6 +169,78 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         v2_grafikon_gomb.addActionListener(new Vevoi_2());
         v2_grafikon_gomb.setBounds(494, 525, 157, 23);
         add(v2_grafikon_gomb);
+        
+        JButton txt_gomb = new JButton("txt");
+        txt_gomb.addActionListener(new TXT());
+        txt_gomb.setBounds(517, 228, 89, 23);
+        add(txt_gomb);
+    }
+    
+    class TXT implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
+    {
+        public void actionPerformed(ActionEvent e)
+         {
+            try 
+            {
+                Connection conn = null;
+                Statement stmt = null;
+                String[] szoveg = {"Reklamáció dátuma","Projekt","Termék típusa","Vevőnél talált hibás db szám","Hiba leírása:","Gyökérok","Intézkedés"};
+                PrintWriter out = null;
+                Class.forName("com.mysql.cj.jdbc.Driver");   
+                conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
+                stmt = (Statement) conn.createStatement();
+                String sql = "select ID, ertesites_datuma, vevo, Tipus, hanydb, miaproblema, anyag, gep, ember, mod_ from qualitydb.Vevoireklamacio_alap "
+                        + "where ertesites_datuma >= '"+ datumtol.getText() +"' and ertesites_datuma <= '"+ datumig.getText() +"'";
+                stmt.execute(sql);
+                ResultSet rs = stmt.getResultSet();
+                
+                int szam = 2;
+                while(rs.next())
+                {
+                    szam = 2;
+                    out = new PrintWriter(new FileWriter(System.getProperty("user.home") + "\\Desktop\\ID_"+ rs.getString(1) +".txt"));
+                    for (String s : szoveg) {
+                        StringBuilder underlined = new StringBuilder();
+                        for (char c : s.toCharArray()) {
+                            underlined.append(c).append('\u0332');
+                        }
+                        if(szam < 6)
+                        {
+                            out.println(underlined+ ": "+ rs.getString(szam));
+                            szam++;
+                        }
+                        else
+                        {
+                            String gyokerok = "";
+                            szam--;
+                            for(int szamlalo = 0; szamlalo < 4; szamlalo++)
+                            {
+                                String[] tomb = rs.getString(szam).split(";");
+                                for(int szamlalo2 = 0; szamlalo2 < tomb.length; szamlalo2++)
+                                {
+                                    gyokerok += tomb[szamlalo2];
+                                    System.out.println("Fut a belső for");
+                                }
+                                szam++;
+                                System.out.println("Fut a külső for");
+                            }
+                            out.println(underlined+ ": "+ gyokerok);
+                        }
+                    }                                
+                    out.flush();
+                    out.close();
+                }
+                       
+            } 
+            catch (Exception e1) 
+            {              
+                e1.printStackTrace();
+                String hibauzenet = e1.toString();
+                Email hibakuldes = new Email();
+                hibakuldes.hibauzenet(System.getProperty("user.name")+"@veas.videoton.hu", getClass()+" "+ hibauzenet);
+                JOptionPane.showMessageDialog(null, getClass()+" "+ hibauzenet, "Hiba üzenet", 2);
+            }
+         }
     }
     
     class Kereses implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg

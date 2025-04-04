@@ -1401,6 +1401,7 @@ public class Foablak extends JFrame
             System.out.println(System.getProperty("user.name"));
             //SQA_SQL aron = new SQA_SQL();
             //aron.Aron_heti();
+
             if(nap == 2)
             {
                 SQA_SQL sqa = new SQA_SQL();
