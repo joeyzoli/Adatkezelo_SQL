@@ -49,7 +49,7 @@ public class Vevoireklamacio_d0 extends JPanel {
     private JTextField beszallito_mezo;
     private JTextField vevorek_mezo;
     private JTextField veasrek_mezo;
-    private JTextField frissites_mezo;
+    //private JTextField frissites_mezo;
     private JTextField email_mezo;
     private JTextField email2_mezo;
     private JTextField rma_mezo;
@@ -76,6 +76,9 @@ public class Vevoireklamacio_d0 extends JPanel {
     private UtilDateModel model;
     static JTable table_1;
     private DefaultTableModel modell2;
+    
+    private JDatePickerImpl frissites;
+    private UtilDateModel model2;
 
     /**
      * Create the panel.
@@ -90,6 +93,14 @@ public class Vevoireklamacio_d0 extends JPanel {
         p.put("text.year", "Év");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         ertesitve = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        
+        model2 = new UtilDateModel();
+        Properties p2 = new Properties();
+        p2.put("text.today", "Ma");
+        p2.put("text.month", "Hónap");
+        p2.put("text.year", "Év");
+        JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);
+        frissites = new JDatePickerImpl(datePanel2, new DateLabelFormatter2());
         
         JLabel lblNewLabel = new JLabel("Vevő");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -145,11 +156,11 @@ public class Vevoireklamacio_d0 extends JPanel {
         lblNewLabel_5.setBounds(916, 105, 86, 14);
         add(lblNewLabel_5);
         
-        frissites_mezo = new JTextField();
-        frissites_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
-        frissites_mezo.setBounds(1012, 102, 86, 20);
-        add(frissites_mezo);
-        frissites_mezo.setColumns(10);
+        //frissites = new JDatePickerImpl();
+        //frissites_mezo.addKeyListener(new Vevoireklamacio_fejlec.Valtozas_figyelo());
+        frissites.setBounds(1012, 102, 120, 20);
+        add(frissites);
+        //frissites_mezo.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Felelős");
         lblNewLabel_6.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -407,6 +418,29 @@ public class Vevoireklamacio_d0 extends JPanel {
         }
 
     }
+    
+    public class DateLabelFormatter2 extends AbstractFormatter {
+
+        private String datePattern = "yyyy.MM.dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                Vevoireklamacio_fejlec.mentes_gomb.setEnabled(true);
+                return dateFormatter.format(cal.getTime());
+            }
+            //System.out.println(datePicker.getJFormattedTextField().getText());
+            return "";
+        }
+
+    }
     /*
     class Enter implements KeyListener                                                                                                 //billentyűzet figyelő eseménykezelő, kiszámolja mennyit kell ellenőrizni
     {
@@ -484,7 +518,7 @@ public class Vevoireklamacio_d0 extends JPanel {
             {
                 sql = "update qualitydb.Vevoireklamacio_alap set mi = '"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"', Vevo = '"+ String.valueOf(vevo_box.getSelectedItem()) +"', "
                         + "Beszallito = '"+ beszallito_mezo.getText() +"', Ertesites_datuma = '"+ ertesitve.getJFormattedTextField().getText() +"', Vevoi_szam = '"+ vevorek_mezo.getText() +"',"
-                        + "Utolso_frissites ='"+ frissites_mezo.getText() +"', Felelos = '"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"', Tipus = '"+ cikkszamok +"',"
+                        + "Utolso_frissites ='"+ frissites.getJFormattedTextField().getText() +"', Felelos = '"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"', Tipus = '"+ cikkszamok +"',"
                         + "Email = '"+ email_mezo.getText() +";"+ email2_mezo.getText() +"', RMA_szam = '"+ rma_mezo.getText() +"', Telefon = '"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "Visszakuldes_datuma = '"+ visszakuldes_mezo.getText() +"' where id = '"+ Vevoireklamacio_fejlec.id_mezo.getText() +"'";                
             }
@@ -493,7 +527,7 @@ public class Vevoireklamacio_d0 extends JPanel {
                 sql = "insert into qualitydb.Vevoireklamacio_alap (mi,Vevo,Beszallito,Ertesites_datuma,Vevoi_szam,Utolso_frissites,Felelos,Tipus,Email,RMA_szam,Telefon,Visszakuldes_datuma)  "
                         + "Values('"+ String.valueOf(Vevoireklamacio_fejlec.fajta_box.getSelectedItem()) +"','"+ String.valueOf(vevo_box.getSelectedItem()) +"',"
                         + "'"+ beszallito_mezo.getText() +"','"+ ertesitve.getJFormattedTextField().getText() +"','"+ vevorek_mezo.getText() +"',"
-                        + "'"+ frissites_mezo.getText() +"','"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"','"+ cikkszamok +"',"       //String.valueOf(tipus_box.getSelectedItem())
+                        + "'"+ frissites.getJFormattedTextField().getText() +"','"+ felelos_mezo.getText() +";"+ String.valueOf(felelos_box.getSelectedItem()) +"','"+ cikkszamok +"',"       //String.valueOf(tipus_box.getSelectedItem())
                         + "'"+ email_mezo.getText() +";"+ email2_mezo.getText() +"','"+ rma_mezo.getText() +"','"+ telefonszam_mezo.getText() +";"+ telefonszam2_mezo.getText() +"',"
                         + "'"+ visszakuldes_mezo.getText() +"')";
             }
@@ -647,7 +681,18 @@ public class Vevoireklamacio_d0 extends JPanel {
                 }                            
                 vevorek_mezo.setText(rs.getString(6));
                 veasrek_mezo.setText(Vevoireklamacio_fejlec.id_mezo.getText());
-                frissites_mezo.setText(rs.getString(7));
+                frissites.getJFormattedTextField().getText();
+                
+                dateValue = rs.getString(7).replace("-", ".");
+                try {
+                    date3 = new SimpleDateFormat("yyyy.MM.dd").parse(dateValue);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    //e.printStackTrace();
+                    System.out.println("hibára futott, nincs utolsó frissítés");
+                }
+                model2.setValue(date3);
+                //frissites_mezo.setText(rs.getString(7));
                 String[] felelos = rs.getString(8).split(";");
                 
                 if(felelos.length > 1)

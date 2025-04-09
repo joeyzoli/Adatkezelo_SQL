@@ -1028,7 +1028,7 @@ public class AVM_teszterallas extends JPanel {
                             sheet4.getRange().get("F" + sor).setNumberValue(Integer.valueOf("0"));
                             sheet4.getRange().get("A" + sor).setText(sheet.getRange().get("A" + 2).getNumberText());
                             sheet4.getRange().get("B" + sor).setText(sheet.getRange().get("B" + 2).getText());
-                            sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf(sheet.getRange().get("C" + 2).getNumberText()));
+                            sheet4.getRange().get("C" + sor).setNumberValue(Integer.valueOf("0"));
                         }
                         else
                         {

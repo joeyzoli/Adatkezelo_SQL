@@ -2702,7 +2702,10 @@ public class SQL
             conn = DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 3";                                            
+            String sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D3 is null and D3_ertesitve = 'nem' and ((DATEDIFF(now(), ertesites_datuma)) -\n"
+                    + "        ((WEEK(now()) - WEEK(ertesites_datuma)) * 2) -\n"
+                    + "        (case when weekday(now()) = 5 then 1 else 0 end) -\n"
+                    + "        (case when weekday(ertesites_datuma) = 4 then 1 else 0 end)) >= 3";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();      
             Workbook workbook = new Workbook();
@@ -2750,7 +2753,10 @@ public class SQL
                 }                
             }            
             ///// lejárt D5 keresése
-            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 15";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ertesitve = 'nem' and ((DATEDIFF(now(), ertesites_datuma)) -\n"
+                    + "        ((WEEK(now()) - WEEK(ertesites_datuma)) * 2) -\n"
+                    + "        (case when weekday(now()) = 5 then 1 else 0 end) -\n"
+                    + "        (case when weekday(ertesites_datuma) = 4 then 1 else 0 end)) >= 15";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())
@@ -2790,7 +2796,10 @@ public class SQL
                 }                
             }
             /// több mint 1 hete lejárt D5 keresése
-            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 21";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D5 is null and D5_ujraertesitve = 'nem' and ((DATEDIFF(now(), ertesites_datuma)) -\n"
+                    + "        ((WEEK(now()) - WEEK(ertesites_datuma)) * 2) -\n"
+                    + "        (case when weekday(now()) = 5 then 1 else 0 end) -\n"
+                    + "        (case when weekday(ertesites_datuma) = 4 then 1 else 0 end)) >= 21";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())
@@ -2830,7 +2839,10 @@ public class SQL
                 }                
             }
             //// lejárt D8 keresése
-            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D8 is null and D8_ertesitve = 'nem' and DATEDIFF(now(),Ertesites_datuma) >= 31";                                            
+            sql = "SELECT ID, Felelos, Vevo, Tipus, Miaproblema FROM  qualitydb.Vevoireklamacio_alap where D8 is null and D8_ertesitve = 'nem' and ((DATEDIFF(now(), ertesites_datuma)) -\n"
+                    + "        ((WEEK(now()) - WEEK(ertesites_datuma)) * 2) -\n"
+                    + "        (case when weekday(now()) = 5 then 1 else 0 end) -\n"
+                    + "        (case when weekday(ertesites_datuma) = 4 then 1 else 0 end)) >= 31";                                            
             stmt.execute(sql);    
             rs = stmt.getResultSet();
             while(rs.next())

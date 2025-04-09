@@ -14,6 +14,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jdesktop.swingx.JXDatePicker;
 
 import com.spire.data.table.DataTable;
 import com.spire.data.table.common.JdbcAdapter;
@@ -49,12 +50,11 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
 
 public class Vevoi_reklamacio_lekerdezes extends JPanel 
 {
-    private JTextField datumtol;
-    private JTextField datumig;
+    //private JTextField datumtol;
+    //private JTextField datumig;
     static JTable table;
     private ComboBox combobox;
     private JComboBox<String> projekt_box;
@@ -63,6 +63,10 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
     private SQL lekerdezes = new SQL();
     private JTextField id_mezo;
     static int fajlszam = 1;
+    private JXDatePicker datumtol;
+    private JXDatePicker datumig;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    
     /**
      * Create the panel.
      */
@@ -91,21 +95,18 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         lblNewLabel_2.setBounds(420, 93, 90, 14);
         add(lblNewLabel_2);
         
-        datumtol = new JTextField();
-        datumtol.setBounds(520, 90, 86, 20);
-        datumtol.setText("2025.02.01");
+        datumtol = new JXDatePicker();
+        datumtol.setBounds(520, 90, 120, 20);
         add(datumtol);
-        datumtol.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Dátim -ig");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
         lblNewLabel_3.setBounds(430, 124, 80, 14);
         add(lblNewLabel_3);
         
-        datumig = new JTextField();
-        datumig.setBounds(520, 121, 86, 20);
+        datumig = new JXDatePicker();
+        datumig.setBounds(520, 121, 120, 20);
         add(datumig);
-        datumig.setColumns(10);
         
         lezart_gomb = new JRadioButton("Nyitott");
         lezart_gomb.setBounds(481, 192, 66, 14);
@@ -162,7 +163,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
         excelmentes.setBounds(520, 651, 89, 23);
         excelmentes.addActionListener(new Excelmentes());
         add(excelmentes);*/
-        ido();
+        //ido();
         
         setBackground(Foablak.hatter_szine);
         
@@ -193,7 +194,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 stmt = (Statement) conn.createStatement();
                 stmt2 = (Statement) conn.createStatement();
                 String sql = "select ID, ertesites_datuma, vevo, Tipus, hanydb, miaproblema, anyag, gep, ember, mod_, Lezaras_datuma from qualitydb.Vevoireklamacio_alap "
-                        + "where ertesites_datuma >= '"+ datumtol.getText() +"' and ertesites_datuma <= '"+ datumig.getText() +"'";
+                        + "where ertesites_datuma >= '"+ dateFormat.format(datumtol.getDate()) +"' and ertesites_datuma <= '"+ dateFormat.format(datumig.getDate()) +"'";
                 stmt.execute(sql);
                 ResultSet rs = stmt.getResultSet();
                 
@@ -321,7 +322,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     nyitott = "nem";
                 }
                                 
-                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart, id_mezo.getText());
+                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), dateFormat.format(datumtol.getDate()), dateFormat.format(datumig.getDate()), nyitott, lezart, id_mezo.getText());
                 TableColumnModel columnModel = table.getColumnModel();
                 for (int column = 0; column < table.getColumnCount(); column++) {
                     int width = 15; // Min width
@@ -374,7 +375,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                     nyitott = "nem";
                 }
                                 
-                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart, id_mezo.getText());
+                lekerdezes.vevoi_lekerdezes(String.valueOf(projekt_box.getSelectedItem()), dateFormat.format(datumtol.getDate()), dateFormat.format(datumig.getDate()), nyitott, lezart, id_mezo.getText());
             }
          
         }
@@ -416,7 +417,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 {
                     nyitott = "nem";
                 }
-                lekerdezes.vevoi_lekerdezes_excel(String.valueOf(projekt_box.getSelectedItem()), datumtol.getText(), datumig.getText(), nyitott, lezart);
+                lekerdezes.vevoi_lekerdezes_excel(String.valueOf(projekt_box.getSelectedItem()), dateFormat.format(datumtol.getDate()), dateFormat.format(datumig.getDate()), nyitott, lezart);
                 Foablak.frame.setCursor(null);
             } 
             catch (Exception e1) 
@@ -468,12 +469,12 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
          }
     }
     
-    public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
+    /*public void ido()                                                                   //a pontos dátu meghatározására szolgáló függvény
     {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         Date date = new Date();
-        datumig.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
-    }
+        //datumig.setText(formatter.format(date));                                        //az aktuális dátumot hozzáadja az időpont mezőhöz
+    }*/
     
     class Vevoi_2 implements ActionListener                                                                                        //termék gomb megnyomáskor hívodik meg
     {
@@ -491,8 +492,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.22.29", "veasquality", "kg6T$kd14TWbs9&gd");
                 stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                String sql = "SELECT DATE_FORMAT(Ertesites_Datuma,'%Y%m'), sum(if(mi = 'Visszajelzés',0,1)) as reklamacio, sum(if(mi = 'Visszajelzés',1,0)) as visszajelzes FROM  qualitydb.Vevoireklamacio_alap where   Ertesites_Datuma >= '"+ datumtol.getText() 
-                        +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' group by DATE_FORMAT(Ertesites_Datuma,'%Y%m')\n"
+                String sql = "SELECT DATE_FORMAT(Ertesites_Datuma,'%Y%m'), sum(if(mi = 'Visszajelzés',0,1)) as reklamacio, sum(if(mi = 'Visszajelzés',1,0)) as visszajelzes FROM  qualitydb.Vevoireklamacio_alap where   Ertesites_Datuma >= '"+ dateFormat.format(datumtol.getDate()) 
+                        +"' and Ertesites_Datuma <= '"+ dateFormat.format(datumig.getDate()) +"' group by DATE_FORMAT(Ertesites_Datuma,'%Y%m')\n"
                                 + "order by DATE_FORMAT(Ertesites_Datuma,'%Y%m') asc";
                 stmt.execute(sql);
                 ResultSet rs = stmt.getResultSet();
@@ -538,8 +539,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 //Date date = new Date();
                 //LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 // int month = localDate.getMonthValue();
-                String[] datum_tol = datumtol.getText().split("\\.");
-                String[] datum_ig = datumig.getText().split("\\.");
+                String[] datum_tol = dateFormat.format(datumtol.getDate()).split("\\.");
+                String[] datum_ig = dateFormat.format(datumig.getDate()).split("\\.");
                 LocalDate start_date = LocalDate.of(Integer.parseInt(datum_tol[0]),Integer.parseInt(datum_tol[1]),Integer.parseInt(datum_tol[2]));
                 LocalDate end_date = LocalDate.of(Integer.parseInt(datum_ig[0]),Integer.parseInt(datum_ig[1]),Integer.parseInt(datum_ig[2]));
                 Period diff = Period.between(start_date,end_date);
@@ -606,7 +607,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 
                 sql = "select Vevo, sum(Hanydb)\n"
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + "where 3=3  and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' \n"                  
+                        + "where 3=3  and Ertesites_Datuma >= '"+ dateFormat.format(datumtol.getDate()) +"' and Ertesites_Datuma <= '"+ dateFormat.format(datumig.getDate()) +"' \n"                  
                         + "group by Vevo order by sum(Hanydb) desc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -660,7 +661,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         + "sum(if(mi = 'Visszajelzés', 0, 1)) as 'Reklamáció', \n"
                         + "sum(if(mi = 'Visszajelzés', 1, 0)) as 'Visszajelzés'\n"
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + " where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"'\n"
+                        + " where 3=3 and Ertesites_Datuma >= '"+ dateFormat.format(datumtol.getDate()) +"' and Ertesites_Datuma <= '"+ dateFormat.format(datumig.getDate()) +"'\n"
                         + "group by Vevo, Hónap order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -832,7 +833,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         + "        sum(if(mi = 'Visszajelzés' && Lezaras_datuma = '', 1,0)) as 'Nyitott visszajelzés',\n"
                         + "        sum(if(mi = 'Visszajelzés' && not Lezaras_datuma = '', 1,0)) as 'Lezárt visszajelzés'\n"
                         + "                from qualitydb.Vevoireklamacio_alap\n"
-                        + "                    where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' \n"
+                        + "                    where 3=3 and Ertesites_Datuma >= '"+ dateFormat.format(datumtol.getDate()) +"' and Ertesites_Datuma <= '"+ dateFormat.format(datumig.getDate()) +"' \n"
                         + "                    group by Hónap  order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -856,8 +857,8 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 
                 int cella4 = 2;
                 int sum = 0;
-                String[] evszam = datumig.getText().split("\\.");
-                String[] evszam2 = datumtol.getText().split("\\.");
+                String[] evszam = dateFormat.format(datumig.getDate()).split("\\.");
+                String[] evszam2 = dateFormat.format(datumtol.getDate()).split("\\.");
                 int valtoev = 0;
                 if(Integer.valueOf(evszam[0]) > Integer.valueOf(evszam2[0]))
                 { 
@@ -872,7 +873,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 sql = "select DATE_FORMAT(Ertesites_Datuma,'%Y%m') as 'Hónap',\n"        // --
                         + "   cast(AVG(if(Lezaras_datuma = '', DATEDIFF(now(), Ertesites_Datuma), DATEDIFF(Lezaras_datuma , Ertesites_Datuma) )) as decimal(3,0)) as 'Nyitva nap átlag'\n"
                         + "           from qualitydb.Vevoireklamacio_alap\n"
-                        + "       where 3=3 and Ertesites_Datuma >= '"+ datumtol.getText() +"' and Ertesites_Datuma <= '"+ datumig.getText() +"' \n"
+                        + "       where 3=3 and Ertesites_Datuma >= '"+ dateFormat.format(datumtol.getDate()) +"' and Ertesites_Datuma <= '"+ dateFormat.format(datumig.getDate()) +"' \n"
                         + "             group by Hónap order by Hónap asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -1312,7 +1313,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                         + " cast(sum(egyeb_koltseg) as decimal(15,0)),\n"
                         + " sum(belso_koltseg)+sum(fuvar_koltseg)+sum(selejt_koltseg)+sum(egyeb_koltseg) as osszes "
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + "where 3=3 and Lezaras_datuma >= '"+datumtol.getText() +"' and Lezaras_datuma <= '"+ datumig.getText() +"'\n"
+                        + "where 3=3 and Lezaras_datuma >= '"+dateFormat.format(datumtol.getDate()) +"' and Lezaras_datuma <= '"+ dateFormat.format(datumig.getDate()) +"'\n"
                         + "group by Vevo order by osszes desc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -1366,7 +1367,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 Worksheet sheet2 = workbook.getWorksheets().get(1);
                 sql = "select *"
                         + "from qualitydb.Vevoireklamacio_alap\n"
-                        + "where 3=3 and Ertesites_datuma >= '"+datumtol.getText() +"' and Ertesites_datuma <= '"+ datumig.getText() +"'\n"
+                        + "where 3=3 and Ertesites_datuma >= '"+dateFormat.format(datumtol.getDate()) +"' and Ertesites_datuma <= '"+ dateFormat.format(datumig.getDate()) +"'\n"
                         + "order by Ertesites_datuma asc";
                 stmt.execute(sql);
                 rs = stmt.getResultSet();
@@ -1382,7 +1383,7 @@ public class Vevoi_reklamacio_lekerdezes extends JPanel
                 sheet.getAllocatedRange().autoFitRows();                
                 sheet.getCellRange("A1:Z1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
                 
-                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:BK1"));
+                sheet2.getAutoFilters().setRange(sheet.getCellRange("A1:BL1"));
                 sheet2.getAllocatedRange().autoFitColumns();
                 sheet2.getAllocatedRange().autoFitRows();                
                 sheet2.getCellRange("A1:BK1").getCellStyle().getExcelFont().isBold(true);                          // félkövér beállítás
