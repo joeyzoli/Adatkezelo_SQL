@@ -1155,7 +1155,7 @@ public class Zarolasok_bevitel extends JPanel {
                                     }
                                     else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                     {
-                                        uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                        uzenet.zarolas_email("easqas@veas.videoton.hu", "pinter.attila@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                                 zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }
@@ -1453,7 +1453,7 @@ public class Zarolasok_bevitel extends JPanel {
                                     }
                                     else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                     {
-                                        uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                        uzenet.zarolas_email("easqas@veas.videoton.hu", "pinter.attila@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                                 zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                         zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                     }
@@ -1753,7 +1753,7 @@ public class Zarolasok_bevitel extends JPanel {
                                 }
                                 else if(felelosterulet_box.getSelectedItem().equals("Kézi"))
                                 {
-                                    uzenet.zarolas_email("easqas@veas.videoton.hu", "nagy.balint@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
+                                    uzenet.zarolas_email("easqas@veas.videoton.hu", "pinter.attila@veas.videoton.hu, molnar.jozsef@veas.videoton.hu,csader.zsolt@veas.videoton.hu, tatai.mihaly@veas.videoton.hu", String.valueOf(projekt_box.getSelectedItem()), String.valueOf(tipus_box.getSelectedItem()),
                                             zaroltdb_mezo.getText(), email_hibaok, String.valueOf(zarolta_box.getSelectedItem()), datum_mezo.getText(), muszak_mezo.getText(),"Zárolás - "+ String.valueOf(tipus_box.getSelectedItem())+" - "+
                                                     zarolasoka_mezo.getText() +" - "+ sorszam_mezo.getText(), meszam_mezo.getText());
                                 }

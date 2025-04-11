@@ -193,7 +193,7 @@ public class Valogatasok extends JPanel {
         String[] emailcimek = {"gepesfolyamatellenor@veas.videoton.hu","quality.control@veas.videoton.hu","quality.inspection@veas.videoton.hu","folyamatellenor.163@veas.videoton.hu","hager.security.oqc@veas.videoton.hu","loxoneoqc@veas.videoton.hu",
                 "avmoqc@veas.videoton.hu","osram_vegellenorzes@veas.videoton.hu","loxoneoqc@veas.videoton.hu","hager.security.oqc@veas.videoton.hu","techemoqc@veas.videoton.hu","telecomdesignoqc@veas.videoton.hu","proglove@veas.videoton.hu",
                 "borbely.szilvia@veas.videoton.hu","mile.jozsef@veas.videoton.hu","reznyak.norbert@veas.videoton.hu","szatmari.edina@veas.videoton.hu","tisler.peter@veas.videoton.hu","pinter.attila@veas.videoton.hu",
-                "ternak.sandor@veas.videoton.hu","kadar.zoltan@veas.videoton.hu","etl.csaba@veas.videoton.hu","nagy.balint@veas.videoton.hu","molnar.jozsef@veas.videoton.hu","csader.zsolt@veas.videoton.hu",
+                "ternak.sandor@veas.videoton.hu","kadar.zoltan@veas.videoton.hu","etl.csaba@veas.videoton.hu","molnar.jozsef@veas.videoton.hu","csader.zsolt@veas.videoton.hu",
                 "QA-Assy@veas.videoton.hu","kovacs.zoltan@veas.videoton.hu","tatai.mihaly@veas.videoton.hu"};
         email_box = new JComboBox<String>(emailcimek);                //emailcimek
         email_box.setBounds(87, 278, 268, 22);

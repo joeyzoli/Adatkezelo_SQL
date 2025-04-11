@@ -1453,9 +1453,15 @@ public class Foablak extends JFrame
             //System.out.println(sorszam.utolso("qualitydb.SQA_reklamaciok"));
             //System.out.println(System.getProperty("user.name"));
             /*Email email = new Email();
-            for(int szamlalo = 0; szamlalo < 1; szamlalo++)
+            for(int szamlalo = 0; szamlalo < 114; szamlalo++)
             {                
-                email.mindenes_email("easqas@veas.videoton.hu", "tatai.mihaly@veas.videoton.hu", "", "email", "https://www.youtube.com/watch?v=njEkyDmyr1s");
+                email.mindenes_email("kurgya.edina@veas.videoton.hu", "kurgya.edina@veas.videoton.hu", "", "Emlékeztető", "Szia Én!\n"
+                        + "\n"
+                        + "Ne felejtsd, aki a tűzzel játszik könnyen megégetheti magát ;)\n"
+                        + "\n"
+                        + "Üdv:  Edina\n"
+                        + ""
+                        + "");
             }
             */
             //schweighardt.robert@veas.videoton.hu", "reznyak.norbert@veas.videoton.hu
